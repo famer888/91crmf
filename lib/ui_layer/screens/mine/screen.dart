@@ -80,7 +80,7 @@ class _MineScreenState extends State<MineScreen> {
   @override
   Widget build(BuildContext context) {
     return ScreenBackground(
-      appBg: MyImage.asset(MyImagePaths.appBg, width: ScreenUtil().screenWidth, height: 148.w),
+      appBg: MyImage.asset(MyImagePaths.appBg, fit:BoxFit.cover, width: ScreenUtil().screenWidth, height: 148.w),
       child: Scaffold(
         body: SafeArea(
           child: Column(

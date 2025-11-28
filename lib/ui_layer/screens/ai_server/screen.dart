@@ -26,7 +26,7 @@ class _AiServerScreenState extends State<AiServerScreen> {
     final navs = config.aiNav.nav;
 
     return ScreenBackground(
-      appBg: MyImage.asset(MyImagePaths.appBg, width: ScreenUtil().screenWidth, height: 148.w),
+      appBg: MyImage.asset(MyImagePaths.appBg, fit:BoxFit.cover, width: ScreenUtil().screenWidth, height: 148.w),
       child: SafeArea(
         child: Scaffold(
           body: SingleChildScrollView(

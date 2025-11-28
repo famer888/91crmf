@@ -36,7 +36,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> with TickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return ScreenBackground(
-      appBg: MyImage.asset(MyImagePaths.appBg, width: ScreenUtil().screenWidth, height: 148.w),
+      appBg: MyImage.asset(MyImagePaths.appBg, fit:BoxFit.cover, width: ScreenUtil().screenWidth, height: 148.w),
       child: Container(
         padding: EdgeInsets.only(top: 35.w, left: MyTheme.pagePadding, right: MyTheme.pagePadding),
         child: TabBarWithView.line(

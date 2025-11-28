@@ -61,7 +61,7 @@ class _CoinRechargeScreenState extends State<CoinRechargeScreen> {
   @override
   Widget build(BuildContext context) {
     return ScreenBackground(
-        appBg: MyImage.asset(MyImagePaths.appBg, width: ScreenUtil().screenWidth, height: 148.w),
+        appBg: MyImage.asset(MyImagePaths.appBg, fit:BoxFit.cover, width: ScreenUtil().screenWidth, height: 148.w),
         child: Scaffold(
           appBar: MyAppBar(
             title: 'jbcz'.tr(context: context),

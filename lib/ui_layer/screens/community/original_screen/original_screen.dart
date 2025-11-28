@@ -31,7 +31,7 @@ class _OriginalCommunityScreenState extends State<OriginalCommunityScreen> {
   @override
   Widget build(BuildContext context) {
     return ScreenBackground(
-      appBg: MyImage.asset(MyImagePaths.appBg, width: ScreenUtil().screenWidth, height: 148.w),
+      appBg: MyImage.asset(MyImagePaths.appBg, fit:BoxFit.cover, width: ScreenUtil().screenWidth, height: 148.w),
       child: const Scaffold(
         appBar: SearchAppBar(),
         body: _Body(),

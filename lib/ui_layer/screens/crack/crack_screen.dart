@@ -83,7 +83,7 @@ class _CrackScreenState extends State<CrackScreen> {
   Widget build(BuildContext context) {
     double itemWidth = (_screenUtil.screenWidth - (5 - 1) * 10.w - MyTheme.pagePadding * 2) / 5;
     return ScreenBackground(
-      appBg: MyImage.asset(MyImagePaths.appBg, width: ScreenUtil().screenWidth, height: 148.w),
+      appBg: MyImage.asset(MyImagePaths.appBg, fit:BoxFit.cover, width: ScreenUtil().screenWidth, height: 148.w),
       child: _asyncValue.maybeWhen(
           init: () {
             _getCrackData();
