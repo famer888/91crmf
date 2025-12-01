@@ -9,7 +9,6 @@ import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:provider/provider.dart';
 
 class CollectionBlackScreen extends StatefulWidget {
-
   const CollectionBlackScreen({super.key});
 
   @override
@@ -22,7 +21,9 @@ class _CollectionBlackScreenState extends State<CollectionBlackScreen> {
   String _lastIx = '';
 
   Future<List<BlackListItemModel>> _init({int page = 1, int limit = 15}) async {
-    final result = await _dynamicDomain.getConstructByApiLink(apiLink: 'contents/list_my_favorite', params: {});
+    final result = await _dynamicDomain.getConstructByApiLink(
+        apiLink: 'contents/list_my_favorite',
+        params: {'page': page, 'limit': limit, 'lastIx': _lastIx});
     if (result.status == 1) {
       final resData = result.data;
       final lastIx = resData['last_ix'];
@@ -31,7 +32,9 @@ class _CollectionBlackScreenState extends State<CollectionBlackScreen> {
       } else {
         _lastIx = lastIx;
         if (result.data['list'] case final List data when data.isNotEmpty) {
-          final curBlackListItemModelList = data.map<BlackListItemModel>((e) => BlackListItemModel.fromJson(e)).toList();
+          final curBlackListItemModelList = data
+              .map<BlackListItemModel>((e) => BlackListItemModel.fromJson(e))
+              .toList();
           return curBlackListItemModelList;
         } else {
           return [];
@@ -45,8 +48,11 @@ class _CollectionBlackScreenState extends State<CollectionBlackScreen> {
   @override
   Widget build(BuildContext context) {
     return MyListView.list(
-      padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
-      itemBuilder: (context, item, index) => BlackItemWidget(item: item, itemWidth: (_screenUtils.screenWidth - MyTheme.pagePadding * 2)),
+      padding:
+          EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
+      itemBuilder: (context, item, index) => BlackItemWidget(
+          item: item,
+          itemWidth: (_screenUtils.screenWidth - MyTheme.pagePadding * 2)),
       isNeedMore: true,
       onFetchingMore: (currentPage, pageSize) {
         if (currentPage == 1) {
@@ -57,6 +63,4 @@ class _CollectionBlackScreenState extends State<CollectionBlackScreen> {
       },
     );
   }
-
 }
-
