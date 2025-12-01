@@ -44,6 +44,7 @@ import 'package:jycrpj/ui_layer/screens/live_video/live_nav/screen.dart';
 import 'package:jycrpj/ui_layer/screens/mine/ai_record/screen.dart';
 import 'package:jycrpj/ui_layer/screens/mine/bind_email/screen.dart';
 import 'package:jycrpj/ui_layer/screens/mine/collection/mine_new_collection_screen.dart';
+import 'package:jycrpj/ui_layer/screens/mine/message_center/customer_service/screen_net.dart';
 import 'package:jycrpj/ui_layer/screens/mine/vip_center/upgrade/screen.dart';
 import 'package:jycrpj/ui_layer/screens/rank/screen.dart';
 import 'package:jycrpj/ui_layer/screens/vlog/screen.dart';
@@ -858,7 +859,7 @@ class MineCustomerServiceRoute extends GoRouteData {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return CommonUtils.buildSlideTransitionPage(
-        state: state, child: const MineCustomerServiceScreen());
+        state: state, child: const MineCustomerServiceWebScreen()/*const MineCustomerServiceScreen()*/);
   }
 }
 

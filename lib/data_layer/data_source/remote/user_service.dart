@@ -193,6 +193,9 @@ class UserService extends BaseService {
   /// 他人中心
   AsyncJson userCenterInfo({required String aff}) => post('/peer_info', data: {'aff': aff});
 
+  /// 获取客服url
+  AsyncJson customerConf() => post('/customer_conf');
+
   ///解锁他人联系方式
   AsyncJson userContactBuy({
     required int aff,

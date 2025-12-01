@@ -179,5 +179,8 @@ mixin _User on _BaseAppRepo implements UserDomain {
       .guard;
 
   @override
+  AsyncResult customerConf() => _userService.customerConf().deserialize().guard;
+
+  @override
   AsyncJson clearCached() => _userService.clearCached();
 }

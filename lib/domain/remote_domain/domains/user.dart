@@ -118,6 +118,9 @@ abstract class UserDomain {
   /// 购买App
   AsyncResult<BuyAppModel> userAppBuy({required String source, required int type});
 
+  /// 获取客服url
+  AsyncResult customerConf();
+
   /// 清除缓存
   AsyncJson clearCached();
 }
