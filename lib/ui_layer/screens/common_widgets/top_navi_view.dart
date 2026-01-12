@@ -31,7 +31,7 @@ class _TopNaviViewState extends State<TopNaviView>
   late final _homeConfig = context.read<HomeConfigNotifier>();
 
   //需要插入额外的分类界面
-  late List<NavPrependModel> nav_prepend = _homeConfig.config.nav_prepend ?? [];
+  late List<NavPrependModel> nav_prepend = _homeConfig.config.navPrepend ?? [];
 
   int _initialIndex = 0;
 
@@ -54,7 +54,7 @@ class _TopNaviViewState extends State<TopNaviView>
       List<LinkModel> list = List.from(data);
       for (var e in nav_prepend) {
         LinkModel item = LinkModel(
-            is_nav_prepend: true,
+            isNavPrepend: true,
             id: 0,
             linkUrl: e.value ?? '',
             resourceUrl: '',
@@ -66,7 +66,7 @@ class _TopNaviViewState extends State<TopNaviView>
         list.insert(e.sort ?? 0, item); //插入到对应位置
       }
 
-      _initialIndex = (_homeConfig.config.nav_default ?? 0);
+      _initialIndex = (_homeConfig.config.navDefault ?? 0);
 
       _tabController = TabController(length: list.length, vsync: this, initialIndex: _initialIndex);
 
@@ -88,7 +88,7 @@ class _TopNaviViewState extends State<TopNaviView>
         initialIndex: _initialIndex,
         titles: data.map((e) => e.name).toList(),
         views: data.map((e) {
-          return (e.is_nav_prepend ?? false)
+          return (e.isNavPrepend ?? false)
               ? configNavPrependPage(e)
               : ApiLinkView(
                   linkModel: e,

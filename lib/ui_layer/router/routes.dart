@@ -17,14 +17,6 @@ import 'package:jycrpj/ui_layer/screens/ai_server/widgets/ai_off_derobe.dart';
 import 'package:jycrpj/ui_layer/screens/anime/detail/screen.dart';
 import 'package:jycrpj/ui_layer/screens/anime/more/screen.dart';
 import 'package:jycrpj/ui_layer/screens/anime/screen.dart';
-import 'package:jycrpj/ui_layer/screens/apps/91aw/aw91_search_result_screen.dart';
-import 'package:jycrpj/ui_layer/screens/apps/91aw/aw91_video_search_screen.dart';
-import 'package:jycrpj/ui_layer/screens/apps/91aw/screen.dart';
-import 'package:jycrpj/ui_layer/screens/apps/awjq/awjq_search_result_screen.dart';
-import 'package:jycrpj/ui_layer/screens/apps/awjq/awjq_tag_screen.dart';
-import 'package:jycrpj/ui_layer/screens/apps/awjq/awjq_video_search_screen.dart';
-import 'package:jycrpj/ui_layer/screens/apps/clsq/cl_search_result_screen.dart';
-import 'package:jycrpj/ui_layer/screens/apps/zpc/zcp_search_result_screen.dart';
 import 'package:jycrpj/ui_layer/screens/asmr/voice_player/local_voice_player.dart';
 import 'package:jycrpj/ui_layer/screens/asmr/voice_player/voice_player_content.dart';
 import 'package:jycrpj/ui_layer/screens/black/black_label_screen.dart';
@@ -33,7 +25,33 @@ import 'package:jycrpj/ui_layer/screens/community/ori_create_group_chat/group_ch
 import 'package:jycrpj/ui_layer/screens/community/ori_create_group_chat/group_chat/group_chat_top_msg_content.dart';
 import 'package:jycrpj/ui_layer/screens/community/ori_create_group_chat/group_chat/group_members_content.dart';
 import 'package:jycrpj/ui_layer/screens/community/ori_create_group_chat/screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/91aw/screen/an91_tag_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/91aw/screen/aw91_search_result_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/91aw/screen/aw91_video_detail_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/91aw/screen/aw91_video_search_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/91aw/screen/screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/awjq/screen/awjq_search_result_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/awjq/screen/awjq_tag_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/awjq/screen/awjq_video_detail_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/awjq/screen/awjq_video_search_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/awjq/screen/screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/clsq/screen/cl_search_result_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/clsq/screen/cl_tag_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/clsq/screen/cl_video_detail_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/clsq/screen/cl_video_search_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/clsq/screen/screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_search_result_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_tag_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_video_detail_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_video_search_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/zpc/screen/screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/zpc/screen/zcp_search_result_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/zpc/screen/zpc_tag_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/zpc/screen/zpc_video_detail_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/zpc/screen/zpc_video_search_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/crack_main_page.dart';
 import 'package:jycrpj/ui_layer/screens/crack/crack_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/new_crack_screen.dart';
 import 'package:jycrpj/ui_layer/screens/game/detail/screen.dart';
 import 'package:jycrpj/ui_layer/screens/game/more/screen.dart.dart';
 import 'package:jycrpj/ui_layer/screens/game/nav/screen.dart.dart';
@@ -51,18 +69,6 @@ import 'package:jycrpj/ui_layer/screens/vlog/screen.dart';
 import 'package:jycrpj/ui_layer/screens/vlog/vlog_second_page.dart';
 import 'package:jycrpj/ui_layer/screens/vlog/vlog_tag_screen.dart';
 import '../../domain/model/video_detail_model.dart';
-import '../screens/apps/91aw/an91_tag_screen.dart';
-import '../screens/apps/91aw/aw91_video_detail_screen.dart';
-import '../screens/apps/awjq/awjq_video_detail_screen.dart';
-import '../screens/apps/awjq/screen.dart';
-import '../screens/apps/clsq/cl_tag_screen.dart';
-import '../screens/apps/clsq/cl_video_detail_screen.dart';
-import '../screens/apps/clsq/cl_video_search_screen.dart';
-import '../screens/apps/clsq/screen.dart';
-import '../screens/apps/zpc/screen.dart';
-import '../screens/apps/zpc/zpc_tag_screen.dart';
-import '../screens/apps/zpc/zpc_video_detail_screen.dart';
-import '../screens/apps/zpc/zpc_video_search_screen.dart';
 import '../screens/black/black_details_screen.dart';
 import '../screens/black/black_screen.dart';
 import '../screens/community/module/screen.dart';
@@ -134,9 +140,14 @@ class WelcomeRoute extends GoRouteData {
 
 @TypedStatefulShellRoute<StatefulShellRoute>(
   branches: [
+    // TypedStatefulShellBranch(
+    //   routes: [
+    //     TypedGoRoute<CrackRoute>(path: AppRouterPaths.crack),
+    //   ],
+    // ),
     TypedStatefulShellBranch(
       routes: [
-        TypedGoRoute<CrackRoute>(path: AppRouterPaths.crack),
+        TypedGoRoute<CrackRoute1>(path: AppRouterPaths.crack1),
       ],
     ),
     TypedStatefulShellBranch(
@@ -207,7 +218,14 @@ class CrackRoute extends GoRouteData {
   const CrackRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) => const CrackScreen();
+  Widget build(BuildContext context, GoRouterState state) => const CrackMainPage();
+}
+
+class CrackRoute1 extends GoRouteData {
+  const CrackRoute1();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const NewCrackScreen();
 }
 
 class RestrictedRoute extends GoRouteData {
@@ -1256,7 +1274,7 @@ class AnWangRestrictedRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<AnWangRestrictedDetailRoute>(path: AppRouterPaths.aawjqVideoDetail)
+@TypedGoRoute<AnWangRestrictedDetailRoute>(path: AppRouterPaths.awjqVideoDetail)
 class AnWangRestrictedDetailRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey =
       AppRouter.rootNavigatorKey;
@@ -1269,6 +1287,22 @@ class AnWangRestrictedDetailRoute extends GoRouteData {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return CommonUtils.buildSlideTransitionPage(
         state: state, child: AwjqVideoDetailScreen(id: id));
+  }
+}
+
+@TypedGoRoute<PZhanVideoDetailRoute>(path: AppRouterPaths.pzhanVideoDetail)
+class PZhanVideoDetailRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppRouter.rootNavigatorKey;
+
+  const PZhanVideoDetailRoute({required this.id});
+
+  final int id;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(
+        state: state, child: PZhanVideoDetailScreen(id: id));
   }
 }
 
@@ -1301,6 +1335,22 @@ class AwjqVideoSearchRoute extends GoRouteData {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return CommonUtils.buildSlideTransitionPage(
         state: state, child: AwjqVideoSearchScreen(args: args));
+  }
+}
+
+@TypedGoRoute<PZhanVideoSearchRoute>(path: AppRouterPaths.pzhanVideoSearch)
+class PZhanVideoSearchRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppRouter.rootNavigatorKey;
+
+  const PZhanVideoSearchRoute({required this.args});
+
+  final String args;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(
+        state: state, child: PZhanVideoSearchScreen(args: args));
   }
 }
 
@@ -1469,6 +1519,21 @@ class ClVideoTagRoute extends GoRouteData {
   }
 }
 
+@TypedGoRoute<PZhanVideoTagRoute>(path: AppRouterPaths.pzhanVideoTag)
+class PZhanVideoTagRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppRouter.rootNavigatorKey;
+
+  const PZhanVideoTagRoute(this.$extra);
+  final String $extra;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(
+        state: state, child: PZhanTagScreen(videoTag: $extra));
+  }
+}
+
 @TypedGoRoute<ClVideoSearchRoute>(path: AppRouterPaths.clVideoSearch)
 class ClVideoSearchRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey =
@@ -1532,6 +1597,23 @@ class AwjqSearchResultRoute extends GoRouteData {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return CommonUtils.buildSlideTransitionPage(
         state: state, child: AwjqSearchResultScreen(word: word, type: type));
+  }
+}
+
+@TypedGoRoute<PZhanSearchResultRoute>(path: AppRouterPaths.pzhanVideoSearchResult)
+class PZhanSearchResultRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppRouter.rootNavigatorKey;
+
+  const PZhanSearchResultRoute({required this.word, required this.type});
+
+  final String word;
+  final int type;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(
+        state: state, child: PZhanSearchResultScreen(word: word, type: type));
   }
 }
 

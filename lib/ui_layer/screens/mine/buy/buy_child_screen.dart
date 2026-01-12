@@ -13,6 +13,8 @@ import 'package:provider/provider.dart';
 import '../../../../domain/model/buy_model.dart';
 import '../../../utils/my_toast.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class BuyChildScreen extends StatefulWidget {
   final int type;
   final bool isList;
@@ -79,7 +81,7 @@ class _BuyChildScreenState extends State<BuyChildScreen> {
   Widget _buildGridItem(BuyItemModel buyItemModel, double itemWidth) {
     if (buyItemModel.app == null) return const SizedBox.shrink();
 
-    return GestureDetector(
+    return ReportGestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
         // 跳转视频详情

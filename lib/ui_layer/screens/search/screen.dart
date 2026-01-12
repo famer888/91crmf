@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jycrpj/data_layer/repo/repo.dart';
 import 'package:provider/provider.dart';
 
 import '../../../domain/api_validator.dart';
@@ -17,6 +18,10 @@ import '../common_widgets/screen_background.dart';
 import '../common_widgets/status/empty_data.dart';
 import '../image_paths.dart';
 import '../theme.dart';
+
+import '../../../report/ui_layer/report_general_banner.dart';
+
+import '../../../report/ui_layer/report_gesture_detector.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -34,11 +39,11 @@ class _SearchScreenState extends State<SearchScreen> {
       MyToast.showText(text: 'qsrgjz'.tr());
       return;
     }
-    final searchHistory = _homeConfigNotifier.searchHistory;
+    final searchHistory = _homeConfigNotifier.getSearchHistory(key: searchHistoryKey);
 
     final title = keyword.replaceAll('/', '|');
     if (!searchHistory.contains(keyword)) {
-      _homeConfigNotifier.upsertSearchHistory(searchHistory: searchHistory..add(keyword));
+      _homeConfigNotifier.upsertSearchHistory(key: searchHistoryKey, searchHistory: searchHistory..add(keyword));
     }
     SearchResultRoute(title).push(context);
   }
@@ -64,8 +69,10 @@ class _SearchScreenState extends State<SearchScreen> {
                 children: [
                   Text('ssjl'.tr(context: context), style: MyTheme.white16medium),
                   const Spacer(),
-                  GestureDetector(
-                    onTap: _homeConfigNotifier.clearSearchHistory,
+                  ReportGestureDetector(
+                    onTap: () {
+                      _homeConfigNotifier.clearSearchHistory(key: searchHistoryKey);
+                    },
                     child: Text(tr('qcjl'), style: MyTheme.jellyCyan_13),
                   ),
                 ],
@@ -74,7 +81,7 @@ class _SearchScreenState extends State<SearchScreen> {
             Align(
               alignment: Alignment.centerLeft,
               child: Selector<HomeConfigNotifier, List<String>>(
-                selector: (_, config) => config.searchHistory,
+                selector: (_, config) => config.getSearchHistory(key: searchHistoryKey),
                 builder: (context, searchHistory, child) => searchHistory.isNotEmpty
                     ? Wrap(
                         spacing: 10.w,
@@ -88,8 +95,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                 onSubmitted(text);
                               },
                               onDelete: () {
-                                final history = _homeConfigNotifier.searchHistory;
-                                _homeConfigNotifier.upsertSearchHistory(searchHistory: history..remove(text));
+                                final history = _homeConfigNotifier.getSearchHistory(key: searchHistoryKey);
+                                _homeConfigNotifier.upsertSearchHistory(key: searchHistoryKey, searchHistory: history..remove(text));
                               },
                             )
                         ],
@@ -139,7 +146,7 @@ class _SearchBarState extends State<_SearchBar> {
         padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
         child: Row(
           children: [
-            GestureDetector(
+            ReportGestureDetector(
               child: MyImage.asset(
                 MyImagePaths.appBackIcon,
                 width: 20.w,
@@ -165,7 +172,7 @@ class _SearchBarState extends State<_SearchBar> {
               ),
             ),
             SizedBox(width: 5.w),
-            GestureDetector(
+            ReportGestureDetector(
               onTap: () {
                 widget.onSubmitted.call(textEditingController.text);
               },
@@ -204,7 +211,7 @@ class _KeywordTile extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          GestureDetector(
+          ReportGestureDetector(
             onTap: onTap,
             child: ConstrainedBox(
               constraints: BoxConstraints(maxWidth: 100.w),
@@ -220,7 +227,7 @@ class _KeywordTile extends StatelessWidget {
             width: 1.w,
             margin: EdgeInsets.symmetric(horizontal: 10.w),
           ),
-          GestureDetector(
+          ReportGestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: onDelete,
             child: MyImage.asset(
@@ -329,7 +336,7 @@ class _SearchContentViewState extends State<_SearchContentView> {
       children: [
         SizedBox(height: 16.w),
         banner.isNotEmpty
-            ? GeneralBannerAppsListWidget(
+            ? ReportGeneralAppsListVidget(
                 aspectRatio: 7 / 2,
                 data: banner,
                 radius: 5.0,
@@ -357,7 +364,7 @@ class _SearchContentViewState extends State<_SearchContentView> {
                       addAutomaticKeepAlives: false,
                       padding: EdgeInsets.zero,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) => GestureDetector(
+                      itemBuilder: (context, index) => ReportGestureDetector(
                             behavior: HitTestBehavior.translucent,
                             onTap: () {
                               widget.onSubmitted(hotTags[index].work);

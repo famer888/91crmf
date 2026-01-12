@@ -23,6 +23,8 @@ import '../../../common_widgets/status/empty_data.dart';
 import '../../../image_paths.dart';
 import '../../../theme.dart';
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class CartoonIntroductionView extends StatefulWidget {
   const CartoonIntroductionView(
       {super.key, required this.id, required this.data});
@@ -89,7 +91,7 @@ class _CartoonIntroductionViewState extends State<CartoonIntroductionView> {
             //             style: MyTheme.gray163_13,
             //           ),
             //         ),
-            //         GestureDetector(
+            //         ReportGestureDetector(
             //           behavior: HitTestBehavior.translucent,
             //           onTap: () {
             //
@@ -121,7 +123,7 @@ class _CartoonIntroductionViewState extends State<CartoonIntroductionView> {
                     ) {
                       final isFavorites = videoInfo.isFavorite == 1;
 
-                      return GestureDetector(
+                      return ReportGestureDetector(
                         onTap: () async {
                           if (videoInfo.id case final id?) {
                             final domain = context.read<CartoonDomain>();
@@ -148,7 +150,7 @@ class _CartoonIntroductionViewState extends State<CartoonIntroductionView> {
                       );
                     }),
                     SizedBox(width: 20.w),
-                    GestureDetector(
+                    ReportGestureDetector(
                       onTap: () {
                         const MineShareToUserRoute().push(context);
                       },
@@ -329,7 +331,7 @@ class AdSingleColumnCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constrains) {
       final w = constrains.maxWidth;
-      return GestureDetector(
+      return ReportGestureDetector(
         onTap: () {},
         child: ClipRRect(
           borderRadius: BorderRadius.circular(5.w),
@@ -419,7 +421,7 @@ class CartoonSingleColumCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constrains) {
-      return GestureDetector(
+      return ReportGestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
           CartoonDetailRoute('${data.id}').push(context);

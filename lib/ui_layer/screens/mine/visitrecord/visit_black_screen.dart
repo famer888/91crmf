@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jycrpj/domain/model/black_model.dart';
-import 'package:jycrpj/ui_layer/screens/apps/app_video_visit_util.dart';
 import 'package:jycrpj/ui_layer/screens/black/widget/black_item_widget.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_list_view.dart';
+import 'package:jycrpj/ui_layer/screens/crack/app_video_visit_util.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 
 class VisitBlackScreen extends StatefulWidget {

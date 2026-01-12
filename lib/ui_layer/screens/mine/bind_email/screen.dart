@@ -8,10 +8,10 @@ import 'package:go_router/go_router.dart';
 import 'package:jycrpj/ui_layer/notifiers/home_config_notifier.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
-import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../domain/domain.dart';
+import '../../../../report/ui_layer/report_gesture_detector.dart';
 import '../../../notifiers/user_notifier.dart';
 import '../../../utils/my_toast.dart';
 import '../../common_widgets/my_app_bar.dart';
@@ -136,7 +136,7 @@ class _MineBindEmialScreenState extends State<MineBindEmailScreen> {
             : MyAppBar(
                 title: 'bdyx'.tr(),
               ),
-        body: GestureDetector(
+        body: ReportGestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
             focusNode.unfocus();
@@ -164,7 +164,7 @@ class _MineBindEmialScreenState extends State<MineBindEmailScreen> {
                           ],
                         ),
                       ),
-                      GestureDetector(
+                      ReportGestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: MyImage.asset(
                           MyImagePaths.appClose,
@@ -266,7 +266,7 @@ class _MineBindEmialScreenState extends State<MineBindEmailScreen> {
                               //           size: 15.w)
                               //       : Container(),
                               // ),
-                              GestureDetector(
+                              ReportGestureDetector(
                                 behavior: HitTestBehavior.translucent,
                                 onTap: () {
                                   if (seconds < 60) return;
@@ -291,7 +291,7 @@ class _MineBindEmialScreenState extends State<MineBindEmailScreen> {
                       ],
                     ),
                     SizedBox(height: 54.w),
-                    GestureDetector(
+                    ReportGestureDetector(
                       onTap: onSubmit,
                       child: Container(
                         height: 40.w,

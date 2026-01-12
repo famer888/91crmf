@@ -10,6 +10,8 @@ import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 
 import '../http/http_image.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 final Uint8List kTransparentImage = Uint8List.fromList(<int>[
   0x89,
   0x50,
@@ -353,7 +355,7 @@ class _NetworkImageWidgetState extends State<NetworkImageWidget> with SingleTick
       ], color: Colors.transparent),
       child: Image.asset(MyImagePaths.appReplyIcon, width: 35),
     );
-    return GestureDetector(onTap: () => onloadImage(), child: current);
+    return ReportGestureDetector(onTap: () => onloadImage(), child: current);
   }
 
 /////////////////////////////////////////////////////////////

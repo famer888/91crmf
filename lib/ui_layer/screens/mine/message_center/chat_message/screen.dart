@@ -22,6 +22,8 @@ import '../../../common_widgets/status/empty_data.dart';
 import '../../../image_paths.dart';
 import '../../../theme.dart';
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class ChatMessageScreen extends StatefulWidget {
   const ChatMessageScreen({
     super.key,
@@ -259,7 +261,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                             SizedBox(
                               width: 17.5.w,
                               height: 17.w,
-                              child: GestureDetector(
+                              child: ReportGestureDetector(
                                 onTap: _imagePickerAssets,
                                 child: MyImage.asset(
                                   MyImagePaths.appCustomerServiceSelectImg,
@@ -290,7 +292,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                         ),
                       ),
                       SizedBox(width: 7.w),
-                      GestureDetector(
+                      ReportGestureDetector(
                         onTap: _sendMsg,
                         child: SizedBox(
                           width: 44.w,

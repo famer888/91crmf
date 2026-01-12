@@ -6,13 +6,15 @@ import '../../../image_paths.dart';
 import '../../../theme.dart';
 import '../../my_image.dart';
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class CardHashTag extends StatelessWidget {
   const CardHashTag({super.key, required this.id, required this.name});
   final String id;
   final String name;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       onTap: () => CommunityTagDetailRoute(id).push(context),
       child: Container(
         height: 24.w,

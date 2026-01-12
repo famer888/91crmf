@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -6,20 +7,21 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
+import 'package:jycrpj/domain/async_value.dart';
 import 'package:jycrpj/domain/model/cash_withdraw_rule_model.dart';
 import 'package:jycrpj/domain/remote_domain/domains/withdraw.dart';
 import 'package:jycrpj/ui_layer/router/routes.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_avatar.dart';
+import 'package:jycrpj/ui_layer/screens/common_widgets/status/loading.dart';
+import 'package:jycrpj/ui_layer/screens/common_widgets/status/network_error.dart';
 import 'package:jycrpj/ui_layer/screens/mine/share_to_user/widgets/gradient_progress_bar.dart';
 import 'package:jycrpj/ui_layer/screens/mine/share_to_user/widgets/invite_image_widget.dart';
 import 'package:jycrpj/ui_layer/screens/mine/share_to_user/widgets/invite_qr_dialog.dart';
 import 'package:jycrpj/ui_layer/screens/mine/share_to_user/widgets/rule_dialog.dart';
-import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
-import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'dart:ui' as ui;
 
 import '../../../../domain/model/member_model.dart';
 import '../../../notifiers/home_config_notifier.dart';
@@ -29,6 +31,8 @@ import '../../common_widgets/my_image.dart';
 import '../../common_widgets/screen_background.dart';
 import '../../image_paths.dart';
 import '../../theme.dart';
+
+import '../../../../report/ui_layer/report_gesture_detector.dart';
 
 class ShareInviteScreen extends StatefulWidget {
   const ShareInviteScreen({super.key});
@@ -42,7 +46,9 @@ class _ShareInviteScreenState extends State<ShareInviteScreen> {
   late final _withdrawDomain = context.read<WithdrawDomain>();
   late final _homeConfigNotifier = context.read<HomeConfigNotifier>();
   late final _userNotifier = context.read<UserNotifier>();
-  final ValueNotifier<CashWithdrawRule?> _ruleNotifier = ValueNotifier(null);
+  AsyncValue<CashWithdrawRule?> _asyncValue = const AsyncInit();
+  bool _showAppBar = true;
+
   final _snapShotViewKey = GlobalKey();
 
   void _showRuleDialog() {
@@ -56,11 +62,11 @@ class _ShareInviteScreenState extends State<ShareInviteScreen> {
   void _showInviteDialog() {
     BotToast.showWidget(
       toastBuilder: (cancelFunc) => InviteQrDialog(
-          userNotifier: _userNotifier,
-          homeConfigNotifier: _homeConfigNotifier,
-          cancel: () {
-            cancelFunc();
-          },
+        userNotifier: _userNotifier,
+        homeConfigNotifier: _homeConfigNotifier,
+        cancel: () {
+          cancelFunc();
+        },
         onSnap: () async {
           if (_snapShotViewKey.currentContext case final context?) {
             await _saveImageToGallery(context);
@@ -112,133 +118,161 @@ class _ShareInviteScreenState extends State<ShareInviteScreen> {
   }
 
   void _getWithdrawData() async {
+    _asyncValue = const AsyncLoading();
+    if (!mounted) return;
+    setState(() {});
+
     final withdrawData = await _withdrawDomain.withdrawIndex();
-    CommonUtils.log('提现数据: $withdrawData');
     if (withdrawData.status == 1) {
-      _ruleNotifier.value = withdrawData.data;
+      final withdrawData_ = withdrawData.data;
+      if (withdrawData_ != null) {
+        _showAppBar = false;
+        _asyncValue = AsyncData(withdrawData_);
+      } else {
+        _showAppBar = false;
+        _asyncValue = const AsyncData(null);
+      }
+    } else {
+      _asyncValue = const AsyncError();
     }
+
+    if (!mounted) return;
+    setState(() {});
   }
 
   @override
   void initState() {
-    _getWithdrawData();
     super.initState();
   }
 
   @override
-  void dispose() {
-    _ruleNotifier.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      InviteImageWidget(userNotifier: _userNotifier, homeConfigNotifier: _homeConfigNotifier, snapShotViewKey: _snapShotViewKey),
-      ScreenBackground(
-        appBg: MyImage.asset(MyImagePaths.appBg, width: _screenUtil.screenWidth, height: 148.w),
-        child: Stack(
-          children: [
-            Scaffold(
-              appBar: MyAppBar(title: 'yqfx'.tr(context: context)),
-              body: SafeArea(
-                child: CustomScrollView(
-                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: Column(
-                        children: [
-                          SizedBox(height: 30.w),
-                          Center(child: MyImage.asset(MyImagePaths.appShareTitle, width: 288.w, height: 23.w)),
-                          SizedBox(height: 20.w),
-                          Stack(
-                            children: [
-                              _MyWithDrawlView(cashWithdrawRuleNotifier: _ruleNotifier, screenUtil: _screenUtil),
-                              Container(
-                                margin: EdgeInsets.only(top: 130.w),
-                                child: ClipRect(
-                                  child: Align(
-                                    alignment: Alignment.topCenter,
-                                    heightFactor: ((_screenUtil.screenHeight - 280.w) / (_screenUtil.screenHeight)),
-                                    child: MyImage.asset(MyImagePaths.appShareListBg,
-                                        width: _screenUtil.screenWidth, height: _screenUtil.screenHeight, fit: BoxFit.cover),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                left: 0,
-                                right: 0,
-                                top: 180.w,
-                                child: Row(
+    return Scaffold(
+      backgroundColor: MyTheme.blackColor22,
+      appBar: _showAppBar ? MyAppBar(title: 'yqfx'.tr(context: context)) : null,
+      body: _asyncValue.maybeWhen(
+          init: () {
+            _getWithdrawData();
+            return const LoadingView();
+          },
+          error: (_, __) => NetworkErrorView(onTap: _getWithdrawData),
+          orElse: () => const LoadingView(),
+          data: (data) {
+            return Stack(
+              children: [
+                InviteImageWidget(userNotifier: _userNotifier, homeConfigNotifier: _homeConfigNotifier, snapShotViewKey: _snapShotViewKey),
+                ScreenBackground(
+                  appBg: MyImage.asset(MyImagePaths.appBg, width: _screenUtil.screenWidth, height: 148.w),
+                  child: Stack(
+                    children: [
+                      Scaffold(
+                        appBar: MyAppBar(title: 'yqfx'.tr(context: context)),
+                        body: SafeArea(
+                          child: CustomScrollView(
+                            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                            slivers: [
+                              SliverToBoxAdapter(
+                                child: Column(
                                   children: [
-                                    SizedBox(width: 30.w),
-                                    ValueListenableBuilder(
-                                        valueListenable: _ruleNotifier,
-                                        builder: (context, cashWithdrawRule, child) {
-                                          final withdrawAmount = cashWithdrawRule?.withdrawAmount ?? '0.00';
-                                          return _buildButton(
+                                    SizedBox(height: 30.w),
+                                    Center(child: MyImage.asset(MyImagePaths.appShareTitle, width: 288.w, height: 23.w)),
+                                    SizedBox(height: 20.w),
+                                    Stack(
+                                      children: [
+                                        _MyWithDrawlView(cashWithdrawRule: data, screenUtil: _screenUtil),
+                                        Container(
+                                          margin: EdgeInsets.only(top: 130.w),
+                                          child: ClipRect(
+                                            child: Align(
+                                              alignment: Alignment.topCenter,
+                                              heightFactor: ((_screenUtil.screenHeight - 280.w) / (_screenUtil.screenHeight)),
+                                              child: MyImage.asset(
+                                                MyImagePaths.appShareListBg,
+                                                width: _screenUtil.screenWidth,
+                                                height: _screenUtil.screenHeight,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          left: 0,
+                                          right: 0,
+                                          top: 180.w,
+                                          child: Row(
+                                            children: [
+                                              SizedBox(width: 30.w),
+                                              _buildButton(
                                                 () {
-                                              const MineWithdrawalRoute(true).push(context);
+                                                  const MineWithdrawalRoute(false).push(context);
+                                                },
+                                                width: 162.w,
+                                                height: 35.w,
+                                                linearColors: MyTheme.gradient_90_135_colors,
+                                                text: 'lltx'.tr(context: context).replaceAll('00', data?.withdrawAmount ?? '0.00'),
+                                              ),
+                                              const Spacer(),
+                                              _buildButton(
+                                                () {
+                                                  _showInviteDialog();
+                                                },
+                                                width: 123.w,
+                                                height: 35.w,
+                                                linearColors: MyTheme.gradient_90_114_colors,
+                                                text: 'ljyqt'.tr(context: context),
+                                              ),
+                                              SizedBox(width: 30.w),
+                                            ],
+                                          ),
+                                        ),
+                                        Positioned(
+                                          left: 0,
+                                          right: 0,
+                                          top: 240.w,
+                                          child: MyImage.asset(MyImagePaths.appMineTxTitle, width: 179.w, height: 18.w),
+                                        ),
+                                        Positioned(
+                                          top: 270.w,
+                                          left: 0,
+                                          right: 0,
+                                          bottom: 0,
+                                          child: ListView.builder(
+                                            physics: const AlwaysScrollableScrollPhysics(),
+                                            itemCount: data?.orderList?.length ?? 0,
+                                            itemBuilder: (context, index) {
+                                              final order = data?.orderList?[index];
+                                              return _buildRewardItem(order);
                                             },
-                                            width: 162.w,
-                                            height: 35.w,
-                                            linearColors: MyTheme.gradient_90_135_colors,
-                                            text: 'lltx'.tr(context: context).replaceAll('00', withdrawAmount),
-                                          );
-                                        }),
-                                    const Spacer(),
-                                    _buildButton(
-                                          () {
-                                        _showInviteDialog();
-                                      },
-                                      width: 123.w,
-                                      height: 35.w,
-                                      linearColors: MyTheme.gradient_90_114_colors,
-                                      text: 'ljyqt'.tr(context: context),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(width: 30.w),
                                   ],
                                 ),
                               ),
-                              Positioned(
-                                left: 0,
-                                right: 0,
-                                top: 240.w,
-                                child: MyImage.asset(MyImagePaths.appMineTxTitle, width: 179.w, height: 18.w),
-                              ),
-                              Positioned(
-                                top: 270.w,
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
-                                child: ListView.builder(
-                                  physics: const AlwaysScrollableScrollPhysics(),
-                                  itemCount: 8,
-                                  itemBuilder: (context, index) {
-                                    return _buildRewardItem();
-                                  },
-                                ),
-                              )
                             ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(top: 45.w, right: 0, child: _buildRuleWidget(context)),
-            Positioned(top: 75.w, right: 0, child: _buildInviteRecordWidget(context)),
-          ],
-        ),
-      )
-    ],);
+                      Positioned(top: 45.w, right: 0, child: _buildRuleWidget(context)),
+                      Positioned(top: 75.w, right: 0, child: _buildInviteRecordWidget(context)),
+                    ],
+                  ),
+                )
+              ],
+            );
+          }),
+    );
   }
 
-  Widget _buildButton(Function() onTap,
-      {required double width, required double height, required List<Color> linearColors, required String text}) {
-    return GestureDetector(
+  Widget _buildButton(
+    Function() onTap, {
+    required double width,
+    required double height,
+    required List<Color> linearColors,
+    required String text,
+  }) {
+    return ReportGestureDetector(
       onTap: onTap,
       child: Container(
         width: width,
@@ -250,7 +284,9 @@ class _ShareInviteScreenState extends State<ShareInviteScreen> {
     );
   }
 
-  Widget _buildRewardItem() {
+  Widget _buildRewardItem(OrderModel? order) {
+    if (order == null) return const SizedBox.shrink();
+
     return Stack(
       children: [
         Container(
@@ -281,8 +317,8 @@ class _ShareInviteScreenState extends State<ShareInviteScreen> {
                 child: MyAvatar(
                   margin: 1,
                   size: 40.w,
-                  isAssets: true,
-                  thumb: MyImagePaths.appInviteAvatar,
+                  isAssets: false,
+                  thumb: order.avatar,
                   gradient: const LinearGradient(colors: [Colors.white, Colors.white]),
                 ),
               ),
@@ -291,9 +327,9 @@ class _ShareInviteScreenState extends State<ShareInviteScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 10.w),
-                  Text('舒心踢电话', style: MyTheme.white255_13.s14.w600),
+                  Text(order.name, style: MyTheme.white255_13.s14.w600),
                   SizedBox(height: 2.w),
-                  Text('获得300元现金，提现已到账', style: MyTheme.white255_12.s14.w400),
+                  Text(order.tip, style: MyTheme.white255_12.s14.w400),
                   SizedBox(height: 10.w),
                 ],
               ),
@@ -308,12 +344,12 @@ class _ShareInviteScreenState extends State<ShareInviteScreen> {
                     RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(children: [
-                        TextSpan(text: '300', style: MyTheme.white255_12.w500.color250_255_115),
-                        TextSpan(text: '元', style: MyTheme.white255_12.w500),
+                        TextSpan(text: order.price.toString(), style: MyTheme.white255_12.w500.color250_255_115),
+                        TextSpan(text: 'y'.tr(context: context), style: MyTheme.white255_12.w500),
                       ]),
                     ),
                     SizedBox(height: 2.w),
-                    Text('已提现', style: MyTheme.white255_13.s11.w400),
+                    Text('ytx'.tr(context: context), style: MyTheme.white255_13.s11.w400),
                   ],
                 ),
               ),
@@ -326,7 +362,7 @@ class _ShareInviteScreenState extends State<ShareInviteScreen> {
   }
 
   Widget _buildRuleWidget(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       onTap: () {
         _showRuleDialog();
       },
@@ -342,7 +378,7 @@ class _ShareInviteScreenState extends State<ShareInviteScreen> {
   }
 
   Widget _buildInviteRecordWidget(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       onTap: () {
         const MineShareToUserRecordRoute().push(context);
       },
@@ -359,19 +395,41 @@ class _ShareInviteScreenState extends State<ShareInviteScreen> {
 }
 
 class _MyWithDrawlView extends StatelessWidget {
-  final ValueNotifier<CashWithdrawRule?> cashWithdrawRuleNotifier;
+  final CashWithdrawRule? cashWithdrawRule;
   final ScreenUtil screenUtil;
-  const _MyWithDrawlView({required this.cashWithdrawRuleNotifier, required this.screenUtil});
+
+  const _MyWithDrawlView({required this.cashWithdrawRule, required this.screenUtil});
 
   @override
   Widget build(BuildContext context) {
+    final withdrawAmount = cashWithdrawRule?.withdrawAmount ?? '0.00';
+    final eventMoney = cashWithdrawRule?.eventMoney ?? '0.00';
+    // 转为 double
+    final withdrawValue = double.tryParse(withdrawAmount) ?? 0.0;
+    final eventMoneyValue = double.tryParse(eventMoney) ?? 0.0;
+    // 差值（withdraw - eventMoney）
+    final diff = withdrawValue - eventMoneyValue;
+    String diffStr = '';
+    if (diff > 0) {
+      diffStr = diff.toStringAsFixed(2);
+    } else {
+      diffStr = '0';
+    }
+
+    final progress = withdrawValue <= 0 ? 0.0 : (eventMoneyValue / withdrawValue).clamp(0.0, 1.0);
+
     return Stack(
       children: [
         Center(
           child: SizedBox(
             width: screenUtil.screenWidth - 2 * MyTheme.pagePadding,
             height: 173.w,
-            child: MyImage.asset(MyImagePaths.appShareInviteBg, width: screenUtil.screenWidth - 2 * MyTheme.pagePadding, height: 173.w, fit: BoxFit.fill),
+            child: MyImage.asset(
+              MyImagePaths.appShareInviteBg,
+              width: screenUtil.screenWidth - 2 * MyTheme.pagePadding,
+              height: 173.w,
+              fit: BoxFit.fill,
+            ),
           ),
         ),
         Center(
@@ -389,7 +447,8 @@ class _MyWithDrawlView extends StatelessWidget {
                     Selector<UserNotifier, Member>(
                       selector: (_, config) => config.member,
                       builder: (context, member, child) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           MyAvatar(
                             thumb: member.thumb,
@@ -403,89 +462,59 @@ class _MyWithDrawlView extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    ValueListenableBuilder(
-                        valueListenable: cashWithdrawRuleNotifier,
-                        builder: (context, cashWithdrawRule, child) {
-                          final withdrawAmount = cashWithdrawRule?.withdrawAmount ?? '0.00';
-                          final eventMoney = cashWithdrawRule?.eventMoney ?? '0.00';
-                          // 转为 double
-                          final withdrawValue = double.tryParse(withdrawAmount) ?? 0.0;
-                          final eventMoneyValue = double.tryParse(eventMoney) ?? 0.0;
-                          // 差值（withdraw - eventMoney）
-                          final diff = withdrawValue - eventMoneyValue;
-                          String diffStr = '';
-                          if (diff > 0) {
-                            diffStr = diff.toStringAsFixed(2);
-                          } else {
-                            diffStr = '0';
-                          }
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(height: 10.w),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 4.5.w),
+                          decoration: BoxDecoration(
+                            color: const Color.fromRGBO(69, 36, 16, 1),
+                            borderRadius: BorderRadius.circular(45.w),
+                            border: Border.all(color: const Color.fromRGBO(122, 80, 14, 1), width: 0.5.w),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(height: 10.w),
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 4.5.w),
-                                decoration: BoxDecoration(
-                                  color: const Color.fromRGBO(69, 36, 16, 1),
-                                  borderRadius: BorderRadius.circular(45.w),
-                                  border: Border.all(color: const Color.fromRGBO(122, 80, 14, 1), width: 0.5.w),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    MyImage.asset(MyImagePaths.appShareInviteDaizi, width: 30.w, height: 30.w),
-                                    SizedBox(width: 5.w),
-                                    Text(eventMoney,
-                                        style:
-                                            TextStyle(color: const Color.fromRGBO(250, 255, 115, 1), fontSize: 25.sp, fontWeight: FontWeight.w600)),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 10.w),
-                              Row(
+                              MyImage.asset(MyImagePaths.appShareInviteDaizi, width: 30.w, height: 30.w),
+                              SizedBox(width: 5.w),
+                              Text(eventMoney,
+                                  style: TextStyle(color: const Color.fromRGBO(250, 255, 115, 1), fontSize: 25.sp, fontWeight: FontWeight.w600)),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 10.w),
+                        Row(
+                          children: [
+                            RichText(
+                              text: TextSpan(
                                 children: [
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(text: '${'ltxjc'.tr(context: context)} ', style: MyTheme.white06_18.white.w500),
-                                        TextSpan(
-                                            text: diffStr,
-                                            style: TextStyle(
-                                                color: MyTheme.color250_255_115, fontSize: 18.sp, fontWeight: FontWeight.w500)),
-                                        TextSpan(text: 'y'.tr(context: context), style: MyTheme.white06_18.white.w500),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(width: 15.w)
+                                  TextSpan(text: '${'ltxjc'.tr(context: context)} ', style: MyTheme.white06_18.white.w500),
+                                  TextSpan(
+                                      text: diffStr,
+                                      style: TextStyle(color: MyTheme.color250_255_115, fontSize: 18.sp, fontWeight: FontWeight.w500)),
+                                  TextSpan(text: 'y'.tr(context: context), style: MyTheme.white06_18.white.w500),
                                 ],
                               ),
-                            ],
-                          );
-                        }),
+                            ),
+                            SizedBox(width: 15.w)
+                          ],
+                        ),
+                      ],
+                    ),
                     SizedBox(width: 20.w),
                   ],
                 ),
                 SizedBox(height: 15.w),
                 SizedBox(
                   width: screenUtil.screenWidth - 5 * MyTheme.pagePadding,
-                  child: ValueListenableBuilder(
-                      valueListenable: cashWithdrawRuleNotifier,
-                      builder: (context, cashWithdrawRule, child) {
-                        final eventMoney = cashWithdrawRule?.eventMoney ?? '0.00';
-                        final withdrawAmount = cashWithdrawRule?.withdrawAmount ?? '0.00';
-                        final eventMoneyValue = double.tryParse(eventMoney) ?? 0.0;
-                        final withdrawAmountValue = double.tryParse(withdrawAmount) ?? 0.0;
-                        final progress = withdrawAmountValue <= 0
-                            ? 0.0
-                            : (eventMoneyValue / withdrawAmountValue).clamp(0.0, 1.0);
-                        return GradientProgressBar(
-                          value: progress,
-                          height: 17,
-                          linearColors: const [Color.fromRGBO(217, 106, 21, 0.8), Color.fromRGBO(224, 176, 20, 0.8)],
-                          radius: const BorderRadius.all(Radius.circular(9)),
-                          label: Text('dqedjd'.tr(context: context).replaceAll('00', eventMoney), style: MyTheme.white255_13.s12.w400),
-                        );
-                      }),
+                  child: GradientProgressBar(
+                    value: progress,
+                    height: 17,
+                    linearColors: const [Color.fromRGBO(217, 106, 21, 0.8), Color.fromRGBO(224, 176, 20, 0.8)],
+                    radius: const BorderRadius.all(Radius.circular(9)),
+                    label: Text('dqedjd'.tr(context: context).replaceAll('00', eventMoney), style: MyTheme.white255_13.s12.w400),
+                  ),
                 ),
                 SizedBox(height: 15.w),
               ],

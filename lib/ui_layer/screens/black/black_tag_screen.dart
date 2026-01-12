@@ -13,6 +13,8 @@ import '../common_widgets/general_banner.dart';
 import '../common_widgets/my_list_view.dart';
 import '../theme.dart';
 
+import '../../../report/ui_layer/report_general_banner.dart';
+
 class BlackTagScreen extends StatefulWidget {
   final BlackModel blockModel;
 
@@ -96,7 +98,13 @@ class _Header extends StatelessWidget {
           valueListenable: bannersNotifier,
           builder: (context, banners, child) {
             if (banners.isEmpty) return const SizedBox.shrink();
-            return Padding(padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: MyTheme.pagePadding), child: GeneralBannerAppsListWidget(data: banners));
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: MyTheme.pagePadding),
+              child: ReportGeneralAppsListVidget(
+                data: banners,
+                titleColor: MyTheme.whiteColor,
+              ),
+            );
           },
         ),
       ],

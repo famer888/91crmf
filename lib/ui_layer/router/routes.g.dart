@@ -72,8 +72,10 @@ List<RouteBase> get $appRoutes => [
       $videoDetailRoute,
       $anWangRestrictedRoute,
       $anWangRestrictedDetailRoute,
+      $pZhanVideoDetailRoute,
       $awjqVideoTagRoute,
       $awjqVideoSearchRoute,
+      $pZhanVideoSearchRoute,
       $darkWeb91Route,
       $aw91VideoDetailRoute,
       $aw91TagRoute,
@@ -85,10 +87,12 @@ List<RouteBase> get $appRoutes => [
       $clCommunityRoute,
       $clVideoDetailRoute,
       $clVideoTagRoute,
+      $pZhanVideoTagRoute,
       $clVideoSearchRoute,
       $clSearchResultRoute,
       $zpcSearchResultRoute,
       $awjqSearchResultRoute,
+      $pZhanSearchResultRoute,
       $aw91SearchResultRoute,
       $voicePalyerContentRoute,
       $livesDetailRoute,
@@ -136,8 +140,8 @@ RouteBase get $statefulShellRoute => StatefulShellRouteData.$route(
         StatefulShellBranchData.$branch(
           routes: [
             GoRouteData.$route(
-              path: '/crack',
-              factory: $CrackRouteExtension._fromState,
+              path: '/crack1',
+              factory: $CrackRoute1Extension._fromState,
             ),
           ],
         ),
@@ -181,11 +185,11 @@ extension $StatefulShellRouteExtension on StatefulShellRoute {
       const StatefulShellRoute();
 }
 
-extension $CrackRouteExtension on CrackRoute {
-  static CrackRoute _fromState(GoRouterState state) => const CrackRoute();
+extension $CrackRoute1Extension on CrackRoute1 {
+  static CrackRoute1 _fromState(GoRouterState state) => const CrackRoute1();
 
   String get location => GoRouteData.$location(
-        '/crack',
+        '/crack1',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -1900,6 +1904,35 @@ extension $AnWangRestrictedDetailRouteExtension on AnWangRestrictedDetailRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $pZhanVideoDetailRoute => GoRouteData.$route(
+      path: '/pzhanVideoDetail',
+      parentNavigatorKey: PZhanVideoDetailRoute.$parentNavigatorKey,
+      factory: $PZhanVideoDetailRouteExtension._fromState,
+    );
+
+extension $PZhanVideoDetailRouteExtension on PZhanVideoDetailRoute {
+  static PZhanVideoDetailRoute _fromState(GoRouterState state) =>
+      PZhanVideoDetailRoute(
+        id: int.parse(state.uri.queryParameters['id']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/pzhanVideoDetail',
+        queryParams: {
+          'id': id.toString(),
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 RouteBase get $awjqVideoTagRoute => GoRouteData.$route(
       path: '/awjqVideoTag',
       parentNavigatorKey: AwjqVideoTagRoute.$parentNavigatorKey,
@@ -1942,6 +1975,35 @@ extension $AwjqVideoSearchRouteExtension on AwjqVideoSearchRoute {
 
   String get location => GoRouteData.$location(
         '/awjqVideoSearch',
+        queryParams: {
+          'args': args,
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $pZhanVideoSearchRoute => GoRouteData.$route(
+      path: '/pzhanVideoSearch',
+      parentNavigatorKey: PZhanVideoSearchRoute.$parentNavigatorKey,
+      factory: $PZhanVideoSearchRouteExtension._fromState,
+    );
+
+extension $PZhanVideoSearchRouteExtension on PZhanVideoSearchRoute {
+  static PZhanVideoSearchRoute _fromState(GoRouterState state) =>
+      PZhanVideoSearchRoute(
+        args: state.uri.queryParameters['args']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/pzhanVideoSearch',
         queryParams: {
           'args': args,
         },
@@ -2265,6 +2327,34 @@ extension $ClVideoTagRouteExtension on ClVideoTagRoute {
       context.replace(location, extra: $extra);
 }
 
+RouteBase get $pZhanVideoTagRoute => GoRouteData.$route(
+      path: '/pzhanVideoTag',
+      parentNavigatorKey: PZhanVideoTagRoute.$parentNavigatorKey,
+      factory: $PZhanVideoTagRouteExtension._fromState,
+    );
+
+extension $PZhanVideoTagRouteExtension on PZhanVideoTagRoute {
+  static PZhanVideoTagRoute _fromState(GoRouterState state) =>
+      PZhanVideoTagRoute(
+        state.extra as String,
+      );
+
+  String get location => GoRouteData.$location(
+        '/pzhanVideoTag',
+      );
+
+  void go(BuildContext context) => context.go(location, extra: $extra);
+
+  Future<T?> push<T>(BuildContext context) =>
+      context.push<T>(location, extra: $extra);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location, extra: $extra);
+
+  void replace(BuildContext context) =>
+      context.replace(location, extra: $extra);
+}
+
 RouteBase get $clVideoSearchRoute => GoRouteData.$route(
       path: '/clVideoSearch',
       parentNavigatorKey: ClVideoSearchRoute.$parentNavigatorKey,
@@ -2370,6 +2460,37 @@ extension $AwjqSearchResultRouteExtension on AwjqSearchResultRoute {
 
   String get location => GoRouteData.$location(
         '/awjqVideoSearchResult',
+        queryParams: {
+          'word': word,
+          'type': type.toString(),
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $pZhanSearchResultRoute => GoRouteData.$route(
+      path: '/pzhanVideoSearchResult',
+      parentNavigatorKey: PZhanSearchResultRoute.$parentNavigatorKey,
+      factory: $PZhanSearchResultRouteExtension._fromState,
+    );
+
+extension $PZhanSearchResultRouteExtension on PZhanSearchResultRoute {
+  static PZhanSearchResultRoute _fromState(GoRouterState state) =>
+      PZhanSearchResultRoute(
+        word: state.uri.queryParameters['word']!,
+        type: int.parse(state.uri.queryParameters['type']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/pzhanVideoSearchResult',
         queryParams: {
           'word': word,
           'type': type.toString(),

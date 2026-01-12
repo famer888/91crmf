@@ -7,6 +7,8 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class VoicePlayerTimeSheet extends StatefulWidget {
   const VoicePlayerTimeSheet({super.key});
 
@@ -44,7 +46,7 @@ class _VoicePlayerTimeSheetState extends State<VoicePlayerTimeSheet> {
                     width: 42.w,
                   ),
                   Text('dsbf'.tr(context: context), style: MyTheme.white_17),
-                  GestureDetector(
+                  ReportGestureDetector(
                     onTap: () => Navigator.pop(context),
                     behavior: HitTestBehavior.translucent,
                     child: Container(

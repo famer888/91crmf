@@ -15,6 +15,8 @@ import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class VoicePlayerSheet extends StatefulWidget {
   const VoicePlayerSheet({super.key, this.complete});
 
@@ -101,7 +103,7 @@ class _VoicePlayerSheetState extends State<VoicePlayerSheet> {
                     width: 42.w,
                   ),
                   Text('bflb'.tr(context: context), style: MyTheme.white_17),
-                  GestureDetector(
+                  ReportGestureDetector(
                     onTap: () => Navigator.pop(context),
                     behavior: HitTestBehavior.translucent,
                     child: Container(

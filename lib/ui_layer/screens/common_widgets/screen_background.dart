@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
-import '../image_paths.dart';
-import 'my_image.dart';
 
 class ScreenBackground extends StatelessWidget {
   const ScreenBackground({
     super.key,
     required this.child,
     this.appBg,
+    this.bgColor,
   });
 
   final Widget child;
   final Widget? appBg;
+  final Color? bgColor;
 
   @override
   Widget build(BuildContext context) {
-    // return child;
     return ColoredBox(
-      color: Theme.of(context).scaffoldBackgroundColor,
+      color: bgColor ?? Theme.of(context).scaffoldBackgroundColor,
       child: Stack(
         fit: StackFit.expand,
         children: [

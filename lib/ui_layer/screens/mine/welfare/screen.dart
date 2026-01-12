@@ -15,6 +15,8 @@ import 'widgets/agent_view.dart';
 import 'widgets/app_center_view.dart';
 import 'widgets/tasks_view.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class MineWelfareScreen extends StatefulWidget {
   const MineWelfareScreen({super.key, required this.index});
   final int index;
@@ -63,7 +65,7 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leadingWidth: 40.w,
-      leading: GestureDetector(
+      leading: ReportGestureDetector(
         onTap: () {
           context.pop();
         },

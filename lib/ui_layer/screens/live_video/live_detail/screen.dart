@@ -19,6 +19,8 @@ import 'package:provider/provider.dart';
 
 
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class LiveVideoDetailScreen extends StatefulWidget {
   const LiveVideoDetailScreen({super.key, required this.id});
 
@@ -73,7 +75,7 @@ class _LiveVideoDetailScreenState extends State<LiveVideoDetailScreen> {
         child: Scaffold(
           extendBodyBehindAppBar: true,
           // appBar: const MyAppBar(),
-          floatingActionButton: GestureDetector(
+          floatingActionButton: ReportGestureDetector(
             onTap: () {
               context.pop();
             },

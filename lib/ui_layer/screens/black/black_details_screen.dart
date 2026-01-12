@@ -13,9 +13,10 @@ import '../../../domain/async_value.dart';
 import '../../../domain/model/banner_model.dart';
 import '../../../domain/model/black_model.dart';
 import '../../../domain/remote_domain/domains/black_domain.dart';
+import '../../../report/ui_layer/report_general_banner.dart';
+import '../../../report/ui_layer/report_gesture_detector.dart';
 import '../../utils/common_utils.dart';
 import '../../utils/my_toast.dart';
-import '../common_widgets/general_banner.dart';
 import '../common_widgets/my_app_bar.dart';
 import '../common_widgets/my_image.dart';
 import '../common_widgets/my_list_view.dart';
@@ -199,7 +200,7 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
         ),
         body: _asyncValue.maybeWhen(
           data: (data) {
-            return GestureDetector(
+            return ReportGestureDetector(
               onTap: () {
                 onDismissFocus();
               },
@@ -261,7 +262,7 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
         final banner = topAds.map((x) => BannerModel.fromJson(x)).toList();
         return Padding(
           padding: EdgeInsets.only(left: MyTheme.pagePadding, right: MyTheme.pagePadding, top: MyTheme.pagePadding),
-          child: GeneralBannerAppsListWidget(data: banner),
+          child: ReportGeneralAppsListVidget(data: banner),
         );
       }
     } catch (e) {
@@ -570,7 +571,7 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
   }
 
   Widget _buildActionItemWidget(iconName, title, void Function()? onTap) {
-    return GestureDetector(
+    return ReportGestureDetector(
       onTap: onTap,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jycrpj/domain/model/banner_model.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/dialog/my_dialog.dart';
-import 'package:jycrpj/ui_layer/screens/common_widgets/general_banner.dart';
 import 'package:jycrpj/ui_layer/screens/mine/bind_email/screen.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +10,8 @@ import 'package:provider/provider.dart';
 import '../../../domain/enum.dart';
 import '../../../domain/model/member_model.dart';
 import '../../../domain/type_def.dart';
+import '../../../report/ui_layer/report_general_banner.dart';
+import '../../../report/ui_layer/report_gesture_detector.dart';
 import '../../notifiers/home_config_notifier.dart';
 import '../../notifiers/user_notifier.dart';
 import '../../router/routes.dart';
@@ -41,31 +42,33 @@ class _MineScreenState extends State<MineScreen> {
 
   _showBindEmailPop() {
     MyDialog.showDialog(
-        context: context,
-        child: Dialog(
-            // title: tr('ts'),
-            backgroundColor: MyTheme.bgColor,
-            //前往充值 - 立即购买
-            // buttonText: tr('fxdv'),
-            // //做任务得VIP
-            // confirmOnTap: () {
-            //   const MineWelfareRoute(index: 1).push(context);
-            // },
-            // cancelOnTap: () {
-            //   if (isInsufficient) {
-            //     const CoinRechargeRoute().push(context);
-            //   } else {
-            //     byVideoRes(member.money - widget.info.coins!);
-            //   }
-            // },
-            child: Container(
-              width: 305.w,
-              height: 410.w,
-              padding: EdgeInsets.symmetric(vertical: 10.w),
-              child: const MineBindEmailScreen(
-                isForPop: true,
-              ),
-            )));
+      context: context,
+      child: Dialog(
+        // title: tr('ts'),
+        backgroundColor: MyTheme.bgColor,
+        //前往充值 - 立即购买
+        // buttonText: tr('fxdv'),
+        // //做任务得VIP
+        // confirmOnTap: () {
+        //   const MineWelfareRoute(index: 1).push(context);
+        // },
+        // cancelOnTap: () {
+        //   if (isInsufficient) {
+        //     const CoinRechargeRoute().push(context);
+        //   } else {
+        //     byVideoRes(member.money - widget.info.coins!);
+        //   }
+        // },
+        child: Container(
+          width: 305.w,
+          height: 410.w,
+          padding: EdgeInsets.symmetric(vertical: 10.w),
+          child: const MineBindEmailScreen(
+            isForPop: true,
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -80,7 +83,7 @@ class _MineScreenState extends State<MineScreen> {
   @override
   Widget build(BuildContext context) {
     return ScreenBackground(
-      appBg: MyImage.asset(MyImagePaths.appBg, fit:BoxFit.cover, width: ScreenUtil().screenWidth, height: 148.w),
+      appBg: MyImage.asset(MyImagePaths.appBg, fit: BoxFit.cover, width: ScreenUtil().screenWidth, height: 148.w),
       child: Scaffold(
         body: SafeArea(
           child: Column(
@@ -118,7 +121,7 @@ class _FixedTopArea extends StatelessWidget {
         children: [
           const _SystemNoticeIcon(),
           const SizedBox(width: 20),
-          GestureDetector(
+          ReportGestureDetector(
             onTap: () => const MineSetupRoute().push(context),
             child: const MyImage.asset(MyImagePaths.appMineSetting, width: 25, fit: BoxFit.fitWidth),
           )
@@ -133,7 +136,7 @@ class _SystemNoticeIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       onTap: () {
         const MessageCenterRoute().push(context);
       },
@@ -210,13 +213,13 @@ class _AdBanner extends StatelessWidget {
     if (banners is List) {
       try {
         final bannerList = banners.map<BannerModel>((e) {
-                final bannerModel = BannerModel.fromJson(e);
-                return bannerModel;
-              }).toList();
+          final bannerModel = BannerModel.fromJson(e);
+          return bannerModel;
+        }).toList();
         return Padding(
-                padding: EdgeInsets.only(top: 20.w),
-                child: GeneralBannerAppsListWidget(data: bannerList),
-              );
+          padding: EdgeInsets.only(top: 20.w),
+          child: ReportGeneralAppsListVidget(data: bannerList),
+        );
       } catch (e) {
         CommonUtils.log('banners转换出错:$e');
         return const SizedBox.shrink();
@@ -267,7 +270,7 @@ class _HeaderInfo extends StatelessWidget {
                         ),
                       ),
                     if (member.vipUpgrade == 1)
-                      GestureDetector(
+                      ReportGestureDetector(
                         onTap: () => const VipUpgradeRoute().push(context),
                         child: Container(
                           margin: EdgeInsets.only(left: 5.w),
@@ -305,7 +308,7 @@ class _HeaderInfo extends StatelessWidget {
               selector: (_, userNotifier) => userNotifier.tokenStatus,
               builder: (context, tokenStatus, child) => tokenStatus == MyTokenStatus.valid
                   ? const SizedBox.shrink()
-                  : GestureDetector(
+                  : ReportGestureDetector(
                       onTap: () => const LoginRoute().push(context),
                       child: Container(
                         width: 70,
@@ -377,7 +380,7 @@ class _VIPCenterState extends State<_VIPCenter> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 75.w,
-      child: GestureDetector(
+      child: ReportGestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () => const VipCenterRoute().push(context),
         child: Stack(
@@ -411,7 +414,7 @@ class _CenterMenu extends StatelessWidget {
                 return SizedBox(
                   width: 170.w,
                   height: 77.5.w,
-                  child: GestureDetector(
+                  child: ReportGestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () => const CoinRechargeRoute().push(context),
                     child: Stack(
@@ -448,7 +451,7 @@ class _CenterMenu extends StatelessWidget {
           child: SizedBox(
             width: 170.w,
             height: 77.5.w,
-            child: GestureDetector(
+            child: ReportGestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () => const ShareInviteRoute().push(context),
               child: Stack(
@@ -477,7 +480,7 @@ class _CenterMenu extends StatelessWidget {
         //   child: SizedBox(
         //     width: 170.w,
         //     height: 77.5.w,
-        //     child: GestureDetector(
+        //     child: ReportGestureDetector(
         //       behavior: HitTestBehavior.translucent,
         //       onTap: () => const MineAgentRoute().push(context),
         //       child: Stack(
@@ -563,7 +566,7 @@ class _SecondMenu extends StatelessWidget {
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
             children: [
               for (final data in menu)
-                GestureDetector(
+                ReportGestureDetector(
                   onTap: data.onTap,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -646,7 +649,7 @@ class _ThirdMenu extends StatelessWidget {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
           children: [
             for (final data in menu)
-              GestureDetector(
+              ReportGestureDetector(
                 onTap: data.onTap,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -683,7 +686,7 @@ class _ThirdMenu extends StatelessWidget {
     //       addRepaintBoundaries: false,
     //       children: [
     //         for (final data in menu)
-    //           GestureDetector(
+    //           ReportGestureDetector(
     //             behavior: HitTestBehavior.translucent,
     //             onTap: data.onTap,
     //             child: SizedBox(

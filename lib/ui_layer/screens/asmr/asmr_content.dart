@@ -20,6 +20,10 @@ import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
 
+import '../../../report/ui_layer/report_general_banner.dart';
+
+import '../../../report/ui_layer/report_gesture_detector.dart';
+
 class ASMRContentView extends StatefulWidget {
   const ASMRContentView({super.key});
 
@@ -104,7 +108,7 @@ class _ASMRContentViewState extends State<ASMRContentView> {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
         child: TabBarWithView.fillColor(
-          tabBarRightWidget: GestureDetector(
+          tabBarRightWidget: ReportGestureDetector(
             onTap: () {
               isGird = !isGird;
               setState(() {});
@@ -293,7 +297,7 @@ class _Header extends StatelessWidget {
             if (banners.isEmpty) return const SizedBox.shrink();
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-              child: GeneralBannerAppsListWidget(data: banners),
+              child: ReportGeneralAppsListVidget(data: banners),
             );
           },
         ),
@@ -319,7 +323,7 @@ class _Header extends StatelessWidget {
               ),
               itemBuilder: (context, index) {
                 final topic = navs[index];
-                return GestureDetector(
+                return ReportGestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
                     onLinkNavTap(topic);

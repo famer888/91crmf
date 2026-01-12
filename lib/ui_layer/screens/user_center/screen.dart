@@ -37,6 +37,8 @@ import 'package:jycrpj/ui_layer/notifiers/home_config_notifier.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/keep_alive_wrapper.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_tab_bar.dart';
 
+import '../../../report/ui_layer/report_gesture_detector.dart';
+
 class UserCenterScreen extends StatefulWidget {
   const UserCenterScreen({super.key, required this.aff, this.index = 0});
 
@@ -105,11 +107,11 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
         body: _asyncValue.maybeWhen(
             orElse: () => const LoadingView(),
             error: (_, __) => Column(
-              children: [
-                UserTopicBarWidget('', key: _topicBarKey),
-                Expanded(child: NetworkErrorView(onTap: _initData)),
-              ],
-            ),
+                  children: [
+                    UserTopicBarWidget('', key: _topicBarKey),
+                    Expanded(child: NetworkErrorView(onTap: _initData)),
+                  ],
+                ),
             data: (data) => configContent(data)),
       ),
     );
@@ -153,8 +155,7 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
     MyToast.closeAllLoading();
 
     if (result.status == 1) {
-      userNotifier.setMoney(
-          money: userNotifier.member.money - (data.coins ?? 0));
+      userNotifier.setMoney(money: userNotifier.member.money - (data.coins ?? 0));
       data.contact = result['data']['contact'];
       _asyncValue = AsyncData(data);
       setState(() {});
@@ -168,10 +169,7 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
 
     final city = (data.city?.isNotEmpty ?? false) ? data.city : '火星';
     final sex = data.sex == 0 ? '保密' : (data.sex == 1 ? '男' : '女');
-    List<String> tags = (data.fetish ?? '')
-        .split(',')
-        .where((element) => element.isNotEmpty)
-        .toList();
+    List<String> tags = (data.fetish ?? '').split(',').where((element) => element.isNotEmpty).toList();
     String tagsStr = ' ';
     for (String e in tags) {
       final String str = '#$e ';
@@ -181,8 +179,7 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
     return Selector<UserNotifier, Member>(
       builder: (_, member, __) {
         return Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: MyTheme.pagePadding, vertical: 10.w),
+          padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 10.w),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -215,8 +212,7 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                       RichText(
                           text: TextSpan(children: [
                         TextSpan(
-                          text: CommonUtils.renderFixedNumber(
-                              data.followCount ?? 0),
+                          text: CommonUtils.renderFixedNumber(data.followCount ?? 0),
                           style: MyTheme.gray102_15,
                         ),
                         TextSpan(
@@ -251,19 +247,16 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                       member.uuid == data.uuid
                           ? const SizedBox.shrink()
                           : Center(
-                              child: GestureDetector(
+                              child: ReportGestureDetector(
                                 behavior: HitTestBehavior.translucent,
                                 onTap: () {
                                   if ((member.username ?? '').isEmpty) {
-                                    MyToast.showText(
-                                        text: 'zcyhcz'.tr(context: context));
+                                    MyToast.showText(text: 'zcyhcz'.tr(context: context));
                                     return;
                                   }
                                   final uuid = data.uuid!;
                                   final nick = data.nickname!;
-                                  final url = data.thumb?.isNotEmpty == true
-                                      ? data.thumb!
-                                      : ' ';
+                                  final url = data.thumb?.isNotEmpty == true ? data.thumb! : ' ';
                                   ChatMessageRoute(
                                     nickName: Uri.encodeComponent(nick),
                                     thumb: Uri.encodeComponent(url),
@@ -293,18 +286,17 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                       member.uuid == data.uuid
                           ? const SizedBox.shrink()
                           : Selector<UserNotifier, bool>(
-                          selector: (_, notifier) =>
-                              notifier.userFollowingStatus.contains('${data.aff}'),
-                          builder: (_, isFollowed, __) {
-                            return Container(
-                              margin: EdgeInsets.only(left: 10.w),
-                              child: FollowButton(
-                                  isFollowed: isFollowed,
-                                  onTap: () async {
-                                    await userNotifier.changeUserFollow('${data.aff}');
-                                  }),
-                            );
-                          })
+                              selector: (_, notifier) => notifier.userFollowingStatus.contains('${data.aff}'),
+                              builder: (_, isFollowed, __) {
+                                return Container(
+                                  margin: EdgeInsets.only(left: 10.w),
+                                  child: FollowButton(
+                                      isFollowed: isFollowed,
+                                      onTap: () async {
+                                        await userNotifier.changeUserFollow('${data.aff}');
+                                      }),
+                                );
+                              })
                     ],
                   )
                 ],
@@ -320,7 +312,7 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
   Widget _contactView(CreatorInfo data) {
     return data.hasContact == 1
         ? (data.contact?.isNotEmpty ?? false)
-            ? GestureDetector(
+            ? ReportGestureDetector(
                 onTap: () {
                   //解锁联系方式
                   if (data.contact?.isNotEmpty ?? false) {
@@ -331,31 +323,22 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                 },
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 10.w),
-                  child: Text(data.contact ?? '',
-                      style: MyTheme.white07_12, maxLines: 10),
+                  child: Text(data.contact ?? '', style: MyTheme.white07_12, maxLines: 10),
                 ),
               )
-            : GestureDetector(
+            : ReportGestureDetector(
                 onTap: () {
                   _buyData(data);
                 },
                 child: Container(
                   alignment: Alignment.center,
                   decoration: DottedDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(4.w)),
-                      shape: Shape.box,
-                      color: MyTheme.blueColor63,
-                      strokeWidth: 1.w),
+                      borderRadius: BorderRadius.all(Radius.circular(4.w)), shape: Shape.box, color: MyTheme.blueColor63, strokeWidth: 1.w),
                   margin: EdgeInsets.only(bottom: 10.w),
                   padding: EdgeInsets.symmetric(horizontal: 10.w),
                   height: 40.w,
-                  child: Text(
-                      (data.contact?.isNotEmpty ?? false)
-                          ? data.contact ?? ''
-                          : data.payTip ?? 'jslxfs'.tr(context: context),
-                      style: MyTheme.blue80_13_M,
-                      textAlign: TextAlign.center,
-                      maxLines: 2),
+                  child: Text((data.contact?.isNotEmpty ?? false) ? data.contact ?? '' : data.payTip ?? 'jslxfs'.tr(context: context),
+                      style: MyTheme.blue80_13_M, textAlign: TextAlign.center, maxLines: 2),
                 ),
               )
         : Container();
@@ -411,8 +394,7 @@ class _VlogVideoViewState extends State<_VlogVideoView> {
     _page = page;
     _limit = pageSize;
 
-    final result = await _domain.otherUserVlogList(
-        aff: int.parse(widget.aff ?? '0'), page: page, limit: pageSize);
+    final result = await _domain.otherUserVlogList(aff: int.parse(widget.aff ?? '0'), page: page, limit: pageSize);
     if (result.isValid) {
       List<VlogModel> tp = List.from(result.data ?? []);
       if (page == 1) {
@@ -429,8 +411,7 @@ class _VlogVideoViewState extends State<_VlogVideoView> {
   @override
   Widget build(BuildContext context) {
     return MyListView.grid(
-      padding:
-          EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
+      padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
       childAspectRatio: UILayerConst.vlogVideoRatio,
       crossAxisSpacing: 10.w,
       itemBuilder: (_, item, index) => VlogCard(
@@ -536,7 +517,7 @@ class _UserTopicBarWidgetState extends State<UserTopicBarWidget> {
       height: MyTheme.statusHeight + MyTheme.navbarHegiht,
       // color: MyTheme.bgColor.withOpacity(opacity),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        GestureDetector(
+        ReportGestureDetector(
           child: Container(
             alignment: Alignment.center,
             width: 40.w,
@@ -556,10 +537,7 @@ class _UserTopicBarWidgetState extends State<UserTopicBarWidget> {
             padding: EdgeInsets.only(right: 30.w),
             child: Text(
               widget.title,
-              style: TextStyle(
-                  color: Color.fromRGBO(255, 255, 255, opacity),
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold),
+              style: TextStyle(color: Color.fromRGBO(255, 255, 255, opacity), fontSize: 16.sp, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
           ),

@@ -25,6 +25,10 @@ import 'my_list_view.dart';
 import 'my_tab_bar.dart';
 import 'my_image.dart';
 
+import '../../../report/ui_layer/report_general_banner.dart';
+
+import '../../../report/ui_layer/report_gesture_detector.dart';
+
 class ApiLinkView extends StatefulWidget {
   const ApiLinkView({super.key, required this.linkModel, required this.onLinkNavTap});
 
@@ -160,7 +164,7 @@ class _HeaderState extends State<_Header> {
 
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-              child: GeneralBannerAppsListWidget(data: banners),
+              child: ReportGeneralAppsListVidget(data: banners),
             );
 
             // return Column(
@@ -206,7 +210,7 @@ class _HeaderState extends State<_Header> {
                 // if (secondPart.isNotEmpty && secondPart is List<BannerModel>)
                 //   Padding(
                 //     padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-                //     child: GeneralBannerAppsListWidget(data: secondPart, singleLine: true),
+                //     child: ReportGeneralAppsListVidget(data: secondPart, singleLine: true),
                 //   ),
               // ],
             // );
@@ -227,7 +231,7 @@ class _HeaderState extends State<_Header> {
                 itemCount: parts.length,
                 itemBuilder: (context, index) {
                   final partsItem = parts[index];
-                  return GestureDetector(
+                  return ReportGestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
                       final linkUrl = partsItem.urlStr;
@@ -295,7 +299,7 @@ class _HeaderState extends State<_Header> {
                   ),
                   itemBuilder: (context, index) {
                     final partsItem = parts[index];
-                    return GestureDetector(
+                    return ReportGestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
                         final linkUrl = partsItem.urlStr;
@@ -390,7 +394,7 @@ class _HeaderState extends State<_Header> {
                                   color: const Color(0xff262631),
                                 ),
                                 child: Center(
-                                  child: GestureDetector(
+                                  child: ReportGestureDetector(
                                     behavior: HitTestBehavior.translucent,
                                     onTap: () {
                                       final linkUrl = topic.linkUrl;
@@ -474,7 +478,7 @@ class _HeaderState extends State<_Header> {
           ),
           itemBuilder: (context, index) {
             final topic = contentTopics[index];
-            return GestureDetector(
+            return ReportGestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
                 final linkUrl = topic.linkUrl;

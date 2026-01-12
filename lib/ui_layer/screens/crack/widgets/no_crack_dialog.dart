@@ -5,6 +5,8 @@ import 'package:jycrpj/ui_layer/screens/theme.dart';
 
 import '../../image_paths.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class NoCrackDialog extends StatelessWidget {
   final VoidCallback cancel;
 
@@ -14,7 +16,7 @@ class NoCrackDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return ColoredBox(
       color: Colors.black54,
-      child: GestureDetector(
+      child: ReportGestureDetector(
         behavior: HitTestBehavior.opaque,
         child: Center(
           child: Padding(
@@ -43,7 +45,7 @@ class NoCrackDialog extends StatelessWidget {
                     softWrap: true,
                   ),
                   SizedBox(height: 40.w),
-                  GestureDetector(
+                  ReportGestureDetector(
                     onTap: () {
                       // context.pop();
                       cancel.call();

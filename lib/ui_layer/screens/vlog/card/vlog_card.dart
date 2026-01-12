@@ -7,6 +7,8 @@ import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class VlogCard extends StatelessWidget {
   const VlogCard({super.key, this.onTapFunc, required this.data});
 
@@ -21,7 +23,7 @@ class VlogCard extends StatelessWidget {
   }
 
   Widget configVlogContentView() {
-    return GestureDetector(
+    return ReportGestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
         onTapFunc?.call(1);
@@ -132,7 +134,7 @@ class VlogCard extends StatelessWidget {
   }
 
   Widget configADContentView() {
-    return GestureDetector(
+    return ReportGestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
         onTapFunc?.call(2);

@@ -18,6 +18,8 @@ import '../../common_widgets/post/comment_input.dart';
 import '../../image_paths.dart';
 import '../../theme.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class CommentView extends StatefulWidget {
   const CommentView({super.key, required this.id});
   final String id;
@@ -76,7 +78,7 @@ class _CommentViewState extends State<CommentView> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       onTap: () {
         inputFocusNode.unfocus();
       },
@@ -166,7 +168,7 @@ class _CommentTile extends StatelessWidget {
           ),
           StatefulBuilder(builder: (_, setState) {
             final isLike = data.isLike == 1;
-            return GestureDetector(
+            return ReportGestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () async {
                 if (data.id case final id?) {

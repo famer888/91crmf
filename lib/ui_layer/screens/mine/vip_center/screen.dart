@@ -14,11 +14,12 @@ import '../../../../domain/enum.dart';
 import '../../../../domain/model/exp_of_vip_model.dart';
 import '../../../../domain/model/product_vip_coin_model.dart';
 import '../../../../domain/type_def.dart';
+import '../../../../report/ui_layer/report_gesture_detector.dart';
 import '../../../notifiers/user_notifier.dart';
 import '../../../router/routes.dart';
 import '../../../utils/my_toast.dart';
+import '../../common_widgets/dialog/widgets/pay_dialog.dart';
 import '../../common_widgets/gradient_text.dart';
-import '../../common_widgets/member_vip.dart';
 import '../../common_widgets/my_app_bar.dart';
 import '../../common_widgets/my_avatar.dart';
 import '../../common_widgets/my_image.dart';
@@ -26,12 +27,12 @@ import '../../common_widgets/partial_clickable_text.dart';
 import '../../common_widgets/screen_background.dart';
 import '../../common_widgets/status/loading.dart';
 import '../../common_widgets/status/network_error.dart';
-import '../../common_widgets/dialog/widgets/pay_dialog.dart';
 import '../../theme.dart';
 
 class VipCenterScreen extends StatefulWidget {
   //停用
   final int pageIndex;
+
   const VipCenterScreen({super.key, this.pageIndex = 0});
 
   @override
@@ -41,7 +42,6 @@ class VipCenterScreen extends StatefulWidget {
 class _VipCenterScreenState extends State<VipCenterScreen> {
   final _type = MyProductType.vip;
   late final _orderDomain = context.read<OrderDomain>();
-  // late final _signDomain = context.read<SignDomain>();
 
   AsyncValue<ProductOfVipOrCoin> _asyncValue = const AsyncInit();
 
@@ -78,7 +78,7 @@ class _VipCenterScreenState extends State<VipCenterScreen> {
         backgroundColor: MyTheme.color11_10_33,
         appBar: MyAppBar(
           title: 'hyzx'.tr(context: context),
-          rightWidget: GestureDetector(
+          rightWidget: ReportGestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () => RechargeRecordRoute(_type.id.toString()).push(context),
             child: Text('czjl'.tr(context: context), style: MyTheme.white14),
@@ -114,10 +114,10 @@ class _BodyState extends State<_Body> {
         SizedBox(height: 10.w),
         const _UserInfoArea(),
         SizedBox(height: 20.w),
-           _ProductCardArea(
-              products: widget.productOfVIP.products,
-              selectedNotifier: productSelectedNotifier,
-            ),
+        _ProductCardArea(
+          products: widget.productOfVIP.products,
+          selectedNotifier: productSelectedNotifier,
+        ),
         SizedBox(height: 20.w),
         Expanded(child: _openVipContent()),
       ],
@@ -128,52 +128,51 @@ class _BodyState extends State<_Body> {
     return Column(
       children: [
         Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: const Color.fromRGBO(35, 34, 55, 1)),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          MyImage.asset(MyImagePaths.appVipL, width: 42.w, height: 10.w),
-                          SizedBox(width: 20.w),
-                          Text('hytq'.tr(context: context), style: MyTheme.white16mudium, maxLines: 100, textAlign: TextAlign.center),
-                          SizedBox(width: 20.w),
-                          MyImage.asset(MyImagePaths.appVipR, width: 42.w, height: 10.w),
-                        ],
-                      ),
-                      SizedBox(height: 15.w),
-                      _RightArea(
-                        notifier: productSelectedNotifier,
-                        products: widget.productOfVIP.products,
-                      ),
-                    ],
-                  ),
+            child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: const Color.fromRGBO(35, 34, 55, 1)),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        MyImage.asset(MyImagePaths.appVipL, width: 42.w, height: 10.w),
+                        SizedBox(width: 20.w),
+                        Text('hytq'.tr(context: context), style: MyTheme.white16mudium, maxLines: 100, textAlign: TextAlign.center),
+                        SizedBox(width: 20.w),
+                        MyImage.asset(MyImagePaths.appVipR, width: 42.w, height: 10.w),
+                      ],
+                    ),
+                    SizedBox(height: 15.w),
+                    _RightArea(
+                      notifier: productSelectedNotifier,
+                      products: widget.productOfVIP.products,
+                    ),
+                  ],
                 ),
-                SizedBox(height: 10.w),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-                  child: PartialClickableText(
-                    prefixText: 'cztx'.tr(context: context),
-                    afterFixText: 'zxkf'.tr(context: context),
-                    prefixTextStyle: TextStyle(color: const Color.fromRGBO(255, 255, 255, 1), fontSize: 12.sp),
-                    afterTextStyle: TextStyle(color: MyTheme.color247_93_96, fontSize: 12.sp),
-                    onTap: () {
-                      const MineCustomerServiceRoute().push(context);
-                    },
-                  ),
+              ),
+              SizedBox(height: 10.w),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
+                child: PartialClickableText(
+                  prefixText: 'cztx'.tr(context: context),
+                  afterFixText: 'zxkf'.tr(context: context),
+                  prefixTextStyle: TextStyle(color: const Color.fromRGBO(255, 255, 255, 1), fontSize: 12.sp),
+                  afterTextStyle: TextStyle(color: MyTheme.color247_93_96, fontSize: 12.sp),
+                  onTap: () {
+                    const MineCustomerServiceRoute().push(context);
+                  },
                 ),
-                SizedBox(height: 25.w),
-              ],
-            ),
-          )
-        ),
+              ),
+              SizedBox(height: 25.w),
+            ],
+          ),
+        )),
         _CustomBuyButton(
           notifier: productSelectedNotifier,
           products: widget.productOfVIP.products,
@@ -182,7 +181,6 @@ class _BodyState extends State<_Body> {
       ],
     );
   }
-
 }
 
 class _UserInfoArea extends StatelessWidget {
@@ -267,32 +265,32 @@ class _ProductCardArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-          return CarouselSlider.builder(
-            itemCount: products.length,
-            options: CarouselOptions(
-              viewportFraction: 0.75,
-              enlargeCenterPage: true,
-              enlargeFactor: 0.3, 
-              enableInfiniteScroll: true,
-              autoPlay: false,
-              height: 150.w, 
-              onPageChanged: (index, reason) {
-                selectedNotifier.value = index;
-              },
-            ),
-            itemBuilder: (context, index, realIndex) {
-              return ValueListenableBuilder(
-                valueListenable: selectedNotifier,
-                builder: (context, selectedIndex, child) {
-                  return _ProductItem(
-                    product: products[index],
-                    isSelected: selectedIndex == index,
-                  );
-                },
-              );
-            },
-          );
-}
+    return CarouselSlider.builder(
+      itemCount: products.length,
+      options: CarouselOptions(
+        viewportFraction: 0.75,
+        enlargeCenterPage: true,
+        enlargeFactor: 0.3,
+        enableInfiniteScroll: true,
+        autoPlay: false,
+        height: 150.w,
+        onPageChanged: (index, reason) {
+          selectedNotifier.value = index;
+        },
+      ),
+      itemBuilder: (context, index, realIndex) {
+        return ValueListenableBuilder(
+          valueListenable: selectedNotifier,
+          builder: (context, selectedIndex, child) {
+            return _ProductItem(
+              product: products[index],
+              isSelected: selectedIndex == index,
+            );
+          },
+        );
+      },
+    );
+  }
 }
 
 class _ProductItem extends StatelessWidget {
@@ -307,43 +305,42 @@ class _ProductItem extends StatelessWidget {
     final price = '¥${product.priceYuan.split('.').first}';
 
     return Stack(
-        children: [
-          Positioned.fill(child: MyImage.network(product.bgImg, fit: BoxFit.fill)),
-          // Positioned(top: 0, left: 0, child: Text(product.pName, style: TextStyle(color: Colors.white, fontSize: 15.sp))),
-             Align(
-              alignment: const FractionalOffset(0.2, 0.87),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    promoPrice,
-                    style: TextStyle(
-                      color: MyTheme.blueColor81_151_241,
-                      fontSize: 32.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Transform.translate(
-                    offset: Offset(0, -4.h),
-                    child: Text(
-                      price,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.sp,
-                        decoration: TextDecoration.lineThrough,
-                        decorationThickness: 1.5,
-                        decorationColor: Colors.red,
-                      ),
-                    ),
-                  ),
-                ],
+      children: [
+        Positioned.fill(child: MyImage.network(product.bgImg, fit: BoxFit.fill)),
+        // Positioned(top: 0, left: 0, child: Text(product.pName, style: TextStyle(color: Colors.white, fontSize: 15.sp))),
+        Align(
+          alignment: const FractionalOffset(0.2, 0.87),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                promoPrice,
+                style: TextStyle(
+                  color: MyTheme.blueColor81_151_241,
+                  fontSize: 32.sp,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-        ],
+              Transform.translate(
+                offset: Offset(0, -4.h),
+                child: Text(
+                  price,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.sp,
+                    decoration: TextDecoration.lineThrough,
+                    decorationThickness: 1.5,
+                    decorationColor: Colors.red,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
-
 
 class _RightArea extends StatelessWidget {
   const _RightArea({
@@ -426,9 +423,9 @@ class _RightItem extends StatelessWidget {
                 maxLines: 2,
                 textAlign: TextAlign.center,
               ),
-            )
+            ),
           ]),
-        )
+        ),
       ],
     );
   }
@@ -554,7 +551,7 @@ class _ExpItemState extends State<_ExpItem> {
                   ),
                 ),
                 const Spacer(),
-                GestureDetector(
+                ReportGestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: _sendExpCoverVIP,
                   child: Container(
@@ -643,8 +640,21 @@ class _CustomBuyButtonState extends State<_CustomBuyButton> {
               SizedBox(height: 10.w),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-                child: GestureDetector(
-                  onTap: () => _showPay(selectedIndex),
+                child: ReportGestureDetector(
+                  onTap: () async {
+                    // 检查登录
+                    // final userNotifier = context.read<UserNotifier>();
+                    // if (userNotifier.tokenStatus != MyTokenStatus.valid) {
+                    //   await const LoginRoute().push(context);
+                    //   if (userNotifier.tokenStatus == MyTokenStatus.valid) {
+                    //     _showPay(selectedIndex);
+                    //   } else {
+                    //     MyToast.showText(text: '请先登录！');
+                    //   }
+                    //   return;
+                    // }
+                    _showPay(selectedIndex);
+                  },
                   child: Container(
                     height: 50.w,
                     decoration: BoxDecoration(
@@ -664,7 +674,6 @@ class _CustomBuyButtonState extends State<_CustomBuyButton> {
                           colors: [
                             Color.fromRGBO(105, 60, 164, 1),
                             Color.fromRGBO(74, 9, 9, 1),
-
                           ],
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
@@ -674,63 +683,61 @@ class _CustomBuyButtonState extends State<_CustomBuyButton> {
                       padding: EdgeInsets.only(left: 16.w),
                       child: Row(
                         children: [
-                           Row(
-                              children: [
-                                Text(
-                                  'zf'.tr(context: context),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 11.sp,
-                                    fontWeight: FontWeight.w600,
+                          Row(
+                            children: [
+                              Text(
+                                'zf'.tr(context: context),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 11.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              SizedBox(width: 8.w),
+                              Text(
+                                '¥$promoPrice',
+                                style: TextStyle(color: Colors.white, fontSize: 27.sp, fontWeight: FontWeight.w600),
+                              ),
+                              SizedBox(width: 8.w),
+                              Stack(
+                                alignment: Alignment.centerLeft,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 2.w),
+                                    child: Text(
+                                      '${'yj'.tr(context: context)} ¥$originalPrice',
+                                      style: TextStyle(
+                                        color: const Color(0xFF9E9E9E),
+                                        fontSize: 11.sp,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                                SizedBox(width: 8.w),
-                                Text('¥$promoPrice', style: TextStyle(color: Colors.white, fontSize: 27.sp, fontWeight: FontWeight.w600),),
-                                
-                                  SizedBox(width: 8.w),
-                                Stack(
-                                  alignment: Alignment.centerLeft,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(vertical: 2.w),
-                                      child: Text(
-                                        '${'yj'.tr(context: context)} ¥$originalPrice',
-                                        style: TextStyle(
-                                          color: const Color(0xFF9E9E9E),
-                                          fontSize: 11.sp,
-                                        ),
+                                  Positioned.fill(
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: 1.2,
+                                        color: Colors.red,
                                       ),
                                     ),
-                                    Positioned.fill(
-                                      child: Align(
-                                        alignment: Alignment.center,
-                                        child: Container(
-                                          width: double.infinity,
-                                          height: 1.2,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                
-                              ],
-                            ),
-                          const  Expanded(child: SizedBox()),
-                            Container(
-                              margin: EdgeInsets.symmetric(horizontal: 5.w,vertical: 3.w),
-                              padding: EdgeInsets.symmetric(horizontal: 16.w),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const Expanded(child: SizedBox()),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 5.w, vertical: 3.w),
+                            padding: EdgeInsets.symmetric(horizontal: 16.w),
                             decoration: BoxDecoration(
                               gradient: MyTheme.gradient_90_114,
-                                borderRadius: BorderRadius.circular(30.w),
+                              borderRadius: BorderRadius.circular(30.w),
                             ),
                             child: Center(
                               child: Text(
                                 'gmgk'.tr(context: context),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.sp,
-                                ),
+                                style: TextStyle(color: Colors.white, fontSize: 16.sp),
                               ),
                             ),
                           ),
@@ -741,7 +748,7 @@ class _CustomBuyButtonState extends State<_CustomBuyButton> {
                 ),
               ),
               SizedBox(height: 10.w),
-              GestureDetector(
+              ReportGestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () => const MineCustomerServiceRoute().push(context),
                 child: Text.rich(

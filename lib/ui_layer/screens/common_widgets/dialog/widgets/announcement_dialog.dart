@@ -7,6 +7,8 @@ import '../../../image_paths.dart';
 import '../../../theme.dart';
 import '../../my_image.dart';
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class AnnouncementDialog extends StatelessWidget {
   const AnnouncementDialog({super.key, required this.confirm, required this.cancel, required this.text});
 
@@ -20,7 +22,7 @@ class AnnouncementDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Positioned.fill(child: GestureDetector(onTap: () => cancel.call(), child: const ColoredBox(color: Colors.black38))),
+        Positioned.fill(child: ReportGestureDetector(onTap: () => cancel.call(), child: const ColoredBox(color: Colors.black38))),
         Center(
           child: Stack(
             children: [
@@ -74,7 +76,7 @@ class AnnouncementDialog extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                GestureDetector(
+                                ReportGestureDetector(
                                   onTap: () => confirm.call(),
                                   child: Container(
                                     width: 110.w,

@@ -8,6 +8,8 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../../report/ui_layer/report_gesture_detector.dart';
+
 class CustomGirdBanner extends StatefulWidget {
   const CustomGirdBanner({
     super.key,
@@ -145,7 +147,7 @@ class _CustomGirdBannerState extends State<CustomGirdBanner> {
             itemCount: widget.data.length,
             itemBuilder: (context, index) {
               final data = widget.data[index];
-              return GestureDetector(
+              return ReportGestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
                   FocusManager.instance.primaryFocus?.unfocus();

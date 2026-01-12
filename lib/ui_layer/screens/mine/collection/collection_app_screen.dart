@@ -4,14 +4,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jycrpj/domain/domain.dart';
 import 'package:jycrpj/domain/model/collection_model.dart';
 import 'package:jycrpj/domain/type_def.dart';
-import 'package:jycrpj/ui_layer/screens/apps/crack_app_type.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_list_view.dart';
+import 'package:jycrpj/ui_layer/screens/crack/crack_app_type.dart';
 import 'package:provider/provider.dart';
 
 import '../../../router/routes.dart';
 import '../../../utils/common_utils.dart';
 import '../../theme.dart';
+
+import '../../../../report/ui_layer/report_gesture_detector.dart';
 
 class CollectionAppScreen extends StatefulWidget {
   const CollectionAppScreen({super.key});
@@ -89,7 +91,7 @@ class _CollectAppVideoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
         final type = data.type;

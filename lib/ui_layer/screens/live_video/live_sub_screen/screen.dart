@@ -13,6 +13,8 @@ import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../report/ui_layer/report_general_banner.dart';
+
 class LiveVideoView extends StatefulWidget {
   const LiveVideoView({super.key, required this.nav});
   final BitNavModel nav;
@@ -86,7 +88,7 @@ class _Header extends StatelessWidget {
             if (banners.isEmpty) return const SizedBox.shrink();
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-              child: GeneralBannerAppsListWidget(data: banners),
+              child: ReportGeneralAppsListVidget(data: banners),
             );
           },
         ),

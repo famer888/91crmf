@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jycrpj/domain/model/member_model.dart';
+import 'package:jycrpj/ui_layer/notifiers/user_notifier.dart';
+import 'package:provider/provider.dart';
 
+import '../../../report/ui_layer/report_gesture_detector.dart';
 import '../../router/routes.dart';
 import '../common_widgets/dialog/my_dialog.dart';
 import '../common_widgets/dialog/widgets/regular_dialog.dart';
@@ -41,7 +44,7 @@ class VipPayDialog {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        GestureDetector(
+                        ReportGestureDetector(
                           onTap: () {
                             context.pop();
                             const ShareInviteRoute().push(context);
@@ -56,7 +59,7 @@ class VipPayDialog {
                           ),
                         ),
                         SizedBox(width: 38.w),
-                        GestureDetector(
+                        ReportGestureDetector(
                           onTap: () {
                             context.pop();
                             const VipCenterRoute().push(context);
@@ -76,7 +79,7 @@ class VipPayDialog {
                 ),
                 Align(
                   alignment: Alignment.topRight,
-                  child: GestureDetector(
+                  child: ReportGestureDetector(
                     onTap: () => context.pop(),
                     child: SizedBox(
                       width: 20.w,
@@ -93,9 +96,16 @@ class VipPayDialog {
     );
   }
 
-  static void showCoinsDialog(BuildContext context, Member member, double coins, VoidCallback onPay) {
+  static void showCoinsDialog({
+    required BuildContext context,
+    required Member member,
+    required double coins,
+    required VoidCallback onPay,
+    bool barrierDismissible = true,
+  }) {
     MyDialog.showDialog(
       context: context,
+      barrierDismissible: barrierDismissible,
       child: RegularDialog(
         leftPadding: 0,
         rightPadding: 0,
@@ -119,11 +129,16 @@ class VipPayDialog {
                     SizedBox(height: 27.w),
                     Row(
                       children: [
-                        Text('金币余额：${member.money}', style: MyTheme.white255_13.s14.w400),
+                        Selector<UserNotifier, int>(
+                          selector: (_, config) => config.member.money,
+                          builder: (context, money, child) {
+                            return Text('金币余额：${member.money}', style: MyTheme.white255_13.s14.w400);
+                          },
+                        ),
                         const Spacer(),
-                        GestureDetector(
+                        ReportGestureDetector(
                           onTap: () {
-                            context.pop();
+                            // context.pop();
                             const CoinRechargeRoute().push(context);
                           },
                           child: Text(
@@ -154,8 +169,19 @@ class VipPayDialog {
                       ],
                     ),
                     SizedBox(height: 40.w),
-                    GestureDetector(
-                      onTap: () {
+                    ReportGestureDetector(
+                      onTap: () async {
+                        // 检查登录
+                        // final userNotifier = context.read<UserNotifier>();
+                        // if (userNotifier.tokenStatus != MyTokenStatus.valid) {
+                        //   await const LoginRoute().push(context);
+                        //   if (userNotifier.tokenStatus == MyTokenStatus.valid) {
+                        //     onPay.call();
+                        //   } else {
+                        //     MyToast.showText(text: '请先登录！');
+                        //   }
+                        //   return;
+                        // }
                         onPay.call();
                       },
                       child: Container(
@@ -171,7 +197,7 @@ class VipPayDialog {
                 ),
                 Align(
                   alignment: Alignment.topRight,
-                  child: GestureDetector(
+                  child: ReportGestureDetector(
                     onTap: () => context.pop(),
                     child: SizedBox(
                       width: 20.w,

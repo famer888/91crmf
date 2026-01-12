@@ -6,6 +6,8 @@ import 'package:jycrpj/ui_layer/screens/theme.dart';
 import '../../../common_widgets/my_image.dart';
 import '../../../image_paths.dart';
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class RuleDialog extends StatelessWidget {
   final VoidCallback cancel;
 
@@ -15,7 +17,7 @@ class RuleDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return ColoredBox(
       color: Colors.black45,
-      child: GestureDetector(
+      child: ReportGestureDetector(
         behavior: HitTestBehavior.opaque,
         child: Center(
           child: Padding(
@@ -39,19 +41,20 @@ class RuleDialog extends StatelessWidget {
                       Text(
                         'gzsmc'.tr(context: context),
                         style: TextStyle(
-                            color: const Color.fromRGBO(255, 255, 255, 1),
-                            letterSpacing: 0.5,
-                            height: 1.8,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.none),
+                          color: const Color.fromRGBO(255, 255, 255, 1),
+                          letterSpacing: 0.5,
+                          height: 1.8,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          decoration: TextDecoration.none,
+                        ),
                         softWrap: true,
                       ),
                     ],
                   ),
                 ),
                 SizedBox(height: 20.w),
-                GestureDetector(
+                ReportGestureDetector(
                   onTap: () => cancel.call(),
                   child: SizedBox(child: MyImage.asset(MyImagePaths.appCancelWithCircle, fit: BoxFit.cover, width: 33.w, height: 33.w)),
                 ),

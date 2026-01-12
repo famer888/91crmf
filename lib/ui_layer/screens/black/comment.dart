@@ -20,6 +20,8 @@ import '../common_widgets/my_image.dart';
 import '../image_paths.dart';
 import '../theme.dart';
 
+import '../../../report/ui_layer/report_gesture_detector.dart';
+
 class BlackCommentView extends StatelessWidget {
   const BlackCommentView({
     super.key,
@@ -44,7 +46,7 @@ class BlackCommentView extends StatelessWidget {
         SizedBox(height: 15.w),
         _Header(commentData: commentData, changeLike: changeLike),
         SizedBox(height: 10.w),
-        GestureDetector(
+        ReportGestureDetector(
           onTap: () {
             onReply.call();
           },
@@ -125,7 +127,7 @@ class _Header extends StatelessWidget {
       final member = context.read<UserNotifier>().member;
       return Row(
         children: [
-          GestureDetector(
+          ReportGestureDetector(
             onTap: () {
               // UserCenterRoute('${user.aff}').push(context);
             },
@@ -141,29 +143,29 @@ class _Header extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(user.nickname, style: MyTheme.white23_12),
-                    GestureDetector(
-                      onTap: () {
-                        if ((member.username ?? '').isEmpty) {
-                          MyToast.showText(text: 'zcyhcz'.tr(context: context));
-                          return;
-                        }
-                        final uuid = user.uuid;
-                        final nick = user.nickname;
-                        final url = user.thumb.isNotEmpty == true ? user.thumb : ' ';
-                        ChatMessageRoute(nickName: Uri.encodeComponent(nick), thumb: Uri.encodeComponent(url), toUuid: uuid).push(context);
-                      },
-                      child: Container(
-                          width: 40.w,
-                          height: 17.w,
-                          margin: EdgeInsets.only(left: 8.w),
-                          decoration: BoxDecoration(gradient: MyTheme.gradient_61_87, borderRadius: BorderRadius.circular(8.5.w)),
-                          alignment: Alignment.center,
-                          child: Text('six'.tr(context: context), style: MyTheme.white255_10)),
-                    ),
+                    // ReportGestureDetector(
+                    //   onTap: () {
+                        // if ((member.username ?? '').isEmpty) {
+                        //   MyToast.showText(text: 'zcyhcz'.tr(context: context));
+                        //   return;
+                        // }
+                        // final uuid = user.uuid;
+                        // final nick = user.nickname;
+                        // final url = user.thumb.isNotEmpty == true ? user.thumb : ' ';
+                        // ChatMessageRoute(nickName: Uri.encodeComponent(nick), thumb: Uri.encodeComponent(url), toUuid: uuid).push(context);
+                      // },
+                    //   child: Container(
+                    //       width: 40.w,
+                    //       height: 17.w,
+                    //       margin: EdgeInsets.only(left: 8.w),
+                    //       decoration: BoxDecoration(gradient: MyTheme.gradient_61_87, borderRadius: BorderRadius.circular(8.5.w)),
+                    //       alignment: Alignment.center,
+                    //       child: Text('six'.tr(context: context), style: MyTheme.white255_10)),
+                    // ),
                     SizedBox(width: 2.w),
                     if (user.authStatus == 1) Icon(Icons.verified_sharp, size: 11.w, color: const Color.fromRGBO(247, 208, 93, 1)),
                     // if (member.uuid != user.uuid)
-                    //   GestureDetector(
+                    //   ReportGestureDetector(
                     //     behavior: HitTestBehavior.translucent,
                     //     onTap: () {
                     //       if (member.username?.isEmpty == true) {
@@ -269,7 +271,7 @@ class _LikeButtonState extends State<_LikeButton> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       onTap: _changeLike,
       child: SizedBox(
         width: 40.w,
@@ -352,7 +354,7 @@ class _RepliesView extends StatelessWidget {
                       maxLines: UILayerConst.maxLine,
                     ),
                     if (index == max - 1 && comments.length > max)
-                      GestureDetector(
+                      ReportGestureDetector(
                         onTap: () {
                           onMoreCommentTap?.call();
                         },

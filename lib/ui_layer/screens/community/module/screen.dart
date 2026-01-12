@@ -15,6 +15,8 @@ import '../../common_widgets/my_app_bar.dart';
 import '../../common_widgets/my_list_view.dart';
 import '../../theme.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class CommunityModuleScreen extends StatefulWidget {
   const CommunityModuleScreen(
       {super.key, required this.id, required this.type});
@@ -79,7 +81,7 @@ class CommunityModuleItem extends StatelessWidget {
   String get imgUrl => CommonUtils.getThumb(data.toJson());
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
         context.pop(data);

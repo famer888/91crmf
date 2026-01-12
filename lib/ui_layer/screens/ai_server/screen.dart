@@ -11,6 +11,10 @@ import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:provider/provider.dart';
 
+import '../../../report/ui_layer/report_general_banner.dart';
+
+import '../../../report/ui_layer/report_gesture_detector.dart';
+
 class AiServerScreen extends StatefulWidget {
   const AiServerScreen({super.key});
 
@@ -34,7 +38,7 @@ class _AiServerScreenState extends State<AiServerScreen> {
             child: Column(
               children: [
                 SizedBox(height: 20.w),
-                GeneralBannerAppsListWidget(data: banners),
+                ReportGeneralAppsListVidget(data: banners),
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -42,7 +46,7 @@ class _AiServerScreenState extends State<AiServerScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: 10.w),
-                      child: GestureDetector(
+                      child: ReportGestureDetector(
                           onTap: () {
                             //跳转各个ai功能
                             _onTapAiFunction(navs[index].type);

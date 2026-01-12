@@ -28,6 +28,8 @@ import '../dialog/widgets/regular_dialog.dart';
 import '../my_image.dart';
 import 'utils/nvideourl_minxin.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class ShortvMvPlayer extends StatefulWidget {
   const ShortvMvPlayer({
     super.key,
@@ -39,6 +41,7 @@ class ShortvMvPlayer extends StatefulWidget {
     this.needCheckAspectRatio = false,
     this.needSlide = true,
   });
+
   final VideoData info;
   final bool isLocal;
   final bool noBack;
@@ -121,9 +124,7 @@ class _ShortvMvPlayerState extends State<ShortvMvPlayer> with NVideoURLMinxin {
                   children: [
                     Positioned.fill(
                       child: MyImage.network(
-                        widget.info.coverThumbHorizontal ??
-                            widget.info.coverThumbVerticle ??
-                            '',
+                        widget.info.coverThumbHorizontal ?? widget.info.coverThumbVerticle ?? '',
                       ),
                     ),
                     Container(color: Colors.black87),
@@ -182,75 +183,74 @@ class _ShortvMvPlayerState extends State<ShortvMvPlayer> with NVideoURLMinxin {
     }
     if (widget.info.isfree == 2) {
       MyDialog.showDialog(
-          context: context,
-          child: RegularDialog(
-            title: tr('ts'),
-            cancelText: isInsufficient ? tr('qwcz') : tr('gmgk'),
-            buttonText: tr('fxdv'),
-            confirmOnTap: () {
-              const MineWelfareRoute(index: 1).push(context);
-            },
-            cancelOnTap: () {
-              if (isInsufficient) {
-                const CoinRechargeRoute().push(context);
-              } else {
-                byVideoRes(member.money - widget.info.coins!, goby);
-              }
-            },
-            content: DefaultTextStyle(
-              style: MyTheme.gray203_13,
-              child: Column(
-                children: [
-                  Text(tr('gmspkwz'), style: MyTheme.gray203_13, maxLines: 3),
-                  SizedBox(height: 15.w),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('${widget.info.coins}${tr('jb')}',
-                          style: MyTheme.blue80_13_M),
-                    ],
-                  ),
-                  SizedBox(height: 15.w),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("${tr('kyje')}：${member.money}${tr('jb')}",
-                          style: MyTheme.gray203_13),
-                    ],
-                  ),
-                ],
-              ),
+        context: context,
+        child: RegularDialog(
+          title: tr('ts'),
+          cancelText: isInsufficient ? tr('qwcz') : tr('gmgk'),
+          buttonText: tr('fxdv'),
+          confirmOnTap: () {
+            const MineWelfareRoute(index: 1).push(context);
+          },
+          cancelOnTap: () {
+            if (isInsufficient) {
+              const CoinRechargeRoute().push(context);
+            } else {
+              byVideoRes(member.money - widget.info.coins!, goby);
+            }
+          },
+          content: DefaultTextStyle(
+            style: MyTheme.gray203_13,
+            child: Column(
+              children: [
+                Text(tr('gmspkwz'), style: MyTheme.gray203_13, maxLines: 3),
+                SizedBox(height: 15.w),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('${widget.info.coins}${tr('jb')}', style: MyTheme.blue80_13_M),
+                  ],
+                ),
+                SizedBox(height: 15.w),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("${tr('kyje')}：${member.money}${tr('jb')}", style: MyTheme.gray203_13),
+                  ],
+                ),
+              ],
             ),
-          ));
+          ),
+        ),
+      );
     } else {
       MyDialog.showDialog(
-          context: context,
-          child: PNGDialog(
-            title: tr('ts'),
-            cancelText: tr('cv'),
-            buttonText: tr('fxdv'),
-            cancelOnTap: () {
-              const VipCenterRoute().push(context);
-            },
-            confirmOnTap: () {
-              const MineWelfareRoute(index: 1).push(context);
-            },
-            content: DefaultTextStyle(
-              style: MyTheme.gray203_13,
-              child: Column(
-                children: [
-                  Text(tr('gmvkwz'), style: MyTheme.gray203_13),
-                  SizedBox(height: 15.w),
-                  Text(
-                    context.read<HomeConfigNotifier>().config.tipsShareText ??
-                        '',
-                    style: MyTheme.gray203_13,
-                    maxLines: 3,
-                  ),
-                ],
-              ),
+        context: context,
+        child: PNGDialog(
+          title: tr('ts'),
+          cancelText: tr('cv'),
+          buttonText: tr('fxdv'),
+          cancelOnTap: () {
+            const VipCenterRoute().push(context);
+          },
+          confirmOnTap: () {
+            const MineWelfareRoute(index: 1).push(context);
+          },
+          content: DefaultTextStyle(
+            style: MyTheme.gray203_13,
+            child: Column(
+              children: [
+                Text(tr('gmvkwz'), style: MyTheme.gray203_13),
+                SizedBox(height: 15.w),
+                Text(
+                  context.read<HomeConfigNotifier>().config.tipsShareText ?? '',
+                  style: MyTheme.gray203_13,
+                  maxLines: 3,
+                ),
+              ],
             ),
-          ));
+          ),
+        ),
+      );
     }
   }
 
@@ -258,9 +258,7 @@ class _ShortvMvPlayerState extends State<ShortvMvPlayer> with NVideoURLMinxin {
     MyToast.showLoading(text: tr('gmzz'));
     final userNotifier = context.read<UserNotifier>();
     final res = widget.isCartoon
-        ? await context
-            .read<CartoonDomain>()
-            .cartoonBuy(id: widget.info.id ?? 0)
+        ? await context.read<CartoonDomain>().cartoonBuy(id: widget.info.id ?? 0)
         : await context.read<MvDomain>().buyVideo(id: widget.info.id ?? 0);
     MyToast.closeAllLoading();
     if (mounted && !goby) {
@@ -294,6 +292,7 @@ class SinkPortraitLandWidget extends StatefulWidget {
     this.needSlide = true,
     required this.noBack,
   });
+
   final bool isBack;
   final bool isPreview;
   final bool isDone;
@@ -326,8 +325,7 @@ class _SinkPortraitLandWidgetState extends State<SinkPortraitLandWidget> {
 
   // build 倍数列表
   List<Widget> _buildSpeedListWidget() {
-    FlickVideoManager flickVideoManager =
-        Provider.of<FlickVideoManager>(context);
+    FlickVideoManager flickVideoManager = Provider.of<FlickVideoManager>(context);
     List<Widget> columnChild = [];
     speedList.forEach((String mapKey, double speedVals) {
       columnChild.add(
@@ -347,9 +345,7 @@ class _SinkPortraitLandWidgetState extends State<SinkPortraitLandWidget> {
               child: Text(
                 '$mapKey X',
                 style: TextStyle(
-                  color: _speed == speedVals
-                      ? MyTheme.jellyCyanColor103224185
-                      : Colors.white,
+                  color: _speed == speedVals ? MyTheme.jellyCyanColor103224185 : Colors.white,
                   fontSize: 16,
                 ),
               ),
@@ -373,15 +369,11 @@ class _SinkPortraitLandWidgetState extends State<SinkPortraitLandWidget> {
   }
 
   Widget _noConditionWidget(context) {
-    FlickVideoManager flickVideoManager =
-        Provider.of<FlickVideoManager>(context);
-    FlickControlManager controlManager =
-        Provider.of<FlickControlManager>(context);
-    FlickDisplayManager flickDisplayManager =
-        Provider.of<FlickDisplayManager>(context);
+    FlickVideoManager flickVideoManager = Provider.of<FlickVideoManager>(context);
+    FlickControlManager controlManager = Provider.of<FlickControlManager>(context);
+    FlickDisplayManager flickDisplayManager = Provider.of<FlickDisplayManager>(context);
 
-    bool flag = (flickVideoManager.videoPlayerValue!.isBuffering &&
-            flickVideoManager.videoPlayerValue!.isPlaying) ||
+    bool flag = (flickVideoManager.videoPlayerValue!.isBuffering && flickVideoManager.videoPlayerValue!.isPlaying) ||
         !flickVideoManager.videoPlayerValue!.isInitialized;
 
     double rate = flickVideoManager.videoPlayerValue?.aspectRatio ?? 0.0;
@@ -509,8 +501,7 @@ class _SinkPortraitLandWidgetState extends State<SinkPortraitLandWidget> {
                               ),
                               Text(
                                 ' / ',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16),
+                                style: TextStyle(color: Colors.white, fontSize: 16),
                               ),
                               FlickTotalDuration(
                                 color: Colors.white,
@@ -530,43 +521,27 @@ class _SinkPortraitLandWidgetState extends State<SinkPortraitLandWidget> {
                                       },
                                       playBackChild: Text(
                                         "${_speed == 1.0 ? '1.0' : _speed == 2.0 ? '2.0' : _speed} X",
-                                        style: const TextStyle(
-                                            color: Colors.white, fontSize: 16),
+                                        style: const TextStyle(color: Colors.white, fontSize: 16),
                                       ),
                                     )
                                   : Container(),
-                              (rate > 1 || !widget.needCheckAspectRatio) &&
-                                          !widget.isPreview ||
-                                      kIsWeb && !widget.isPreview
+                              (rate > 1 || !widget.needCheckAspectRatio) && !widget.isPreview || kIsWeb && !widget.isPreview
                                   ? Padding(
                                       padding: const EdgeInsets.only(left: 10),
                                       child: FlickFullScreenToggle(
-                                        enterFullScreenChild: const Icon(
-                                            Icons.fullscreen,
-                                            size: 25,
-                                            color: Colors.white),
-                                        exitFullScreenChild: const Icon(
-                                            Icons.fullscreen_exit,
-                                            size: 25,
-                                            color: Colors.white),
+                                        enterFullScreenChild: const Icon(Icons.fullscreen, size: 25, color: Colors.white),
+                                        exitFullScreenChild: const Icon(Icons.fullscreen_exit, size: 25, color: Colors.white),
                                         toggleFullscreen: () {
                                           if (kIsWeb) {
-                                            List<html.VideoElement> elements =
-                                                html.document
-                                                    .querySelectorAll('video');
+                                            List<html.VideoElement> elements = html.document.querySelectorAll('video');
                                             if (elements.isEmpty) return;
 
-                                            html.VideoElement video =
-                                                elements.last;
+                                            html.VideoElement video = elements.last;
                                             video.muted = false;
                                             video.volume = 1;
-                                            video.setAttribute(
-                                                'playsinline', 'true');
-                                            video.setAttribute(
-                                                'autoplay', 'true');
-                                            if (html.document
-                                                    .fullscreenElement ==
-                                                null) {
+                                            video.setAttribute('playsinline', 'true');
+                                            video.setAttribute('autoplay', 'true');
+                                            if (html.document.fullscreenElement == null) {
                                               video.enterFullscreen();
                                             } else {
                                               html.document.exitFullscreen();
@@ -582,11 +557,9 @@ class _SinkPortraitLandWidgetState extends State<SinkPortraitLandWidget> {
                           )
                         ],
                       ),
-                      !flickVideoManager.videoPlayerValue!.isInitialized ||
-                              flickDisplayManager.showPlayerControls
+                      !flickVideoManager.videoPlayerValue!.isInitialized || flickDisplayManager.showPlayerControls
                           ? FlickVideoProgressBar(
-                              flickProgressBarSettings:
-                                  FlickProgressBarSettings(
+                              flickProgressBarSettings: FlickProgressBarSettings(
                                 padding: const EdgeInsets.only(top: 10),
                                 height: 3,
                                 handleRadius: 6,
@@ -598,9 +571,7 @@ class _SinkPortraitLandWidgetState extends State<SinkPortraitLandWidget> {
                               ),
                             )
                           : Container(),
-                     kIsWeb && widget.needCheckAspectRatio && !widget.isPreview
-                          ? SizedBox(height: MyTheme.pxBotHegiht / 2)
-                          : Container(),
+                      kIsWeb && widget.needCheckAspectRatio && !widget.isPreview ? SizedBox(height: MyTheme.pxBotHegiht / 2) : Container(),
                     ],
                   ),
                 ),
@@ -608,7 +579,7 @@ class _SinkPortraitLandWidgetState extends State<SinkPortraitLandWidget> {
                   ? Positioned(
                       right: 0,
                       bottom: 40.w,
-                      child: GestureDetector(
+                      child: ReportGestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
                           widget.skiPreview?.call();
@@ -619,10 +590,8 @@ class _SinkPortraitLandWidgetState extends State<SinkPortraitLandWidget> {
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                MyTheme.jellyCyanColor103224185
-                                    .withAlpha((0.6 * 255).toInt()),
-                                MyTheme.jellyCyanColor103224185
-                                    .withAlpha((0.6 * 255).toInt()),
+                                MyTheme.jellyCyanColor103224185.withAlpha((0.6 * 255).toInt()),
+                                MyTheme.jellyCyanColor103224185.withAlpha((0.6 * 255).toInt()),
                               ],
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
@@ -635,9 +604,7 @@ class _SinkPortraitLandWidgetState extends State<SinkPortraitLandWidget> {
                           child: Center(
                             child: Text.rich(
                               TextSpan(
-                                  text: widget.info?.isfree == 2
-                                      ? '${widget.info?.coins}${tr('kbtgyl')}'
-                                      : tr('ktvptgyl'),
+                                  text: widget.info?.isfree == 2 ? '${widget.info?.coins}${tr('kbtgyl')}' : tr('ktvptgyl'),
                                   style: MyTheme.white255_12_B),
                             ),
                           ),
@@ -647,9 +614,7 @@ class _SinkPortraitLandWidgetState extends State<SinkPortraitLandWidget> {
                   : Container(),
               // 倍数选择
               Positioned(
-                right: controlManager.isFullscreen == false
-                    ? (rate > 1 ? 39 : 3)
-                    : (rate > 1 ? 50 : 3),
+                right: controlManager.isFullscreen == false ? (rate > 1 ? 39 : 3) : (rate > 1 ? 50 : 3),
                 bottom: 55,
                 child: !_hideSpeedStu
                     ? FlickAutoHideChild(
@@ -678,7 +643,7 @@ class _SinkPortraitLandWidgetState extends State<SinkPortraitLandWidget> {
             if (widget.noBack) {
               return const SizedBox.shrink();
             }
-            return GestureDetector(
+            return ReportGestureDetector(
               behavior: HitTestBehavior.translucent,
               child: SafeArea(
                 top: false,
@@ -732,8 +697,7 @@ class _SinkPortraitLandWidgetState extends State<SinkPortraitLandWidget> {
         style: MyTheme.white255_14_N,
         child: Text.rich(
           TextSpan(children: [
-            TextSpan(
-                text: '${widget.info?.coins ?? 0}', style: MyTheme.blue80_14_M),
+            TextSpan(text: '${widget.info?.coins ?? 0}', style: MyTheme.blue80_14_M),
             TextSpan(text: '${tr('jbjsw')}，'),
             TextSpan(text: '${tr('ktvpzk')}${user.money}')
           ]),
@@ -757,15 +721,10 @@ class _SinkPortraitLandWidgetState extends State<SinkPortraitLandWidget> {
                   width: 22,
                   height: 22,
                   decoration: const BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          color: Color.fromRGBO(0, 0, 0, 0.2),
-                          offset: Offset(0, 0),
-                          blurRadius: 11)
-                    ],
+                    boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.2), offset: Offset(0, 0), blurRadius: 11)],
                   ),
                   alignment: Alignment.center,
-                  child: GestureDetector(
+                  child: ReportGestureDetector(
                     behavior: HitTestBehavior.translucent,
                     child: const MyImage.asset(
                       MyImagePaths.appNavBackWN,
@@ -803,7 +762,7 @@ class _SinkPortraitLandWidgetState extends State<SinkPortraitLandWidget> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              GestureDetector(
+              ReportGestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
                   if (vflag) {
@@ -820,13 +779,12 @@ class _SinkPortraitLandWidgetState extends State<SinkPortraitLandWidget> {
                     borderRadius: BorderRadius.all(Radius.circular(3)),
                   ),
                   child: Center(
-                    child: Text(vflag ? tr('gmgk') : tr('ljkv'),
-                        style: MyTheme.white13),
+                    child: Text(vflag ? tr('gmgk') : tr('ljkv'), style: MyTheme.white13),
                   ),
                 ),
               ),
               const SizedBox(width: 37),
-              GestureDetector(
+              ReportGestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
                   widget.shareVp?.call();
@@ -852,8 +810,6 @@ class _SinkPortraitLandWidgetState extends State<SinkPortraitLandWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.isDone && widget.isPreview
-        ? _conditionWidget(context)
-        : _noConditionWidget(context);
+    return widget.isDone && widget.isPreview ? _conditionWidget(context) : _noConditionWidget(context);
   }
 }

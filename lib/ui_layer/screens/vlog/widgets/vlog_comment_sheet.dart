@@ -11,6 +11,8 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/post/comment_input.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class VlogCommentSheet extends StatefulWidget {
   const VlogCommentSheet({super.key, this.id = 0, this.onClose});
   final int id;
@@ -81,7 +83,7 @@ class VlogCommentSheetState extends State<VlogCommentSheet> {
                 topRight: Radius.circular(10.w),
               ),
             ),
-            child: GestureDetector(
+            child: ReportGestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
                 Navigator.pop(context);
@@ -91,7 +93,7 @@ class VlogCommentSheetState extends State<VlogCommentSheet> {
   }
 
   Widget configContentView() {
-    return GestureDetector(
+    return ReportGestureDetector(
       onTap: () {
         inputFocusNode.unfocus();
       },

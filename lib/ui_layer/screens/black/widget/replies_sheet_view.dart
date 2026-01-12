@@ -13,6 +13,8 @@ import '../../common_widgets/post/comment_input.dart';
 import '../../image_paths.dart';
 import '../../theme.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 typedef CommentsAsyncGetter = AsyncResult<List<CommentModel>> Function(int, int);
 typedef LikeAsyncSetter = Future<bool> Function(int id);
 
@@ -75,7 +77,7 @@ class _BlackRepliesSheetViewState extends State<BlackRepliesSheetView> {
           color: MyTheme.bgColor,
           borderRadius: BorderRadius.only(topLeft: Radius.circular(20.w), topRight: Radius.circular(20.w)),
         ),
-        child: GestureDetector(
+        child: ReportGestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
             inputFocusNode.unfocus();
@@ -88,7 +90,7 @@ class _BlackRepliesSheetViewState extends State<BlackRepliesSheetView> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    GestureDetector(
+                    ReportGestureDetector(
                       onTap: () {
                         context.pop();
                       },
@@ -100,7 +102,7 @@ class _BlackRepliesSheetViewState extends State<BlackRepliesSheetView> {
                 ),
               ),
               Expanded(
-                child: GestureDetector(
+                child: ReportGestureDetector(
                   child: MyListView.list(
                     itemBuilder: (context, item, index) => BlackSheetReplyView(commentData: item, changeLike: () => widget.onLikeChange(item.id)),
                     onFetchingMore: (currentPage, pageSize) => getComments(currentPage: currentPage, pageSize: pageSize),

@@ -149,7 +149,7 @@ class Member {
   final String nickname;
   final String? thumb;
   final int? coins;
-  final int money;
+  int money;
   final int? incomeMoney;
   final List? roleType;
   final int? tempVip;

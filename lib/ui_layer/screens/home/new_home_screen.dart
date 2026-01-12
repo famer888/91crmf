@@ -19,6 +19,7 @@ class NewHomeScreen extends StatefulWidget {
 }
 
 class _NewHomeScreenState extends State<NewHomeScreen> with TickerProviderStateMixin {
+  late final _screenUtil = ScreenUtil();
   late final TabController _tabController;
   final _tabs = [
     HomeAdsType.hot,
@@ -38,7 +39,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> with TickerProviderStateM
     return ScreenBackground(
       appBg: MyImage.asset(MyImagePaths.appBg, fit:BoxFit.cover, width: ScreenUtil().screenWidth, height: 148.w),
       child: Container(
-        padding: EdgeInsets.only(top: 35.w, left: MyTheme.pagePadding, right: MyTheme.pagePadding),
+        padding: EdgeInsets.only(top: _screenUtil.statusBarHeight, left: MyTheme.pagePadding, right: MyTheme.pagePadding),
         child: TabBarWithView.line(
           tabController: _tabController,
           initialIndex: 0,

@@ -1,5 +1,13 @@
 part of 'repo.dart';
 
+/// 分类搜索记录
+const clSearchHistoryKey = 'cl_search_history';
+const awjqSearchHistoryKey = 'awjq_search_history';
+const aw91SearchHistoryKey = 'aw91_search_history';
+const zpcSearchHistoryKey = 'zpc_search_history';
+const pzhanSearchHistoryKey = 'pzhan_search_history';
+const searchHistoryKey = 'search_history';
+
 class _CacheManager implements CacheDomain {
   bool _isInitialized = false;
 
@@ -12,14 +20,16 @@ class _CacheManager implements CacheDomain {
   final _fdsKey = 'fds_key';
   final _linesUrlKey = 'lines_url';
   final _githubKey = 'github_url';
+  final _reportAppIdKey = 'report_app_id';
+  final _reportTraceIdKey = 'report_trace_id';
   final _isBarrage = 'isBarrage';
   final _officeWebKey = 'office_web';
   final _adsKey = 'ads';
   final _startScreenAdsKey = 'startScreenAdsKey';
   final _crackAppVideoKey = 'crack_app_video';
   final _blackPostKey = 'black_post';
+  final _guideKey = 'guide';
 
-  final _searchHistoryKey = 'search_history';
   final _downloadVideoTasksKey = 'download_video_tasks';
   final _chatsKey = 'imchats';
 
@@ -48,6 +58,12 @@ class _CacheManager implements CacheDomain {
 
   Future<void> upsertGithubUrl(String url) => appBox.upsert(_githubKey, url);
 
+  Future<String?> readReportAppId() async => (await appBox.read(_reportAppIdKey))?.toString();
+  Future<void> upsertReportAppId(String appid) => appBox.upsert(_reportAppIdKey, appid);
+
+  Future<String?> readReportTraceId() async => (await appBox.read(_reportTraceIdKey))?.toString();
+  Future<void> upsertReportTraceId(String id) => appBox.upsert(_reportTraceIdKey, id);
+
   @override
   Future<bool> readIsBarrage() async => await appBox.read(_isBarrage) ?? true;
 
@@ -70,6 +86,12 @@ class _CacheManager implements CacheDomain {
   Future upsertFdsKey(String value) => appBox.upsert(_fdsKey, value);
 
   @override
+  Future<bool> readGuide() async => await appBox.read(_guideKey) ?? true;
+
+  @override
+  Future<void> upsertGuide(bool guide) async => appBox.upsert(_guideKey, guide);
+
+  @override
   Future<AdModel?> readAds() async {
     if (await appBox.read(_adsKey) case final data?) {
       try {
@@ -80,29 +102,6 @@ class _CacheManager implements CacheDomain {
   }
 
   Future<void> upsertAds(AdModel ads) => appBox.upsert(_adsKey, ads.toJson());
-
-  @override
-  Future<List<FeedModel>?> readCrackAppVideoList() async {
-    final feedModels = await appBox.read(_crackAppVideoKey);
-    try {
-      return (feedModels as List).map((e) {
-        final map = Map<String, dynamic>.from(e);
-        final feedModel = FeedModel.fromJson(map);
-        return feedModel;
-      }).toList();
-    } catch (e) {
-      CommonUtils.log('#####读取破解app视频浏览记录#####${e.toString()}');
-    }
-    return null;
-  }
-
-  @override
-  Future<void> upsertCrackAppVideoList({required List<FeedModel> feedModels}) async {
-    List<Map<String, dynamic>> feedModelList = feedModels.map((e) {
-      return e.toJson();
-    }).toList();
-    await appBox.upsert(_crackAppVideoKey, feedModelList);
-  }
 
   /// 读取黑料帖子浏览记录
   @override
@@ -177,18 +176,18 @@ class _CacheManager implements CacheDomain {
   }
 
   @override
-  Future<List<String>> readSearchHistory() async {
-    if (await appBox.read(_searchHistoryKey) case final data?) {
+  Future<List<String>> readSearchHistory({required String key}) async {
+    if (await appBox.read(key) case final data?) {
       return List<String>.from(data);
     }
     return [];
   }
 
   @override
-  Future<void> upsertSearchHistory({required List<String> searchHistory}) => appBox.upsert(_searchHistoryKey, searchHistory);
+  Future<void> upsertSearchHistory({required String key, required List<String> searchHistory}) => appBox.upsert(key, searchHistory);
 
   @override
-  Future<void> clearSearchHistory() => appBox.delete(_searchHistoryKey);
+  Future<void> clearSearchHistory({required String key}) => appBox.delete(key);
 
   @override
   Future<List> readDownloadVideoTasks() async {
@@ -211,4 +210,28 @@ class _CacheManager implements CacheDomain {
 
   @override
   Future<void> upsertChats({required String chats}) => chatBox.upsert(_chatsKey, chats);
+
+  @override
+  Future<List<VideoVisitModel>?> readCrackAppVideoList() async {
+    final feedModels = await appBox.read(_crackAppVideoKey);
+    try {
+      return (feedModels as List).map((e) {
+        final map = Map<String, dynamic>.from(e);
+        final feedModel = VideoVisitModel.fromJson(map);
+        return feedModel;
+      }).toList();
+    } catch (e) {
+      CommonUtils.log('#####读取破解app视频浏览记录#####${e.toString()}');
+    }
+    return null;
+  }
+
+  @override
+  Future<void> upsertCrackAppVideoList({required List<VideoVisitModel> feedModels}) async {
+    List<Map<String, dynamic>> feedModelList = feedModels.map((e) {
+      return e.toJson();
+    }).toList();
+    await appBox.upsert(_crackAppVideoKey, feedModelList);
+  }
+
 }

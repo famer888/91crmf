@@ -11,6 +11,8 @@ import 'content.dart';
 import 'count_view.dart';
 import 'media.dart';
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 enum CommunityType {
   bit,
   community,
@@ -36,7 +38,7 @@ class PostCard extends StatelessWidget {
         color: Colors.white.withOpacity(0.03),
         borderRadius: BorderRadius.all(Radius.circular(10.w)),
       ),
-      child: GestureDetector(
+      child: ReportGestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () => switch (_type) {
           CommunityType.community =>

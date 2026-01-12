@@ -15,6 +15,8 @@ import '../../common_widgets/my_image.dart';
 import '../../image_paths.dart';
 import '../../theme.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class MineAgentApplyView extends StatefulWidget {
   const MineAgentApplyView({super.key, this.applySuccess});
   final VoidCallback? applySuccess;
@@ -81,7 +83,7 @@ class _MineAgentApplyViewState extends State<MineAgentApplyView> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-      child: GestureDetector(
+      child: ReportGestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
           if (!currentFocus.hasPrimaryFocus &&
@@ -169,7 +171,7 @@ class _MineAgentApplyViewState extends State<MineAgentApplyView> {
                   ),
                   Align(
                     alignment: Alignment.center,
-                    child: GestureDetector(
+                    child: ReportGestureDetector(
                       onTap: _askApplyAgent,
                       child: Container(
                         alignment: Alignment.center,

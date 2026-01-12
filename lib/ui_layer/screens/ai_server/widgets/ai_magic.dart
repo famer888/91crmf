@@ -14,6 +14,8 @@ import '../../common_widgets/general_banner.dart';
 import '../../common_widgets/my_list_view.dart';
 import '../../theme.dart';
 
+import '../../../../report/ui_layer/report_general_banner.dart';
+
 class AIMagic extends StatefulWidget {
   const AIMagic({
     super.key,
@@ -102,7 +104,7 @@ class _Header extends StatelessWidget {
             if (banners.isEmpty) return const SizedBox.shrink();
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-              child: GeneralBannerAppsListWidget(data: banners),
+              child: ReportGeneralAppsListVidget(data: banners),
             );
           },
         ),

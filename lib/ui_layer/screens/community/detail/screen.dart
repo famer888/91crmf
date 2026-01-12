@@ -31,6 +31,8 @@ import '../../common_widgets/status/network_error.dart';
 import '../../theme.dart';
 import 'content.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class CommunityPostDetailScreen extends StatefulWidget {
   const CommunityPostDetailScreen({super.key, required this.id});
 
@@ -208,7 +210,7 @@ class _CommunityPostDetailScreenState extends State<CommunityPostDetailScreen>
                 ),
               ),
             ),
-            body: GestureDetector(
+            body: ReportGestureDetector(
               onTap: () {
                 unfocus();
               },
@@ -275,7 +277,7 @@ class _AvatarWithNickName extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        GestureDetector(
+        ReportGestureDetector(
           onTap: () {
             FocusManager.instance.primaryFocus?.unfocus();
             context.pop();
@@ -291,7 +293,7 @@ class _AvatarWithNickName extends StatelessWidget {
           ),
         ),
         SizedBox(width: 10.w),
-        GestureDetector(
+        ReportGestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
             UserCenterRoute('${user?.aff}').push(context);

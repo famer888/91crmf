@@ -7,6 +7,11 @@ class MyTheme {
   // 页面通用边距
   static double get pagePadding => 13.w;
 
+  static double spacing = 8.0.w;
+
+  // app grid card ratio
+  static const aspectRatio = kIsWeb ? 170 / 106 : 170 / 124;
+
   // 栏目顶部导航高度
   static double get navbarHegiht => 44.w;
 
@@ -88,6 +93,12 @@ class MyTheme {
       color: Colors.white.withOpacity(0.6),
       fontSize: 12.sp,
       fontWeight: FontWeight.w500);
+
+  static final TextStyle color51_12 = TextStyle(
+      color: const Color.fromRGBO(51, 51, 51, 1),
+      fontSize: 12.sp,
+      overflow: TextOverflow.ellipsis,
+      decoration: TextDecoration.none);
 
   static final TextStyle white08_12 = TextStyle(
       color: white08Color,
@@ -291,10 +302,28 @@ class MyTheme {
 
   static const kWidgetColor = Color.fromRGBO(22, 22, 34, 1);
 
+  static const defaultAppBgColor = Color.fromRGBO(21, 1, 10, 1);
+  static const defaultAppTabTitleColor = Color.fromRGBO(97, 97, 101, 1);
+  static const defaultSearchBarBackgroundColor = Color.fromRGBO(31, 28, 29, 0.6);
+
   static const clAppPrimaryColor = Color.fromRGBO(113, 217, 224, 1);
+  static const clAppBgColor = Color.fromRGBO(35, 35, 35, 1);
+
   static const aw91AppPrimaryColor = Color.fromRGBO(254, 203, 181, 1);
+  static const aw91AppBgColor = Color.fromRGBO(0, 0, 0, 1);
+
   static const awjqAppPrimaryColor = Color.fromRGBO(119, 88, 245, 1);
+  static const awjqAppBgColor = Color.fromRGBO(12, 10, 34, 1);
+  static const awjqAppSearchBarBackgroundColor = Color.fromRGBO(26, 24, 52, 1);
+
   static const zpcAppPrimaryColor = Color.fromRGBO(253, 160, 11, 1);
+  static const zpcAppBgColor = Color.fromRGBO(255, 255, 255, 1);
+  static const zpcAppSearchBarBackgroundColor = Color.fromRGBO(230, 228, 228, 1);
+  static const zpcSearchBackgroundColor = Color.fromRGBO(31, 28, 29, 0.6);
+
+  static const pzhanAppPrimaryColor = Color.fromRGBO(255, 145, 0, 1);
+  static const pzhanAppBgColor = Color.fromRGBO(1, 1, 1, 1);
+  static const pzhanAppSearchBarBackgroundColor = Color.fromRGBO(58, 57, 62, 1);
 
   static Color white255005Color = const Color.fromRGBO(255, 255, 255, 0.05);
   static Color white25501Color = const Color.fromRGBO(255, 255, 255, 0.1);
@@ -309,6 +338,7 @@ class MyTheme {
   static Color white255Color = const Color.fromRGBO(255, 255, 255, 1);
   static Color color250_255_115 = const Color.fromRGBO(250, 255, 115, 1);
   static const Color yellow255Color = Color.fromRGBO(255, 197, 48, 1);
+  static const Color color90_90_90 = Color.fromRGBO(90, 90, 90, 1);
 
   static const Color white02Color = Color.fromRGBO(255, 255, 255, 0.2);
   static const Color white05Color = Color.fromRGBO(255, 255, 255, 0.5);
@@ -319,6 +349,7 @@ class MyTheme {
   static const Color white008Color = Color.fromRGBO(255, 255, 255, 0.08);
   static const Color color11_10_33 = Color.fromRGBO(11, 10, 33, 1);
 
+  static const Color blackColor = Color.fromRGBO(0, 0, 0, 1);
   static const Color whiteColor = Color.fromRGBO(255, 255, 255, 1);
 
   static const Color orange24718713 = Color.fromRGBO(247, 187, 13, 1);

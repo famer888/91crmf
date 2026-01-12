@@ -13,6 +13,7 @@ class CashWithdrawRule {
   final double? proxyRate;
   final String? proxyMoney;
   final String? scaleTip;
+  final List<OrderModel>? orderList;
 
   CashWithdrawRule({
     this.ruleText,
@@ -26,7 +27,9 @@ class CashWithdrawRule {
     this.proxyRate,
     this.proxyMoney,
     this.scaleTip,
+    this.orderList,
   });
+
   factory CashWithdrawRule.fromJson(Map<String, dynamic> json) {
     return CashWithdrawRule(
         ruleText: json['rule_text'],
@@ -39,6 +42,40 @@ class CashWithdrawRule {
         incomeRate: json['income_rate'],
         proxyRate: json['proxy_rate'],
         proxyMoney: json['proxy_money'],
-        scaleTip: json['scale_tip']);
+        scaleTip: json['scale_tip'],
+        orderList: List<OrderModel>.from(json['order']?.map((x) => OrderModel.fromJson(x)) ?? []),
+    );
+  }
+}
+
+class OrderModel {
+  String name;
+  String avatar;
+  String tip;
+  int price;
+
+  OrderModel({
+    this.name = '',
+    this.avatar = '',
+    this.tip = '',
+    this.price = 0,
+  });
+
+  factory OrderModel.fromJson(Map<String, dynamic> json) {
+    return OrderModel(
+      name: json['name'] ?? '',
+      avatar: json['avatar'] ?? '',
+      tip: json['tip'] ?? '',
+      price: json['price'] ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'avatar': avatar,
+      'tip': tip,
+      'price': price,
+    };
   }
 }

@@ -7,6 +7,8 @@ import '../../../../utils/common_utils.dart';
 import '../../../theme.dart';
 import '../../my_image.dart';
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class CartoonVideoCard extends StatelessWidget {
   const CartoonVideoCard({super.key, required this.data});
   final CartoonModel data;
@@ -16,7 +18,7 @@ class CartoonVideoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
         CartoonDetailRoute('${data.id}').push(context);

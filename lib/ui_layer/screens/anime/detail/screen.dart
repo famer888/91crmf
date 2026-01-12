@@ -17,6 +17,8 @@ import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'widgets/introduction_view.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class CartoonDetailScreen extends StatefulWidget {
   const CartoonDetailScreen({super.key, required this.id});
 
@@ -72,7 +74,7 @@ class _CartoonDetailScreenState extends State<CartoonDetailScreen> {
         child: Scaffold(
           extendBodyBehindAppBar: true,
           // appBar: const MyAppBar(),
-          floatingActionButton: GestureDetector(
+          floatingActionButton: ReportGestureDetector(
             onTap: () {
               context.pop();
             },

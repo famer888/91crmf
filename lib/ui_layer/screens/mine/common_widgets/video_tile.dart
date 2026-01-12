@@ -8,13 +8,15 @@ import '../../../utils/common_utils.dart';
 import '../../theme.dart';
 import '../../common_widgets/my_image.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class MineVideoTile extends StatelessWidget {
   const MineVideoTile({super.key, required this.data});
   final MineVideoCardData data;
   @override
   Widget build(BuildContext context) {
     double w = (1.sw - MyTheme.pagePadding * 2 - 4.w) / 2;
-    return GestureDetector(
+    return ReportGestureDetector(
       onTap: () {
         VideoDetailRoute('${data.id}').push(context);
       },

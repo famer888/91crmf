@@ -456,7 +456,11 @@ abstract class _$$FeedAdModelImplCopyWith<$Res>
       int reportId,
       int reportType,
       int? crackAppType,
-      String? subTitle});
+      String? subTitle,
+      int? adType,
+      String? adSlotName,
+      String? advertiseCode,
+      String? advertiseLocationCode});
 }
 
 /// @nodoc
@@ -498,6 +502,10 @@ class __$$FeedAdModelImplCopyWithImpl<$Res>
     Object? reportType = null,
     Object? crackAppType = freezed,
     Object? subTitle = freezed,
+    Object? adType = freezed,
+    Object? adSlotName = freezed,
+    Object? advertiseCode = freezed,
+    Object? advertiseLocationCode = freezed,
   }) {
     return _then(_$FeedAdModelImpl(
       null == id
@@ -612,6 +620,22 @@ class __$$FeedAdModelImplCopyWithImpl<$Res>
           ? _value.subTitle
           : subTitle // ignore: cast_nullable_to_non_nullable
               as String?,
+      freezed == adType
+          ? _value.adType
+          : adType // ignore: cast_nullable_to_non_nullable
+              as int?,
+      freezed == adSlotName
+          ? _value.adSlotName
+          : adSlotName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      freezed == advertiseCode
+          ? _value.advertiseCode
+          : advertiseCode // ignore: cast_nullable_to_non_nullable
+              as String?,
+      freezed == advertiseLocationCode
+          ? _value.advertiseLocationCode
+          : advertiseLocationCode // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -649,6 +673,10 @@ class _$FeedAdModelImpl implements FeedAdModel {
       this.reportType,
       this.crackAppType,
       this.subTitle,
+      this.adType,
+      this.adSlotName,
+      this.advertiseCode,
+      this.advertiseLocationCode,
       {final String? $type})
       : $type = $type ?? 'ad';
 
@@ -711,13 +739,21 @@ class _$FeedAdModelImpl implements FeedAdModel {
   final int? crackAppType;
   @override
   final String? subTitle;
+  @override
+  final int? adType;
+  @override
+  final String? adSlotName;
+  @override
+  final String? advertiseCode;
+  @override
+  final String? advertiseLocationCode;
 
   @JsonKey(name: 'feed_type')
   final String $type;
 
   @override
   String toString() {
-    return 'FeedModel.ad(id: $id, title: $title, description: $description, imgUrl: $imgUrl, urlConfig: $urlConfig, position: $position, androidDownUrl: $androidDownUrl, iosDownUrl: $iosDownUrl, type: $type, status: $status, oauthType: $oauthType, mvM3U8: $mvM3U8, channel: $channel, createdAt: $createdAt, router: $router, startAt: $startAt, endAt: $endAt, clicked: $clicked, sort: $sort, urlStr: $urlStr, linkUrl: $linkUrl, url: $url, resourceUrl: $resourceUrl, redirectType: $redirectType, reportId: $reportId, reportType: $reportType, crackAppType: $crackAppType, subTitle: $subTitle)';
+    return 'FeedModel.ad(id: $id, title: $title, description: $description, imgUrl: $imgUrl, urlConfig: $urlConfig, position: $position, androidDownUrl: $androidDownUrl, iosDownUrl: $iosDownUrl, type: $type, status: $status, oauthType: $oauthType, mvM3U8: $mvM3U8, channel: $channel, createdAt: $createdAt, router: $router, startAt: $startAt, endAt: $endAt, clicked: $clicked, sort: $sort, urlStr: $urlStr, linkUrl: $linkUrl, url: $url, resourceUrl: $resourceUrl, redirectType: $redirectType, reportId: $reportId, reportType: $reportType, crackAppType: $crackAppType, subTitle: $subTitle, adType: $adType, adSlotName: $adSlotName, advertiseCode: $advertiseCode, advertiseLocationCode: $advertiseLocationCode)';
   }
 
   @JsonKey(ignore: true)
@@ -772,7 +808,11 @@ abstract class FeedAdModel implements FeedModel {
       final int reportId,
       final int reportType,
       final int? crackAppType,
-      final String? subTitle) = _$FeedAdModelImpl;
+      final String? subTitle,
+      final int? adType,
+      final String? adSlotName,
+      final String? advertiseCode,
+      final String? advertiseLocationCode) = _$FeedAdModelImpl;
 
   factory FeedAdModel.fromJson(Map<String, dynamic> json) =
       _$FeedAdModelImpl.fromJson;
@@ -809,6 +849,10 @@ abstract class FeedAdModel implements FeedModel {
   @override
   int? get crackAppType;
   String? get subTitle;
+  int? get adType;
+  String? get adSlotName;
+  String? get advertiseCode;
+  String? get advertiseLocationCode;
   @override
   @JsonKey(ignore: true)
   _$$FeedAdModelImplCopyWith<_$FeedAdModelImpl> get copyWith =>

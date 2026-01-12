@@ -18,6 +18,10 @@ import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../report/ui_layer/report_general_banner.dart';
+
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class LiveVideoDetailIntroductionView extends StatefulWidget {
   const LiveVideoDetailIntroductionView(
       {super.key, required this.id, required this.data});
@@ -140,7 +144,7 @@ class _HeaderViewState extends State<_HeaderView> {
                   StatefulBuilder(builder: (_, setState) {
                     final isFavorite = videoInfo.isFavorite == 1;
 
-                    return GestureDetector(
+                    return ReportGestureDetector(
                       onTap: () async {
                         if (videoInfo.id case final id?) {
                           final liveDomain = context.read<LiveDomain>();
@@ -173,7 +177,7 @@ class _HeaderViewState extends State<_HeaderView> {
                     );
                   }),
                   SizedBox(width: 20.w),
-                  GestureDetector(
+                  ReportGestureDetector(
                     onTap: () {
                       const MineShareToUserRoute().push(context);
                     },
@@ -200,7 +204,7 @@ class _HeaderViewState extends State<_HeaderView> {
                   apps: banners,
                 )
 
-                //  GeneralBannerAppsListWidget(
+                //  ReportGeneralAppsListVidget(
                 //   data: banners,
                 //   aspectRatio: 10 / 3,
                 // ),

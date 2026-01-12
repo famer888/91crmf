@@ -35,33 +35,35 @@ class HomeData {
         timestamp: json['timestamp'],
         config: Config.fromJson(json['config']),
         ads: json['ads'] == null ? null : AdModel.fromJson(json['ads']),
-        popAds: List<Notice>.from(
-            json['pop_ads']?.map((x) => Notice.fromJson(x)) ?? []),
+        popAds: List<Notice>.from(json['pop_ads']?.map((x) => Notice.fromJson(x)) ?? []),
         help: List<Help>.from(json['help']?.map((e) => Help.fromJson(e))),
-        noticeApps: List<Notice>.from(
-            json['notice_app']?.map((x) => Notice.fromJson(x)) ?? []),
-        startScreenAds: List<AdModel>.from(
-            json['start_screen_ads']?.map((x) => AdModel.fromJson(x)) ?? []),
+        noticeApps: List<Notice>.from(json['notice_app']?.map((x) => Notice.fromJson(x)) ?? []),
+        startScreenAds: List<AdModel>.from(json['start_screen_ads']?.map((x) => AdModel.fromJson(x)) ?? []),
       );
 }
 
 class AdModel {
-  AdModel(
-      {this.id,
-      this.title,
-      this.description,
-      this.imgUrl,
-      this.url,
-      this.position,
-      this.androidDownUrl,
-      this.iosDownUrl,
-      this.type,
-      this.status,
-      this.oauthType,
-      this.mvM3U8,
-      this.channel,
-      this.createdAt,
-      this.subTitle});
+  AdModel({
+    this.id,
+    this.title,
+    this.description,
+    this.imgUrl,
+    this.url,
+    this.position,
+    this.androidDownUrl,
+    this.iosDownUrl,
+    this.type,
+    this.status,
+    this.oauthType,
+    this.mvM3U8,
+    this.channel,
+    this.createdAt,
+    this.subTitle,
+    this.adType = 0,
+    this.adSlotName = '',
+    this.advertiseCode = '',
+    this.advertiseLocationCode = '',
+  });
 
   final int? id;
   final String? title;
@@ -78,23 +80,32 @@ class AdModel {
   final String? channel;
   final String? createdAt;
   final String? subTitle;
+  final int adType;
+  final String adSlotName;
+  final String advertiseCode;
+  final String advertiseLocationCode;
 
   factory AdModel.fromJson(Map<String, dynamic> json) => AdModel(
-      id: json['id'],
-      title: json['title'],
-      description: json['description'],
-      imgUrl: json['img_url'],
-      url: json['url'],
-      position: json['position'],
-      androidDownUrl: json['android_down_url'],
-      iosDownUrl: json['ios_down_url'],
-      type: json['type'],
-      status: json['status'],
-      oauthType: json['oauth_type'],
-      mvM3U8: json['mv_m3u8'],
-      channel: json['channel'],
-      createdAt: json['created_at'].toString(),
-      subTitle: json['sub_title']);
+        id: json['id'],
+        title: json['title'],
+        description: json['description'],
+        imgUrl: json['img_url'],
+        url: json['url'],
+        position: json['position'],
+        androidDownUrl: json['android_down_url'],
+        iosDownUrl: json['ios_down_url'],
+        type: json['type'],
+        status: json['status'],
+        oauthType: json['oauth_type'],
+        mvM3U8: json['mv_m3u8'],
+        channel: json['channel'],
+        createdAt: json['created_at'].toString(),
+        subTitle: json['sub_title'],
+        adType: json['ad_type'] ?? 0,
+        adSlotName: json['ad_slot_name'] ?? '',
+        advertiseCode: json['advertise_code'] ?? '',
+        advertiseLocationCode: json['advertise_location_code'] ?? '',
+      );
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -111,7 +122,11 @@ class AdModel {
         'mv_m3u8': mvM3U8,
         'channel': channel,
         'created_at': createdAt,
-        'sub_title': subTitle
+        'sub_title': subTitle,
+        'ad_type': adType,
+        'ad_slot_name': adSlotName,
+        'advertise_code': advertiseCode,
+        'advertise_location_code': advertiseLocationCode,
       };
 }
 
@@ -202,25 +217,30 @@ class Config {
     this.r2URL,
     this.r2Key,
     this.r2CompleteURL,
-    this.pwa_apk,
+    this.pwaApk,
     this.keywords,
     this.description,
     this.title,
     this.adVersion,
-    this.nav_prepend,
-    this.nav_default,
+    this.navPrepend,
+    this.navDefault,
     this.hjgjSortNav,
     this.hjgjDiscoverSortNav,
     this.aw91SortNav,
     this.zpcSortNav,
     this.awjqSortNav,
+    this.pzhanSortNav,
+    this.pzhanFindSortNav,
     required this.aiNav,
     required this.payAiAudio,
     required this.payAiNovel,
     required this.payAiKiss,
+    this.appListStr,
     this.videoFaceTopNav,
     this.videoFaceSortNav,
     required this.aiAudioFontCt,
+    required this.buryPoint,
+    this.welfare,
   });
 
   final int? imCoins;
@@ -296,6 +316,7 @@ class Config {
   final List<BannerModel>? buoy;
   final int payAi;
   final int? showApp;
+  final String? appListStr;
 
   final String potatoGroup;
   final String tgGroup;
@@ -318,7 +339,7 @@ class Config {
   final String? r2CompleteURL;
 
   //paw_apk下载
-  final String? pwa_apk;
+  final String? pwaApk;
 
   //seo
   final String? keywords;
@@ -327,19 +348,29 @@ class Config {
 
   final int? adVersion;
 
-  final List<NavPrependModel>? nav_prepend;
-  int? nav_default;
+  final List<NavPrependModel>? navPrepend;
+  int? navDefault;
 
   // 草榴 推荐视频
   final List<AppNavModel>? hjgjSortNav;
+
   // 草榴 17岁
   final List<AppNavModel>? hjgjDiscoverSortNav;
+
   // 91暗网
   final List<AppNavModel>? aw91SortNav;
+
   // 制片厂
   final List<AppNavModel>? zpcSortNav;
+
   // 暗网禁区
   final List<AppNavModel>? awjqSortNav;
+
+  // P站
+  final List<AppNavModel>? pzhanSortNav;
+
+  // P站发现页面的tab
+  final List<AppNavModel>? pzhanFindSortNav;
 
   final int payAiMagic;
   final int payAiDraw;
@@ -349,14 +380,20 @@ class Config {
   final int payAiNovel;
   final int payAiKiss;
   final int aiAudioFontCt;
+
+  ReportConfig buryPoint;
+  final List<BannerModel>? welfare;
+
   factory Config.fromJson(Map<String, dynamic> json) => Config(
-        nav_default: json['nav_default'],
-        nav_prepend: List<NavPrependModel>.from(json['nav_prepend']?.map((x) => NavPrependModel.fromJson(x)) ?? []),
+        navDefault: json['nav_default'],
+        navPrepend: List<NavPrependModel>.from(json['nav_prepend']?.map((x) => NavPrependModel.fromJson(x)) ?? []),
         hjgjSortNav: List<AppNavModel>.from(json['hjgj_sort_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
         hjgjDiscoverSortNav: List<AppNavModel>.from(json['hjgj_discover_sort_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
         aw91SortNav: List<AppNavModel>.from(json['91aw_sort_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
         zpcSortNav: List<AppNavModel>.from(json['zpc_sort_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
         awjqSortNav: List<AppNavModel>.from(json['awjq_sort_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
+        pzhanSortNav: List<AppNavModel>.from(json['pzhan_sort_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
+        pzhanFindSortNav: List<AppNavModel>.from(json['pzhan_find_sort_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
         dayPrice: json['day_price'],
         personAds: json['person_ads'],
         imgUploadUrl: json['img_upload_url'],
@@ -375,8 +412,7 @@ class Config {
         videoEncryptApi: json['video_encrypt_api'],
         videoEncryptReferer: json['video_encrypt_referer'],
         videoEncryptM3u8: json['video_encrypt_m3u8'],
-        vipLevelStr:
-            List<String>.from(json['vip_level_str']?.map((x) => x) ?? []),
+        vipLevelStr: List<String>.from(json['vip_level_str']?.map((x) => x) ?? []),
         vipNameStr: json['vip_name_str'] ?? '',
         navId: json['nav_id'],
         lqNavid: json['lq_navid'],
@@ -387,74 +423,37 @@ class Config {
         githubUrl: json['github_url'],
         linesUrl: List<String>.from(json['lines_url']?.map((x) => x) ?? []),
         tipsShareText: json['tips_share_text'],
-        girlCommentOption: json['girl_comment_option'] ??
-            json['girl_comment_option'].toString(),
+        girlCommentOption: json['girl_comment_option'] ?? json['girl_comment_option'].toString(),
         proxyJoinNum: json['proxy_join_num']?.toString(),
         coverIds: List<String>.from(json['cover_ids']?.map((x) => x) ?? []),
         coverVipStr: json['cover_vip_str']?.map((x) => x).toList(),
         coverTips: json['cover_tips'],
-        voiceNav: List<FaceNavigatorModel>.from(
-            json['voice_nav']?.map((x) => FaceNavigatorModel.fromJson(x)) ??
-                []),
-        voiceSortNav: List<NavigatorModel>.from(
-            json['voice_sort_nav']?.map((x) => NavigatorModel.fromJson(x)) ??
-                []),
+        voiceNav: List<FaceNavigatorModel>.from(json['voice_nav']?.map((x) => FaceNavigatorModel.fromJson(x)) ?? []),
+        voiceSortNav: List<NavigatorModel>.from(json['voice_sort_nav']?.map((x) => NavigatorModel.fromJson(x)) ?? []),
         sortNav: List<NavigatorModel>.from(json['sort_nav']?.map((x) => NavigatorModel.fromJson(x)) ?? []),
-        forumNav: List<NavigatorModel>.from(
-            json['forum_nav']?.map((x) => NavigatorModel.fromJson(x)) ?? []),
-        seedSortNav: List<NavigatorModel>.from(
-            json['seed_sort_nav']?.map((x) => NavigatorModel.fromJson(x)) ??
-                []),
-        vlogNav: List<VlogNavigatorModel>.from(
-            json['vlog_nav']?.map((x) => VlogNavigatorModel.fromJson(x)) ?? []),
-        vlogTagSortNav: List<NavigatorModel>.from(
-            json['vlog_tag_sort_nav']?.map((x) => NavigatorModel.fromJson(x)) ??
-                []),
-        vlogSortNav: List<NavigatorModel>.from(
-            json['vlog_sort_nav']?.map((x) => NavigatorModel.fromJson(x)) ??
-                []),
-        vlogDiscoverSortNav: List<NavigatorModel>.from(
-            json['vlog_discover_sort_nav']
-                    ?.map((x) => NavigatorModel.fromJson(x)) ??
-                []),
-        cartoonTopNav: List<BitNavModel>.from(
-            json['cartoon_top_nav']?.map((x) => BitNavModel.fromJson(x)) ?? []),
-        cartoonSortNav: List<BitNavModel>.from(
-            json['cartoon_sort_nav']?.map((x) => BitNavModel.fromJson(x)) ??
-                []),
-        comicTopNav: List<BitNavModel>.from(
-            json['comic_top_nav']?.map((x) => BitNavModel.fromJson(x)) ?? []),
-        comicSortNav: List<BitNavModel>.from(
-            json['comic_sort_nav']?.map((x) => BitNavModel.fromJson(x)) ?? []),
-        gameTopNav: List<BitNavModel>.from(
-            json['game_top_nav']?.map((x) => BitNavModel.fromJson(x)) ?? []),
-        gameSortNav: List<BitNavModel>.from(
-            json['game_sort_nav']?.map((x) => BitNavModel.fromJson(x)) ?? []),
-        gameTagSortNav: List<BitNavModel>.from(
-            json['game_tag_sort_nav']?.map((x) => BitNavModel.fromJson(x)) ??
-                []),
-        liveTopNav: List<BitNavModel>.from(
-            json['live_top_nav']?.map((x) => BitNavModel.fromJson(x)) ?? []),
-        communityNav: List<BitNavModel>.from(
-            json['community_nav']?.map((x) => BitNavModel.fromJson(x)) ?? []),
-        faceTopNav: List<FaceNavigatorModel>.from(
-            json['face_top_nav']?.map((x) => FaceNavigatorModel.fromJson(x)) ??
-                []),
-        seedTopNav: List<FaceNavigatorModel>.from(
-            json['seed_top_nav']?.map((x) => FaceNavigatorModel.fromJson(x)) ??
-                []),
-        faceSortNav: List<FaceSortModel>.from(
-            json['face_sort_nav']?.map((x) => FaceSortModel.fromJson(x)) ?? []),
-        postDetailAds: List<Notice>.from(
-            json['post_detail_ads']?.map((x) => Notice.fromJson(x)) ?? []),
-        buoy: List<BannerModel>.from(
-            json['buoy']?.map((x) => BannerModel.fromJson(x)) ?? []),
-        forumTips: List<TipModel>.from(
-            json['forum_tips']?.map((x) => TipModel.fromJson(x)) ?? []),
-        rankTopNav: List<RankNavigatorModel>.from(
-            json['rank_top_nav']?.map((x) => RankNavigatorModel.fromJson(x))),
-        rankCycleNav: List<RankNavigatorModel>.from(
-            json['rank_cycle_nav']?.map((x) => RankNavigatorModel.fromJson(x))),
+        forumNav: List<NavigatorModel>.from(json['forum_nav']?.map((x) => NavigatorModel.fromJson(x)) ?? []),
+        seedSortNav: List<NavigatorModel>.from(json['seed_sort_nav']?.map((x) => NavigatorModel.fromJson(x)) ?? []),
+        vlogNav: List<VlogNavigatorModel>.from(json['vlog_nav']?.map((x) => VlogNavigatorModel.fromJson(x)) ?? []),
+        vlogTagSortNav: List<NavigatorModel>.from(json['vlog_tag_sort_nav']?.map((x) => NavigatorModel.fromJson(x)) ?? []),
+        vlogSortNav: List<NavigatorModel>.from(json['vlog_sort_nav']?.map((x) => NavigatorModel.fromJson(x)) ?? []),
+        vlogDiscoverSortNav: List<NavigatorModel>.from(json['vlog_discover_sort_nav']?.map((x) => NavigatorModel.fromJson(x)) ?? []),
+        cartoonTopNav: List<BitNavModel>.from(json['cartoon_top_nav']?.map((x) => BitNavModel.fromJson(x)) ?? []),
+        cartoonSortNav: List<BitNavModel>.from(json['cartoon_sort_nav']?.map((x) => BitNavModel.fromJson(x)) ?? []),
+        comicTopNav: List<BitNavModel>.from(json['comic_top_nav']?.map((x) => BitNavModel.fromJson(x)) ?? []),
+        comicSortNav: List<BitNavModel>.from(json['comic_sort_nav']?.map((x) => BitNavModel.fromJson(x)) ?? []),
+        gameTopNav: List<BitNavModel>.from(json['game_top_nav']?.map((x) => BitNavModel.fromJson(x)) ?? []),
+        gameSortNav: List<BitNavModel>.from(json['game_sort_nav']?.map((x) => BitNavModel.fromJson(x)) ?? []),
+        gameTagSortNav: List<BitNavModel>.from(json['game_tag_sort_nav']?.map((x) => BitNavModel.fromJson(x)) ?? []),
+        liveTopNav: List<BitNavModel>.from(json['live_top_nav']?.map((x) => BitNavModel.fromJson(x)) ?? []),
+        communityNav: List<BitNavModel>.from(json['community_nav']?.map((x) => BitNavModel.fromJson(x)) ?? []),
+        faceTopNav: List<FaceNavigatorModel>.from(json['face_top_nav']?.map((x) => FaceNavigatorModel.fromJson(x)) ?? []),
+        seedTopNav: List<FaceNavigatorModel>.from(json['seed_top_nav']?.map((x) => FaceNavigatorModel.fromJson(x)) ?? []),
+        faceSortNav: List<FaceSortModel>.from(json['face_sort_nav']?.map((x) => FaceSortModel.fromJson(x)) ?? []),
+        postDetailAds: List<Notice>.from(json['post_detail_ads']?.map((x) => Notice.fromJson(x)) ?? []),
+        buoy: List<BannerModel>.from(json['buoy']?.map((x) => BannerModel.fromJson(x)) ?? []),
+        forumTips: List<TipModel>.from(json['forum_tips']?.map((x) => TipModel.fromJson(x)) ?? []),
+        rankTopNav: List<RankNavigatorModel>.from(json['rank_top_nav']?.map((x) => RankNavigatorModel.fromJson(x))),
+        rankCycleNav: List<RankNavigatorModel>.from(json['rank_cycle_nav']?.map((x) => RankNavigatorModel.fromJson(x))),
         payAi: json['pay_ai'] ?? 0,
         showApp: json['show_app'],
         potatoGroup: json['potato_group'] ?? '',
@@ -462,20 +461,11 @@ class Config {
         seedVipTip: json['seed_vip_tip'] ?? '',
         seedCoinsTip: json['seed_coins_tip'] ?? '',
         wdaiStr: json['wdai_str'] ?? '',
-        vipLevelAwqStr:
-            List<String>.from(json['vip_level_awq_str']?.map((x) => x) ?? []),
+        vipLevelAwqStr: List<String>.from(json['vip_level_awq_str']?.map((x) => x) ?? []),
         vipNameAwqStr: json['vip_name_awq_str'] ?? '',
-        originalSortNav: List<NavigatorModel>.from(
-            json['original_sort_nav']?.map((x) => NavigatorModel.fromJson(x)) ??
-                []),
-        originalBloggerNav: List<NavigatorModel>.from(
-            json['original_blogger_nav']
-                    ?.map((x) => NavigatorModel.fromJson(x)) ??
-                []),
-        originalTopNav: List<OriginalCommunityNavModel>.from(
-            json['original_top_nav']
-                    ?.map((x) => OriginalCommunityNavModel.fromJson(x)) ??
-                []),
+        originalSortNav: List<NavigatorModel>.from(json['original_sort_nav']?.map((x) => NavigatorModel.fromJson(x)) ?? []),
+        originalBloggerNav: List<NavigatorModel>.from(json['original_blogger_nav']?.map((x) => NavigatorModel.fromJson(x)) ?? []),
+        originalTopNav: List<OriginalCommunityNavModel>.from(json['original_top_nav']?.map((x) => OriginalCommunityNavModel.fromJson(x)) ?? []),
         faceCoins: json['face_coins'],
         stripCoins: json['strip_coins'],
         openLive: json['open_live'],
@@ -487,7 +477,7 @@ class Config {
         r2URL: json['r2URL'] ?? '',
         r2Key: json['r2Key'] ?? '',
         r2CompleteURL: json['r2CompleteURL'] ?? '',
-        pwa_apk: json['pwa_apk'] ?? '',
+        pwaApk: json['pwa_apk'] ?? '',
         keywords: json['keywords'] ?? '',
         description: json['description'] ?? '',
         title: json['title'] ?? '',
@@ -498,25 +488,24 @@ class Config {
         payAiAudio: json['pay_ai_audio'] ?? 0,
         payAiNovel: json['pay_ai_novel'] ?? 0,
         payAiKiss: json['pay_ai_kiss'] ?? 0,
+        appListStr: json['app_list_str'] ?? '',
         aiAudioFontCt: json['ai_audio_font_ct'] ?? 0,
-        videoFaceTopNav: List<FaceNavigatorModel>.from(
-            json['video_face_top_nav']
-                    ?.map((x) => FaceNavigatorModel.fromJson(x)) ??
-                []),
-        videoFaceSortNav: List<VideoFaceSortModel>.from(
-            json['video_face_sort_nav']
-                    ?.map((x) => VideoFaceSortModel.fromJson(x)) ??
-                []),
+        videoFaceTopNav: List<FaceNavigatorModel>.from(json['video_face_top_nav']?.map((x) => FaceNavigatorModel.fromJson(x)) ?? []),
+        videoFaceSortNav: List<VideoFaceSortModel>.from(json['video_face_sort_nav']?.map((x) => VideoFaceSortModel.fromJson(x)) ?? []),
+        buryPoint: ReportConfig.fromJson(json['bury_point']) ?? ReportConfig(),
+        welfare: List<BannerModel>.from(json['welfare']?.map((x) => BannerModel.fromJson(x)) ?? []),
       );
 
   Map<String, dynamic> toJson() => {
-        'nav_default': nav_default,
-        'nav_prepend': nav_prepend?.map((e) => e).toList() ?? [],
+        'nav_default': navDefault,
+        'nav_prepend': navPrepend?.map((e) => e).toList() ?? [],
         'hjgj_sort_nav': hjgjSortNav?.map((e) => e).toList() ?? [],
         'hjgj_discover_sort_nav': hjgjDiscoverSortNav?.map((e) => e).toList() ?? [],
         '91aw_sort_nav': aw91SortNav?.map((e) => e).toList() ?? [],
         'zpc_sort_nav': zpcSortNav?.map((e) => e).toList() ?? [],
         'awjq_sort_nav': awjqSortNav?.map((e) => e).toList() ?? [],
+        'pzhan_sort_nav': pzhanSortNav?.map((e) => e).toList() ?? [],
+        'pzhan_find_sort_nav': pzhanFindSortNav?.map((e) => e).toList() ?? [],
         'day_price': dayPrice,
         'person_ads': personAds,
         'img_upload_url': imgUploadUrl,
@@ -559,8 +548,7 @@ class Config {
         'vlog_nav': vlogNav?.map((e) => e).toList() ?? [],
         'vlog_tag_sort_nav': vlogTagSortNav?.map((e) => e).toList() ?? [],
         'vlog_sort_nav': vlogSortNav?.map((e) => e).toList() ?? [],
-        'vlog_discover_sort_nav':
-            vlogDiscoverSortNav?.map((e) => e).toList() ?? [],
+        'vlog_discover_sort_nav': vlogDiscoverSortNav?.map((e) => e).toList() ?? [],
         'cartoon_top_nav': cartoonTopNav?.map((e) => e).toList() ?? [],
         'cartoon_sort_nav': cartoonSortNav?.map((e) => e).toList() ?? [],
         'comic_top_nav': comicTopNav?.map((e) => e).toList() ?? [],
@@ -573,8 +561,7 @@ class Config {
         'face_top_nav': faceTopNav?.map((e) => e).toList() ?? [],
         'face_sort_nav': faceSortNav?.map((e) => e).toList() ?? [],
         'original_sort_nav': originalSortNav?.map((e) => e).toList() ?? [],
-        'original_blogger_nav':
-            originalBloggerNav?.map((e) => e).toList() ?? [],
+        'original_blogger_nav': originalBloggerNav?.map((e) => e).toList() ?? [],
         'post_detail_ads': postDetailAds?.map((e) => e).toList() ?? [],
         'buoy': buoy?.map((e) => e).toList() ?? [],
         'forum_tips': forumTips?.map((e) => e).toList() ?? [],
@@ -598,7 +585,8 @@ class Config {
         'r2URL': r2URL,
         'r2Key': r2Key,
         'r2CompleteURL': r2CompleteURL,
-        'pwa_apk': pwa_apk,
+        'app_list_str': appListStr,
+        'pwa_apk': pwaApk,
         'keywords': keywords,
         'description': description,
         'title': title,
@@ -607,71 +595,104 @@ class Config {
         'pay_ai_draw': payAiDraw,
         'video_face_top_nav': videoFaceTopNav?.map((e) => e).toList() ?? [],
         'video_face_sort_nav': videoFaceSortNav?.map((e) => e).toList() ?? [],
+        'bury_point': buryPoint.toJson(),
+        'welfare': welfare?.map((e) => e).toList() ?? [],
       };
 }
 
 class Notice {
   Notice({
     this.id,
-    this.imgUrl,
+    this.resourceUrl,
+    this.name,
+    this.desc = '',
     this.router,
+    this.reportId,
+    this.reportType,
+    this.openType = 0,
+    this.fId = 0,
+    this.adType = 0,
+    this.adSlotName = '',
+    this.advertiseCode = '',
+    this.advertiseLocationCode = '',
+    this.imgUrl,
     this.type,
     this.height,
     this.width,
     this.urlStr,
-    this.reportId,
-    this.reportType,
     this.linkUrl,
-    this.resourceUrl,
     this.title,
-    this.redirect_type,
+    this.redirectType,
   });
 
   final int? id;
-  final String? imgUrl;
+  final String? resourceUrl;
+  final String? name;
+  final String desc;
   final String? router;
+  final int? reportId;
+  final int? reportType;
+  final int openType;
+  final int fId;
+  final int adType;
+  final String adSlotName;
+  final String advertiseCode;
+  final String advertiseLocationCode;
+  final String? imgUrl;
   final String? type;
   final int? height;
   final int? width;
   final String? urlStr;
-  final int? reportId;
-  final int? reportType;
-  final String? resourceUrl;
-
   final String? linkUrl;
   final String? title;
-  final int? redirect_type;
+  final int? redirectType;
 
   factory Notice.fromJson(Map<String, dynamic> json) => Notice(
         id: json['id'] ?? 0,
-        imgUrl: json['img_url'] ?? '',
+        resourceUrl: json['resource_url'] ?? '',
+        name: json['name'],
+        desc: json['desc'] ?? '',
         router: json['router'] ?? '',
+        reportId: json['report_id'] ?? 0,
+        reportType: json['report_type'] ?? 0,
+        openType: json['open_type'] ?? 0,
+        fId: json['f_id'] ?? 0,
+        adType: json['ad_type'] ?? 0,
+        adSlotName: json['ad_slot_name'] ?? '',
+        advertiseCode: json['advertise_code'] ?? '',
+        advertiseLocationCode: json['advertise_location_code'] ?? '',
+        imgUrl: json['img_url'] ?? '',
         type: '${json['type']}' ?? '',
         height: json['height'] ?? 100,
         width: json['width'] ?? 100,
         urlStr: json['url_str'] ?? '',
-        reportId: json['report_id'] ?? 0,
-        reportType: json['report_type'] ?? 0,
         linkUrl: json['link_url'] ?? '',
-        resourceUrl: json['resource_url'] ?? '',
-        title: json['title'] ?? '',
-        redirect_type: json['redirect_type'] ?? 0,
+        title: json['title'],
+        redirectType: json['redirect_type'] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'img_url': imgUrl,
+        'resource_url': resourceUrl,
+        'name': name,
+        'desc': desc,
         'router': router,
+        'report_id': reportId,
+        'report_type': reportType,
+        'open_type': openType,
+        'f_id': fId,
+        'ad_type': adType,
+        'ad_slot_name': adSlotName,
+        'advertise_code': advertiseCode,
+        'advertise_location_code': advertiseLocationCode,
+        'img_url': imgUrl,
         'type': type,
         'height': height,
         'width': width,
         'url_str': urlStr,
-        'report_id': reportId,
-        'report_type': reportType,
         'link_url': linkUrl,
-        'resource_url':resourceUrl,
         'title': title,
-        'redirect_type': redirect_type,
+        'redirect_type': redirectType,
       };
 }
 
@@ -792,17 +813,15 @@ class AppNavModel {
     this.type = '',
   });
 
-
-  factory AppNavModel.fromJson(Map<String, dynamic> json) =>
-      AppNavModel(
-        title: json['title'],
-        type: json['type'],
+  factory AppNavModel.fromJson(Map<String, dynamic> json) => AppNavModel(
+        title: json['title'] ?? (json['name'] ?? ''),
+        type: json['type'] ?? (json['sort'] ?? ''),
       );
 
   Map<String, dynamic> toJson() => {
-    'title': title,
-    'type': type,
-  };
+        'title': title,
+        'type': type,
+      };
 }
 
 class NavPrependModel {
@@ -818,8 +837,7 @@ class NavPrependModel {
   final int? sort;
   final String? value;
 
-  factory NavPrependModel.fromJson(Map<String, dynamic> json) =>
-      NavPrependModel(
+  factory NavPrependModel.fromJson(Map<String, dynamic> json) => NavPrependModel(
         label: json['label'],
         type: json['type'],
         sort: json['sort'],
@@ -831,5 +849,115 @@ class NavPrependModel {
         'type': type,
         'sort': sort,
         'value': value,
+      };
+}
+
+class ReportConfig {
+  ReportConfig({
+    this.clickAppId = '',
+    this.clickTransitPath = '',
+    this.isReportOrderPaid = 0,
+    this.isReportCoinConsume = 0,
+    this.isReportNavigation = 0,
+    this.isReportAppPageView = 0,
+    this.isReportPageClick = 0,
+    this.isReportAdvertising = 0,
+    this.isReportPageLifecycle = 0,
+    this.isReportVideoEvent = 0,
+    this.isReportVideoLike = 0,
+    this.isReportVideoComment = 0,
+    this.isReportVideoCollect = 0,
+    this.isReportVideoPurchase = 0,
+    this.isReportKeywordSearch = 0,
+    this.isReportKeywordClick = 0,
+    this.isReportAdImpression = 0,
+    this.isReportAdClick = 0,
+    this.isEncryption = 0,
+    this.encryptionKey = '',
+    this.encryptionIv = '',
+    this.signKey = '',
+    this.authenticationKey = '',
+    this.authenticationTime = '',
+  });
+
+  final String clickAppId;
+  final String clickTransitPath;
+  final int isReportOrderPaid;
+  final int isReportCoinConsume;
+  final int isReportNavigation;
+  final int isReportAppPageView;
+  final int isReportPageClick;
+  final int isReportAdvertising;
+  final int isReportPageLifecycle;
+  final int isReportVideoEvent;
+  final int isReportVideoLike;
+  final int isReportVideoComment;
+  final int isReportVideoCollect;
+  final int isReportVideoPurchase;
+  final int isReportKeywordSearch;
+  final int isReportKeywordClick;
+  final int isReportAdImpression;
+  final int isReportAdClick;
+  final int isEncryption;
+  final String encryptionKey;
+  final String encryptionIv;
+  final String signKey;
+  final String authenticationKey;
+  final String authenticationTime;
+
+  factory ReportConfig.fromJson(Map<String, dynamic> json) {
+    return ReportConfig(
+      clickAppId: json['click_app_id'] ?? '',
+      clickTransitPath: json['click_transit_path'] ?? '',
+      isReportOrderPaid: json['is_report_order_paid'] ?? 0,
+      isReportCoinConsume: json['is_report_coin_consume'] ?? 0,
+      isReportNavigation: json['is_report_navigation'] ?? 0,
+      isReportAppPageView: json['is_report_app_page_view'] ?? 0,
+      isReportPageClick: json['is_report_page_click'] ?? 0,
+      isReportAdvertising: json['is_report_advertising'] ?? 0,
+      isReportPageLifecycle: json['is_report_page_lifecycle'] ?? 0,
+      isReportVideoEvent: json['is_report_video_event'] ?? 0,
+      isReportVideoLike: json['is_report_video_like'] ?? 0,
+      isReportVideoComment: json['is_report_video_comment'] ?? 0,
+      isReportVideoCollect: json['is_report_video_collect'] ?? 0,
+      isReportVideoPurchase: json['is_report_video_purchase'] ?? 0,
+      isReportKeywordSearch: json['is_report_keyword_search'] ?? 0,
+      isReportKeywordClick: json['is_report_keyword_click'] ?? 0,
+      isReportAdImpression: json['is_report_ad_impression'] ?? 0,
+      isReportAdClick: json['is_report_ad_click'] ?? 0,
+      isEncryption: json['is_encryption'] ?? 0,
+      encryptionKey: json['encryption_key'] ?? '',
+      encryptionIv: json['encryption_iv'] ?? '',
+      signKey: json['sign_key'] ?? '',
+      authenticationKey: json['authentication_key'] ?? '',
+      authenticationTime: '${json['authentication_time'] ?? 0}',
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'click_app_id': clickAppId,
+        'click_transit_path': clickTransitPath,
+        'is_report_order_paid': isReportOrderPaid,
+        'is_report_coin_consume': isReportCoinConsume,
+        'is_report_navigation': isReportNavigation,
+        'is_report_app_page_view': isReportAppPageView,
+        'is_report_page_click': isReportPageClick,
+        'is_report_advertising': isReportAdvertising,
+        'is_report_page_lifecycle': isReportPageLifecycle,
+        'is_report_video_event': isReportVideoEvent,
+        'is_report_video_like': isReportVideoLike,
+        'is_report_video_comment': isReportVideoComment,
+        'is_report_video_collect': isReportVideoCollect,
+        'is_report_video_purchase': isReportVideoPurchase,
+        'is_report_keyword_search': isReportKeywordSearch,
+        'is_report_keyword_click': isReportKeywordClick,
+        'is_report_ad_impression': isReportAdImpression,
+        'is_report_ad_click': isReportAdClick,
+        'is_encryption': isEncryption,
+        'encryption_key': encryptionKey,
+        'encryption_iv': encryptionIv,
+        'sign_key': signKey,
+        'authentication_key': authenticationKey,
+        'authentication_time': authenticationTime,
       };
 }

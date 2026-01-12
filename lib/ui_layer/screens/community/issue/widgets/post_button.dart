@@ -4,13 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../theme.dart';
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class PostButton extends StatelessWidget {
   const PostButton({super.key, required this.onTap});
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: onTap,
       child: Container(

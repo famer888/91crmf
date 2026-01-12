@@ -15,6 +15,8 @@ import '../../../common_widgets/status/network_error.dart';
 import '../../../image_paths.dart';
 import '../../../theme.dart';
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class MineAgentPromoteDataScreen extends StatefulWidget {
   const MineAgentPromoteDataScreen({super.key});
 
@@ -61,7 +63,7 @@ class _MineAgentPromoteDataScreenState
     return Scaffold(
       appBar: MyAppBar(
         title: 'tgsj'.tr(context: context),
-        rightWidget: GestureDetector(
+        rightWidget: ReportGestureDetector(
           onTap: () => const MineAgentProfitRoute().push(context),
           child: Text(
             'symx'.tr(context: context),
@@ -146,7 +148,7 @@ class _WithdrawalCard extends StatelessWidget {
               ))
             ],
           ),
-          GestureDetector(
+          ReportGestureDetector(
             onTap: () {
               const MineWithdrawalRoute(true).push(context);
             },

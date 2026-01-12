@@ -11,6 +11,8 @@ import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class MineNovelRecordScreen extends StatefulWidget {
   const MineNovelRecordScreen({super.key, this.status});
 
@@ -137,7 +139,7 @@ class _AINovelRecordCardState extends State<_AINovelRecordCard> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(
-          child: GestureDetector(
+          child: ReportGestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
               if (!canView) {

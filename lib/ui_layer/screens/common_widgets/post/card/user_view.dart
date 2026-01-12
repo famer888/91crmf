@@ -12,6 +12,8 @@ import '../../follow_button.dart';
 import '../../member_vip.dart';
 import '../../my_avatar.dart';
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class CardUserView extends StatelessWidget {
   const CardUserView({
     super.key,
@@ -30,7 +32,7 @@ class CardUserView extends StatelessWidget {
     final aff = '${user.aff}';
     return Row(
       children: [
-        GestureDetector(
+        ReportGestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
             UserCenterRoute(aff).push(context);

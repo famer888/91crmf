@@ -24,6 +24,10 @@ import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../report/ui_layer/report_general_banner.dart';
+
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class CommunityContentView extends StatefulWidget {
   const CommunityContentView({super.key, required this.id});
   final int id;
@@ -131,7 +135,7 @@ class _CommunityContentViewState extends State<CommunityContentView> {
         Positioned(
             bottom: 10.w,
             right: 13.w,
-            child: GestureDetector(
+            child: ReportGestureDetector(
               onTap: _showIssueAlert,
               behavior: HitTestBehavior.translucent,
               child: MyImage.asset(
@@ -206,7 +210,7 @@ class _CommunityContentViewState extends State<CommunityContentView> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   for (final issue in issues)
-                    GestureDetector(
+                    ReportGestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
                         context.pop();
@@ -262,7 +266,7 @@ class _Header extends StatelessWidget {
             if (banners.isEmpty) return const SizedBox.shrink();
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-              child: GeneralBannerAppsListWidget(data: banners),
+              child: ReportGeneralAppsListVidget(data: banners),
             );
           },
         ),
@@ -305,7 +309,7 @@ class _Header extends StatelessWidget {
                             topic.bgThumb,
                             borderRadius: 6.w,
                           ),
-                          GestureDetector(
+                          ReportGestureDetector(
                             behavior: HitTestBehavior.translucent,
                             onTap: () {
                               CommunityTagDetailRoute('${topic.id}')

@@ -7,6 +7,8 @@ import '../../../../utils/common_utils.dart';
 import '../../../theme.dart';
 import '../../my_image.dart';
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class GameAdCard extends StatelessWidget {
   const GameAdCard({super.key, required this.ad});
   final GameSectionAdModel ad;
@@ -14,7 +16,7 @@ class GameAdCard extends StatelessWidget {
   String get imgUrl => CommonUtils.getThumb(ad.toJson());
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
         CommonUtils.openRoute(context, ad.toJson());

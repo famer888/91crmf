@@ -24,6 +24,8 @@ import '../../common_widgets/status/network_error.dart';
 import '../../image_paths.dart';
 import '../../theme.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class MineWithdrawalScreen extends StatefulWidget {
   const MineWithdrawalScreen({super.key, required this.isAgent});
 
@@ -45,7 +47,7 @@ class _MineWithdrawalScreenState extends State<MineWithdrawalScreen> {
   late final orderDomain = context.read<OrderDomain>();
 
   /// 计算后所有需要扣除的money
-  final _sumAllResultMoney = ValueNotifier<int>(0);
+  final _sumAllResultMoney = ValueNotifier<double>(0);
 
   /// 提现到账money
   final _sumResultMoney = ValueNotifier<int>(0);
@@ -137,7 +139,12 @@ class _MineWithdrawalScreenState extends State<MineWithdrawalScreen> {
           if (context.mounted) {
             context.pop();
           }
-          await sendWithdraw(amount: int.parse(amount), cardId: card.id!);
+          if (isAgent) {
+            await sendWithdraw(amount: double.tryParse(amount) ?? 0.0, cardId: card.id!);
+          } else {
+            final amount = _sumAllResultMoney.value;
+            await sendWithdraw(amount: amount, cardId: card.id!);
+          }
         },
         content: Text(
           '${'sftxd'.tr(context: context)}\n${card.bank} ${CommonUtils.subStringFour('${card.card}')}',
@@ -149,7 +156,7 @@ class _MineWithdrawalScreenState extends State<MineWithdrawalScreen> {
     );
   }
 
-  Future<void> sendWithdraw({required int amount, required int cardId}) async {
+  Future<void> sendWithdraw({required double amount, required int cardId}) async {
     try {
       MyToast.showLoading();
       final res = await orderDomain.incomeApplyWithdraw(cardId: cardId, amount: amount, type: widget.isAgent ? 1 : 2);
@@ -169,8 +176,8 @@ class _MineWithdrawalScreenState extends State<MineWithdrawalScreen> {
     return ScreenBackground(
       child: Scaffold(
         appBar: MyAppBar(
-          title: (isAgent ? 'dltx' : 'sytx').tr(context: context),
-          rightWidget: GestureDetector(
+          title: (isAgent ? 'dltx' : 'hdtx').tr(context: context),
+          rightWidget: ReportGestureDetector(
             onTap: () => const MineWithdrawalRecordRoute().push(context),
             child: Text('txjl'.tr(context: context), style: MyTheme.gray15),
           ),
@@ -178,7 +185,7 @@ class _MineWithdrawalScreenState extends State<MineWithdrawalScreen> {
         body: _asyncValue.maybeWhen(
           error: (_, __) => NetworkErrorView(onTap: _initData),
           orElse: () => const LoadingView(),
-          data: (data) => GestureDetector(
+          data: (data) => ReportGestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
             child: Padding(
@@ -216,8 +223,9 @@ class _MineWithdrawalScreenState extends State<MineWithdrawalScreen> {
                                     children: [
                                       TextSpan(text: 'yuer'.tr(context: context), style: MyTheme.hexa3a2a2_13.s14),
                                       TextSpan(
-                                          text: isAgent ? ' ${data.proxyMoney ?? '0'} ' : ' ${data.eventMoney ?? '0'} ',
-                                          style: MyTheme.jellyCyan_18_M.color250_255_115),
+                                        text: isAgent ? ' ${data.proxyMoney ?? '0'} ' : ' ${data.eventMoney ?? '0'} ',
+                                        style: MyTheme.jellyCyan_18_M.color250_255_115,
+                                      ),
                                       TextSpan(text: 'y'.tr(context: context), style: MyTheme.hexa3a2a2_13.s14),
                                     ],
                                   ),
@@ -235,12 +243,25 @@ class _MineWithdrawalScreenState extends State<MineWithdrawalScreen> {
                                       value = value.isEmpty ? '0' : value;
                                       setState(() {
                                         _sumResultMoney.value = int.parse(value);
-                                        _sumAllResultMoney.value = (_sumResultMoney.value / (1 - (data.proxyRate ?? 0))).ceil();
+                                        if (isAgent) {
+                                          final handlingFee = (_sumResultMoney.value * (data.proxyRate ?? 0.0).toDouble());
+                                          _sumAllResultMoney.value = handlingFee + _sumResultMoney.value;
+                                          CommonUtils.log('数据 金额:${_sumResultMoney.value}'
+                                              ' - 汇率:${data.proxyRate ?? 0}'
+                                              ' - 所有金额:${_sumAllResultMoney.value}'
+                                              ' - 手续费:$handlingFee');
+                                        } else {
+                                          final handlingFee = (_sumResultMoney.value * (data.eventRate ?? 0.0).toDouble());
+                                          _sumAllResultMoney.value = _sumResultMoney.value + handlingFee;
+                                          CommonUtils.log('数据 金额:${_sumResultMoney.value}'
+                                              ' - 汇率:${data.eventRate ?? 0}'
+                                              ' - 所有金额:${_sumAllResultMoney.value}'
+                                              ' - 手续费:$handlingFee');
+                                        }
                                       });
                                     },
                                     keyboardType: TextInputType.number,
                                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                    maxLength: 1,
                                     controller: _textController,
                                     style: MyTheme.copper25.s14,
                                     cursorColor: Colors.white,
@@ -283,7 +304,7 @@ class _MineWithdrawalScreenState extends State<MineWithdrawalScreen> {
                           SizedBox(height: 25.w),
                           Text('txsk'.tr(context: context), style: MyTheme.white255_13_M.s16.w500),
                           SizedBox(height: 10.w),
-                          GestureDetector(
+                          ReportGestureDetector(
                             onTap: () async {
                               if (await const MineWithdrawalBankListRoute().push(context) case final BankCard card) {
                                 _currentBankCard.value = card;
@@ -329,7 +350,7 @@ class _MineWithdrawalScreenState extends State<MineWithdrawalScreen> {
                       margin: EdgeInsets.only(bottom: 20.w),
                       child: Offstage(
                         offstage: false,
-                        child: GestureDetector(
+                        child: ReportGestureDetector(
                           onTap: () {
                             showWithdrawDialog();
                           },

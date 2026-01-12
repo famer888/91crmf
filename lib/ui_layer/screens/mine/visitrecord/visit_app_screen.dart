@@ -1,15 +1,17 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:jycrpj/domain/model/feed/feed_model.dart';
 import 'package:jycrpj/ui_layer/router/routes.dart';
-import 'package:jycrpj/ui_layer/screens/apps/app_video_visit_util.dart';
-import 'package:jycrpj/ui_layer/screens/apps/crack_app_type.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/empty_data.dart';
+import 'package:jycrpj/ui_layer/screens/crack/app_video_visit_util.dart';
+import 'package:jycrpj/ui_layer/screens/crack/crack_app_type.dart';
+import 'package:jycrpj/ui_layer/screens/mine/visitrecord/visit_model.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 
 import '../../theme.dart';
+
+import '../../../../report/ui_layer/report_gesture_detector.dart';
 
 class VisitAppScreen extends StatefulWidget {
   final int type;
@@ -21,7 +23,7 @@ class VisitAppScreen extends StatefulWidget {
 }
 
 class _VisitAppScreenState extends State<VisitAppScreen> {
-  final ValueNotifier<List<FeedModel>> _visitFeedModelsNotifier = ValueNotifier([]);
+  final ValueNotifier<List<VideoVisitModel>> _visitFeedModelsNotifier = ValueNotifier([]);
 
 
   @override
@@ -41,7 +43,7 @@ class _VisitAppScreenState extends State<VisitAppScreen> {
   }
 
   void _getVisitVideoData() async {
-    final List<FeedModel>? visitFeedModels = await AppVideoVisitUtil.getAppVisitRecord(context);
+    final List<VideoVisitModel>? visitFeedModels = await AppVideoVisitUtil.getAppVisitRecord(context);
     if (visitFeedModels == null) {
       _visitFeedModelsNotifier.value = [];
     } else {
@@ -72,10 +74,7 @@ class _VisitAppScreenState extends State<VisitAppScreen> {
                 ),
                 itemBuilder: (context, index) {
                   final feedModel = visitFeedModels[index];
-                  return feedModel.map(
-                    video: (video) => _VisitAppVideoItem(video),
-                    ad: (ad) => const SizedBox.shrink(),
-                  );
+                  return _VisitAppVideoItem(feedModel);
                 }),
           );
         });
@@ -83,7 +82,7 @@ class _VisitAppScreenState extends State<VisitAppScreen> {
 }
 
 class _VisitAppVideoItem extends StatelessWidget {
-  final FeedVideoModel data;
+  final VideoVisitModel data;
 
   const _VisitAppVideoItem(this.data);
 
@@ -99,13 +98,16 @@ class _VisitAppVideoItem extends StatelessWidget {
       return tr('awjq');
     } else if (type == CrackAppType.aw91.type) {
       return tr('aw91');
+    } else if (type == CrackAppType.pzhan.type) {
+      return tr('pzhan');
     }
     return '';
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    CommonUtils.log('封面:$imageUrl');
+    return ReportGestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
         final type = data.crackAppType;
@@ -117,6 +119,8 @@ class _VisitAppVideoItem extends StatelessWidget {
           AnWangRestrictedDetailRoute(id: data.id).push(context);
         } else if (type == CrackAppType.aw91.type) {
           Aw91VideoDetailRoute(id: data.id).push(context);
+        } else if (type == CrackAppType.pzhan.type) {
+          PZhanVideoDetailRoute(id: data.id).push(context);
         }
       },
       child: LayoutBuilder(builder: (context, cons) {
@@ -139,7 +143,7 @@ class _VisitAppVideoItem extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('${CommonUtils.renderFixedNumber(data.playCt)}${'bf'.tr()}', style: MyTheme.white12medium),
+                              Text('${CommonUtils.renderFixedNumber(data.playCount)}${'bf'.tr()}', style: MyTheme.white12medium),
                               Text(RelativeDateFormat.getHMTime(time: data.duration), style: MyTheme.white12medium),
                             ],
                           ),

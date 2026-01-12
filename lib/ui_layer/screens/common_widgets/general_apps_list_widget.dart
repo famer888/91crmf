@@ -7,6 +7,8 @@ import '../../notifiers/home_config_notifier.dart';
 import '../../utils/common_utils.dart';
 import 'my_image.dart';
 
+import '../../../report/ui_layer/report_gesture_detector.dart';
+
 class GeneralAppsListVidget extends StatefulWidget {
   const GeneralAppsListVidget({super.key, this.apps});
 
@@ -51,7 +53,7 @@ class _GeneralAppsListVidgetState extends State<GeneralAppsListVidget> {
             ),
             itemBuilder: (context, index) {
               Notice? model = apps[index];
-              return GestureDetector(
+              return ReportGestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
                   final json = model.toJson() ?? {};

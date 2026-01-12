@@ -11,6 +11,8 @@ import '../../common_widgets/post/center/post_center.dart';
 import '../../common_widgets/screen_background.dart';
 import '../../theme.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class MinePostScreen extends StatefulWidget {
   const MinePostScreen({super.key});
 
@@ -63,7 +65,7 @@ class _Header extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              GestureDetector(
+              ReportGestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
                   const MineWithdrawalRoute(false).push(context);
@@ -82,7 +84,7 @@ class _Header extends StatelessWidget {
                   ),
                 ),
               ),
-              GestureDetector(
+              ReportGestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
                   const MineIncomeDetailRoute().push(context);

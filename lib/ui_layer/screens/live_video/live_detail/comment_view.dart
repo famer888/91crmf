@@ -17,6 +17,8 @@ import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class LiveVideoCommentView extends StatefulWidget {
   const LiveVideoCommentView({super.key, required this.id});
   final String id;
@@ -70,7 +72,7 @@ class _LiveVideoCommentViewState extends State<LiveVideoCommentView> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       onTap: () {
         inputFocusNode.unfocus();
       },
@@ -160,7 +162,7 @@ class _CommentTile extends StatelessWidget {
           ),
           StatefulBuilder(builder: (_, setState) {
             final isLike = data.isLike == 1;
-            return GestureDetector(
+            return ReportGestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () async {
                 if (data.id case final id?) {

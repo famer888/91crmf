@@ -8,6 +8,8 @@ import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class LiveVideoCard extends StatelessWidget {
   const LiveVideoCard({super.key, required this.data});
 
@@ -21,7 +23,7 @@ class LiveVideoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = 97.w;
 
-    return GestureDetector(
+    return ReportGestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
         LivesDetailRoute('${data.id}').push(context);

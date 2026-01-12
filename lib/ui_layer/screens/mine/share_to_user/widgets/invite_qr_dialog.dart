@@ -12,6 +12,8 @@ import '../../../common_widgets/my_image.dart';
 import '../../../image_paths.dart';
 import '../../../theme.dart';
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class InviteQrDialog extends StatefulWidget {
   final VoidCallback cancel;
   final UserNotifier userNotifier;
@@ -30,7 +32,7 @@ class _InviteQrDialogState extends State<InviteQrDialog> {
   Widget build(BuildContext context) {
     return ColoredBox(
       color: Colors.black45,
-      child: GestureDetector(
+      child: ReportGestureDetector(
         behavior: HitTestBehavior.opaque,
         child: Center(
           child: Padding(
@@ -117,7 +119,7 @@ class _InviteQrDialogState extends State<InviteQrDialog> {
                       Row(
                         children: [
                           SizedBox(width: 22.5.w),
-                          GestureDetector(
+                          ReportGestureDetector(
                             onTap: () {
                               if (widget.userNotifier.member.share?.affUrlCopy != null &&
                                   widget.userNotifier.member.share?.affUrlCopy?.url?.isNotEmpty == true) {
@@ -136,7 +138,7 @@ class _InviteQrDialogState extends State<InviteQrDialog> {
                             ),
                           ),
                           SizedBox(width: 20.w),
-                          GestureDetector(
+                          ReportGestureDetector(
                             onTap: widget.onSnap,
                             child: Container(
                               height: 35.w,
@@ -203,7 +205,7 @@ class _InviteQrDialogState extends State<InviteQrDialog> {
                   ),
                 ),
                 SizedBox(height: 20.w),
-                GestureDetector(
+                ReportGestureDetector(
                   onTap: () => widget.cancel.call(),
                   child: SizedBox(child: MyImage.asset(MyImagePaths.appCancelWithCircle, fit: BoxFit.cover, width: 33.w, height: 33.w)),
                 ),

@@ -7,7 +7,7 @@ import '../../../../domain/async_value.dart';
 import '../../../../domain/domain.dart';
 import '../../../../domain/enum.dart';
 import '../../../../domain/model/product_vip_coin_model.dart';
-import '../../../notifiers/home_config_notifier.dart';
+import '../../../../report/ui_layer/report_gesture_detector.dart';
 import '../../../notifiers/user_notifier.dart';
 import '../../../router/routes.dart';
 import '../../common_widgets/fixed_buy_button.dart';
@@ -65,7 +65,7 @@ class _CoinRechargeScreenState extends State<CoinRechargeScreen> {
         child: Scaffold(
           appBar: MyAppBar(
             title: 'jbcz'.tr(context: context),
-            rightWidget: GestureDetector(
+            rightWidget: ReportGestureDetector(
               onTap: () => RechargeRecordRoute(_type.id.toString()).push(context),
               child: Text('czjl'.tr(context: context), style: MyTheme.gray150_14),
             ),
@@ -168,7 +168,7 @@ class _SumArea extends StatelessWidget {
               ],
             ),
             const Spacer(),
-            GestureDetector(
+            ReportGestureDetector(
               onTap: () {
                 const CoinDetailRoute().push(context);
                 // RechargeRecordRoute(MyProductType.coin.id.toString()).push(context);
@@ -215,7 +215,7 @@ class _ProductArea extends StatelessWidget {
               childAspectRatio: 96 / 125,
             ),
             itemCount: products.length,
-            itemBuilder: (context, index) => GestureDetector(
+            itemBuilder: (context, index) => ReportGestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () => productSelectedNotifier.value = index,
               child: _CoinItem(product: products[index], isSelected: isSelectedIndex == index),

@@ -12,6 +12,8 @@ import '../../theme.dart';
 import 'convenience.dart';
 import 'index_key.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 /// 左图 + 间距 + 统计数字
 class IconTextWidget extends StatelessWidget {
   final String iconName;
@@ -500,7 +502,7 @@ class _CletIconTextWidgetState extends State<CletIconTextWidget> {
         //   height: 40.w,
         //   child: current,
         // );
-        return GestureDetector(
+        return ReportGestureDetector(
           onTap: onTap,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

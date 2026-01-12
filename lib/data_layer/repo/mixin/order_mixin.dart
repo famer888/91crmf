@@ -40,7 +40,7 @@ mixin _Order on _BaseAppRepo implements OrderDomain {
   @override
   AsyncJson incomeApplyWithdraw({
     required int cardId,
-    required int amount,
+    required double amount,
     required int type,
   }) =>
       _orderService.incomeApplyWithdraw(

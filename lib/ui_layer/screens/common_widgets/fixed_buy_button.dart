@@ -1,12 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:jycrpj/domain/enum.dart';
+import 'package:jycrpj/ui_layer/notifiers/user_notifier.dart';
+import 'package:jycrpj/ui_layer/utils/my_toast.dart';
+import 'package:provider/provider.dart';
 
 import '../../../domain/model/product_vip_coin_model.dart';
 import '../../router/routes.dart';
 import '../theme.dart';
 import 'dialog/widgets/pay_dialog.dart';
 import 'my_button.dart';
+
+import '../../../report/ui_layer/report_gesture_detector.dart';
 
 class FixedBuyButton extends StatefulWidget {
   const FixedBuyButton({
@@ -56,14 +62,26 @@ class _FixedBuyButtonState extends State<FixedBuyButton> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
                 child: MyButton.gradient(
-                  onPressed: () => _showPay(selectedIndex),
+                  onPressed: () async {
+                    // 检查登录
+                    // final userNotifier = context.read<UserNotifier>();
+                    // if (userNotifier.tokenStatus != MyTokenStatus.valid) {
+                    //   await const LoginRoute().push(context);
+                    //   if (userNotifier.tokenStatus == MyTokenStatus.valid) {
+                    //     _showPay(selectedIndex);
+                    //   } else {
+                    //     MyToast.showText(text: '请先登录！');
+                    //   }
+                    //   return;
+                    // }
+                    _showPay(selectedIndex);
+                  },
                   minimumSize: Size.fromHeight(40.w),
-                  text:
-                      "${'ljzf'.tr(context: context)} ¥${widget.products[selectedIndex].promoPriceYuan.split(".").first}",
+                  text: "${'ljzf'.tr(context: context)} ¥${widget.products[selectedIndex].promoPriceYuan.split(".").first}",
                 ),
               ),
               SizedBox(height: 10.w),
-              GestureDetector(
+              ReportGestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () => const MineCustomerServiceRoute().push(context),
                 child: Text.rich(

@@ -15,6 +15,8 @@ import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class MineKissRecordScreen extends StatefulWidget {
   const MineKissRecordScreen({super.key, this.status});
 
@@ -133,7 +135,7 @@ class _AIKissRecordCardState extends State<_AIKissRecordCard> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6.w),
             ),
-            child: GestureDetector(
+            child: ReportGestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
                 if (_status != 3) {
@@ -162,7 +164,7 @@ class _AIKissRecordCardState extends State<_AIKissRecordCard> {
                             children: [
                               Container(
                                   margin: EdgeInsets.only(bottom: 13.w),
-                                  child: GestureDetector(
+                                  child: ReportGestureDetector(
                                     behavior: HitTestBehavior.translucent,
                                     onTap: () {
                                       _saveVideo(_video);
@@ -276,7 +278,7 @@ class _AIKissRecordCardState extends State<_AIKissRecordCard> {
           AspectRatio(
               aspectRatio: 1, child: ShortvMvPlayer(info: datas, noBack: true)),
           SizedBox(height: 30.w),
-          GestureDetector(
+          ReportGestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
               _saveVideo(_video);
@@ -295,7 +297,7 @@ class _AIKissRecordCardState extends State<_AIKissRecordCard> {
             ),
           ),
           SizedBox(height: 15.w),
-          GestureDetector(
+          ReportGestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
               _deleteRecord();

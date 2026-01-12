@@ -31,6 +31,7 @@ class CrackApp {
   final int isfree;
   final int coins;
   bool isPay;
+  final int weight;
 
   CrackApp({
     required this.id,
@@ -41,6 +42,7 @@ class CrackApp {
     required this.isfree,
     required this.coins,
     required this.isPay,
+    required this.weight,
   });
 
   factory CrackApp.fromJson(Map<String, dynamic> json) {
@@ -53,6 +55,7 @@ class CrackApp {
       isfree: json['isfree'],
       coins: json['coins'],
       isPay: (json['is_pay'] ?? 0) > 0,
+      weight: json['weight'] ?? 0,
     );
   }
 
@@ -66,6 +69,7 @@ class CrackApp {
       'isfree': isfree,
       'coins': coins,
       'is_pay': isPay,
+      'weight': weight,
     };
   }
 }

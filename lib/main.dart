@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:jycrpj/app_global.dart';
 import 'package:jycrpj/domain/remote_domain/domains/aiaudio.dart';
 import 'package:jycrpj/domain/remote_domain/domains/aidraw.dart';
 import 'package:jycrpj/domain/remote_domain/domains/aikiss.dart';
@@ -16,12 +17,12 @@ import 'package:jycrpj/domain/remote_domain/domains/game.dart';
 import 'package:jycrpj/domain/remote_domain/domains/live.dart';
 import 'package:jycrpj/domain/remote_domain/domains/rank.dart';
 import 'package:isolated_worker/worker_delegator.dart';
+import 'package:jycrpj/ui_layer/screens/crack/unlock_status_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:utils/utils.dart';
 
-import 'app_global.dart';
 import 'crypto.dart';
 import 'data_layer/repo/repo.dart';
 import 'domain/domain.dart';
@@ -43,8 +44,7 @@ void disableZoomOnWeb() {
   html.document.documentElement?.style.overflow = 'hidden';
   html.document.documentElement?.style.touchAction = 'manipulation';
   html.document.documentElement?.style.setProperty('user-select', 'none');
-  html.document.documentElement?.style
-      .setProperty('overscroll-behavior', 'contain');
+  html.document.documentElement?.style.setProperty('overscroll-behavior', 'contain');
 }
 
 void main() async {
@@ -67,17 +67,16 @@ void main() async {
   DefaultDelegate<dynamic, dynamic> fooDelegate = const DefaultDelegate(callback: PlatformAwareCrypto.decryptImage);
   JsDelegate fooJsDelegate = const JsDelegate(callback: 'decryptImage');
   List<WorkerDelegate<dynamic, dynamic>> wds = List.generate(
-      5,
-          (index) => WorkerDelegate(
-        key: 'decryptImage$index',
-        defaultDelegate: fooDelegate,
-        jsDelegate: fooJsDelegate,
-      ));
+    5,
+    (index) => WorkerDelegate(
+      key: 'decryptImage$index',
+      defaultDelegate: fooDelegate,
+      jsDelegate: fooJsDelegate,
+    ),
+  );
   WorkerDelegator().addAllDelegates(wds);
-  await WorkerDelegator().importScripts(const <String>[
-    'js/aware.js?v=2',
-    'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js?v=2'
-  ]);
+  await WorkerDelegator()
+      .importScripts(const <String>['js/aware.js?v=2', 'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js?v=2']);
 
   runApp(
     MultiProvider(
@@ -116,8 +115,7 @@ void main() async {
         Provider<BlackDomain>(lazy: false, create: (_) => appRepo),
         Provider<CrackDomain>(lazy: false, create: (_) => appRepo),
         Provider<BuyDomain>(lazy: false, create: (_) => appRepo),
-        Provider<DownloadUtil>(
-            lazy: false, create: (_) => DownloadUtil(cache: appRepo.cache)),
+        Provider<DownloadUtil>(lazy: false, create: (_) => DownloadUtil(cache: appRepo.cache)),
         ChangeNotifierProvider(create: (_) => HomeConfigNotifier(appRepo)),
         ChangeNotifierProvider(create: (_) => UserNotifier(appRepo)),
         ChangeNotifierProxyProvider<UserNotifier, ChatNotifier?>(
@@ -138,6 +136,7 @@ void main() async {
           },
           create: (BuildContext context) => null,
         ),
+        ChangeNotifierProvider(create: (_) => UnlockStatusNotifier()),
       ],
       child: EasyLocalization(
         supportedLocales: const [Locale('zh', 'CN')],
@@ -174,6 +173,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    AppGlobal.context = context;
     final botToastBuilder = BotToastInit();
 
     return MaterialApp.router(
@@ -186,7 +186,8 @@ class _MyAppState extends State<MyApp> {
         progressIndicatorTheme: const ProgressIndicatorThemeData(color: MyTheme.jellyCyanColor103224185),
         splashColor: Colors.transparent,
         scaffoldBackgroundColor: MyTheme.bgColor,
-        canvasColor: MyTheme.bgColor, // Canvas 背景色
+        canvasColor: MyTheme.bgColor,
+        // Canvas 背景色
         colorScheme: const ColorScheme.light(
           surface: MyTheme.whiteColor, // ColorScheme 背景色
         ),
@@ -220,7 +221,8 @@ class _MyAppState extends State<MyApp> {
           },
         ),
       ),
-      debugShowCheckedModeBanner: false, // 设置为false来移除右上角的DEBUG横幅
+      debugShowCheckedModeBanner: false,
+      // 设置为false来移除右上角的DEBUG横幅
       builder: (context, widget) {
         widget = botToastBuilder(context, widget!);
         widget = MediaQuery(

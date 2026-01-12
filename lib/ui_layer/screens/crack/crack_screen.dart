@@ -7,10 +7,10 @@ import 'package:jycrpj/domain/domain.dart';
 import 'package:jycrpj/domain/remote_domain/domains/crack.dart';
 import 'package:jycrpj/ui_layer/notifiers/user_notifier.dart';
 import 'package:jycrpj/ui_layer/router/routes.dart';
-import 'package:jycrpj/ui_layer/screens/apps/crack_app_type.dart';
 import 'package:jycrpj/ui_layer/screens/black/vip_pay_dialog.dart';
 import 'package:jycrpj/ui_layer/screens/black/widget/interval_gesture_widget.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/loading.dart';
+import 'package:jycrpj/ui_layer/screens/crack/crack_app_type.dart';
 import 'package:jycrpj/ui_layer/screens/crack/widgets/no_crack_dialog.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
@@ -151,6 +151,8 @@ class _CrackScreenState extends State<CrackScreen> {
       interval: 2,
       onTap: () {
         if (isCrack) {
+          // _routeAppDetails(context, appData);
+
           if (appData.isfree == 0) {
             // 免费
             _routeAppDetails(context, appData);
@@ -174,33 +176,39 @@ class _CrackScreenState extends State<CrackScreen> {
                 _routeAppDetails(context, appData);
               } else {
                 // 金币弹窗
-                VipPayDialog.showCoinsDialog(context, _userNotifier.member, appData.coins.toDouble(), () async {
-                  // 支付
-                  int type = 0;
-                  if (appData.appName == 'hjgj') {
-                    type = CrackAppType.clsq.type;
-                  } else if (appData.appName == 'awjq') {
-                    type = CrackAppType.awjq.type;
-                  } else if (appData.appName == '91aw') {
-                    type = CrackAppType.aw91.type;
-                  } else if (appData.appName == 'zpc') {
-                    type = CrackAppType.zpc.type;
-                  }
-                  final result = await _userDomain.userAppBuy(source: appData.appName, type: type);
-                  if (result.status == 1) {
-                    appData.isPay = true;
-                    MyToast.showText(text: result.data?.message ?? '');
-                    if (context.mounted) {
-                      context.pop();
-                      _routeAppDetails(context, appData);
+                VipPayDialog.showCoinsDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  member: _userNotifier.member,
+                  coins: appData.coins.toDouble(),
+                  onPay: () async {
+                    // 支付
+                    int type = 0;
+                    if (appData.appName == 'hjgj') {
+                      type = CrackAppType.clsq.type;
+                    } else if (appData.appName == 'awjq') {
+                      type = CrackAppType.awjq.type;
+                    } else if (appData.appName == '91aw') {
+                      type = CrackAppType.aw91.type;
+                    } else if (appData.appName == 'zpc') {
+                      type = CrackAppType.zpc.type;
                     }
-                  } else {
-                    if (context.mounted) {
-                      context.pop();
+                    final result = await _userDomain.userAppBuy(source: appData.appName, type: type);
+                    if (result.status == 1) {
+                      appData.isPay = true;
+                      MyToast.showText(text: result.data?.message ?? '');
+                      if (context.mounted) {
+                        context.pop();
+                        _routeAppDetails(context, appData);
+                      }
+                    } else {
+                      if (context.mounted) {
+                        context.pop();
+                      }
+                      MyToast.showText(text: result.msg ?? '');
                     }
-                    MyToast.showText(text: result.msg ?? '');
-                  }
-                });
+                  },
+                );
               }
             }
           }
@@ -214,9 +222,10 @@ class _CrackScreenState extends State<CrackScreen> {
           SizedBox(
             width: itemWidth,
             height: itemWidth,
-            child: Stack(children: [AspectRatio(aspectRatio: 1, child: MyImage.network(appData.logo, fit: BoxFit.cover, borderRadius: 8.w)),
-            if(isCrack)_buildCrackTag(appData.isfree),
-              ]),
+            child: Stack(children: [
+              AspectRatio(aspectRatio: 1, child: MyImage.network(appData.logo, fit: BoxFit.cover, borderRadius: 8.w)),
+              if (isCrack) _buildCrackTag(appData.isfree),
+            ]),
           ),
           SizedBox(height: 8.w),
           Expanded(

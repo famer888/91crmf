@@ -1,10 +1,13 @@
+import 'dart:typed_data';
+
 import 'package:cross_file/cross_file.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
+import 'package:jycrpj/data_layer/repo/repo.dart';
+
 import '../../domain/domain.dart';
 import '../../domain/model/home_data_model.dart';
 import '../../domain/type_def.dart';
-import 'dart:typed_data';
-import 'package:dio/dio.dart';
 
 class HomeConfigNotifier extends ChangeNotifier {
   HomeConfigNotifier(this._domain);
@@ -17,8 +20,12 @@ class HomeConfigNotifier extends ChangeNotifier {
   Config get config => _config;
   late Config _config;
 
-  List<String> get searchHistory => [..._searchHistory];
-  final _searchHistory = <String>[];
+  List<String> getSearchHistory({required String key}) {
+    final searchHistory = _searchHistoryMap[key] ?? [];
+    return [...searchHistory];
+  }
+
+  final Map<String, List<String>> _searchHistoryMap = {};
 
   Future<bool> init() async {
     final result = await _domain.getHomeConfig();
@@ -35,8 +42,18 @@ class HomeConfigNotifier extends ChangeNotifier {
   }
 
   Future _initSearchHistory() async {
-    _searchHistory.clear();
-    _searchHistory.addAll(await _domain.cache.readSearchHistory());
+    _searchHistoryMap.clear();
+
+    final clSearchHistory = await _domain.cache.readSearchHistory(key: clSearchHistoryKey);
+    final awjqSearchHistory = await _domain.cache.readSearchHistory(key: awjqSearchHistoryKey);
+    final aw91SearchHistory = await _domain.cache.readSearchHistory(key: aw91SearchHistoryKey);
+    final zpcSearchHistory = await _domain.cache.readSearchHistory(key: zpcSearchHistoryKey);
+    final pzhanSearchHistory = await _domain.cache.readSearchHistory(key: pzhanSearchHistoryKey);
+    _searchHistoryMap[clSearchHistoryKey] = clSearchHistory;
+    _searchHistoryMap[awjqSearchHistoryKey] = awjqSearchHistory;
+    _searchHistoryMap[aw91SearchHistoryKey] = aw91SearchHistory;
+    _searchHistoryMap[zpcSearchHistoryKey] = zpcSearchHistory;
+    _searchHistoryMap[pzhanSearchHistoryKey] = pzhanSearchHistory;
   }
 
   Future<Json?> uploadImage(XFile xFile) async {
@@ -91,19 +108,28 @@ class HomeConfigNotifier extends ChangeNotifier {
   }
 
   /// 更新搜索记录
-  Future<void> upsertSearchHistory({
-    required List<String> searchHistory,
-  }) async {
-    await _domain.cache.upsertSearchHistory(searchHistory: searchHistory);
-    _searchHistory.clear();
-    _searchHistory.addAll(searchHistory);
+  Future<void> upsertSearchHistory({required String key, required List<String> searchHistory}) async {
+    await _domain.cache.upsertSearchHistory(key: key, searchHistory: searchHistory);
+    _searchHistoryMap[key]?.clear();
+    _searchHistoryMap[key]?.addAll(searchHistory);
     notifyListeners();
   }
 
   /// 更新搜索记录
-  Future<void> clearSearchHistory() async {
-    await _domain.cache.clearSearchHistory();
-    _searchHistory.clear();
+  Future<void> clearSearchHistory({required String key}) async {
+    await _domain.cache.clearSearchHistory(key: key, );
+    _searchHistoryMap[key]?.clear();
     notifyListeners();
+  }
+
+  /// 获取引导
+  Future<bool> readGuide() async {
+    final readGuide = await _domain.cache.readGuide();
+    return readGuide;
+  }
+
+  /// 更新引导
+  Future<void> upsertGuide(bool guide) async {
+    await _domain.cache.upsertGuide(guide);
   }
 }

@@ -24,6 +24,8 @@ import '../common_widgets/post/content/comment_count.dart';
 import '../common_widgets/post/content/like_collect_share_area.dart';
 import '../theme.dart';
 
+import '../../../report/ui_layer/report_general_banner.dart';
+
 typedef GoNewBlackDetailCallback = void Function(int id);
 
 class BlackDetailContentView extends StatefulWidget {
@@ -136,22 +138,35 @@ class _BlackDetailContentViewState extends State<BlackDetailContentView> {
         VipPayDialog.showVipDialog(context);
       }
       if (type == 2) {
-        VipPayDialog.showCoinsDialog(context, _userNotifier.member, widget.data.cur!.coins.toDouble(), () async {
-          final result = await _blackDomain.getBlackBuy(id: widget.data.cur!.id);
-          if (result.status == 1) {
-            MyToast.showText(text: result.msg ?? '');
-            widget.data.cur?.isPay = true;
-            if (context.mounted) {
-              context.pop();
-            }
-            setState(() {});
-          } else {
-            if (context.mounted) {
-              context.pop();
-            }
-            MyToast.showText(text: result.msg ?? '');
-          }
-        });
+        VipPayDialog.showCoinsDialog(
+            context: context,
+            barrierDismissible: false,
+            member: _userNotifier.member,
+            coins: widget.data.cur!.coins.toDouble(),
+            onPay: () async {
+              final member = context.read<UserNotifier>().member;
+              final adequate = member.money >= widget.data.cur!.coins;
+
+              if (!adequate) {
+                MyToast.showText(text: 'ndyebz'.tr(context: context));
+                return;
+              }
+
+              final result = await _blackDomain.getBlackBuy(id: widget.data.cur!.id);
+              if (result.status == 1) {
+                MyToast.showText(text: result.msg ?? '');
+                widget.data.cur?.isPay = true;
+                if (context.mounted) {
+                  context.pop();
+                }
+                setState(() {});
+              } else {
+                if (context.mounted) {
+                  context.pop();
+                }
+                MyToast.showText(text: result.msg ?? '');
+              }
+            });
       }
     });
   }
@@ -212,7 +227,7 @@ class _BlackDetailContentViewState extends State<BlackDetailContentView> {
     try {
       if (topAds case final List data when data.isNotEmpty) {
         final banner = topAds.map((x) => BannerModel.fromJson(x)).toList();
-        return Padding(padding: EdgeInsets.only(top: MyTheme.pagePadding), child: GeneralBannerAppsListWidget(data: banner));
+        return Padding(padding: EdgeInsets.only(top: MyTheme.pagePadding), child: ReportGeneralAppsListVidget(data: banner));
       }
     } catch (e) {
       CommonUtils.log('转换banner出错:$e');

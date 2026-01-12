@@ -219,6 +219,7 @@ class AppRouterPaths {
 
   /// 破解
   static const crack = '/crack';
+  static const crack1 = '/crack1';
 
   /// 破解详情页
   static const crackDetail = '/crackDetail';
@@ -244,7 +245,7 @@ class AppRouterPaths {
   static const awjq = '/awjq';
 
   /// 暗网禁区 视频详情
-  static const aawjqVideoDetail = '/awjqVideoDetail';
+  static const awjqVideoDetail = '/awjqVideoDetail';
 
   /// 暗网禁区 标签页面
   static const awjqVideoTag = '/awjqVideoTag';
@@ -255,6 +256,17 @@ class AppRouterPaths {
   /// 暗网禁区 视频搜索结果页
   static const awjqVideoSearchResult = '/awjqVideoSearchResult';
 
+  /// P站 视频搜索页面
+  static const pzhanVideoSearch = '/pzhanVideoSearch';
+
+  /// P站 视频搜索结果页
+  static const pzhanVideoSearchResult = '/pzhanVideoSearchResult';
+
+  /// P站 视频详情
+  static const pzhanVideoDetail = '/pzhanVideoDetail';
+
+  /// P站 标签页面
+  static const pzhanVideoTag = '/pzhanVideoTag';
 
   /// 草榴社区
   static const caoliu = '/caoliu';

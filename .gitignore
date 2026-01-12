@@ -138,5 +138,8 @@ key.properties
 coverage/
 test/.test_tool/
 
+HLQ_Struggle/
+pubspec.lock
+
 # FVM Version Cache
 .fvm/

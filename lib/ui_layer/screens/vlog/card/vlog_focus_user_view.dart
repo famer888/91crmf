@@ -5,6 +5,8 @@ import 'package:jycrpj/ui_layer/router/routes.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class VlogFocusUserView extends StatefulWidget {
   const VlogFocusUserView({super.key, required this.focusArr});
 
@@ -25,7 +27,7 @@ class _VlogFocusUserViewState extends State<VlogFocusUserView> {
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,
               children: widget.focusArr!
-                  .map((e) => GestureDetector(
+                  .map((e) => ReportGestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
                         //跳转用户中心

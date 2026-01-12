@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class IntervalGestureWidget extends StatefulWidget {
   final Widget? child;
   final int interval;
@@ -17,7 +19,7 @@ class _IntervalGestureWidgetState extends State<IntervalGestureWidget> {
  //上次点击时间
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: _onClickAction,
       child: widget.child,

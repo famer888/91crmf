@@ -9,9 +9,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper_null_safety_flutter3/flutter_swiper_null_safety_flutter3.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jycrpj/app_global.dart';
 import 'package:jycrpj/domain/model/banner_model.dart';
+import 'package:jycrpj/report/event_tracking.dart';
+import 'package:jycrpj/report/ui_layer/report_app_down_center_dialog.dart';
+import 'package:jycrpj/report/ui_layer/report_popup_alert.dart';
+import 'package:jycrpj/report/ui_layer/report_timing_observer.dart';
+import 'package:jycrpj/report/ui_layer/report_top_ad_widget.dart';
 import 'package:jycrpj/ui_layer/screens/asmr/voice_player/voice_player_manager.dart';
-import 'package:jycrpj/ui_layer/screens/common_widgets/dialog/widgets/app_down_center_dialog.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/event_bus/event_bus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +41,8 @@ import 'common_widgets/pop_scope_wrapper.dart';
 import 'common_widgets/status/loading.dart';
 import 'image_paths.dart';
 import 'theme.dart';
+
+import '../../report/ui_layer/report_gesture_detector.dart';
 
 class BottomNaviBar extends StatefulWidget {
   const BottomNaviBar({required this.navigationShell, super.key = const ValueKey<String>('ScaffoldWithNavBar')});
@@ -125,19 +132,33 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
 
   Future<void> _getClipboardText() async {
     if (kIsWeb) {
-      final uri = Uri.parse(html.window.location.href);
-      final affCode = uri.queryParameters[BuildConfig.affCodeKey] ?? '';
-      if (affCode.isNotEmpty) {
-        domain.toInvitation(affCode: affCode);
-      }
+      final uri = Uri.parse(html.window.location.href.replaceAll('amp;', ''));
+      String aff = uri.queryParameters[BuildConfig.affCodeKey] ?? '';
+      if (aff.isNotEmpty) domain.toInvitation(affCode: aff);
     } else {
       final result = await Clipboard.getData(Clipboard.kTextPlain);
-      if (result?.text?.split(':') case final clipTextList? when clipTextList.length > 1 && clipTextList[0] == BuildConfig.affCodeKey) {
-        if (clipTextList[1] case final affCode when affCode.isNotEmpty) {
-          domain.toInvitation(affCode: affCode);
+      if (result?.text case final String text when text.isNotEmpty) {
+        try {
+          final params = Uri.splitQueryString(text);
+          String aff = params[BuildConfig.affCodeKey] ?? '';
+          if (aff.isNotEmpty) domain.toInvitation(affCode: aff);
+        } catch (e) {
+          return;
         }
       }
     }
+  }
+
+  /// 活动弹窗 带report
+  void _showActivityDialogReport() {
+    final popAds = homeConfigNotifier.homeData.popAds;
+    ReportPopupAlert(
+      popAds,
+      context,
+      cancel: () {
+        _showAppDownCenterDialog();
+      },
+    );
   }
 
   /// 活动弹窗
@@ -160,7 +181,7 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
                   },
                   confirm: () {
                     cancelFunc();
-                    if (notice?.redirect_type != 1) {
+                    if (notice?.redirectType != 1) {
                       //跳转内部结束继续弹窗
                       if (isLastAd) {
                         _showAppDownCenterDialog();
@@ -192,15 +213,16 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
       final needUpdate = (int.tryParse(targetNumber) ?? 0) > (int.tryParse(currentVersion) ?? 0);
 
       if (kIsWeb) {
-        _showActivityDialog(index: 0); //web端直接去展示广告
+        _showActivityDialogReport();
+        // _showActivityDialog(index: 0); //web端直接去展示广告
         return;
       }
       if (needUpdate) {
         _showAppUpdateDialog();
         return;
       }
-
-      _showActivityDialog(index: 0); // 无更新，展示广告
+      _showActivityDialogReport();
+      // _showActivityDialog(index: 0); // 无更新，展示广告
     }
   }
 
@@ -212,7 +234,8 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
         toastBuilder: (cancelFunc) => UpdateDialog(
               cancel: () {
                 cancelFunc();
-                _showActivityDialog(index: 0);
+                _showActivityDialogReport();
+                // _showActivityDialog(index: 0);
               },
               confirm: () {
                 cancelFunc();
@@ -251,7 +274,7 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
 
     if (homeData.noticeApps?.isNotEmpty ?? false) {
       BotToast.showWidget(
-          toastBuilder: (cancelFunc) => AppDownCenterDialog(
+          toastBuilder: (cancelFunc) => ReportAppDownCenterDialog(
                 cancel: () {
                   cancelFunc();
                   _showAnnouncementDialog(); //app推荐下载弹窗展示完后再展示公告
@@ -301,6 +324,7 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
 
   @override
   Widget build(BuildContext context) {
+    AppGlobal.context = context;
     return Selector<UserNotifier, bool>(
       builder: (_, isInit, child) {
         if (!isInit) {
@@ -338,6 +362,11 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
                       activeIcon: const _Icon(MyImagePaths.appTabOriginalH),
                       label: 'home_pj'.tr(context: context),
                     ),
+                    // BottomNavigationBarItem(
+                    //   icon: const _Icon(MyImagePaths.appTabOriginal),
+                    //   activeIcon: const _Icon(MyImagePaths.appTabOriginalH),
+                    //   label: 'home_pj'.tr(context: context),
+                    // ),
                     BottomNavigationBarItem(
                       icon: const _Icon(MyImagePaths.appTabHomeN),
                       activeIcon: const _Icon(MyImagePaths.appTabHomeS),
@@ -367,7 +396,7 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
               floatingActionButton: kIsWeb && !CommonUtils.isPWA() && !CommonUtils.isIosWkWebView()
                   ? Padding(
                       padding: EdgeInsets.only(bottom: 10.w),
-                      child: GestureDetector(
+                      child: ReportGestureDetector(
                         onTap: () {
                           CommonUtils.downLoadApp(context);
                         },
@@ -393,7 +422,7 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
             Positioned(
               right: 13.w,
               bottom: 110.w,
-              child: TopADWidget(toADs: homeConfigNotifier.config.buoy ?? []),
+              child: ReportTopADWidget(toADs: homeConfigNotifier.config.buoy ?? []),
             )
           ],
         ),
@@ -404,6 +433,19 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
 
   void _goBranch(int index) {
     widget.navigationShell.goBranch(index, initialLocation: index == widget.navigationShell.currentIndex);
+
+    // 获取当前路由的路径
+    final currentLocation = GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString();
+
+    PageInfo info = PageInfo.path(currentLocation);
+    RouteStore.currentPageKey = info.key;
+    RouteStore.currentPageName = info.name;
+
+    EventTracking().reportSingle({
+      "event": "navigation",
+      "navigation_key": currentLocation,
+      "navigation_name": RouteStore.currentPageName,
+    });
   }
 }
 
@@ -465,7 +507,7 @@ class _TopADWidgetState extends State<TopADWidget> {
                 loop: widget.toADs.length > 1,
                 itemBuilder: (BuildContext context, int index) {
                   double w = 80.w;
-                  return GestureDetector(
+                  return ReportGestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
                       CommonUtils.openRoute(context, widget.toADs[index].toJson());
@@ -518,7 +560,7 @@ class _TopADWidgetState extends State<TopADWidget> {
                 top: 0,
                 width: 20.w,
                 height: 20.w,
-                child: GestureDetector(
+                child: ReportGestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
                       setState(() {

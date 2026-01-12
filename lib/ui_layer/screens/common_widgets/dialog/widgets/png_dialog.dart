@@ -6,6 +6,8 @@ import '../../../image_paths.dart';
 import '../../../theme.dart';
 import '../../my_image.dart';
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class PNGDialog extends StatelessWidget {
   const PNGDialog({
     super.key,
@@ -38,7 +40,7 @@ class PNGDialog extends StatelessWidget {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                GestureDetector(
+                ReportGestureDetector(
                   onTap: () {
                     context.pop();
                   },
@@ -80,7 +82,7 @@ class PNGDialog extends StatelessWidget {
                             if (cancelText != null)
                               Expanded(
                                   child: Center(
-                                child: GestureDetector(
+                                child: ReportGestureDetector(
                                   onTap: () {
                                     context.pop();
                                     cancelOnTap?.call();
@@ -120,7 +122,7 @@ class PNGDialog extends StatelessWidget {
                             if (buttonText != null)
                               Expanded(
                                 child: Center(
-                                  child: GestureDetector(
+                                  child: ReportGestureDetector(
                                     onTap: () {
                                       context.pop();
                                       confirmOnTap?.call();

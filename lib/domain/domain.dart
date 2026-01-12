@@ -1,5 +1,6 @@
 import 'package:jycrpj/domain/model/black_model.dart';
 import 'package:jycrpj/domain/type_def.dart';
+import 'package:jycrpj/ui_layer/screens/mine/visitrecord/visit_model.dart';
 
 import 'model/feed/feed_model.dart';
 import 'remote_domain/domain.dart';
@@ -47,20 +48,26 @@ abstract class CacheDomain
   /// 获取官网链结缓存
   Future<String?> readOfficeWeb();
 
+  /// 获取展示引导页标识
+  Future<bool> readGuide();
+
+  /// 更新引导页标识
+  Future<void> upsertGuide(bool guide);
+
   /// 取得搜索记录
-  Future<List<String>> readSearchHistory();
+  Future<List<String>> readSearchHistory({required String key});
 
   /// 更新搜索记录
-  Future<void> upsertSearchHistory({required List<String> searchHistory});
+  Future<void> upsertSearchHistory({required String key, required List<String> searchHistory});
 
   /// 清除搜索记录
-  Future<void> clearSearchHistory();
+  Future<void> clearSearchHistory({required String key});
 
   /// 读取破解App浏览视频记录
-  Future<List<FeedModel>?> readCrackAppVideoList();
+  Future<List<VideoVisitModel>?> readCrackAppVideoList();
 
   /// 更新破解App浏览视频记录
-  Future<void> upsertCrackAppVideoList({required List<FeedModel> feedModels});
+  Future<void> upsertCrackAppVideoList({required List<VideoVisitModel> feedModels});
 
   /// 读取黑料帖子浏览记录
   Future<List<BlackListItemModel>?> readBlackVisitList();

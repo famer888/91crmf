@@ -14,6 +14,8 @@ import '../../../common_widgets/my_list_view.dart';
 import '../../../common_widgets/screen_background.dart';
 import '../../../theme.dart';
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class MineShareToUserRecordScreen extends StatefulWidget {
   const MineShareToUserRecordScreen({super.key});
 
@@ -58,7 +60,7 @@ class _MineShareToUserRecordScreenState extends State<MineShareToUserRecordScree
       child: Scaffold(
         appBar: MyAppBar(
           title: 'yqjl'.tr(context: context),
-          rightWidget: GestureDetector(
+          rightWidget: ReportGestureDetector(
             onTap: () => const MineCustomerServiceRoute().push(context),
             child: Text(
               'lxkf'.tr(context: context),

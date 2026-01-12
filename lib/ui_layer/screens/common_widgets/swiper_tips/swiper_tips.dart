@@ -5,6 +5,8 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/swiper_tips/marquee_widge
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class SwiperTips extends StatefulWidget {
   const SwiperTips({
     super.key,
@@ -37,7 +39,7 @@ class _SwiperTipsState extends State<SwiperTips> {
           physics: const NeverScrollableScrollPhysics(), // 禁用手动滚动
           scrollDirection: Axis.vertical,
           itemBuilder: (BuildContext context, int index) {
-            return GestureDetector(
+            return ReportGestureDetector(
               onTap: () {
                 CommonUtils.openRoute(context, widget.tips[index].toJson());
               },

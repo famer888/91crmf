@@ -28,7 +28,7 @@ abstract class OrderDomain {
   ///提现  收益 申请提现
   AsyncJson incomeApplyWithdraw({
     required int cardId,
-    required int amount,
+    required double amount,
     required int type,
   });
 

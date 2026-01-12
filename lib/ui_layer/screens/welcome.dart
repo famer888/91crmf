@@ -6,6 +6,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper_null_safety_flutter3/flutter_swiper_null_safety_flutter3.dart';
+import 'package:jycrpj/app_global.dart';
+import 'package:jycrpj/report/ui_layer/report_ad_view.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/screen_background.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +22,8 @@ import 'common_widgets/my_image.dart';
 import 'common_widgets/pop_scope_wrapper.dart';
 import 'common_widgets/status/network_error.dart';
 import 'theme.dart';
+
+import '../../report/ui_layer/report_gesture_detector.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -98,7 +102,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         });
         return;
       }
-      const CrackRoute().go(context);
+      const CrackRoute1().go(context);
     } else if (showTip) {
       MyToast.showText(text: 'wfljqsz'.tr(context: context));
     }
@@ -109,7 +113,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  GestureDetector(
+                  ReportGestureDetector(
                     onTap: () {
                       isCheckingLine = false;
                       if (mounted) setState(() {});
@@ -123,7 +127,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                   SizedBox(height: 20.w),
                   if (officialWebUrl?.isNotEmpty == true)
-                    GestureDetector(
+                    ReportGestureDetector(
                       onTap: () {
                         CommonUtils.launchUrl(officialWebUrl!);
                       },
@@ -158,7 +162,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 SizedBox(height: 20.w),
                 Column(
                   children: lines.asMap().keys.map((x) {
-                    return GestureDetector(
+                    return ReportGestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
                           appDomain.setBaseURL(lines[x].toString().trim());
@@ -186,12 +190,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    AppGlobal.context = context;
     return PopScopeWrapper(
       child: ScreenBackground(
         child: Scaffold(
           // backgroundColor: MyTheme.bgColor,
           body: showAd
-              ? AdView(adModels: welcomeStartScreenAds!)
+              ? ReportAdView(adModels: welcomeStartScreenAds!)
               : checkLineView(),
         ),
       ),
@@ -240,7 +245,7 @@ class _AdViewState extends State<AdView> {
                     .toJson())),
                 context);
 
-            return GestureDetector(
+            return ReportGestureDetector(
               onTap: () {
                 final ad = widget.adModels[index];
                 CommonUtils.openRoute(context, {
@@ -284,11 +289,11 @@ class _AdViewState extends State<AdView> {
         Positioned(
           top: MediaQuery.of(context).padding.top + 10.w,
           right: 15.w,
-          child: GestureDetector(
+          child: ReportGestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
               if (countDownNotifier.value > 0) return;
-              const CrackRoute().go(context);
+              const CrackRoute1().go(context);
             },
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: 15.w),

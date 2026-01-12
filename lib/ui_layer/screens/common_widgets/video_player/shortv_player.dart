@@ -25,6 +25,8 @@ import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class ShortVPlayer extends StatefulWidget {
   const ShortVPlayer({
     super.key,
@@ -503,7 +505,7 @@ class _SinkPortraitWidgetState extends State<SinkPortraitWidget> {
       right: 0,
       left: 0,
       bottom: 0,
-      child: GestureDetector(
+      child: ReportGestureDetector(
         behavior: HitTestBehavior.translucent,
         onHorizontalDragStart: _onHorizontalDragStart,
         onHorizontalDragUpdate: _onHorizontalDragUpdate,
@@ -636,7 +638,7 @@ class _SinkPortraitWidgetState extends State<SinkPortraitWidget> {
           ),
         ),
         Positioned.fill(
-          child: GestureDetector(
+          child: ReportGestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
               try {

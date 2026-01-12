@@ -12,6 +12,8 @@ import '../../common_widgets/status/loading.dart';
 import '../../common_widgets/status/network_error.dart';
 import '../../theme.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class HomeAdsPage extends StatefulWidget {
   final int pos;
 
@@ -71,7 +73,7 @@ class _HomeAdsPageState extends State<HomeAdsPage> {
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 final e = data.top[index];
-                return GestureDetector(
+                return ReportGestureDetector(
                   onTap: () {
                     homeDomain.reqAdClickCount(id: e.reportId, type: e.reportType);
                     CommonUtils.launchUrl(e.linkUrl);
@@ -109,7 +111,7 @@ class _HomeAdsPageState extends State<HomeAdsPage> {
                       ],
                     ),
                     const Spacer(),
-                    GestureDetector(
+                    ReportGestureDetector(
                       onTap: () {
                         homeDomain.reqAdClickCount(id: e.reportId, type: e.reportType);
                         CommonUtils.launchUrl(e.linkUrl);

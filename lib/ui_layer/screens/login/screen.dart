@@ -18,6 +18,8 @@ import '../common_widgets/my_image.dart';
 import '../image_paths.dart';
 import '../theme.dart';
 
+import '../../../report/ui_layer/report_gesture_detector.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -125,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: const MyAppBar(),
-      body: GestureDetector(
+      body: ReportGestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () => FocusScope.of(context).unfocus(),
         child: Stack(

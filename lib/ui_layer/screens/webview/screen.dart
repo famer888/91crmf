@@ -12,6 +12,8 @@ import '../image_paths.dart';
 import '../theme.dart';
 
 import "package:universal_html/html.dart" as html;
+import '../../../report/ui_layer/report_gesture_detector.dart';
+
 import 'fake_native_widget.dart' if (dart.library.html) 'real_web_widget.dart'
     as ui;
 
@@ -67,7 +69,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
                   style: MyTheme.white255_18_B,
                 ),
                 backgroundColor: MyTheme.bgColor,
-                leading: GestureDetector(
+                leading: ReportGestureDetector(
                   onTap: () {
                     context.pop();
                   },

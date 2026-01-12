@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jycrpj/app_global.dart';
+import 'package:jycrpj/ui_layer/screens/crack/app_util.dart';
 import '../../domain/api_validator.dart';
 import '../../domain/model/system_notice_model.dart';
 import '../../domain/remote_domain/domain.dart';
@@ -69,6 +69,7 @@ class UserNotifier extends ChangeNotifier {
     if (result.data case final data?) {
       _member = data;
       _isInit = true;
+      await AppUtil.initCheckAppUnlockStatus();
       notifyListeners();
       return true;
     }

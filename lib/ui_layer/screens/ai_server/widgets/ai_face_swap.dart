@@ -24,6 +24,10 @@ import '../../common_widgets/my_list_view.dart';
 import '../../image_paths.dart';
 import '../../theme.dart';
 
+import '../../../../report/ui_layer/report_general_banner.dart';
+
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class AIFaceSwap extends StatefulWidget {
   const AIFaceSwap({
     super.key,
@@ -86,7 +90,7 @@ class _AIFaceSwapState extends State<AIFaceSwap> {
         Row(children: [
           Text('jbye'.tr() + ': $userCoins', style: MyTheme.white255_15),
           const Spacer(),
-          GestureDetector(
+          ReportGestureDetector(
               onTap: () {
                 context.pop();
                 const CoinRechargeRoute().push(context);
@@ -309,7 +313,7 @@ class _AIFaceSwapState extends State<AIFaceSwap> {
                   Text('sclbxx'.tr(context: context),
                       style: MyTheme.white13),
                   SizedBox(height: 10.w),
-                  GestureDetector(
+                  ReportGestureDetector(
                     onTap: () {
                       imagePickerAssets().then((e) {
                         setState(() {});
@@ -356,7 +360,7 @@ class _AIFaceSwapState extends State<AIFaceSwap> {
                                     Positioned(
                                         top: 5.w,
                                         right: 5.w,
-                                        child: GestureDetector(
+                                        child: ReportGestureDetector(
                                           onTap: () {
                                             setState(() {
                                               uploadObject = {};
@@ -413,7 +417,7 @@ class _AIFaceSwapState extends State<AIFaceSwap> {
                     ],
                   ),
                   SizedBox(height: 10.w),
-                  GestureDetector(
+                  ReportGestureDetector(
                     onTap: () async {
                       if (uploadObject.isEmpty) {
                         CommonUtils.showDialog(
@@ -592,7 +596,7 @@ class _Header extends StatelessWidget {
             if (banners.isEmpty) return const SizedBox.shrink();
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-              child: GeneralBannerAppsListWidget(data: banners),
+              child: ReportGeneralAppsListVidget(data: banners),
             );
           },
         ),
@@ -614,7 +618,7 @@ class _Header extends StatelessWidget {
               ),
               itemBuilder: (context, index) {
                 final topic = topics[index];
-                return GestureDetector(
+                return ReportGestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
                     onLinkNavTap(topic);
@@ -660,7 +664,7 @@ class MaterrialCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       onTap: () => onTap(data),
       child: Column(
         mainAxisSize: MainAxisSize.min,

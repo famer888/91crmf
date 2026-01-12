@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_app_bar.dart';
-import 'package:jycrpj/ui_layer/screens/common_widgets/my_filter_tab_bar.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_tab_bar.dart';
 import 'package:jycrpj/ui_layer/screens/mine/ai_record/draw_art/screen.dart';
 import 'package:jycrpj/ui_layer/screens/mine/ai_record/kiss_ai_record/screen.dart';
@@ -19,6 +18,8 @@ import '../../image_paths.dart';
 import '../../theme.dart';
 import 'face_swap_record/screen.dart';
 import 'strip_off_record/screen.dart';
+
+import '../../../../report/ui_layer/report_gesture_detector.dart';
 
 class MineAIRecordScreen extends StatefulWidget {
   const MineAIRecordScreen({super.key, this.index = 0});
@@ -109,7 +110,7 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading: GestureDetector(
+      leading: ReportGestureDetector(
         child: Padding(
           padding: EdgeInsets.all(12.w),
           child: MyImage.asset(

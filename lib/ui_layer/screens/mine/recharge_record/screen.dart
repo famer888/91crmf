@@ -15,6 +15,8 @@ import '../../common_widgets/screen_background.dart';
 import '../../image_paths.dart';
 import '../../theme.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class RechargeRecordScreen extends StatefulWidget {
   const RechargeRecordScreen({super.key, required this.type});
 
@@ -44,7 +46,7 @@ class _RechargeRecordScreenState extends State<RechargeRecordScreen> {
       appBar: MyAppBar(
         showDiver: true,
         title: 'czjl'.tr(context: context),
-        rightWidget: GestureDetector(
+        rightWidget: ReportGestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () => const MineCustomerServiceRoute().push(context),
           child: Text('lxkf'.tr(context: context), style: MyTheme.gray150_14),
@@ -82,7 +84,7 @@ class OrderItem extends StatelessWidget {
                 '${'ddbh'.tr(context: context)}：${order.id}',
                 style: MyTheme.white23_12,
               ),
-              GestureDetector(
+              ReportGestureDetector(
                 onTap: () {
                   CommonUtils.copyToClipboard(text: '${'ddbh'.tr(context: context)}：${order.id}');
                   MyToast.showText(text: 'fzcgl'.tr(context: context));

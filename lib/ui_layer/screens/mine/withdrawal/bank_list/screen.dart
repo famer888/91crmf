@@ -18,6 +18,8 @@ import '../../../common_widgets/my_list_view.dart';
 import '../../../image_paths.dart';
 import '../../../theme.dart';
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class MineWithdrawalBankListScreen extends StatefulWidget {
   const MineWithdrawalBankListScreen({super.key});
 
@@ -129,7 +131,7 @@ class _MineWithdrawalBankListScreenState extends State<MineWithdrawalBankListScr
                         buildTextField('srxm', nameController, TextInputType.text),
                       ]),
                       SizedBox(height: 28.w),
-                      GestureDetector(
+                      ReportGestureDetector(
                         onTap: () => _sendAddBankCard(card: cardController.text, name: nameController.text, num: numController.text),
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 50.w),
@@ -143,7 +145,7 @@ class _MineWithdrawalBankListScreenState extends State<MineWithdrawalBankListScr
                 ),
                 Align(
                     alignment: Alignment.topRight,
-                    child: GestureDetector(
+                    child: ReportGestureDetector(
                         onTap: () => context.pop(),
                         child: SizedBox(
                           width: 20.w,
@@ -235,12 +237,9 @@ class _MineWithdrawalBankListScreenState extends State<MineWithdrawalBankListScr
     return Scaffold(
         appBar: MyAppBar(
           title: 'tx'.tr(context: context),
-          rightWidget: GestureDetector(
+          rightWidget: ReportGestureDetector(
             onTap: _showAddBankCardDialog,
-            child: Text(
-              'tji'.tr(context: context),
-              style: MyTheme.gray15,
-            ),
+            child: Text('tji'.tr(context: context), style: MyTheme.gray15),
           ),
         ),
         body: Stack(
@@ -265,17 +264,14 @@ class _MineWithdrawalBankListScreenState extends State<MineWithdrawalBankListScr
                         ? const SizedBox.shrink()
                         : Padding(
                             padding: EdgeInsets.only(bottom: 20.w),
-                            child: GestureDetector(
+                            child: ReportGestureDetector(
                               onTap: _showAddBankCardDialog,
                               child: Container(
                                 alignment: Alignment.center,
                                 width: 324.w,
                                 height: 40.w,
                                 decoration: BoxDecoration(gradient: MyTheme.gradient_90_114, borderRadius: BorderRadius.circular(5.w)),
-                                child: Text(
-                                  'tjxzh'.tr(context: context),
-                                  style: MyTheme.white255_15,
-                                ),
+                                child: Text('tjxzh'.tr(context: context), style: MyTheme.white255_15),
                               ),
                             ),
                           )),
@@ -291,7 +287,7 @@ class _MineWithdrawalBankListScreenState extends State<MineWithdrawalBankListScr
                         offstage: selectedCard != null ? false : true,
                         child: Padding(
                           padding: EdgeInsets.only(bottom: 20.w),
-                          child: GestureDetector(
+                          child: ReportGestureDetector(
                             onTap: () {
                               context.pop(selectedCardNotifier.value);
                             },
@@ -344,124 +340,114 @@ class _MyBankCardState extends State<MyBankCard> {
           final isSelected = currentCard == widget.card;
           return Padding(
             padding: EdgeInsets.only(top: MyTheme.pagePadding),
-            child: GestureDetector(
-                onTap: () => widget.selectedBankCardNotifier.value = widget.card,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 50.w,
-                      child: Center(
-                        child: Container(
-                          width: 25.w,
-                          height: 25.w,
-                          decoration: isSelected
-                              ? BoxDecoration(
-                                  gradient: const LinearGradient(
-                                    colors: [Color.fromRGBO(109, 239, 220, 1), Color.fromRGBO(94, 79, 236, 1)],
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
-                                  ),
-                                  borderRadius: BorderRadius.circular(25.w))
-                              : const BoxDecoration(
-                                  color: Colors.transparent,
-                                ),
-                          child: isSelected
-                              ? const Icon(
-                                  Icons.check,
-                                  color: Colors.white,
-                                )
-                              : SizedBox.square(
-                                  dimension: 25.w,
-                                  child: const Icon(
-                                    Icons.circle_outlined,
-                                    color: Color.fromRGBO(90, 75, 235, 1),
-                                  ),
-                                ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-                          height: 110.w,
+            child: ReportGestureDetector(
+              onTap: () => widget.selectedBankCardNotifier.value = widget.card,
+              child: Row(
+                children: [
+                  // SizedBox(
+                  //   width: 50.w,
+                  //   child: Center(
+                  //     child: Container(
+                  //       width: 25.w,
+                  //       height: 25.w,
+                  //       decoration: isSelected
+                  //           ? BoxDecoration(
+                  //               gradient: const LinearGradient(
+                  //                 colors: [Color.fromRGBO(109, 239, 220, 1), Color.fromRGBO(94, 79, 236, 1)],
+                  //                 begin: Alignment.centerLeft,
+                  //                 end: Alignment.centerRight,
+                  //               ),
+                  //               borderRadius: BorderRadius.circular(25.w))
+                  //           : const BoxDecoration(color: Colors.transparent),
+                  //       child: isSelected
+                  //           ? const Icon(Icons.check, color: Colors.white)
+                  //           : SizedBox.square(
+                  //               dimension: 25.w,
+                  //               child: const Icon(Icons.circle_outlined, color: Color.fromRGBO(90, 75, 235, 1)),
+                  //             ),
+                  //     ),
+                  //   ),
+                  // ),
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
+                      height: 110.w,
+                      width: double.infinity,
+                      child: Stack(children: [
+                        Positioned.fill(
+                            child: Container(
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.w),
+                              gradient: const LinearGradient(
+                                colors: [Color.fromRGBO(102, 58, 226, 1), Color.fromRGBO(117, 126, 247, 1)],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              )),
                           width: double.infinity,
-                          child: Stack(children: [
-                            Positioned.fill(
-                                child: Container(
-                              clipBehavior: Clip.hardEdge,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.w),
-                                  gradient: const LinearGradient(
-                                    colors: [Color.fromRGBO(102, 58, 226, 1), Color.fromRGBO(117, 126, 247, 1)],
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
-                                  )),
-                              width: double.infinity,
-                              height: double.infinity,
-                            )),
-                            Container(
-                                width: double.infinity,
-                                height: double.infinity,
-                                margin: EdgeInsets.only(left: MyTheme.pagePadding, top: MyTheme.pagePadding, bottom: MyTheme.pagePadding),
-                                child: Stack(
+                          height: double.infinity,
+                        )),
+                        Container(
+                          width: double.infinity,
+                          height: double.infinity,
+                          margin: EdgeInsets.only(left: MyTheme.pagePadding, top: MyTheme.pagePadding, bottom: MyTheme.pagePadding),
+                          child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: Row(
                                   children: [
-                                    Positioned.fill(
-                                        child: Row(
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      mainAxisSize: MainAxisSize.max,
                                       children: [
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            SizedBox(
-                                              width: 235.w,
-                                              height: 10.w,
-                                              child: FittedBox(
-                                                fit: BoxFit.cover,
-                                                child: Text(
-                                                  CommonUtils.subStringFour('${widget.card.card}'),
-                                                  style: MyTheme.white19_semi,
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 235.w,
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '${widget.card.bank}',
-                                                    style: MyTheme.white9255_15,
-                                                  ),
-                                                  Text(
-                                                    '持卡人: '
-                                                    '${widget.card.name}',
-                                                    style: MyTheme.white255_12_M,
-                                                  ),
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        Expanded(
-                                            child: Center(
-                                          child: GestureDetector(
-                                            onTap: widget.onDelete,
-                                            child: MyImage.asset(
-                                              MyImagePaths.appShch,
-                                              width: 16.w,
-                                              height: 16.w,
+                                        SizedBox(
+                                          width: 235.w,
+                                          height: 10.w,
+                                          child: FittedBox(
+                                            fit: BoxFit.cover,
+                                            child: Text(
+                                              CommonUtils.subStringFour('${widget.card.card}'),
+                                              style: MyTheme.white19_semi,
                                             ),
                                           ),
-                                        ))
+                                        ),
+                                        SizedBox(
+                                          width: 235.w,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Text('${widget.card.bank}', style: MyTheme.white9255_15),
+                                              Text(
+                                                '持卡人: '
+                                                '${widget.card.name}',
+                                                style: MyTheme.white255_12_M,
+                                              ),
+                                            ],
+                                          ),
+                                        )
                                       ],
-                                    )),
+                                    ),
+                                    Expanded(
+                                      child: Center(
+                                        child: ReportGestureDetector(
+                                          onTap: widget.onDelete,
+                                          child: MyImage.asset(MyImagePaths.appShch, width: 16.w, height: 16.w),
+                                        ),
+                                      ),
+                                    ),
                                   ],
-                                ))
-                          ])),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ]),
                     ),
-                  ],
-                )),
+                  ),
+                ],
+              ),
+            ),
           );
         });
   }

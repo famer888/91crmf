@@ -23,6 +23,8 @@ import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class AIMagicDetail extends StatefulWidget {
   const AIMagicDetail({super.key, required this.data});
   final AIMagicModel data;
@@ -332,7 +334,7 @@ class _SubmitButtonState extends State<SubmitButton> {
         Row(children: [
           Text('jbye'.tr() + ': $coins', style: MyTheme.white255_15),
           const Spacer(),
-          GestureDetector(
+          ReportGestureDetector(
               onTap: () {
                 context.pop();
                 const CoinRechargeRoute().push(context);
@@ -377,7 +379,7 @@ class _SubmitButtonState extends State<SubmitButton> {
     final String buttonText = freeNumber > 0
         ? '免费生成（剩余 $freeNumber 次）'
         : '需消耗 $aiMagicCost 金币【余额 $coins】生成';
-    return GestureDetector(
+    return ReportGestureDetector(
       onTap: () => _handleTap(context),
       child: Container(
         width: double.infinity,
@@ -442,7 +444,7 @@ class _AIImagePickerGridState extends State<AIImagePickerGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       onTap: upList.isEmpty ? imagePickerAssets : null, 
       child: Stack(
         children: [
@@ -483,7 +485,7 @@ class _AIImagePickerGridState extends State<AIImagePickerGrid> {
                       Positioned(
                         top: 8.w,
                         right: 8.w,
-                        child: GestureDetector(
+                        child: ReportGestureDetector(
                           onTap: () {
                             widget.upList.removeAt(0);
                             if (mounted) {

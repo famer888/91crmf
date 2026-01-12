@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' as fd;
+import 'package:jycrpj/app_global.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import '../../crypto.dart';
 
@@ -15,6 +16,9 @@ class AutoEncryptAndDecryptInterceptor extends Interceptor {
 
     if (options.data != null) {
       data.addAll(options.data);
+    }
+    if (AppGlobal.reportTraceId.isNotEmpty) {
+      data['trace_id'] = AppGlobal.reportTraceId;
     }
 
     CommonUtils.log('params: $data, ');

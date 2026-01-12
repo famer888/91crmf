@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../theme.dart';
 
+import '../../../report/ui_layer/report_gesture_detector.dart';
+
 class FollowButton extends StatelessWidget {
   const FollowButton(
       {super.key, required this.isFollowed, required this.onTap});
@@ -11,7 +13,7 @@ class FollowButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
         onTap();

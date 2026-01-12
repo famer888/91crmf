@@ -6,6 +6,8 @@ import '../../../image_paths.dart';
 import '../../../theme.dart';
 import '../../my_image.dart';
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class PostLikeButton extends StatelessWidget {
   const PostLikeButton({super.key, required this.isLiked, required this.onTap});
 
@@ -14,7 +16,7 @@ class PostLikeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -51,7 +53,7 @@ class PostCollectButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -88,7 +90,7 @@ class PostShareButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();

@@ -15,6 +15,8 @@ import '../../common_widgets/screen_background.dart';
 import '../../image_paths.dart';
 import '../../theme.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class MessageCenterScreen extends StatefulWidget {
   const MessageCenterScreen({super.key});
 
@@ -62,20 +64,15 @@ class _MessageCenterScreenState extends State<MessageCenterScreen> {
                       : Container(),
                   Column(
                     children: chats.map((e) {
-                      final DateTime targetDate =
-                          DateTime.fromMillisecondsSinceEpoch(
-                              int.parse(e.list.last.time) * 1000);
-                      final String formattedDate =
-                          DateFormat('HH:mm').format(targetDate);
+                      final DateTime targetDate = DateTime.fromMillisecondsSinceEpoch(int.parse(e.list.last.time) * 1000);
+                      final String formattedDate = DateFormat('HH:mm').format(targetDate);
                       return Slidable(
                           endActionPane: ActionPane(
                             motion: const ScrollMotion(),
                             children: [
                               SlidableAction(
                                 onPressed: (_) {
-                                  context
-                                      .read<ChatNotifier>()
-                                      .removeChat(e.touser?.uuid ?? '');
+                                  context.read<ChatNotifier>().removeChat(e.touser?.uuid ?? '');
                                 },
                                 backgroundColor: const Color(0xFFFE4A49),
                                 foregroundColor: Colors.white,
@@ -84,48 +81,35 @@ class _MessageCenterScreenState extends State<MessageCenterScreen> {
                               ),
                             ],
                           ),
-                          child: GestureDetector(
+                          child: ReportGestureDetector(
                             behavior: HitTestBehavior.translucent,
                             onTap: () {
-                              ChatMessageRoute(
-                                      nickName: e.touser?.nickname ?? '',
-                                      toUuid: e.touser?.uuid ?? '',
-                                      thumb: e.touser?.avatar ?? '')
+                              ChatMessageRoute(nickName: e.touser?.nickname ?? '', toUuid: e.touser?.uuid ?? '', thumb: e.touser?.avatar ?? '')
                                   .push(context);
                             },
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 15.w),
                               child: Container(
                                 decoration: const BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Colors.white10, width: 0.5)),
+                                  border: Border(bottom: BorderSide(color: Colors.white10, width: 0.5)),
                                 ),
                                 padding: EdgeInsets.symmetric(vertical: 15.w),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    MyAvatar(
-                                        thumb: Uri.decodeComponent(
-                                            e.touser?.avatar ?? ''),
-                                        size: 50.w),
+                                    MyAvatar(thumb: Uri.decodeComponent(e.touser?.avatar ?? ''), size: 50.w),
                                     SizedBox(width: 15.w),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            Uri.decodeComponent(
-                                                e.touser?.nickname ?? ''),
+                                            Uri.decodeComponent(e.touser?.nickname ?? ''),
                                             style: MyTheme.white13medium,
                                           ),
                                           SizedBox(height: 9.w),
                                           Text(
-                                            e.list.last.content_type == 0
-                                                ? e.list.last.content
-                                                : "[${tr('tp')}]",
+                                            e.list.last.content_type == 0 ? e.list.last.content : "[${tr('tp')}]",
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: MyTheme.gray153_13,
@@ -134,10 +118,8 @@ class _MessageCenterScreenState extends State<MessageCenterScreen> {
                                       ),
                                     ),
                                     Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.end,
                                       children: [
                                         Text(
                                           formattedDate,
@@ -147,13 +129,9 @@ class _MessageCenterScreenState extends State<MessageCenterScreen> {
                                         Opacity(
                                           opacity: e.count == 0 ? 0 : 1,
                                           child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 1.w, horizontal: 8.w),
-                                            decoration: BoxDecoration(
-                                                color: const Color(0xFFFE4A49),
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        7.5.w)),
+                                            padding: EdgeInsets.symmetric(vertical: 1.w, horizontal: 8.w),
+                                            decoration:
+                                                BoxDecoration(color: const Color(0xFFFE4A49), borderRadius: BorderRadius.circular(7.5.w)),
                                             child: Text(
                                               e.count.toString(),
                                               style: MyTheme.white10,
@@ -182,8 +160,7 @@ class _SystemMessageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final systemNotice = context.select<UserNotifier, SystemNotice?>(
-        (notifier) => notifier.systemNotice);
+    final systemNotice = context.select<UserNotifier, SystemNotice?>((notifier) => notifier.systemNotice);
     String times = ' ';
     String messages = 'zwxx'.tr();
     int noticeCount = 0;
@@ -212,8 +189,7 @@ class _NoticeMessageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final systemNotice = context.select<UserNotifier, SystemNotice?>(
-        (notifier) => notifier.systemNotice);
+    final systemNotice = context.select<UserNotifier, SystemNotice?>((notifier) => notifier.systemNotice);
     String times = ' ';
     String messages = 'zwxx'.tr();
     int noticeCount = 0;
@@ -264,7 +240,7 @@ class _MessageActionItem extends StatelessWidget {
       newTimeString = dateFormat2.format(dateTime);
     }
 
-    return GestureDetector(
+    return ReportGestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: onTap,
       child: Padding(

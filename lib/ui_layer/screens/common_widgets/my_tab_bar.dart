@@ -144,9 +144,7 @@ class _TabBarWithViewState extends State<TabBarWithView> with SingleTickerProvid
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               configTabView(),
-              Expanded(
-                child: configExtendedTabBarView(),
-              ),
+              Expanded(child: configExtendedTabBarView()),
             ],
           );
   }
@@ -210,9 +208,7 @@ class _TabBarWithViewState extends State<TabBarWithView> with SingleTickerProvid
                   data: Theme.of(context).copyWith(tabBarTheme: tabBarTheme),
                   child: RepaintBoundary(
                     child: ScrollConfiguration(
-                        behavior: ScrollConfiguration.of(context).copyWith(
-                          scrollbars: false,
-                        ),
+                        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                         child: ValueListenableBuilder(
                             valueListenable: indexChangeNotifier,
                             builder: (context, selectedIndex, child) {
@@ -241,6 +237,7 @@ class _TabBarWithViewState extends State<TabBarWithView> with SingleTickerProvid
                   ),
                 ),
               ),
+              if (widget.tabBarRightWidget != null) SizedBox(width: 6.w),
               if (widget.tabBarRightWidget case final view?) view,
             ],
           ),
@@ -378,7 +375,7 @@ class MyTabBarTheme extends TabBarTheme {
         // indicatorSize: TabBarIndicatorSize.label,
         indicatorColor: Colors.transparent,
         indicator: BoxDecoration(
-          gradient:  LinearGradient(
+          gradient: LinearGradient(
             colors: linearColors ?? MyTheme.gradient_90_114_colors,
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
@@ -392,6 +389,7 @@ class MyTabBarTheme extends TabBarTheme {
 
 class LineIndicator extends Decoration {
   final List<Color>? linearColors;
+
   const LineIndicator({this.linearColors});
 
   @override

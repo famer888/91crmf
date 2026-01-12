@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:jycrpj/report/ui_layer/report_gesture_detector.dart';
 import 'package:jycrpj/ui_layer/screens/black/black_visit_record_util.dart';
 import 'package:jycrpj/ui_layer/screens/black/widget/subscript.dart';
 
@@ -7,7 +8,6 @@ import '../../../../domain/model/black_model.dart';
 import '../../../router/routes.dart';
 import '../../../utils/common_utils.dart';
 import '../../common_widgets/my_image.dart';
-import 'interval_gesture_widget.dart';
 
 class BlackItemWidget extends StatelessWidget {
   final BlackListItemModel item;
@@ -38,7 +38,7 @@ class BlackItemWidget extends StatelessWidget {
       SizedBox(height: 2.w),
       _buildSubContentWidget(),
     ]);
-    return IntervalGestureWidget(
+    return ReportGestureDetector(
       onTap: () {
         BlackVisitRecordUtil.updateVisitRecord(context, item);
         BlockDetailsRoute(id: item.id).push(context);

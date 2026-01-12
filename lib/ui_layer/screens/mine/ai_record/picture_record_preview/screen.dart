@@ -7,6 +7,8 @@ import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class PictureRecordPreviewScreen extends StatefulWidget {
   const PictureRecordPreviewScreen({super.key, required this.url, required this.delTapCall});
 
@@ -32,7 +34,7 @@ class _PictureRecordPreviewScreenState
         child: Column(children: [
           Expanded(child: MyImage.network(widget.url, fit: BoxFit.contain, borderRadius: 14.w)),
           SizedBox(height: 30.w),
-          GestureDetector(
+          ReportGestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
               _saveImage(context);
@@ -51,7 +53,7 @@ class _PictureRecordPreviewScreenState
             ),
           ),
           SizedBox(height: 15.w),
-          GestureDetector(
+          ReportGestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
               widget.delTapCall.call();

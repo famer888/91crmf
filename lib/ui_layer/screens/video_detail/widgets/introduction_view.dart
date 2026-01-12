@@ -28,6 +28,10 @@ import '../../common_widgets/status/network_error.dart';
 import '../../image_paths.dart';
 import '../../theme.dart';
 
+import '../../../../report/ui_layer/report_general_banner.dart';
+
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class IntroductionView extends StatefulWidget {
   const IntroductionView({super.key, required this.id, required this.data});
   final String id;
@@ -95,7 +99,7 @@ class _IntroductionViewState extends State<IntroductionView> {
             //             style: MyTheme.gray163_13,
             //           ),
             //         ),
-            //         GestureDetector(
+            //         ReportGestureDetector(
             //           behavior: HitTestBehavior.translucent,
             //           onTap: () {
             //
@@ -114,7 +118,7 @@ class _IntroductionViewState extends State<IntroductionView> {
                 ? Container()
                 : Container(
               padding: EdgeInsets.only(top: 13.w),
-              child: GestureDetector(
+              child: ReportGestureDetector(
                 onTap: () {
                   UserCenterRoute('${widget.data.detail.member?.aff}').push(context);
                 },
@@ -164,7 +168,7 @@ class _IntroductionViewState extends State<IntroductionView> {
                     ) {
                       final isFavorites = videoInfo.userFavorites == 1;
 
-                      return GestureDetector(
+                      return ReportGestureDetector(
                         onTap: () async {
                           if (videoInfo.id case final id?) {
                             final userDomain = context.read<UserDomain>();
@@ -191,7 +195,7 @@ class _IntroductionViewState extends State<IntroductionView> {
                       );
                     }),
                     SizedBox(width: 20.w),
-                    GestureDetector(
+                    ReportGestureDetector(
                       onTap: () {
                         const MineShareToUserRoute().push(context);
                       },
@@ -318,7 +322,7 @@ class _IntroductionViewState extends State<IntroductionView> {
                   child: GeneralAppsListVidget(
                     apps: banner,
                   )
-                  // child: GeneralBannerAppsListWidget(
+                  // child: ReportGeneralAppsListVidget(
                   //   data: banner,
                   //   aspectRatio: 7 / 2,
                   // ),
@@ -412,7 +416,7 @@ class AdSingleColumnCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constrains) {
       final w = constrains.maxWidth;
-      return GestureDetector(
+      return ReportGestureDetector(
         onTap: () {},
         child: ClipRRect(
           borderRadius: BorderRadius.circular(5.w),
@@ -502,7 +506,7 @@ class VideoSingleColumCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constrains) {
-      return GestureDetector(
+      return ReportGestureDetector(
         onTap: () {
           VideoDetailRoute('${data.id}').push(context);
         },

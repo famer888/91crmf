@@ -33,6 +33,8 @@ import '../player_barrage_widget.dart';
 import 'utils/nvideourl_minxin.dart';
 
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 //先判断show的值 != “public” 直接显示已下线
 //判断hls.length > 0 直接播放
 //hls.length = 0 则判断type值
@@ -253,7 +255,7 @@ class _LiveMvPlayerState extends State<LiveMvPlayer> with NVideoURLMinxin {
           bottom: 0,
           right: 10.w,
           child:
-        GestureDetector(
+        ReportGestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
               if (widget.info.hls?.isEmpty ?? false) {
@@ -462,7 +464,7 @@ class _LiveMvPlayerState extends State<LiveMvPlayer> with NVideoURLMinxin {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 0, right: 5),
-                    child: GestureDetector(
+                    child: ReportGestureDetector(
                       behavior: HitTestBehavior.translucent,
                       child: Container(
                         alignment: Alignment.center,
@@ -492,7 +494,7 @@ class _LiveMvPlayerState extends State<LiveMvPlayer> with NVideoURLMinxin {
               ),
             ),
             SizedBox(width: 16.w),
-            GestureDetector(
+            ReportGestureDetector(
               behavior: HitTestBehavior.translucent,
               child: isbarrage
                   ? const MyImage.asset(MyImagePaths.appOndm,
@@ -511,7 +513,7 @@ class _LiveMvPlayerState extends State<LiveMvPlayer> with NVideoURLMinxin {
               },
             ),
             SizedBox(width: 16.w),
-            GestureDetector(//全屏才会显示打赏
+            ReportGestureDetector(//全屏才会显示打赏
               behavior: HitTestBehavior.translucent,
               child: const MyImage.asset(MyImagePaths.appDs,
                   width: 60, height: 25, fit: BoxFit.contain),
@@ -887,7 +889,7 @@ class _SinkPortraitLandWidgetState extends State<_SinkPortraitLandWidget> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      GestureDetector(
+                      ReportGestureDetector(
                         behavior: HitTestBehavior.translucent,
                         child: const MyImage.asset(
                             MyImagePaths.appNavBackWN,
@@ -1355,7 +1357,7 @@ class _SinkPortraitLandWidgetState extends State<_SinkPortraitLandWidget> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 0, right: 5),
-              child: GestureDetector(
+              child: ReportGestureDetector(
                 behavior: HitTestBehavior.translucent,
                 child: Container(
                   alignment: Alignment.center,
@@ -1385,7 +1387,7 @@ class _SinkPortraitLandWidgetState extends State<_SinkPortraitLandWidget> {
         ),
       ),
       const SizedBox(width: 13),
-      GestureDetector(
+      ReportGestureDetector(
         behavior: HitTestBehavior.translucent,
         child: isbarrage
             ? const MyImage.asset(MyImagePaths.appOndm,
@@ -1397,7 +1399,7 @@ class _SinkPortraitLandWidgetState extends State<_SinkPortraitLandWidget> {
         },
       ),
       const SizedBox(width: 13),
-      GestureDetector(//打赏
+      ReportGestureDetector(//打赏
         behavior: HitTestBehavior.translucent,
         child: const MyImage.asset(MyImagePaths.appDs,
             width: 60, height: 25, fit: BoxFit.contain),
@@ -1412,7 +1414,7 @@ class _SinkPortraitLandWidgetState extends State<_SinkPortraitLandWidget> {
         },
       ),
       const SizedBox(width: 13),
-      GestureDetector(
+      ReportGestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
             _getWidgetInfo();
@@ -1588,7 +1590,7 @@ class _SinkPortraitLandWidgetState extends State<_SinkPortraitLandWidget> {
                         ],
                       ),
                       alignment: Alignment.center,
-                      child: GestureDetector(
+                      child: ReportGestureDetector(
                         behavior: HitTestBehavior.translucent,
                         child: const MyImage.asset(
                           MyImagePaths.appNavBackWN,
@@ -1626,7 +1628,7 @@ class _SinkPortraitLandWidgetState extends State<_SinkPortraitLandWidget> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  GestureDetector(
+                  ReportGestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
                       if (vflag) {
@@ -1650,7 +1652,7 @@ class _SinkPortraitLandWidgetState extends State<_SinkPortraitLandWidget> {
                     ),
                   ),
                   const SizedBox(width: 37),
-                  GestureDetector(
+                  ReportGestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
                       widget.shareVp?.call();
@@ -1692,7 +1694,7 @@ class _SinkPortraitLandWidgetState extends State<_SinkPortraitLandWidget> {
           Positioned(
               top: 10.w,
               left: 10.w,
-              child: GestureDetector(
+              child: ReportGestureDetector(
                 behavior: HitTestBehavior.translucent,
                 child: const MyImage.asset(
                   MyImagePaths.appNavBackWN,

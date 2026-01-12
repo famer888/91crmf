@@ -11,6 +11,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/material.dart';
+import 'package:jycrpj/app_global.dart';
 import 'package:jycrpj/data_layer/data_source/remote/aidraw_service.dart';
 import 'package:jycrpj/data_layer/data_source/remote/aimagic_service.dart';
 import 'package:jycrpj/data_layer/data_source/remote/ainovel_service.dart';
@@ -51,6 +52,9 @@ import 'package:jycrpj/domain/remote_domain/domains/live.dart';
 import 'package:jycrpj/domain/remote_domain/domains/rank.dart';
 import 'package:jycrpj/domain/remote_domain/domains/buy.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:jycrpj/report/event_tracking.dart';
+import 'package:jycrpj/report/ui_layer/report_timing_interceptor.dart';
+import 'package:jycrpj/ui_layer/screens/mine/visitrecord/visit_model.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:utils/utils.dart';
 import 'package:universal_html/html.dart' as html;
@@ -136,38 +140,71 @@ import '../data_source/remote/user_service.dart';
 import '../data_source/remote/withdraw_service.dart';
 import 'http_interceptor.dart';
 import 'utils.dart';
+
 part 'cache.dart';
+
 part 'mixin/home_mixin.dart';
+
 part 'mixin/user_mixin.dart';
+
 part 'mixin/element_mixin.dart';
+
 part 'mixin/dynamic_mixin.dart';
+
 part 'mixin/community_mixin.dart';
+
 part 'mixin/seed_mixin.dart';
+
 part 'mixin/order_mixin.dart';
+
 part 'mixin/sign_mixin.dart';
+
 part 'mixin/account_mixin.dart';
+
 part 'mixin/proxy_mixin.dart';
+
 part 'mixin/withdraw_mixin.dart';
+
 part 'mixin/search_mixin.dart';
+
 part 'mixin/mv_mixin.dart';
+
 part 'mixin/vlog_mixin.dart';
+
 part 'mixin/cartoon_mixin.dart';
+
 part 'mixin/game_mixin.dart';
+
 part 'mixin/message_mixin.dart';
+
 part 'mixin/privilege_mixin.dart';
+
 part 'mixin/original_mixim.dart';
+
 part 'mixin/live_mixin.dart';
+
 part 'mixin/ai_mixin.dart';
+
 part 'mixin/asmr_mixin.dart';
+
 part 'mixin/rank_mixin.dart';
+
 part 'mixin/aimagic_mixin.dart';
+
 part 'mixin/aidraw_mixin.dart';
+
 part 'mixin/ainovel_mixin.dart';
+
 part 'mixin/aiaudio_mixin.dart';
+
 part 'mixin/aikiss_mixin.dart';
+
 part 'mixin/black_mixin.dart';
+
 part 'mixin/invite_mixin.dart';
+
 part 'mixin/crack_mixin.dart';
+
 part 'mixin/buy_mixin.dart';
 
 class AppRepo extends _BaseAppRepo
@@ -203,8 +240,7 @@ class AppRepo extends _BaseAppRepo
         _Crack,
         _Buy,
         _Asmr,
-        _Rank {
-}
+        _Rank {}
 
 abstract class _BaseAppRepo implements AppDomain {
   late final _homeService = HomeService(_apiDio);
@@ -279,6 +315,18 @@ abstract class _BaseAppRepo implements AppDomain {
     await _cacheManager.init();
     _appInfo = await _getAppInfo();
 
+    if (kDebugMode) {
+      _apiDio.interceptors.add(
+        InterceptorsWrapper(
+          onRequest: (options, handler) {
+            if (kDebugMode) {
+              ReqPrint.logRequest(options);
+            }
+            handler.next(options);
+          },
+        ),
+      );
+    }
     _apiDio.interceptors.add(AutoEncryptAndDecryptInterceptor(_appInfo));
     _apiDio.interceptors.add(
       InterceptorsWrapper(
@@ -291,6 +339,7 @@ abstract class _BaseAppRepo implements AppDomain {
         },
       ),
     );
+    _apiDio.interceptors.add(ReportTimingInterceptor());
   }
 
   Future _cleanToken() async {
@@ -383,13 +432,18 @@ abstract class _BaseAppRepo implements AppDomain {
 
   @override
   void setBaseURL(String url) async {
-    // TODO: 手动设置线路
     if (!kIsWeb) {
       final fdsKey = await _getFdsKey();
       final secretValue = PlatformAwareCrypto.secretValue(fdsKey: fdsKey);
       _apiDio.options.headers = {'Cf-Ray-Xf': secretValue};
     }
     _apiDio.options.baseUrl = url;
+  }
+
+  @override
+  void setReportTraceId(String id) async {
+    _cacheManager.upsertReportTraceId(id);
+    AppGlobal.reportTraceId = id;
   }
 
   @override
@@ -401,13 +455,25 @@ abstract class _BaseAppRepo implements AppDomain {
     List<String> unChecklines = (await _cacheManager.readLinesUrl()) ?? BuildConfig.apiLines;
 
     // 测试服
-    // unChecklines = ['https://91crapi.dyclub.co/api.php'];
+    unChecklines = ['https://91crapi.dyclub.co/api.php'];
     List<String> linesTemp = [...unChecklines];
 
     if (!kIsWeb) {
       final fdsKey = await _getFdsKey();
       final secretValue = PlatformAwareCrypto.secretValue(fdsKey: fdsKey);
       _apiDio.options.headers = {'Cf-Ray-Xf': secretValue};
+    }
+
+    // 读取本地上报AppId
+    final String? localReportAppId = await _cacheManager.readReportAppId();
+    if (localReportAppId case final String reportAppId) {
+      AppGlobal.reportAppId = reportAppId;
+    }
+
+    // 读取本地上报traceId
+    final String? localReportTraceId = await _cacheManager.readReportTraceId();
+    if (localReportTraceId case final String reportTraceId) {
+      AppGlobal.reportTraceId = reportTraceId;
     }
 
     // 检查网络
@@ -637,4 +703,62 @@ String _gvSha256(String data) {
   var digest = sha256.convert(content);
   var text = hex.encode(digest.bytes);
   return text;
+}
+
+class ReqPrint {
+
+  static void logRequest(RequestOptions options) {
+    final buffer = StringBuffer();
+
+    buffer.writeln('┌────── Dio Request ──────');
+    buffer.writeln('│ METHOD: ${options.method}');
+    buffer.writeln('│ URL: ${options.baseUrl}${options.path}');
+
+    // query 参数
+    if (options.queryParameters.isNotEmpty) {
+      buffer.writeln('│ QueryParameters:');
+      options.queryParameters.forEach((k, v) {
+        buffer.writeln('│   $k: $v');
+      });
+    }
+
+    // headers
+    buffer.writeln('│ Headers:');
+    options.headers.forEach((k, v) {
+      buffer.writeln('│   $k: $v');
+    });
+
+    // body
+    if (options.data != null) {
+      // final decryptedData = PlatformAwareCrypto.decryptResData(options.data);
+      buffer.writeln('│ Body:');
+      _logRequestBody(options.data, buffer);
+    }
+
+    buffer.writeln('└────────────────────────');
+    CommonUtils.log(buffer.toString());
+  }
+
+  static void _logRequestBody(dynamic data, StringBuffer buffer) {
+    if (data is FormData) {
+      buffer.writeln('│   [FormData]');
+      for (final field in data.fields) {
+        buffer.writeln('│     ${field.key}: ${field.value}');
+      }
+      for (final file in data.files) {
+        buffer.writeln(
+          '│     ${file.key}: ${file.value.filename} (${file.value.contentType})',
+        );
+      }
+    } else if (data is Map || data is List) {
+      buffer.writeln('│   ${_prettyJson(data)}');
+    } else {
+      buffer.writeln('│   $data');
+    }
+  }
+
+  static String _prettyJson(Object data) {
+    const encoder = JsonEncoder.withIndent('  ');
+    return encoder.convert(data);
+  }
 }

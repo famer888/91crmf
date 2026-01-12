@@ -17,6 +17,8 @@ import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 
+import '../../../../../report/ui_layer/report_general_banner.dart';
+
 class MyJoinedGroupContent extends StatefulWidget {
   const MyJoinedGroupContent({super.key});
 
@@ -131,7 +133,7 @@ class _Header extends StatelessWidget {
             if (banners.isEmpty) return const SizedBox.shrink();
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-              child: GeneralBannerAppsListWidget(data: banners),
+              child: ReportGeneralAppsListVidget(data: banners),
             );
           },
         ),

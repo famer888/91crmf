@@ -3,6 +3,8 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class DanSanHDialog extends StatelessWidget {
   const DanSanHDialog({
     super.key,
@@ -55,7 +57,7 @@ class DanSanHDialog extends StatelessWidget {
                             decoration: TextDecoration.none),
                       ),
                     ),
-                    GestureDetector(
+                    ReportGestureDetector(
                       onTap: () => closeCall?.call(),
                       child: const MyImage.asset(
                         MyImagePaths.appCircleClose,

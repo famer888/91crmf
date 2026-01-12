@@ -14,6 +14,8 @@ import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class VlogFocusRecCard extends StatefulWidget {
   const VlogFocusRecCard({super.key, required this.data});
 
@@ -26,7 +28,7 @@ class VlogFocusRecCard extends StatefulWidget {
 class _VlogFocusRecCardState extends State<VlogFocusRecCard> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       onTap: () {
         //点击头像加入用户详情
         final aff = '${widget.data.aff}';

@@ -5,13 +5,15 @@ import 'package:jycrpj/ui_layer/router/routes.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_avatar.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 
+import '../../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class SoulMemberCard extends StatelessWidget {
   const SoulMemberCard({super.key, required this.data});
 
   final UserModel data;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ReportGestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
         //跳转用户中心

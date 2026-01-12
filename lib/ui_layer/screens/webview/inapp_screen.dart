@@ -1,14 +1,8 @@
-import 'dart:convert';
-
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-// import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import '../../router/routes.dart';
 import '../../utils/common_utils.dart';
 import '../../utils/my_toast.dart';
@@ -18,7 +12,8 @@ import '../image_paths.dart';
 import '../theme.dart';
 
 import 'package:universal_html/html.dart' as html;
-import 'package:webview_flutter_android/webview_flutter_android.dart';
+import '../../../report/ui_layer/report_gesture_detector.dart';
+
 import 'fake_native_widget.dart' if (dart.library.html) 'real_web_widget.dart'
     as ui;
 
@@ -33,7 +28,6 @@ class InAppWebViewScreen extends StatefulWidget {
 
 class _InAppWebViewScreenState extends State<InAppWebViewScreen> {
   String titleText = '';
-  late WebViewController _controller;
 
   late html.EventListener _listener;
 
@@ -73,7 +67,7 @@ class _InAppWebViewScreenState extends State<InAppWebViewScreen> {
                   style: MyTheme.white255_18_B,
                 ),
                 backgroundColor: MyTheme.bgColor,
-                leading: GestureDetector(
+                leading: ReportGestureDetector(
                   onTap: () {
                     context.pop();
                   },

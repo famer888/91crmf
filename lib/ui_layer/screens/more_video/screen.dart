@@ -1,13 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jycrpj/domain/remote_domain/domains/dynamic.dart';
 import 'package:jycrpj/domain/type_def.dart';
-import 'package:jycrpj/ui_layer/screens/apps/91aw/widget/aw91_feed_card.dart';
-import 'package:jycrpj/ui_layer/screens/apps/awjq/widget/awjq_feed_card.dart';
-import 'package:jycrpj/ui_layer/screens/apps/clsq/widget/cl_feed_card.dart';
-import 'package:jycrpj/ui_layer/screens/apps/crack_app_type.dart';
-import 'package:jycrpj/ui_layer/screens/apps/zpc/widget/zpc_feed_card.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/91aw/widget/aw91_feed_card.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/awjq/widget/awjq_feed_card.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/clsq/widget/cl_feed_card.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/widget/pzhan_feed_card.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/zpc/widget/zpc_feed_card.dart';
+import 'package:jycrpj/ui_layer/screens/crack/crack_app_type.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:provider/provider.dart';
 
@@ -19,10 +21,16 @@ import '../common_widgets/my_app_bar.dart';
 import '../common_widgets/my_list_view.dart';
 import '../common_widgets/my_tab_bar.dart';
 import '../common_widgets/screen_background.dart';
+import '../crack/apps/pzhan/model/pzhan_model.dart';
 import '../theme.dart';
 
 class MoreVideoScreen extends StatefulWidget {
-  const MoreVideoScreen({super.key, required this.name, required this.id, required this.api});
+  const MoreVideoScreen({
+    super.key,
+    required this.name,
+    required this.id,
+    required this.api,
+  });
 
   final String name;
   final String id;
@@ -51,6 +59,9 @@ class _MoreVideoScreenState extends State<MoreVideoScreen> {
       } else if (apiPrefix == 'mv91aw') {
         // 91暗网
         _appType = CrackAppType.aw91.type;
+      } else if (apiPrefix == 'tabnewpzhan') {
+        // pzhan
+        _appType = CrackAppType.pzhan.type;
       }
     }
     super.initState();
@@ -106,6 +117,39 @@ class _VideoViewState extends State<_VideoView> {
   late final dynamicDomain = context.read<DynamicDomain>();
   late final mvDomain = context.read<MvDomain>();
 
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    super.dispose();
+  }
+
+  Future<List<PZhanVideoModel>> _getPZhanData({
+    required int page,
+    required int pageSize,
+  }) async {
+    final result = await dynamicDomain.getConstructByApiLink(apiLink: widget.api, params: {
+      'page': page,
+      'limit': pageSize,
+      'sort': widget.sort,
+      'tab_id': widget.id,
+    });
+    if (result.status == 1) {
+      if (result.data['list'] case final List data when data.isNotEmpty) {
+        final feedModelList = data.map<PZhanVideoModel>((x) => PZhanVideoModel.fromJson(x)).toList();
+        CommonUtils.log('获取的结果:$feedModelList');
+        return feedModelList;
+      }
+      return [];
+    } else {
+      return [];
+    }
+  }
 
   Future<List<FeedModel>> _getData({
     required int page,
@@ -120,8 +164,6 @@ class _VideoViewState extends State<_VideoView> {
       );
       return result.data!;
     } else {
-
-
       final result = await dynamicDomain.getConstructByApiLink(apiLink: widget.api, params: {
         'page': page,
         'limit': pageSize,
@@ -142,14 +184,10 @@ class _VideoViewState extends State<_VideoView> {
   }
 
   double getAspectRatio() {
-    if (widget.appType == CrackAppType.clsq.type) {
-      return ClFeedCard.aspectRatio;
-    } else if (widget.appType == CrackAppType.zpc.type) {
-      return ZpcFeedCard.aspectRatio;
-    } else if (widget.appType == CrackAppType.awjq.type) {
+    if (widget.appType == CrackAppType.awjq.type) {
       return AwjqFeedCard.aspectRatio;
-    } else if (widget.appType == CrackAppType.aw91.type) {
-      return Aw91FeedCard.aspectRatio;
+    } else if (widget.appType == CrackAppType.clsq.type || widget.appType == CrackAppType.zpc.type || widget.appType == CrackAppType.aw91.type) {
+      return MyTheme.aspectRatio;
     } else {
       return FeedCard.aspectRatio;
     }
@@ -159,7 +197,7 @@ class _VideoViewState extends State<_VideoView> {
     if (widget.appType == CrackAppType.clsq.type) {
       return ClFeedCard(feed: feed);
     } else if (widget.appType == CrackAppType.zpc.type) {
-      return ZpcFeedCard(feed: feed);
+      return ZpcFeedCard(feed: feed, appType: widget.appType);
     } else if (widget.appType == CrackAppType.awjq.type) {
       return AwjqFeedCard(feed: feed);
     } else if (widget.appType == CrackAppType.aw91.type) {
@@ -171,12 +209,22 @@ class _VideoViewState extends State<_VideoView> {
 
   @override
   Widget build(BuildContext context) {
-    return MyListView.grid(
-      padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 5.w),
-      childAspectRatio: getAspectRatio(),
-      crossAxisSpacing: 8.w,
-      itemBuilder: (_, item, __) => buildFeedCard(feed: item),
-      onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize),
-    );
+    if (widget.appType == CrackAppType.pzhan.type) {
+      return MyListView.grid(
+        padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 5.w),
+        childAspectRatio: MyTheme.aspectRatio,
+        crossAxisSpacing: 8.w,
+        itemBuilder: (_, item, __) => PZhanFeedCard(feed: item),
+        onFetchingMore: (currentPage, pageSize) => _getPZhanData(page: currentPage, pageSize: pageSize),
+      );
+    } else {
+      return MyListView.grid(
+        padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 5.w),
+        childAspectRatio: getAspectRatio(),
+        crossAxisSpacing: 8.w,
+        itemBuilder: (_, item, __) => buildFeedCard(feed: item),
+        onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize),
+      );
+    }
   }
 }

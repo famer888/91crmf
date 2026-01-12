@@ -19,6 +19,10 @@ import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
 
+import '../../../report/ui_layer/report_general_banner.dart';
+
+import '../../../report/ui_layer/report_gesture_detector.dart';
+
 class CartoonRecView extends StatefulWidget {
   const CartoonRecView(
       {super.key, required this.linkModel, required this.onLinkNavTap});
@@ -146,7 +150,7 @@ class _HeaderState extends State<_Header> {
             if (banners.isEmpty) return const SizedBox.shrink();
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-              child: GeneralBannerAppsListWidget(data: banners),
+              child: ReportGeneralAppsListVidget(data: banners),
             );
           },
         ),
@@ -179,7 +183,7 @@ class _HeaderState extends State<_Header> {
                     ),
                     itemBuilder: (context, index) {
                       final partsItem = parts[index];
-                      return GestureDetector(
+                      return ReportGestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
                           final linkUrl = partsItem.urlStr;

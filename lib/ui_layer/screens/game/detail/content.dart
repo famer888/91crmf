@@ -24,6 +24,10 @@ import '../../common_widgets/post/content/content.dart';
 import '../../common_widgets/post/content/media.dart';
 import '../../theme.dart';
 
+import '../../../../report/ui_layer/report_general_banner.dart';
+
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class GameDetailContentView extends StatelessWidget {
   const GameDetailContentView({super.key, required this.fullData});
   final GameDetailModel fullData;
@@ -87,7 +91,7 @@ class GameDetailContentView extends StatelessWidget {
               ? const SizedBox.shrink()
               : Padding(
                   padding: EdgeInsets.only(bottom: 5.w),
-                  child: GeneralBannerAppsListWidget(
+                  child: ReportGeneralAppsListVidget(
                       data: fullData.banner ?? [], aspectRatio: 7 / 2),
                 ),
           _PrevAndNextView(data: fullData),
@@ -162,7 +166,7 @@ class _TagsView extends StatelessWidget {
                   .where((element) => element.isNotEmpty)
                   .toList()
                   .map((e) {
-                return GestureDetector(
+                return ReportGestureDetector(
                   onTap: () {
                     GameTagRoute(e).push(context);
                   },
@@ -199,7 +203,7 @@ class _PrevAndNextView extends StatelessWidget {
                   data.prev == null
                       ? const SizedBox.shrink()
                       : Expanded(
-                          child: GestureDetector(
+                          child: ReportGestureDetector(
                           onTap: () {
                             GameDetailRoute('${data.prev?.id}').push(context);
                           },
@@ -243,7 +247,7 @@ class _PrevAndNextView extends StatelessWidget {
                   data.next == null
                       ? const SizedBox.shrink()
                       : Expanded(
-                          child: GestureDetector(
+                          child: ReportGestureDetector(
                           onTap: () {
                             GameDetailRoute('${data.next?.id}').push(context);
                           },
@@ -375,7 +379,7 @@ class _SourceAreaState extends State<_SourceArea> {
                         ),
                       ),
                       SizedBox(height: 10.w),
-                      GestureDetector(
+                      ReportGestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
                           const VipCenterRoute().push(context);
@@ -424,7 +428,7 @@ class _SourceAreaState extends State<_SourceArea> {
                         ),
                       ),
                       SizedBox(height: 10.w),
-                      GestureDetector(
+                      ReportGestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: _buyGame,
                         child: Container(
@@ -458,7 +462,7 @@ class _SourceAreaState extends State<_SourceArea> {
                 children: [
                   Column(
                     children: currentLinks.map((link) {
-                      return GestureDetector(
+                      return ReportGestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
                           CommonUtils.copyToClipboard(
@@ -494,7 +498,7 @@ class _SourceAreaState extends State<_SourceArea> {
                     }).toList(),
                   ),
                   SizedBox(height: 10.w),
-                  GestureDetector(
+                  ReportGestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
                       CommonUtils.copyToClipboard(text: secret);
@@ -713,7 +717,7 @@ class _GameRecoomendCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constrains) {
-      return GestureDetector(
+      return ReportGestureDetector(
         onTap: () {
           GameDetailRoute('${data.id}').push(context);
         },

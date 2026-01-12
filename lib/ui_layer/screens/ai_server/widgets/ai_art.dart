@@ -19,6 +19,8 @@ import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class AIArtScreen extends StatefulWidget {
   const AIArtScreen({super.key});
 
@@ -125,7 +127,7 @@ class _SelectOptionsListState extends State<SelectOptionsList> {
         Row(children: [
           Text('jbye'.tr() + ': $coins', style: MyTheme.white255_15),
           const Spacer(),
-          GestureDetector(
+          ReportGestureDetector(
               onTap: () {
                 context.pop();
                 const CoinRechargeRoute().push(context);
@@ -305,7 +307,7 @@ class _SelectOptionsListState extends State<SelectOptionsList> {
             },
           ),
         ),
-        GestureDetector(
+        ReportGestureDetector(
           onTap: () {
             if (selectedList.isEmpty) {
               MyToast.showText(text: '请至少选择一项');
@@ -522,7 +524,7 @@ class SelectRadios extends StatelessWidget {
       runSpacing: 8.w,
       children: model.element.map((option) {
         final isSelected = option.val == currentValue;
-        return GestureDetector(
+        return ReportGestureDetector(
           onTap: () => onChanged(isSelected
               ? null
               : {
@@ -573,7 +575,7 @@ class SelectThumbs extends StatelessWidget {
         child: Row(
             children: model.element.map((option) {
           final isSelected = option.val == currentValue;
-          return GestureDetector(
+          return ReportGestureDetector(
             onTap: () => onChanged(
               isSelected
                   ? null
@@ -720,7 +722,7 @@ class AIImagePickerGrid extends StatelessWidget {
               Positioned(
                 top: 0,
                 right: 0,
-                child: GestureDetector(
+                child: ReportGestureDetector(
                   onTap: () => onRemoveImage(item),
                   child: MyImage.asset(
                     MyImagePaths.appIssueCancelIcon,
@@ -732,7 +734,7 @@ class AIImagePickerGrid extends StatelessWidget {
             ],
           ),
         if (upList.length < picLimit)
-          GestureDetector(
+          ReportGestureDetector(
             onTap: onAddImage,
             child: Container(
               decoration: BoxDecoration(

@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jycrpj/domain/api_validator.dart';
+import 'package:jycrpj/report/ui_layer/report_general_banner.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../domain/async_value.dart';
@@ -22,6 +23,8 @@ import '../../../common_widgets/status/network_error.dart';
 import '../../../image_paths.dart';
 import '../../../theme.dart';
 
+import '../../../../../report/ui_layer/report_gesture_detector.dart';
+
 class TaskView extends StatefulWidget {
   const TaskView({super.key});
 
@@ -34,6 +37,7 @@ class _TaskViewState extends State<TaskView> {
   late final userNotifier = context.read<UserNotifier>();
   late final signDomain = context.read<SignDomain>();
   AsyncValue<WelfareTaskModel> _asyncValue = const AsyncInit();
+  late final homeConfigNotifier = context.read<HomeConfigNotifier>();
 
   @override
   void initState() {
@@ -79,6 +83,7 @@ class _TaskViewState extends State<TaskView> {
   }
 
   Widget _buildDataView(WelfareTaskModel data) {
+    final banners = homeConfigNotifier.homeData.config.welfare;
     return CustomScrollView(
       // physics: const BouncingScrollPhysics(
       //   parent: AlwaysScrollableScrollPhysics(),
@@ -88,6 +93,17 @@ class _TaskViewState extends State<TaskView> {
         SliverList.list(children: [
           _MemberView(data: data),
           SizedBox(height: 6.w),
+          if (banners case final banners? when banners.isNotEmpty)
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 15.w),
+                child: ReportGeneralBanner(
+                  data: banners,
+                  aspectRatio: 7 / 2,
+                ),
+              ),
+            ),
           _signInContent(data),
           SizedBox(height: 13.w),
           ClipRRect(
@@ -194,7 +210,7 @@ class _TaskViewState extends State<TaskView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  GestureDetector(
+                  ReportGestureDetector(
                     onTap: () {
                       if (data.signStatus == false) {
                         _signUp();
@@ -217,7 +233,7 @@ class _TaskViewState extends State<TaskView> {
                     ),
                   ),
                   SizedBox(width: 13.w),
-                  GestureDetector(
+                  ReportGestureDetector(
                     onTap: () {
                       //兑换VIP
                       const VipCenterRoute(pageIndex: 1).push(context);
@@ -373,7 +389,7 @@ class _MemberView extends StatelessWidget {
                         );
                 },
               ),
-              GestureDetector(
+              ReportGestureDetector(
                 onTap: () => const VipCenterRoute().push(context),
                 child: Container(
                   width: 300.w,
@@ -461,7 +477,7 @@ class _Header extends StatelessWidget {
                       ));
                 },
                 selector: (_, notifier) => notifier.member),
-            GestureDetector(
+            ReportGestureDetector(
               onTap: () async {
                 const VipCenterRoute().push(context);
               },
@@ -544,7 +560,7 @@ class _Tile extends StatelessWidget {
             ),
           ),
           SizedBox(width: 10.w),
-          GestureDetector(
+          ReportGestureDetector(
             onTap: () async {
               if (state == 2) {
                 _tapSignListTask(context);

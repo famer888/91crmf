@@ -18,6 +18,8 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/my_list_view.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 
+import '../../../../report/ui_layer/report_gesture_detector.dart';
+
 class AIOffDeRobe extends StatefulWidget {
   const AIOffDeRobe({super.key});
 
@@ -70,7 +72,7 @@ class _AIOffDeRobeState extends State<AIOffDeRobe> {
         Row(children: [
           Text('jbye'.tr() + ': $userCoins', style: MyTheme.white255_15),
           const Spacer(),
-          GestureDetector(
+          ReportGestureDetector(
               onTap: () {
                 context.pop();
                 const CoinRechargeRoute().push(context);
@@ -200,7 +202,7 @@ class _AIOffDeRobeState extends State<AIOffDeRobe> {
               padding: piaddings,
               child: Stack(
                 children: [
-                  GestureDetector(
+                  ReportGestureDetector(
                     onTap: imagePickerAssets,
                     child: Container(
                       width: double.infinity,
@@ -235,7 +237,7 @@ class _AIOffDeRobeState extends State<AIOffDeRobe> {
                                 Positioned(
                                     top: 5,
                                     right: 5,
-                                    child: GestureDetector(
+                                    child: ReportGestureDetector(
                                       onTap: () {
                                         setState(() {
                                           uploadObject = {};
@@ -312,7 +314,7 @@ class _AIOffDeRobeState extends State<AIOffDeRobe> {
                 )),
                 SizedBox(height: 20.w),
                 Center(
-              child: GestureDetector(
+              child: ReportGestureDetector(
                 onTap: onSubmitOffDerobe,
                 child: Container(
                   width: double.infinity,

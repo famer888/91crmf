@@ -1,8 +1,9 @@
+import 'dart:developer' as developer;
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'dart:developer' as developer;
+
 import 'package:common_utils/common_utils.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,13 +13,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:html_unescape/html_unescape.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:jycrpj/app_config.dart';
 import 'package:jycrpj/crypto.dart';
 import 'package:jycrpj/domain/model/live_model.dart';
 import 'package:jycrpj/domain/model/member_model.dart';
 import 'package:jycrpj/domain/model/vlog_model.dart';
 import 'package:jycrpj/domain/remote_domain/domains/home.dart';
-import 'package:jycrpj/logger.dart';
 import 'package:jycrpj/ui_layer/notifiers/home_config_notifier.dart';
 import 'package:jycrpj/ui_layer/notifiers/user_notifier.dart';
 import 'package:jycrpj/ui_layer/router/routes.dart';
@@ -31,16 +34,15 @@ import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:jycrpj/ui_layer/utils/preload_utils.dart';
-import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart' as url_launcher;
-import 'package:html_unescape/html_unescape.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:universal_html/js_util.dart' as js_util;
+import 'package:url_launcher/url_launcher.dart' as url_launcher;
 import 'package:utils/utils.dart';
+
+import '../../report/ui_layer/report_gesture_detector.dart';
 
 class CommonUtils {
   static setStatusBar({bool isLight = false}) {
@@ -218,6 +220,7 @@ class CommonUtils {
       'thumb_vertical',
       'cover_thumb_horizontal',
       'cover_thumb_vertical',
+      'cover_thumb_url',
       'cover_vertical',
       'cover_horizontal',
       'thumb_horizontal_url',
@@ -362,7 +365,7 @@ class CommonUtils {
         borderRadius: BorderRadius.circular(borderRadius ?? 0.w), // 圆角半径
         child: BackdropFilter(
           filter: ui.ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: GestureDetector(
+          child: ReportGestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
               onTap?.call();
@@ -504,7 +507,7 @@ class CommonUtils {
     String apk = Provider.of<HomeConfigNotifier>(context, listen: false)
             .homeData
             .config
-            .pwa_apk ??
+            .pwaApk ??
         '';
     Uri u = Uri.parse(html.window.location.href);
     String aff = u.queryParameters[BuildConfig.affCodeKey] ?? "";
@@ -537,91 +540,86 @@ class CommonUtils {
     html.window.open(site, "_blank");
   }
 
-  static openRoute(BuildContext context, Map data) {
-    if (data['link_url'] case final url? when url.isNotEmpty) {
-      if (data['report_id'] case final reportiId? when reportiId != null) {
-        ///上报点击量 report_id存在才上报
+  static Future<void> openRoute(BuildContext context, Map data) async {
+    if (data['link_url'] case final String url when url.isNotEmpty) {
+      if (data['report_id'] != null) {
         context.read<HomeDomain>().reqAdClickCount(
-              id: data['report_id'],
-              type: data['report_type'],
-            );
+          id: data['report_id'],
+          type: data['report_type'],
+        );
       }
+
       if (data['redirect_type'] == 1) {
         final urlList = url.split('??');
         final Map<String, dynamic> params = {};
+
         if (urlList.first == BuildConfig.webViewPathName) {
           final newUrl = urlList.last.toString().substring(4).trim();
-          WebViewRoute(newUrl).push(context);
+          await WebViewRoute(newUrl).push(context);
         } else {
-          if (urlList.length > 1 && urlList.last != '') {
-            urlList[1].split('&').forEach((item) {
-              final stringText = item.split('=');
-              params[stringText[0]] =
-                  stringText.length > 1 ? stringText[1] : null;
-            });
+          if (urlList.length > 1 && urlList.last.isNotEmpty) {
+            for (final item in urlList[1].split('&')) {
+              final kv = item.split('=');
+              params[kv[0]] = kv.length > 1 ? kv[1] : null;
+            }
           }
+
           String paramsStr = '';
-          if (params.values.isNotEmpty) {
-            params.forEach((key, value) {
+          params.forEach((_, value) {
+            if (value != null) {
               paramsStr += '/${Uri.decodeComponent(value)}';
-            });
-          }
+            }
+          });
 
-          String path = urlList.first ?? '';
-          if (path == 'vip') {
-            //如果是VIP直接进入VIP中心界面
-            path = 'mineVipCenter';
-          } else if (path == 'coinRecharge') {
-            path = 'mineCoinRecharge';
-          }
+          String path = urlList.first;
+          if (path == 'vip') path = 'mineVipCenter';
+          if (path == 'coinRecharge') path = 'mineCoinRecharge';
 
-          context.push('/$path$paramsStr');
+          /// ⚠️ 关键：await
+          await context.push('/$path$paramsStr');
         }
       } else {
-        launchUrl(data['link_url'].trim());
+        await launchUrl(url.trim());
       }
-
       return;
     }
 
-    if (data['url_str'] case final url? when url.isNotEmpty) {
+    if (data['url_str'] case final String url when url.isNotEmpty) {
       if (data['redirect_type'] == 1) {
         final urlList = url.split('??');
         final Map<String, dynamic> params = {};
+
         if (urlList.first == BuildConfig.webViewPathName) {
           final newUrl = urlList.last.toString().substring(4).trim();
-          WebViewRoute(newUrl).push(context);
+          await WebViewRoute(newUrl).push(context);
         } else {
-          if (urlList.length > 1 && urlList.last != '') {
-            urlList[1].split('&').forEach((item) {
-              final stringText = item.split('=');
-              params[stringText[0]] =
-                  stringText.length > 1 ? stringText[1] : null;
-            });
-          }
-          String paramsStr = '';
-          if (params.values.isNotEmpty) {
-            params.forEach((key, value) {
-              paramsStr += '/${Uri.decodeComponent(value)}';
-            });
+          if (urlList.length > 1 && urlList.last.isNotEmpty) {
+            for (final item in urlList[1].split('&')) {
+              final kv = item.split('=');
+              params[kv[0]] = kv.length > 1 ? kv[1] : null;
+            }
           }
 
-          String path = urlList.first ?? '';
-          if (path == 'vip') {
-            //如果是VIP直接进入VIP中心界面
-            path = 'mineVipCenter';
-          } else if (path == 'coinRecharge') {
-            path = 'mineCoinRecharge';
-          } else if (path == 'gamesortpage' || path == 'gameNav') {
-            // paramsStr += '/${Uri.decodeComponent('${data['title']}')}';
+          String paramsStr = '';
+          params.forEach((_, value) {
+            if (value != null) {
+              paramsStr += '/${Uri.decodeComponent(value)}';
+            }
+          });
+
+          String path = urlList.first;
+          if (path == 'vip') path = 'mineVipCenter';
+          if (path == 'coinRecharge') path = 'mineCoinRecharge';
+          if (path == 'gamesortpage' || path == 'gameNav') {
             path = 'gameNav';
             paramsStr += '/${data['title']}';
           }
 
-          context.push('/$path$paramsStr');
+          /// ⚠️ 关键
+          await context.push('/$path$paramsStr');
         }
       } else {
-        launchUrl(data['url_str'].trim());
+        await launchUrl(url.trim());
       }
     }
   }
@@ -1182,7 +1180,7 @@ class CommonUtils {
                     : Container(),
                 vflag ? SizedBox(height: 10.w) : Container(),
                 vflag
-                    ? GestureDetector(
+                    ? ReportGestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
                           showAlert?.call();
@@ -1204,7 +1202,7 @@ class CommonUtils {
                   width: 30.w,
                   height: 40.w,
                   child: Stack(children: [
-                    GestureDetector(
+                    ReportGestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
                         enterUserCenter?.call();
@@ -1257,7 +1255,7 @@ class CommonUtils {
                             : Positioned(
                                 bottom: 3.w,
                                 right: 8.w,
-                                child: GestureDetector(
+                                child: ReportGestureDetector(
                                   behavior: HitTestBehavior.translucent,
                                   onTap: () {
                                     follow?.call();
@@ -1270,7 +1268,7 @@ class CommonUtils {
                   ]),
                 ),
                 SizedBox(height: 15.w),
-                GestureDetector(
+                ReportGestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
                     like?.call();
@@ -1297,7 +1295,7 @@ class CommonUtils {
                   ),
                 ),
                 SizedBox(height: 15.w),
-                GestureDetector(
+                ReportGestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
                     comment?.call();
@@ -1316,7 +1314,7 @@ class CommonUtils {
                   ),
                 ),
                 SizedBox(height: 15.w),
-                GestureDetector(
+                ReportGestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
                     collect?.call();
@@ -1345,7 +1343,7 @@ class CommonUtils {
                   ),
                 ),
                 SizedBox(height: 15.w),
-                GestureDetector(
+                ReportGestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
                       const MineShareToUserRoute().push(context);
@@ -1362,7 +1360,7 @@ class CommonUtils {
                       ],
                     )),
                 SizedBox(height: 15.w),
-                // GestureDetector(
+                // ReportGestureDetector(
                 //   behavior: HitTestBehavior.translucent,
                 //   onTap: () {
                 //     cleanView?.call();
@@ -1402,7 +1400,7 @@ class CommonUtils {
       double w = constrains.maxWidth;
       return Container(
         padding: EdgeInsets.only(bottom: 20.w),
-        child: GestureDetector(
+        child: ReportGestureDetector(
           onTap: () {
             openRoute(context, data.toJson());
           },
