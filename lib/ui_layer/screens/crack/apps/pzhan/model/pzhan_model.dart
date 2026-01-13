@@ -298,6 +298,11 @@ class PZhanCategoryTopicModel {
   final int favoritesNum;
   final bool isFollow;
 
+  // 兼容福利姬 增加的字段
+  int midStyleType;
+  int groupId;
+  String title;
+
   PZhanCategoryTopicModel({
     this.id = 0,
     this.tabId = 0,
@@ -307,6 +312,9 @@ class PZhanCategoryTopicModel {
     this.workNum = 0,
     this.favoritesNum = 0,
     this.isFollow = false,
+    this.midStyleType = 0,
+    this.groupId = 0,
+    this.title = '',
   });
 
   factory PZhanCategoryTopicModel.fromJson(Map<String, dynamic> json) {
@@ -319,6 +327,9 @@ class PZhanCategoryTopicModel {
       workNum: json['work_num'] ?? 0,
       favoritesNum: json['favorites_num'] ?? 0,
       isFollow: (json['is_follow'] ?? 0) > 0,
+      midStyleType: json['mid_style_type'] ?? 0,
+      groupId: json['group_id'] ?? 0,
+      title: json['title'] ?? '',
     );
   }
 
@@ -332,6 +343,83 @@ class PZhanCategoryTopicModel {
       'work_num': workNum,
       'favorites_num': favoritesNum,
       'is_follow': isFollow ? 1 : 0,
+      'mid_style_type': midStyleType,
+      'group_id': groupId,
+      'title': title,
     };
+  }
+}
+
+/*
+mid_style_up: {title: 热门福利姬, group_id: 2,
+ list: [{uid: 103, nickname: 芋圆呀呀, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718131473778.png},
+ {uid: 108, nickname: 爆机少女喵小吉, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718121175287.png},
+  {uid: 102, nickname: 白桃少女, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718103034588.png},
+   {uid: 104, nickname: 米娜学姐, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718103034588.png},
+    {uid: 127, nickname: 布丁大法, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718123176813.png},
+     {uid: 105, nickname: 麻酥酥, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718130364920.png},
+      {uid: 109, nickname: 小尤奈, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718110525410.png},
+      {uid: 120, nickname: 占星猫, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718130364920.png},
+      {uid: 107, nickname: 八月未央, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718104250323.png},
+       {uid: 117, nickname: 小丁, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718122168304.png},
+       {uid: 106, nickname: 抖娘利世, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718103034588.png},
+        {uid: 115, nickname: 狗头萝莉, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718131473778.png},
+         {uid: 101, nickname: 樱井宁宁, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718124397110.png},
+          {uid: 116, nickname: 萌白酱, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718125288438.png},
+           {uid: 113, nickname: 米胡桃, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718123176813.png},
+            {uid: 118, nickname: 习呆呆, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718123176813.png},
+             {uid: 111, nickname: 芋喵喵, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718105627574.png},
+              {uid: 110, nickname: 发条少女, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718122168304.png},
+               {uid: 114, nickname: 吟吟娘, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718121175287.png},
+                {uid: 112, nickname: 奈汐酱, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718123176813.png},
+                {uid: 119, nickname: 桃谷谷, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718110525410.png},
+                 {uid: 126, nickname: 奶萝喵四, desc: , fans_count: 0, videos: 0, thumb_full: https://new.fgibqt.cn//new/xiao/20201117/2020111718110525410.png}]},
+ */
+class PZhanMidStyleUpModel {
+  final String title;
+  final int groupId;
+  final List<MidStyleUpListModel> list;
+
+  PZhanMidStyleUpModel({
+    this.title = '',
+    this.groupId = 0,
+    this.list = const [],
+  });
+
+  factory PZhanMidStyleUpModel.fromJson(Map<String, dynamic> json) {
+    return PZhanMidStyleUpModel(
+      title: json['title'] ?? '',
+      groupId: json['group_id'] ?? 0,
+      list: json['list'] != null ? List<MidStyleUpListModel>.from(json['list'].map((e) => MidStyleUpListModel.fromJson(e))) : [],
+    );
+  }
+}
+
+class MidStyleUpListModel {
+  int uid;
+  String nickname;
+  String desc;
+  int fansCount;
+  int videos;
+  String thumbFull;
+
+  MidStyleUpListModel({
+    this.uid = 0,
+    this.nickname = '',
+    this.desc = '',
+    this.fansCount = 0,
+    this.videos = 0,
+    this.thumbFull = '',
+  });
+
+  factory MidStyleUpListModel.fromJson(Map<String, dynamic> json) {
+    return MidStyleUpListModel(
+      uid: json['uid'] ?? 0,
+      nickname: json['nickname'] ?? '',
+      desc: json['desc'] ?? '',
+      fansCount: json['fans_count'] ?? 0,
+      videos: json['videos'] ?? 0,
+      thumbFull: json['thumb_full'] ?? '',
+    );
   }
 }

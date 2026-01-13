@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jycrpj/domain/async_value.dart';
@@ -48,6 +49,7 @@ class _PZhanVideoDetailScreenState extends State<PZhanVideoDetailScreen> {
 
   @override
   void initState() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     _initData();
     _getVideoRecommendList();
     super.initState();
@@ -153,69 +155,78 @@ class _PZhanVideoDetailScreenState extends State<PZhanVideoDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenBackground(
-      child: SafeArea(
-        bottom: false,
-        child: Scaffold(
-          extendBodyBehindAppBar: true,
-          floatingActionButton: ReportGestureDetector(
-            onTap: () {
-              context.pop();
-            },
-            child: Container(
-              margin: EdgeInsets.only(bottom: 40.w),
-              height: 45.w,
-              width: 45.w,
-              decoration: BoxDecoration(gradient: MyTheme.gradient_90_114, borderRadius: BorderRadius.all(Radius.circular(20.w))),
-              child: Center(child: Text('fahui'.tr(context: context), style: MyTheme.white255_13_M)),
+    return PopScope(
+      canPop: true, // 允许返回
+      onPopInvoked: (didPop) {
+        if (didPop) {
+          // 页面真的已经被移出栈了
+          SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+        }
+      },
+      child: ScreenBackground(
+        child: SafeArea(
+          bottom: false,
+          child: Scaffold(
+            extendBodyBehindAppBar: true,
+            floatingActionButton: ReportGestureDetector(
+              onTap: () {
+                context.pop();
+              },
+              child: Container(
+                margin: EdgeInsets.only(bottom: 40.w),
+                height: 45.w,
+                width: 45.w,
+                decoration: BoxDecoration(gradient: MyTheme.gradient_90_114, borderRadius: BorderRadius.all(Radius.circular(20.w))),
+                child: Center(child: Text('fahui'.tr(context: context), style: MyTheme.white255_13_M)),
+              ),
             ),
-          ),
-          body: _asyncValue.maybeWhen(
-            orElse: () => const LoadingView(),
-            error: (_, __) => NetworkErrorView(onTap: _initData),
-            data: (data) => Column(
-              children: [
-                VideoView(data: data),
-                Container(
-                  color: const Color.fromRGBO(16, 16, 16, 1),
-                  padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 13.w),
-                  child: Row(
-                    children: [
-                      Text('简介', style: MyTheme.white255_13.s16.w500),
-                      const Spacer(),
-                      // ReportGestureDetector(
-                      //   onTap: () {
-                      //     AppDialog.showLineDialog(context, _userNotifier);
-                      //   },
-                      //   child: Row(
-                      //     mainAxisSize: MainAxisSize.min,
-                      //     children: [
-                      //       SizedBox(
-                      //         width: 15.w,
-                      //         height: 15.w,
-                      //         child: MyImage.asset(MyImagePaths.appSwitchLine, width: 15.w, height: 15.w),
-                      //       ),
-                      //       SizedBox(width: 4.w),
-                      //       Text('切换路线', style: MyTheme.white255_10.white25507.w400),
-                      //     ],
-                      //   ),
-                      // ),
-                    ],
+            body: _asyncValue.maybeWhen(
+              orElse: () => const LoadingView(),
+              error: (_, __) => NetworkErrorView(onTap: _initData),
+              data: (data) => Column(
+                children: [
+                  VideoView(data: data),
+                  Container(
+                    color: const Color.fromRGBO(16, 16, 16, 1),
+                    padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 13.w),
+                    child: Row(
+                      children: [
+                        Text('简介', style: MyTheme.white255_13.s16.w500),
+                        const Spacer(),
+                        // ReportGestureDetector(
+                        //   onTap: () {
+                        //     AppDialog.showLineDialog(context, _userNotifier);
+                        //   },
+                        //   child: Row(
+                        //     mainAxisSize: MainAxisSize.min,
+                        //     children: [
+                        //       SizedBox(
+                        //         width: 15.w,
+                        //         height: 15.w,
+                        //         child: MyImage.asset(MyImagePaths.appSwitchLine, width: 15.w, height: 15.w),
+                        //       ),
+                        //       SizedBox(width: 4.w),
+                        //       Text('切换路线', style: MyTheme.white255_10.white25507.w400),
+                        //     ],
+                        //   ),
+                        // ),
+                      ],
+                    ),
                   ),
-                ),
-                Container(color: const Color.fromRGBO(255, 255, 255, 0.9), height: 0.2.w),
-                Expanded(
-                  child: _Body(
-                    id: widget.id,
-                    data: data,
-                    banners: _noticeList,
-                    recommendVideoListNotifier: _recommendVideoListNotifier,
-                    downloadCallback: () async {
-                      _videoDownload(data);
-                    },
+                  Container(color: const Color.fromRGBO(255, 255, 255, 0.9), height: 0.2.w),
+                  Expanded(
+                    child: _Body(
+                      id: widget.id,
+                      data: data,
+                      banners: _noticeList,
+                      recommendVideoListNotifier: _recommendVideoListNotifier,
+                      downloadCallback: () async {
+                        _videoDownload(data);
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
