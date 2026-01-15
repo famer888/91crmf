@@ -3,14 +3,19 @@ import 'package:amplitude_flutter/amplitude.dart';
 import 'package:amplitude_flutter/configuration.dart';
 import 'package:amplitude_flutter/events/base_event.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper_null_safety_flutter3/flutter_swiper_null_safety_flutter3.dart';
+import 'package:jycrpj/app_config.dart';
 import 'package:jycrpj/app_global.dart';
+import 'package:jycrpj/data_layer/repo/repo.dart';
 import 'package:jycrpj/report/ui_layer/report_ad_view.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/screen_background.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
+import 'package:universal_html/html.dart' as html;
 
 import '../../domain/domain.dart';
 import '../../domain/model/home_data_model.dart';
@@ -94,7 +99,35 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     );
   }
 
+  Future<void> _getClipboardText() async {
+    if (kIsWeb) {
+      final uri = Uri.parse(html.window.location.href.replaceAll('amp;', ''));
+      String traceID = uri.queryParameters['trace_id'] ?? '';
+      if (traceID.isNotEmpty) context.read<AppRepo>().setReportTraceId(traceID);
+
+      String aff = uri.queryParameters[BuildConfig.affCodeKey] ?? '';
+      if (aff.isNotEmpty) context.read<AppRepo>().setAffXCode(aff);
+    } else {
+      final result = await Clipboard.getData(Clipboard.kTextPlain);
+      if (result?.text case final String text when text.isNotEmpty) {
+        try {
+          final params = Uri.splitQueryString(text);
+          String traceID = params['trace_id'] ?? '';
+          if (traceID.isNotEmpty)
+            context.read<AppRepo>().setReportTraceId(traceID);
+
+          String aff = params[BuildConfig.affCodeKey] ?? '';
+          if (aff.isNotEmpty) context.read<AppRepo>().setAffXCode(aff);
+        } catch (e) {
+          return;
+        }
+      }
+    }
+  }
+
   _enterAdOrHome({bool showTip = false}) async {
+    await _getClipboardText(); //config之前先获取trace_id aff_x_code
+
     if (await homeConfigNotifier.init() && mounted) {
       if (welcomeStartScreenAds?.isNotEmpty ?? false) {
         setState(() {

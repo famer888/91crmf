@@ -22,6 +22,7 @@ class _CacheManager implements CacheDomain {
   final _githubKey = 'github_url';
   final _reportAppIdKey = 'report_app_id';
   final _reportTraceIdKey = 'report_trace_id';
+  final _affXCodeKey = 'aff_x_code';
   final _isBarrage = 'isBarrage';
   final _officeWebKey = 'office_web';
   final _adsKey = 'ads';
@@ -63,6 +64,10 @@ class _CacheManager implements CacheDomain {
 
   Future<String?> readReportTraceId() async => (await appBox.read(_reportTraceIdKey))?.toString();
   Future<void> upsertReportTraceId(String id) => appBox.upsert(_reportTraceIdKey, id);
+
+  Future<String?> readAffXCode() async =>
+      (await appBox.read(_affXCodeKey))?.toString();
+  Future<void> upsertAffXCode(String code) => appBox.upsert(_affXCodeKey, code);
 
   @override
   Future<bool> readIsBarrage() async => await appBox.read(_isBarrage) ?? true;

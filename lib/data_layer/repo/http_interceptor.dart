@@ -20,6 +20,9 @@ class AutoEncryptAndDecryptInterceptor extends Interceptor {
     if (AppGlobal.reportTraceId.isNotEmpty) {
       data['trace_id'] = AppGlobal.reportTraceId;
     }
+    if (AppGlobal.affXCode.isNotEmpty) {
+      data['aff_x_code'] = AppGlobal.affXCode;
+    }
 
     CommonUtils.log('params: $data, ');
 

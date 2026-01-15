@@ -447,6 +447,12 @@ abstract class _BaseAppRepo implements AppDomain {
   }
 
   @override
+  void setAffXCode(String code) async {
+    _cacheManager.upsertAffXCode(code);
+    AppGlobal.affXCode = code;
+  }
+
+  @override
   void initLine({
     Function? success,
     Function? failed,
