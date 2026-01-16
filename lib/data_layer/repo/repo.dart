@@ -482,6 +482,12 @@ abstract class _BaseAppRepo implements AppDomain {
       AppGlobal.reportTraceId = reportTraceId;
     }
 
+    // 读取本地aff_x_code
+    final String? localAffXCode = await _cacheManager.readAffXCode();
+    if (localAffXCode case final String affXCode) {
+      AppGlobal.affXCode = affXCode;
+    }
+
     // 检查网络
     final connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult.contains(ConnectivityResult.mobile) || connectivityResult.contains(ConnectivityResult.wifi)) {
