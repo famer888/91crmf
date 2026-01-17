@@ -13,12 +13,15 @@ class BuildConfig {
 
   static final apiLines = kIsWeb
       ? [
-          'https://wapi.91cr2.com/api.php',
+          'https://wapi.kqtwctnb.xyz/api.php',
         ]
       : [
-          'https://api1.91cr2.com/api.php',
-          'https://api2.91cr2.com/api.php',
-          'https://api3.91cr2.com/api.php',
+          'https://api1.kqtwctnb.xyz/api.php',
+          'https://api2.kqtwctnb.xyz/api.php',
+          'https://api3.kqtwctnb.xyz/api.php',
+          'https://api4.kqtwctnb.xyz/api.php',
+          'https://api5.kqtwctnb.xyz/api.php',
+          'https://api6.kqtwctnb.xyz/api.php',
         ];
 
   /// 备用线路
