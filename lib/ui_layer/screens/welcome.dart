@@ -13,6 +13,7 @@ import 'package:jycrpj/app_global.dart';
 import 'package:jycrpj/data_layer/repo/repo.dart';
 import 'package:jycrpj/report/ui_layer/report_ad_view.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/screen_background.dart';
+import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
 import 'package:universal_html/html.dart' as html;
@@ -62,10 +63,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   void _initAmp() async {
-    amplitude =
-        Amplitude(Configuration(apiKey: "c9354b2d3cdf9bc6164f17bf6651ea43"));
-    await amplitude.track(
-        BaseEvent("open app", deviceId: appDomain.info["oauth_id"].toString()));
+    amplitude = Amplitude(Configuration(apiKey: "c9354b2d3cdf9bc6164f17bf6651ea43"));
+    await amplitude.track(BaseEvent("open app", deviceId: appDomain.info["oauth_id"].toString()));
   }
 
   void _loadDataFromCache() async {
@@ -85,13 +84,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       failed: () async {
         isCheckingLine = false;
         if (mounted) setState(() {});
-        await amplitude.track(BaseEvent("entry failure",
-            deviceId: appDomain.info["oauth_id"].toString()));
+        await amplitude.track(BaseEvent("entry failure", deviceId: appDomain.info["oauth_id"].toString()));
       },
       success: () async {
         _enterAdOrHome();
-        await amplitude.track(BaseEvent("enter app",
-            deviceId: appDomain.info["oauth_id"].toString()));
+        await amplitude.track(BaseEvent("enter app", deviceId: appDomain.info["oauth_id"].toString()));
       },
       lines: (x) {
         lines = x;
@@ -113,8 +110,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         try {
           final params = Uri.splitQueryString(text);
           String traceID = params['trace_id'] ?? '';
-          if (traceID.isNotEmpty)
-            context.read<AppRepo>().setReportTraceId(traceID);
+          if (traceID.isNotEmpty) context.read<AppRepo>().setReportTraceId(traceID);
 
           String aff = params[BuildConfig.affCodeKey] ?? '';
           if (aff.isNotEmpty) context.read<AppRepo>().setAffXCode(aff);
@@ -151,11 +147,45 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       isCheckingLine = false;
                       if (mounted) setState(() {});
                     },
-                    child: Text(
-                      'jcxlsd'.tr(
-                          context: context), //线路检测中，请稍等^_^ 若一直进不去请使用VPN翻墙软件观看！
-                      style: MyTheme.gray14,
-                      textAlign: TextAlign.center,
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 20.w),
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                color: const Color.fromRGBO(153, 153, 153, 1),
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: 'jcxlsd'.tr(context: context),
+                                  style: MyTheme.gray14,
+                                ),
+                                TextSpan(
+                                  text: 'dwzl'.tr(context: context),
+                                  style: TextStyle(
+                                      color: const Color.fromRGBO(240, 75, 62, 1),
+                                      fontSize: 14.sp,
+                                      overflow: TextOverflow.ellipsis,
+                                      decoration: TextDecoration.none),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        // Text(
+                        //   'jcxlsd'.tr(context: context), //线路检测中，请稍等^_^ 若一直进不去请使用VPN翻墙软件观看！
+                        //   style: MyTheme.gray14,
+                        //   textAlign: TextAlign.center,
+                        // ),
+                        Positioned(
+                          top: 43,
+                          right: 48,
+                          child: MyImage.asset(MyImagePaths.appClickLines, width: 25.w, height: 29.w),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(height: 20.w),
@@ -166,7 +196,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       },
                       child: Text(
                         '${'gwdzdz'.tr(context: context)}:\n$officialWebUrl', //若进不去点我重新安装
-                        style: MyTheme.red14,
+                        style: MyTheme.gray14,
                         maxLines: 3,
                         textAlign: TextAlign.center,
                       ),
@@ -202,19 +232,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           _enterAdOrHome(showTip: true);
                         },
                         child: Container(
-                          margin: EdgeInsets.only(
-                              bottom: 10.w, left: 40.w, right: 40.w),
-                          decoration: BoxDecoration(
-                              color: MyTheme.gray117,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(3.w))),
+                          margin: EdgeInsets.only(bottom: 10.w, left: 40.w, right: 40.w),
+                          decoration: BoxDecoration(color: MyTheme.gray117, borderRadius: BorderRadius.all(Radius.circular(3.w))),
                           alignment: Alignment.center,
                           height: 36.w,
-                          child: Text(
-                              'byxl'
-                                  .tr(context: context)
-                                  .replaceAll("0", "${x + 1}"),
-                              style: MyTheme.white13),
+                          child: Text('byxl'.tr(context: context).replaceAll("0", "${x + 1}"), style: MyTheme.white13),
                         ));
                   }).toList(),
                 )
@@ -228,9 +250,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       child: ScreenBackground(
         child: Scaffold(
           // backgroundColor: MyTheme.bgColor,
-          body: showAd
-              ? ReportAdView(adModels: welcomeStartScreenAds!)
-              : checkLineView(),
+          body: showAd ? ReportAdView(adModels: welcomeStartScreenAds!) : checkLineView(),
         ),
       ),
     );
@@ -272,11 +292,7 @@ class _AdViewState extends State<AdView> {
             child: Swiper(
           autoplay: length > 1,
           itemBuilder: (BuildContext context, int index) {
-            precacheImage(
-                NetworkImage(CommonUtils.getThumb(widget
-                    .adModels[(index + 1).clamp(0, length - 1)]
-                    .toJson())),
-                context);
+            precacheImage(NetworkImage(CommonUtils.getThumb(widget.adModels[(index + 1).clamp(0, length - 1)].toJson())), context);
 
             return ReportGestureDetector(
               onTap: () {
@@ -307,9 +323,7 @@ class _AdViewState extends State<AdView> {
                       height: 5.w,
                       margin: EdgeInsets.only(right: 7.w),
                       decoration: BoxDecoration(
-                        color: isActive
-                            ? Colors.white
-                            : Colors.white.withOpacity(0.3),
+                        color: isActive ? Colors.white : Colors.white.withOpacity(0.3),
                         shape: BoxShape.circle,
                       ),
                     );

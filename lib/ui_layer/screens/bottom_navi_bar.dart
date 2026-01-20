@@ -378,6 +378,11 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
                       label: 'home_hl'.tr(context: context),
                     ),
                     BottomNavigationBarItem(
+                      icon: const _Icon(MyImagePaths.appTabDspN),
+                      activeIcon: const _Icon(MyImagePaths.appTabDspS),
+                      label: 'home_dsp'.tr(context: context),
+                    ),
+                    BottomNavigationBarItem(
                       icon: const _Icon(MyImagePaths.appTabLlsN),
                       activeIcon: const _Icon(MyImagePaths.appTabLlsH),
                       label: 'home_ai'.tr(context: context),

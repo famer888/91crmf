@@ -89,8 +89,11 @@ class _PZhanTopNaviViewState extends State<PZhanTopNaviView> with TickerProvider
                       tabBarHeight: 40.h,
                       linearColors: const [MyTheme.pzhanAppPrimaryColor, MyTheme.pzhanAppPrimaryColor],
                       labelStyle: TextStyle(color: MyTheme.pzhanAppPrimaryColor, fontSize: 18.sp, fontWeight: FontWeight.w600),
-                      unselectedLabelStyle:
-                          TextStyle(color: const Color.fromRGBO(255, 255, 255, 1), fontSize: 16.sp, fontWeight: FontWeight.w500),
+                      unselectedLabelStyle: TextStyle(
+                        color: const Color.fromRGBO(255, 255, 255, 1),
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
                       titles: titles,
                       views: data.map((e) {
                         return KeepAliveWrapper(

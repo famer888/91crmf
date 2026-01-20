@@ -60,6 +60,10 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
   bool isInit = false;
   bool initSetIndex = false;
 
+  final ScrollController _nestedController = ScrollController();
+  final ValueNotifier<bool> _showToTopBtn = ValueNotifier(false);
+  double _showThreshold = 0; // 一屏高度
+
   Future<List<PZhanVideoModel>?> _getData({
     required int page,
     required int pageSize,
@@ -102,12 +106,16 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
   @override
   void initState() {
     isListNotifier.value = false;
+    _nestedController.addListener(_onScroll);
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showThreshold = ScreenUtil().screenHeight;
+    });
     if (!initSetIndex) {
       if (_isDiscovery) {
         final index = (_homeConfig.config.pzhanFindSortNav ?? []).indexWhere((item) => item.type == 'hot');
@@ -136,61 +144,117 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
     topicsNotifier.dispose();
     partNotifier.dispose();
     isListNotifier.dispose();
+    _nestedController.removeListener(_onScroll);
+    _nestedController.dispose();
+    _showToTopBtn.dispose();
     super.dispose();
+  }
+
+  void _onScroll() {
+    if (!_nestedController.hasClients) return;
+
+    if (_nestedController.offset > _showThreshold) {
+      if (!_showToTopBtn.value) {
+        _showToTopBtn.value = true;
+      }
+    } else {
+      if (_showToTopBtn.value) {
+        _showToTopBtn.value = false;
+      }
+    }
+  }
+
+  void _scrollToTop() {
+    if (!_nestedController.hasClients) return;
+
+    _nestedController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return NestedScrollView(
-      headerSliverBuilder: (_, __) => [
-        SliverToBoxAdapter(
-          child: _Header(
-            bannersNotifier: bannersNotifier,
-            topicsNotifier: topicsNotifier,
-            partNotifier: partNotifier,
-            onLinkNavTap: widget.onLinkNavTap,
+    return Stack(
+      children: [
+        NestedScrollView(
+          controller: _nestedController,
+          headerSliverBuilder: (_, __) => [
+            SliverToBoxAdapter(
+              child: _Header(
+                bannersNotifier: bannersNotifier,
+                topicsNotifier: topicsNotifier,
+                partNotifier: partNotifier,
+                onLinkNavTap: widget.onLinkNavTap,
+              ),
+            ),
+          ],
+          body: TabBarWithView.fillColor(
+            initialIndex: initialIndex,
+            tabBarHeight: 32.w,
+            labelPadding: 5.w,
+            tabInterMargin: 6.w,
+            isScrollable: true,
+            linearColors: const [Colors.transparent, Colors.transparent],
+            tabBarPadding: EdgeInsets.symmetric(vertical: 6.w, horizontal: MyTheme.pagePadding),
+            labelStyle: TextStyle(color: MyTheme.pzhanAppPrimaryColor, fontSize: 16.sp, fontWeight: FontWeight.w500),
+            unselectedLabelStyle: TextStyle(color: const Color.fromRGBO(255, 255, 255, 0.8), fontSize: 16.sp, fontWeight: FontWeight.w400),
+            titles: isInit ? _titles.map<String>((e) => e.title).toList() : [],
+            tabBarRightWidget: widget.showRightList
+                ? GridListSwitch(
+                    color: MyTheme.pzhanAppPrimaryColor,
+                    callback: (isList) {
+                      isListNotifier.value = isList;
+                    })
+                : null,
+            views: [
+              for (final AppNavModel nav in _titles)
+                ValueListenableBuilder(
+                    valueListenable: isListNotifier,
+                    builder: (context, isList, child) {
+                      return isList
+                          ? MyListView.list(
+                              itemBuilder: (context, item, index) => PZhanFeedCard(isList: true, feed: item),
+                              onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
+                            )
+                          : MyListView.grid(
+                              padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
+                              childAspectRatio: MyTheme.aspectRatio,
+                              crossAxisSpacing: 8.w,
+                              mainAxisSpacing: 10.w,
+                              itemBuilder: (context, item, index) => PZhanFeedCard(isList: false, feed: item),
+                              onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
+                            );
+                    }),
+            ],
+          ),
+        ),
+        Positioned(
+          right: 20.w,
+          bottom: 42.w,
+          child: ValueListenableBuilder<bool>(
+            valueListenable: _showToTopBtn,
+            builder: (context, show, _) {
+              return AnimatedOpacity(
+                opacity: show ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 200),
+                child: IgnorePointer(
+                  ignoring: !show,
+                  child: ReportGestureDetector(
+                    onTap: _scrollToTop,
+                    child: SizedBox(
+                      width: 42.w,
+                      height: 68.w,
+                      child: MyImage.asset(MyImagePaths.appPzhanTop, width: 42.w, height: 68.w),
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ],
-      body: TabBarWithView.fillColor(
-        initialIndex: initialIndex,
-        tabBarHeight: 32.w,
-        labelPadding: 5.w,
-        tabInterMargin: 6.w,
-        isScrollable: true,
-        linearColors: const [Colors.transparent, Colors.transparent],
-        tabBarPadding: EdgeInsets.symmetric(vertical: 6.w, horizontal: MyTheme.pagePadding),
-        labelStyle: TextStyle(color: MyTheme.pzhanAppPrimaryColor, fontSize: 16.sp, fontWeight: FontWeight.w500),
-        unselectedLabelStyle: TextStyle(color: const Color.fromRGBO(255, 255, 255, 0.8), fontSize: 16.sp, fontWeight: FontWeight.w400),
-        titles: isInit ? _titles.map<String>((e) => e.title).toList() : [],
-        tabBarRightWidget: widget.showRightList
-            ? GridListSwitch(
-                color: MyTheme.pzhanAppPrimaryColor,
-                callback: (isList) {
-                  isListNotifier.value = isList;
-                })
-            : null,
-        views: [
-          for (final AppNavModel nav in _titles)
-            ValueListenableBuilder(
-                valueListenable: isListNotifier,
-                builder: (context, isList, child) {
-                  return isList
-                      ? MyListView.list(
-                          itemBuilder: (context, item, index) => PZhanFeedCard(isList: true, feed: item),
-                          onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
-                        )
-                      : MyListView.grid(
-                          padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
-                          childAspectRatio: MyTheme.aspectRatio,
-                          crossAxisSpacing: 8.w,
-                          mainAxisSpacing: 10.w,
-                          itemBuilder: (context, item, index) => PZhanFeedCard(isList: false, feed: item),
-                          onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
-                        );
-                }),
-        ],
-      ),
     );
   }
 }

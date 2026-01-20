@@ -21,6 +21,9 @@ class AppRouterPaths {
   /// 黑料
   static const heiLiao = '/heiLiao';
 
+  /// 短视频
+  static const dShip = '/dship';
+
   /// 黑料详情
   static const heiLiaoDetails = '/heiLiaoDetail';
 

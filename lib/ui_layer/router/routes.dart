@@ -52,6 +52,7 @@ import 'package:jycrpj/ui_layer/screens/crack/apps/zpc/screen/zpc_video_search_s
 import 'package:jycrpj/ui_layer/screens/crack/crack_main_page.dart';
 import 'package:jycrpj/ui_layer/screens/crack/crack_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/new_crack_screen.dart';
+import 'package:jycrpj/ui_layer/screens/dsp/dship_screen.dart';
 import 'package:jycrpj/ui_layer/screens/game/detail/screen.dart';
 import 'package:jycrpj/ui_layer/screens/game/more/screen.dart.dart';
 import 'package:jycrpj/ui_layer/screens/game/nav/screen.dart.dart';
@@ -167,6 +168,11 @@ class WelcomeRoute extends GoRouteData {
     ),
     TypedStatefulShellBranch(
       routes: [
+        TypedGoRoute<DShipRoute>(path: AppRouterPaths.dShip),
+      ],
+    ),
+    TypedStatefulShellBranch(
+      routes: [
         TypedGoRoute<AIServerRoute>(path: AppRouterPaths.aiServer),
       ],
     ),
@@ -250,6 +256,13 @@ class AIServerRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) => const AiServerScreen();
+}
+
+class DShipRoute extends GoRouteData {
+  const DShipRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const DshipScreen();
 }
 
 class BlackRoute extends GoRouteData {

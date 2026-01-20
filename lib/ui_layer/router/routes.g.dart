@@ -164,6 +164,14 @@ RouteBase get $statefulShellRoute => StatefulShellRouteData.$route(
         StatefulShellBranchData.$branch(
           routes: [
             GoRouteData.$route(
+              path: '/dship',
+              factory: $DShipRouteExtension._fromState,
+            ),
+          ],
+        ),
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
               path: '/aiServer',
               factory: $AIServerRouteExtension._fromState,
             ),
@@ -224,6 +232,23 @@ extension $BlackRouteExtension on BlackRoute {
 
   String get location => GoRouteData.$location(
         '/heiLiao',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $DShipRouteExtension on DShipRoute {
+  static DShipRoute _fromState(GoRouterState state) => const DShipRoute();
+
+  String get location => GoRouteData.$location(
+        '/dship',
       );
 
   void go(BuildContext context) => context.go(location);
