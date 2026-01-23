@@ -17,7 +17,8 @@ class AutoEncryptAndDecryptInterceptor extends Interceptor {
   static bool _warnJump = false;
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  void onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
     final Map data = {..._appInfo};
 
     if (options.data != null) {
@@ -47,13 +48,18 @@ class AutoEncryptAndDecryptInterceptor extends Interceptor {
         String officeSite = AppGlobal.officeSite;
         //弹出告警提示
         BotToast.showWidget(
-          toastBuilder: (cancelFunc) => RegularDialog(
-            title: '',
-            content: Text('sjjysb'.tr(), style: MyTheme.gray153_14),
-            buttonText: 'qr'.tr(),
-            confirmOnTap: () {
-              CommonUtils.launchUrl(officeSite);
-            },
+          toastBuilder: (cancelFunc) => Stack(
+            children: [
+              AbsorbPointer(),
+              RegularDialog(
+                title: '',
+                content: Text('sjjysb'.tr(), style: MyTheme.gray153_14),
+                buttonText: 'qr'.tr(),
+                confirmOnTap: () {
+                  CommonUtils.launchUrl(officeSite);
+                },
+              ),
+            ],
           ),
         );
       }

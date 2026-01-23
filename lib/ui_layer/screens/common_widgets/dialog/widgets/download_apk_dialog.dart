@@ -42,8 +42,7 @@ class _DownloadApkDialogState extends State<DownloadApkDialog> {
     final digest = await sha256.bind(apkFile.openRead()).first;
     VersionMsg? cf = context.read<HomeConfigNotifier>().homeData.versionMsg;
     String fileSha256 = digest.toString();
-    // return false;
-    return cf?.sha256?.isEmpty == true || cf?.sha256 == fileSha256;
+    return cf?.sha256 == fileSha256;
   }
 
   Future<void> _init() async {
@@ -65,17 +64,18 @@ class _DownloadApkDialogState extends State<DownloadApkDialog> {
               } else {
                 // // //关闭升级弹窗
                 // widget.onTap?.call();
-                UpgradeFailHint hint = context.read<HomeConfigNotifier>().homeData.upgradeFail!;
+                UpgradeFailHint hint =
+                    context.read<HomeConfigNotifier>().homeData.upgradeFail!;
                 //弹出告警提示
                 BotToast.showWidget(
                     toastBuilder: (cancelFunc) => RegularDialog(
-                      title: '',
-                      content: Text(hint.title, style: MyTheme.gray153_14),
-                      buttonText: hint.label,
-                      confirmOnTap: () {
-                        CommonUtils.launchUrl(hint.url);
-                      },
-                    ));
+                          title: '',
+                          content: Text(hint.title, style: MyTheme.gray153_14),
+                          buttonText: hint.label,
+                          confirmOnTap: () {
+                            CommonUtils.launchUrl(hint.url);
+                          },
+                        ));
                 // CommonUtils.showDialog(
                 //     context: context,
                 //     barrierDismissible: false,
