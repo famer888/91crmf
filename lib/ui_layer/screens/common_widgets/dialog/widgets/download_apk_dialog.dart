@@ -1,8 +1,14 @@
+import 'dart:io';
+import 'package:crypto/crypto.dart';
 import 'package:app_installer/app_installer.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:jycrpj/domain/model/home_data_model.dart';
+import 'package:jycrpj/ui_layer/notifiers/home_config_notifier.dart';
+import 'package:jycrpj/ui_layer/screens/common_widgets/dialog/widgets/regular_dialog.dart';
+import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -11,9 +17,10 @@ import '../../../../utils/common_utils.dart';
 
 class DownloadApkDialog extends StatefulWidget {
   const DownloadApkDialog(
-      {super.key, required this.version, required this.url});
+      {super.key, required this.version, required this.url, this.onTap});
   final String version;
   final String url;
+  final Function? onTap;
 
   @override
   State<DownloadApkDialog> createState() => _DownloadApkDialogState();
@@ -31,6 +38,14 @@ class _DownloadApkDialogState extends State<DownloadApkDialog> {
     } catch (_) {}
   }
 
+  Future<bool> md5ApkFile(File apkFile) async {
+    final digest = await sha256.bind(apkFile.openRead()).first;
+    VersionMsg? cf = context.read<HomeConfigNotifier>().homeData.versionMsg;
+    String fileSha256 = digest.toString();
+    // return false;
+    return cf?.sha256?.isEmpty == true || cf?.sha256 == fileSha256;
+  }
+
   Future<void> _init() async {
     try {
       final result = await getExternalStorageDirectory();
@@ -39,13 +54,41 @@ class _DownloadApkDialogState extends State<DownloadApkDialog> {
       await appDomain.downloadApk(
           urlPath: widget.url,
           savePath: savePath,
-          onReceiveProgress: (int count, int total) {
+          onReceiveProgress: (int count, int total) async {
             var tmp = (count / total * 100).toInt();
             if (tmp % 1 == 0) {
               progressNotifier.value = tmp;
             }
             if (count >= total) {
-              _installApk(savePath);
+              if (await md5ApkFile(File(savePath))) {
+                _installApk(savePath);
+              } else {
+                // // //关闭升级弹窗
+                // widget.onTap?.call();
+                UpgradeFailHint hint = context.read<HomeConfigNotifier>().homeData.upgradeFail!;
+                //弹出告警提示
+                BotToast.showWidget(
+                    toastBuilder: (cancelFunc) => RegularDialog(
+                      title: '',
+                      content: Text(hint.title, style: MyTheme.gray153_14),
+                      buttonText: hint.label,
+                      confirmOnTap: () {
+                        CommonUtils.launchUrl(hint.url);
+                      },
+                    ));
+                // CommonUtils.showDialog(
+                //     context: context,
+                //     barrierDismissible: false,
+                //     builder: (context) => RegularDialog(
+                //           title: 'wxts'.tr(),
+                //           content:
+                //               Text('wjjysb'.tr(), style: MyTheme.gray153_14),
+                //           buttonText: 'qd'.tr(),
+                //           confirmOnTap: () {
+                //             CommonUtils.launchUrl(url);
+                //           },
+                //         ));
+              }
             }
           });
     } catch (e) {

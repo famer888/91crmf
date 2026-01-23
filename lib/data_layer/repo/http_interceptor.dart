@@ -26,7 +26,7 @@ class AutoEncryptAndDecryptInterceptor extends Interceptor {
 
     CommonUtils.log('params: $data, ');
 
-    options.data = PlatformAwareCrypto.encryptReqParams(data);
+    options.data = PlatformAwareCrypto.encryptReqParams(data, isWeb: fd.kIsWeb);
 
     return super.onRequest(options, handler);
   }
