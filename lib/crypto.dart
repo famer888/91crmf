@@ -198,4 +198,29 @@ class PlatformAwareCrypto {
     final decrypted = encrypter.decrypt(encrypted, iv: IV.fromUtf8(iv));
     return decrypted;
   }
+
+  //验证签名
+  static String makeSign(Map<dynamic, dynamic>? params, String signKey) {
+    if (params == null || params.isEmpty) {
+      return '';
+    }
+    // 1. ksort（按 key 排序）
+    final sortedKeys = params.keys.toList()..sort();
+    // 2. 拼接 key=value
+    final List<String> arrTemp = [];
+    for (final key in sortedKeys) {
+      var value = params[key]?.toString() ?? '';
+      if (key == 'data') {
+        value = value.replaceAll(' ', '+');
+      }
+      arrTemp.add('$key=$value');
+    }
+    // 3. 用 & 连接
+    final string = arrTemp.join('&') + signKey;
+    // 4. 先 sha256，再 md5
+    final sha256Str = sha256.convert(utf8.encode(string)).toString();
+    final md5Str = md5.convert(utf8.encode(sha256Str)).toString();
+
+    return md5Str;
+  }
 }
