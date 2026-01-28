@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:app_installer/app_installer.dart';
@@ -5,6 +6,8 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:jycrpj/app_global.dart';
+import 'package:jycrpj/data_layer/repo/repo.dart';
 import 'package:jycrpj/domain/model/home_data_model.dart';
 import 'package:jycrpj/ui_layer/notifiers/home_config_notifier.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/dialog/widgets/regular_dialog.dart';
@@ -76,18 +79,25 @@ class _DownloadApkDialogState extends State<DownloadApkDialog> {
                             CommonUtils.launchUrl(hint.url);
                           },
                         ));
-                // CommonUtils.showDialog(
-                //     context: context,
-                //     barrierDismissible: false,
-                //     builder: (context) => RegularDialog(
-                //           title: 'wxts'.tr(),
-                //           content:
-                //               Text('wjjysb'.tr(), style: MyTheme.gray153_14),
-                //           buttonText: 'qd'.tr(),
-                //           confirmOnTap: () {
-                //             CommonUtils.launchUrl(url);
-                //           },
-                //         ));
+                //接口篡改上报
+                if (AppGlobal.context != null) {
+                  final apiDio = AppGlobal.context!.read<AppRepo>().apiDio;
+                  final response = await apiDio.post('/api/home/config');
+
+                  Map<String, dynamic> map = {
+                    'url': response.requestOptions.path,
+                    'req_header': Map.from(response.requestOptions.headers),
+                    'res_header': Map.from(response.headers.map),
+                    'data': response.data,
+                  };
+
+                  //上报数据type 1 接口校验 2 APK校验
+                  final res = await apiDio.post('/api/home/hijack', data: {
+                    'type': 2,
+                    'json': jsonEncode(map),
+                  });
+                  CommonUtils.log('$res');
+                }
               }
             }
           });
