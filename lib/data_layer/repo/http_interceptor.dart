@@ -47,13 +47,25 @@ class AutoEncryptAndDecryptInterceptor extends Interceptor {
         String officeSite = AppGlobal.officeSite;
         //弹出告警提示
         BotToast.showWidget(
-          toastBuilder: (cancelFunc) => RegularDialog(
-            title: '',
-            content: Text('sjjysb'.tr(), style: MyTheme.gray153_14),
-            buttonText: 'qr'.tr(),
-            confirmOnTap: () {
-              CommonUtils.launchUrl(officeSite);
-            },
+          toastBuilder: (cancelFunc) => Stack(
+            children: [
+              Positioned.fill(
+                child: AbsorbPointer(
+                  absorbing: true,
+                  child: Container(color: const Color.fromRGBO(0, 0, 0, 0.35)),
+                ),
+              ),
+              Center(
+                child: RegularDialog(
+                  title: '',
+                  content: Text('sjjysb'.tr(), style: MyTheme.gray153_14),
+                  buttonText: 'qr'.tr(),
+                  confirmOnTap: () {
+                    CommonUtils.launchUrl(officeSite);
+                  },
+                ),
+              ),
+            ],
           ),
         );
       }
