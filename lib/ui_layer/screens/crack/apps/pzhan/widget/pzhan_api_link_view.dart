@@ -17,6 +17,7 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/my_list_view.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_tab_bar.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/model/pzhan_model.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/widget/pzhan_feed_card.dart';
+import 'package:jycrpj/ui_layer/screens/crack/widgets/scroll_top_button.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
@@ -106,7 +107,6 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
   @override
   void initState() {
     isListNotifier.value = false;
-    _nestedController.addListener(_onScroll);
     super.initState();
   }
 
@@ -114,7 +114,7 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _showThreshold = ScreenUtil().screenHeight;
+      _showThreshold = ScreenUtil().screenHeight * 0.40;
     });
     if (!initSetIndex) {
       if (_isDiscovery) {
@@ -144,24 +144,9 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
     topicsNotifier.dispose();
     partNotifier.dispose();
     isListNotifier.dispose();
-    _nestedController.removeListener(_onScroll);
     _nestedController.dispose();
     _showToTopBtn.dispose();
     super.dispose();
-  }
-
-  void _onScroll() {
-    if (!_nestedController.hasClients) return;
-
-    if (_nestedController.offset > _showThreshold) {
-      if (!_showToTopBtn.value) {
-        _showToTopBtn.value = true;
-      }
-    } else {
-      if (_showToTopBtn.value) {
-        _showToTopBtn.value = false;
-      }
-    }
   }
 
   void _scrollToTop() {
@@ -178,81 +163,134 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        NestedScrollView(
-          controller: _nestedController,
-          headerSliverBuilder: (_, __) => [
-            SliverToBoxAdapter(
-              child: _Header(
-                bannersNotifier: bannersNotifier,
-                topicsNotifier: topicsNotifier,
-                partNotifier: partNotifier,
-                onLinkNavTap: widget.onLinkNavTap,
+        NotificationListener<ScrollNotification>(
+          onNotification: (ScrollNotification notification) {
+            if (notification is ScrollUpdateNotification) {
+              CommonUtils.log('''
+                NestedScrollView 头部滚动通知:
+                - 类型: ${notification.runtimeType}
+                - 滚动位置: ${notification.metrics.pixels}
+                ''');
+            }
+            return false;
+          },
+          child: NestedScrollView(
+            controller: _nestedController,
+            headerSliverBuilder: (_, __) => [
+              SliverToBoxAdapter(
+                child: _Header(
+                  bannersNotifier: bannersNotifier,
+                  topicsNotifier: topicsNotifier,
+                  partNotifier: partNotifier,
+                  onLinkNavTap: widget.onLinkNavTap,
+                ),
               ),
-            ),
-          ],
-          body: TabBarWithView.fillColor(
-            initialIndex: initialIndex,
-            tabBarHeight: 32.w,
-            labelPadding: 5.w,
-            tabInterMargin: 6.w,
-            isScrollable: true,
-            linearColors: const [Colors.transparent, Colors.transparent],
-            tabBarPadding: EdgeInsets.symmetric(vertical: 6.w, horizontal: MyTheme.pagePadding),
-            labelStyle: TextStyle(color: MyTheme.pzhanAppPrimaryColor, fontSize: 16.sp, fontWeight: FontWeight.w500),
-            unselectedLabelStyle: TextStyle(color: const Color.fromRGBO(255, 255, 255, 0.8), fontSize: 16.sp, fontWeight: FontWeight.w400),
-            titles: isInit ? _titles.map<String>((e) => e.title).toList() : [],
-            tabBarRightWidget: widget.showRightList
-                ? GridListSwitch(
-                    color: MyTheme.pzhanAppPrimaryColor,
-                    callback: (isList) {
-                      isListNotifier.value = isList;
-                    })
-                : null,
-            views: [
-              for (final AppNavModel nav in _titles)
-                ValueListenableBuilder(
-                    valueListenable: isListNotifier,
-                    builder: (context, isList, child) {
-                      return isList
-                          ? MyListView.list(
-                              itemBuilder: (context, item, index) => PZhanFeedCard(isList: true, feed: item),
-                              onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
-                            )
-                          : MyListView.grid(
-                              padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
-                              childAspectRatio: MyTheme.aspectRatio,
-                              crossAxisSpacing: 8.w,
-                              mainAxisSpacing: 10.w,
-                              itemBuilder: (context, item, index) => PZhanFeedCard(isList: false, feed: item),
-                              onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
-                            );
-                    }),
             ],
+            body: TabBarWithView.fillColor(
+              initialIndex: initialIndex,
+              tabBarHeight: 32.w,
+              labelPadding: 5.w,
+              tabInterMargin: 6.w,
+              isScrollable: true,
+              linearColors: const [Colors.transparent, Colors.transparent],
+              tabBarPadding: EdgeInsets.symmetric(vertical: 6.w, horizontal: MyTheme.pagePadding),
+              labelStyle: TextStyle(color: MyTheme.pzhanAppPrimaryColor, fontSize: 16.sp, fontWeight: FontWeight.w500),
+              unselectedLabelStyle: TextStyle(color: const Color.fromRGBO(255, 255, 255, 0.8), fontSize: 16.sp, fontWeight: FontWeight.w400),
+              titles: isInit ? _titles.map<String>((e) => e.title).toList() : [],
+              tabBarRightWidget: widget.showRightList
+                  ? GridListSwitch(
+                      color: MyTheme.pzhanAppPrimaryColor,
+                      callback: (isList) {
+                        isListNotifier.value = isList;
+                      })
+                  : null,
+              views: [
+                for (final AppNavModel nav in _titles)
+                  ValueListenableBuilder(
+                      valueListenable: isListNotifier,
+                      builder: (context, isList, child) {
+                        return isList
+                            ? NotificationListener<ScrollNotification>(
+                                // 添加在这里
+                                onNotification: (ScrollNotification notification) {
+                                  if (notification is ScrollUpdateNotification) {
+                                    // 获取当前标签页的滚动位置
+                                    final double tabPixels = notification.metrics.pixels;
+                                    // 获取 NestedScrollView header 的滚动位置
+                                    final double headerPixels = _nestedController.hasClients ? _nestedController.offset : 0;
+                                    // 计算总滚动量
+                                    final double totalPixels = headerPixels + tabPixels;
+                                    final bool shouldShow = totalPixels > _showThreshold;
+                                    if (shouldShow != _showToTopBtn.value) {
+                                      CommonUtils.log('标签页滚动: header=$headerPixels, tab=$tabPixels, total=$totalPixels');
+                                      _showToTopBtn.value = shouldShow;
+                                    }
+                                  }
+                                  return false;
+                                },
+                                child: MyListView.list(
+                                  scrollController: PrimaryScrollController.of(context),
+                                  itemBuilder: (context, item, index) => PZhanFeedCard(isList: true, feed: item),
+                                  onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
+                                ),
+                              )
+                            : NotificationListener<ScrollNotification>(
+                                // 同样的调试代码也添加在这里
+                                onNotification: (ScrollNotification notification) {
+                                  if (notification is ScrollUpdateNotification) {
+                                    final double tabPixels = notification.metrics.pixels;
+                                    final double headerPixels = _nestedController.hasClients ? _nestedController.offset : 0;
+                                    final double totalPixels = headerPixels + tabPixels;
+                                    final bool shouldShow = totalPixels > _showThreshold;
+                                    if (shouldShow != _showToTopBtn.value) {
+                                      CommonUtils.log('网格页滚动: header=$headerPixels, tab=$tabPixels, total=$totalPixels');
+                                      _showToTopBtn.value = shouldShow;
+                                    }
+                                  }
+                                  return false;
+                                },
+                                child: MyListView.grid(
+                                  scrollController: PrimaryScrollController.of(context),
+                                  padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
+                                  childAspectRatio: MyTheme.aspectRatio,
+                                  crossAxisSpacing: 8.w,
+                                  mainAxisSpacing: 10.w,
+                                  itemBuilder: (context, item, index) => PZhanFeedCard(isList: false, feed: item),
+                                  onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
+                                ),
+                              );
+                      }),
+              ],
+            ),
           ),
         ),
         Positioned(
           right: 20.w,
           bottom: 42.w,
-          child: ValueListenableBuilder<bool>(
-            valueListenable: _showToTopBtn,
-            builder: (context, show, _) {
-              return AnimatedOpacity(
-                opacity: show ? 1.0 : 0.0,
-                duration: const Duration(milliseconds: 200),
-                child: IgnorePointer(
-                  ignoring: !show,
-                  child: ReportGestureDetector(
-                    onTap: _scrollToTop,
-                    child: SizedBox(
-                      width: 42.w,
-                      height: 68.w,
-                      child: MyImage.asset(MyImagePaths.appPzhanTop, width: 42.w, height: 68.w),
-                    ),
-                  ),
-                ),
-              );
-            },
+          child: ScrollTopButton(
+            showToTopButtonNotifier: _showToTopBtn,
+            scrollTopCallback: _scrollToTop,
           ),
+          // ValueListenableBuilder<bool>(
+          //   valueListenable: _showToTopBtn,
+          //   builder: (context, show, _) {
+          // return AnimatedOpacity(
+          //   opacity: show ? 1.0 : 0.0,
+          //   duration: const Duration(milliseconds: 200),
+          //   child: IgnorePointer(
+          //     ignoring: !show,
+          //     child: ReportGestureDetector(
+          //       onTap: _scrollToTop,
+          //       child: SizedBox(
+          //         width: 42.w,
+          //         height: 68.w,
+          //         child: MyImage.asset(MyImagePaths.appPzhanTop, width: 42.w, height: 68.w),
+          //       ),
+          //     ),
+          //   ),
+          // );
+          // },
+          // ),
         ),
       ],
     );

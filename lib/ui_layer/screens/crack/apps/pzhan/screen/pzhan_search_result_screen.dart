@@ -7,6 +7,7 @@ import 'package:jycrpj/report/ui_layer/report_search_click.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_list_view.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/model/pzhan_model.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/widget/pzhan_feed_card.dart';
+import 'package:jycrpj/ui_layer/screens/crack/widgets/scroll_top_button.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
@@ -24,6 +25,7 @@ class PZhanSearchResultScreen extends StatefulWidget {
 
 class _PZhanSearchResultScreenState extends State<PZhanSearchResultScreen> {
   late final _appDomain = context.read<AppDomain>();
+  final ValueNotifier<bool> _showToTopButtonNotifier = ValueNotifier(false);
 
   Future<List<PZhanVideoModel>?> _getData({
     required int page,
@@ -55,6 +57,21 @@ class _PZhanSearchResultScreenState extends State<PZhanSearchResultScreen> {
   }
 
   @override
+  void dispose() {
+    _showToTopButtonNotifier.dispose();
+    super.dispose();
+  }
+
+  void _scrollToTop() {
+    // 由于没有直接的 ScrollController，使用 PrimaryScrollController
+    PrimaryScrollController.of(context).animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ColoredBox(
       color: Theme.of(context).scaffoldBackgroundColor,
@@ -80,19 +97,42 @@ class _PZhanSearchResultScreenState extends State<PZhanSearchResultScreen> {
                   ),
                 ),
                 centerTitle: true),
-            body: MyListView.grid(
-              padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
-              childAspectRatio: MyTheme.aspectRatio,
-              crossAxisSpacing: 8.w,
-              itemBuilder: (context, item, index) => PZhanFeedCard(isList: false, feed: item).withSearchReport({
-                "event": "keyword_click",
-                "keyword": widget.word,
-                "click_item_id": item.id,
-                "click_item_type_key": "video",
-                "click_item_type_name": "视频",
-                "click_ position": index,
-              }),
-              onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: widget.type),
+            body: NotificationListener<ScrollNotification>(
+              onNotification: (ScrollNotification notification) {
+                if (notification is ScrollUpdateNotification) {
+                  final showButton = notification.metrics.pixels > 300;
+                  if (showButton != _showToTopButtonNotifier.value) {
+                    _showToTopButtonNotifier.value = showButton;
+                  }
+                }
+                return false;
+              },
+              child: Stack(
+                children: [
+                  MyListView.grid(
+                    padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
+                    childAspectRatio: MyTheme.aspectRatio,
+                    crossAxisSpacing: 8.w,
+                    itemBuilder: (context, item, index) => PZhanFeedCard(isList: false, feed: item).withSearchReport({
+                      "event": "keyword_click",
+                      "keyword": widget.word,
+                      "click_item_id": item.id,
+                      "click_item_type_key": "video",
+                      "click_item_type_name": "视频",
+                      "click_ position": index,
+                    }),
+                    onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: widget.type),
+                  ),
+                  Positioned(
+                    bottom: 40.w,
+                    right: 20.w,
+                    child: ScrollTopButton(
+                      showToTopButtonNotifier: _showToTopButtonNotifier,
+                      scrollTopCallback: _scrollToTop,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
