@@ -7,6 +7,7 @@ import 'package:jycrpj/domain/type_def.dart';
 import 'package:jycrpj/report/ui_layer/report_search_click.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_list_view.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/zpc/widget/zpc_feed_card.dart';
+import 'package:jycrpj/ui_layer/screens/crack/widgets/scroll_top_button.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
@@ -24,6 +25,7 @@ class ZpcSearchResultScreen extends StatefulWidget {
 
 class _ZpcSearchResultScreenState extends State<ZpcSearchResultScreen> {
   late final _appDomain = context.read<AppDomain>();
+  final ValueNotifier<bool> _showToTopButtonNotifier = ValueNotifier(false);
 
   Future<List<FeedModel>?> _getData({
     required int page,
@@ -50,45 +52,86 @@ class _ZpcSearchResultScreenState extends State<ZpcSearchResultScreen> {
   }
 
   @override
+  void dispose() {
+    _showToTopButtonNotifier.dispose();
+    super.dispose();
+  }
+
+  void _scrollToTop() {
+    // 由于没有直接的 ScrollController，使用 PrimaryScrollController
+    PrimaryScrollController.of(context).animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ColoredBox(
       color: Theme.of(context).scaffoldBackgroundColor,
-      child: Stack(fit: StackFit.expand, children: [
-        Theme(
-          data: Theme.of(context).copyWith(scaffoldBackgroundColor: Colors.white),
-          child: Scaffold(
-            appBar: AppBar(
-                title: Text('ssjg'.tr(context: context),
-                    style: TextStyle(color: MyTheme.blackColor32, fontSize: 16.sp, fontWeight: FontWeight.w500)),
-                leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Image.asset(
-                    MyImagePaths.appBackIcon,
-                    width: 20.w,
-                    height: 20.w,
-                    color: const Color.fromRGBO(51, 51, 51, 1),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Theme(
+            data: Theme.of(context).copyWith(scaffoldBackgroundColor: Colors.white),
+            child: Scaffold(
+              appBar: AppBar(
+                  title: Text('ssjg'.tr(context: context),
+                      style: TextStyle(color: MyTheme.blackColor32, fontSize: 16.sp, fontWeight: FontWeight.w500)),
+                  leading: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Image.asset(
+                      MyImagePaths.appBackIcon,
+                      width: 20.w,
+                      height: 20.w,
+                      color: const Color.fromRGBO(51, 51, 51, 1),
+                    ),
                   ),
+                  centerTitle: true),
+              body: NotificationListener<ScrollNotification>(
+                onNotification: (ScrollNotification notification) {
+                  if (notification is ScrollUpdateNotification) {
+                    final showButton = notification.metrics.pixels > 300;
+                    if (showButton != _showToTopButtonNotifier.value) {
+                      _showToTopButtonNotifier.value = showButton;
+                    }
+                  }
+                  return false;
+                },
+                child: Stack(
+                  children: [
+                    MyListView.grid(
+                      padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
+                      childAspectRatio: MyTheme.aspectRatio,
+                      crossAxisSpacing: 8.w,
+                      itemBuilder: (context, item, index) => ZpcFeedCard(isList: false, feed: item).withSearchReport({
+                        "event": "keyword_click",
+                        "keyword": widget.word,
+                        "click_item_id": item.id,
+                        "click_item_type_key": "video",
+                        "click_item_type_name": "视频",
+                        "click_ position": index,
+                      }),
+                      onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: widget.type),
+                    ),
+                    Positioned(
+                      bottom: 40.w,
+                      right: 20.w,
+                      child: ScrollTopButton(
+                        showToTopButtonNotifier: _showToTopButtonNotifier,
+                        scrollTopCallback: _scrollToTop,
+                      ),
+                    ),
+                  ],
                 ),
-                centerTitle: true),
-            body: MyListView.grid(
-              padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
-              childAspectRatio: MyTheme.aspectRatio,
-              crossAxisSpacing: 8.w,
-              itemBuilder: (context, item, index) => ZpcFeedCard(isList: false, feed: item).withSearchReport({
-                "event": "keyword_click",
-                "keyword": widget.word,
-                "click_item_id": item.id,
-                "click_item_type_key": "video",
-                "click_item_type_name": "视频",
-                "click_ position": index,
-              }),
-              onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: widget.type),
+              ),
             ),
           ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 }

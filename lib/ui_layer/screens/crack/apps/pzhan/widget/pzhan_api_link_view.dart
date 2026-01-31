@@ -271,26 +271,6 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
             showToTopButtonNotifier: _showToTopBtn,
             scrollTopCallback: _scrollToTop,
           ),
-          // ValueListenableBuilder<bool>(
-          //   valueListenable: _showToTopBtn,
-          //   builder: (context, show, _) {
-          // return AnimatedOpacity(
-          //   opacity: show ? 1.0 : 0.0,
-          //   duration: const Duration(milliseconds: 200),
-          //   child: IgnorePointer(
-          //     ignoring: !show,
-          //     child: ReportGestureDetector(
-          //       onTap: _scrollToTop,
-          //       child: SizedBox(
-          //         width: 42.w,
-          //         height: 68.w,
-          //         child: MyImage.asset(MyImagePaths.appPzhanTop, width: 42.w, height: 68.w),
-          //       ),
-          //     ),
-          //   ),
-          // );
-          // },
-          // ),
         ),
       ],
     );
