@@ -17,6 +17,8 @@ class HomeData {
     this.popAds,
     this.help,
     this.noticeApps,
+    this.upgradeApk = '',
+    this.upgradeFail,
   });
 
   final VersionMsg? versionMsg;
@@ -28,6 +30,8 @@ class HomeData {
   final List<AdModel>? startScreenAds;
   final List<Help>? help;
   final List<Notice>? noticeApps;
+  final String upgradeApk;
+  final UpgradeFailHint? upgradeFail;
 
   factory HomeData.fromJson(Map<String, dynamic> json) => HomeData(
         versionMsg: json['versionMsg'] == null ? null : VersionMsg.fromJson(json['versionMsg']),
@@ -39,6 +43,8 @@ class HomeData {
         help: List<Help>.from(json['help']?.map((e) => Help.fromJson(e))),
         noticeApps: List<Notice>.from(json['notice_app']?.map((x) => Notice.fromJson(x)) ?? []),
         startScreenAds: List<AdModel>.from(json['start_screen_ads']?.map((x) => AdModel.fromJson(x)) ?? []),
+        upgradeApk: json['upgrade_apk'] ?? '',
+        upgradeFail: json['upgrade_fail'] == null ? null : UpgradeFailHint.fromJson(json['upgrade_fail']),
       );
 }
 
@@ -707,6 +713,7 @@ class VersionMsg {
     this.message,
     this.mstatus,
     this.channel,
+    this.sha256,
   });
 
   /// 版本号
@@ -729,6 +736,7 @@ class VersionMsg {
   /// 系统公告状态 0 没有 1通知 2禁用
   final int? mstatus;
   final String? channel;
+  final String? sha256;
 
   factory VersionMsg.fromJson(Map<String, dynamic> json) => VersionMsg(
         version: json['version'],
@@ -740,6 +748,7 @@ class VersionMsg {
         message: json['message'],
         mstatus: json['mstatus'],
         channel: json['channel'],
+        sha256: json['sha256'] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
@@ -752,6 +761,7 @@ class VersionMsg {
         'message': message,
         'mstatus': mstatus,
         'channel': channel,
+        "sha256": sha256,
       };
 }
 
@@ -959,5 +969,31 @@ class ReportConfig {
         'sign_key': signKey,
         'authentication_key': authenticationKey,
         'authentication_time': authenticationTime,
+      };
+}
+
+class UpgradeFailHint {
+  final String title;
+  final String label;
+  final String url;
+
+  const UpgradeFailHint({
+    required this.title,
+    required this.label,
+    required this.url,
+  });
+
+  factory UpgradeFailHint.fromJson(Map<String, dynamic> json) {
+    return UpgradeFailHint(
+      title: json['title'] ?? '',
+      label: json['label'] ?? '',
+      url: json['url'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'title': title,
+        'label': label,
+        'url': url,
       };
 }

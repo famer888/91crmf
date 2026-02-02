@@ -1,9 +1,12 @@
 import 'package:flutter/foundation.dart';
 
 class BuildConfig {
-  static const key = '2acf7e91e9864673';
-  static const iv = '1c29882d3ddfcfd6';
-  static const appKey = '5589d41f92a597d016b037ac37db243d';
+  static const key = kIsWeb ? '2d92bc72da0cfa0e' : 'b82b97395366e9ce';
+  static const iv = kIsWeb ? '28e67f94db214cfa' : 'fcc60c3f632a15d7';
+  static const appKey = kIsWeb
+      ? 'a7a35f42521b8c30694ea56fdc49a1ab'
+      : 'da86568be9c6208a644870e12d6a5ef4';
+  static const ver = kIsWeb ? 'v2' : 'v1';
   static const mediaKey = 'f5d965df75336270';
   static const mediaIv = '97b60394abc2fbe1';
   static const secretKey = '0cd8091ddd83a5a8';
