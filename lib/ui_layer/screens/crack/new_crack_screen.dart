@@ -58,7 +58,6 @@ class _NewCrackScreenState extends State<NewCrackScreen> {
 
     try {
       final resCrackRes = await _crackDomain.getCrackList(isCrack: 1);
-      CommonUtils.log('刷新的结果: $resCrackRes');
       // 如果任一接口返回 status != 1 则视为错误
       if (resCrackRes.status != 1) {
         _asyncValue = const AsyncError();

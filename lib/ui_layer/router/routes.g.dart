@@ -76,6 +76,7 @@ List<RouteBase> get $appRoutes => [
       $awjqVideoTagRoute,
       $awjqVideoSearchRoute,
       $pZhanVideoSearchRoute,
+      $tiktok51VideoSearchRoute,
       $darkWeb91Route,
       $aw91VideoDetailRoute,
       $aw91TagRoute,
@@ -2029,6 +2030,35 @@ extension $PZhanVideoSearchRouteExtension on PZhanVideoSearchRoute {
 
   String get location => GoRouteData.$location(
         '/pzhanVideoSearch',
+        queryParams: {
+          'args': args,
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $tiktok51VideoSearchRoute => GoRouteData.$route(
+      path: '/tiktok51VideoSearch',
+      parentNavigatorKey: Tiktok51VideoSearchRoute.$parentNavigatorKey,
+      factory: $Tiktok51VideoSearchRouteExtension._fromState,
+    );
+
+extension $Tiktok51VideoSearchRouteExtension on Tiktok51VideoSearchRoute {
+  static Tiktok51VideoSearchRoute _fromState(GoRouterState state) =>
+      Tiktok51VideoSearchRoute(
+        args: state.uri.queryParameters['args']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/tiktok51VideoSearch',
         queryParams: {
           'args': args,
         },

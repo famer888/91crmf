@@ -262,6 +262,9 @@ class AppRouterPaths {
   /// P站 视频搜索页面
   static const pzhanVideoSearch = '/pzhanVideoSearch';
 
+  /// 51Tiktok 视频搜索页面
+  static const tiktok51VideoSearch = '/tiktok51VideoSearch';
+
   /// P站 视频搜索结果页
   static const pzhanVideoSearchResult = '/pzhanVideoSearchResult';
 

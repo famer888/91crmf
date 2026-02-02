@@ -25,6 +25,7 @@ import 'package:jycrpj/ui_layer/screens/community/ori_create_group_chat/group_ch
 import 'package:jycrpj/ui_layer/screens/community/ori_create_group_chat/group_chat/group_chat_top_msg_content.dart';
 import 'package:jycrpj/ui_layer/screens/community/ori_create_group_chat/group_chat/group_members_content.dart';
 import 'package:jycrpj/ui_layer/screens/community/ori_create_group_chat/screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/51tiktok/screen/tiktok51_video_search_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/91aw/screen/an91_tag_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/91aw/screen/aw91_search_result_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/91aw/screen/aw91_video_detail_screen.dart';
@@ -1364,6 +1365,22 @@ class PZhanVideoSearchRoute extends GoRouteData {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return CommonUtils.buildSlideTransitionPage(
         state: state, child: PZhanVideoSearchScreen(args: args));
+  }
+}
+
+@TypedGoRoute<Tiktok51VideoSearchRoute>(path: AppRouterPaths.tiktok51VideoSearch)
+class Tiktok51VideoSearchRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppRouter.rootNavigatorKey;
+
+  const Tiktok51VideoSearchRoute({required this.args});
+
+  final String args;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(
+        state: state, child: Tiktok51VideoSearchScreen(args: args));
   }
 }
 
