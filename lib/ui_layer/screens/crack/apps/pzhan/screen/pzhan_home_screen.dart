@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jycrpj/domain/model/banner_model.dart';
+import 'package:jycrpj/domain/model/category_topic_model.dart';
 import 'package:jycrpj/domain/model/crack_model.dart';
 import 'package:jycrpj/domain/model/home_data_model.dart';
 import 'package:jycrpj/domain/model/link_model.dart';
@@ -77,7 +78,7 @@ class _PZhanHomeScreenState extends State<PZhanHomeScreen> {
   final ValueNotifier<List<BannerModel>> _bannersNotifier = ValueNotifier([]);
 
   /// 话题数据
-  final ValueNotifier<List<PZhanCategoryTopicModel>> _topicsNotifier = ValueNotifier([]);
+  final ValueNotifier<List<CategoryTopicModel>> _topicsNotifier = ValueNotifier([]);
 
   AppNavModel? _selectedAppNavModel;
   LinkModel? _currentLinkModel;
@@ -230,7 +231,7 @@ class _PZhanHomeScreenState extends State<PZhanHomeScreen> {
       }
 
       if (result.data['mid_style_category'] case final List data when data.isNotEmpty && refresh) {
-        _topicsNotifier.value = data.map<PZhanCategoryTopicModel>((e) => PZhanCategoryTopicModel.fromJson(e)).toList();
+        _topicsNotifier.value = data.map<CategoryTopicModel>((e) => CategoryTopicModel.fromJson(e)).toList();
       }
 
       if (result.data['list'] case final List data when data.isNotEmpty) {

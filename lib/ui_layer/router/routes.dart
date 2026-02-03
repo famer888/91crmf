@@ -41,6 +41,10 @@ import 'package:jycrpj/ui_layer/screens/crack/apps/clsq/screen/cl_tag_screen.dar
 import 'package:jycrpj/ui_layer/screens/crack/apps/clsq/screen/cl_video_detail_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/clsq/screen/cl_video_search_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/clsq/screen/screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_search_result_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_tag_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_video_detail_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_video_search_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_search_result_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_tag_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_video_detail_screen.dart';
@@ -1365,6 +1369,69 @@ class PZhanVideoSearchRoute extends GoRouteData {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return CommonUtils.buildSlideTransitionPage(
         state: state, child: PZhanVideoSearchScreen(args: args));
+  }
+}
+
+@TypedGoRoute<HjsqVideoSearchRoute>(path: AppRouterPaths.hjsqVideoSearch)
+class HjsqVideoSearchRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppRouter.rootNavigatorKey;
+
+  const HjsqVideoSearchRoute({required this.args});
+
+  final String args;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(
+        state: state, child: HjsqVideoSearchScreen(args: args));
+  }
+}
+
+@TypedGoRoute<HjsqVideoTagRoute>(path: AppRouterPaths.hjsqVideoTag)
+class HjsqVideoTagRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppRouter.rootNavigatorKey;
+
+  const HjsqVideoTagRoute(this.$extra);
+  final String $extra;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(
+        state: state, child: HjsqTagScreen(videoTag: $extra));
+  }
+}
+
+@TypedGoRoute<HjsqSearchResultRoute>(path: AppRouterPaths.hjsqVideoSearchResult)
+class HjsqSearchResultRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppRouter.rootNavigatorKey;
+
+  const HjsqSearchResultRoute({required this.word, required this.type});
+
+  final String word;
+  final int type;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(
+        state: state, child: HjsqSearchResultScreen(word: word, type: type));
+  }
+}
+
+@TypedGoRoute<HjsqVideoDetailRoute>(path: AppRouterPaths.hjsqVideoDetail)
+class HjsqVideoDetailRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppRouter.rootNavigatorKey;
+
+  const HjsqVideoDetailRoute(this.$extra);
+  final int $extra;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(
+        state: state, child: HjsqVideoDetailScreen(id: $extra));
   }
 }
 

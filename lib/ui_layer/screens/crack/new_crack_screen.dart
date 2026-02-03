@@ -14,9 +14,11 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/screen_background.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/loading.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/network_error.dart';
 import 'package:jycrpj/ui_layer/screens/crack/app_util.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/51tiktok/screen/tiktok51_community_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/91aw/screen/screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/awjq/screen/screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/clsq/screen/screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_community_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_community_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/zpc/screen/screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/crack_app_type.dart';
@@ -207,6 +209,24 @@ class _NewCrackScreenState extends State<NewCrackScreen> {
                                     Scaffold.of(scaffoldContext).openEndDrawer();
                                   },
                                 );
+                              } else if (crackApp_.appName == CrackAppType.tiktok51.appName) {
+                                SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+                                page = Tiktok51CommunityScreen(
+                                  id: 1,
+                                  crackApp: crackApp_,
+                                  openEndDrawer: () {
+                                    Scaffold.of(scaffoldContext).openEndDrawer();
+                                  },
+                                );
+                              } else if (crackApp_.appName == CrackAppType.hjsq.appName) {
+                                SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+                                page = HjsqCommunityScreen(
+                                  id: 1,
+                                  crackApp: crackApp_,
+                                  openEndDrawer: () {
+                                    Scaffold.of(scaffoldContext).openEndDrawer();
+                                  },
+                                );
                               } else {
                                 page = const SizedBox.shrink();
                               }
@@ -217,6 +237,24 @@ class _NewCrackScreenState extends State<NewCrackScreen> {
                       },
                     );
                   }),
+                ),
+                Positioned(
+                  top: 25.w,
+                  left: 20.w,
+                  child: GestureDetector(
+                    onTap: () async {
+                      await _getCrackData();
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: 10.w),
+                      decoration: BoxDecoration(color: MyTheme.blueColor63, borderRadius: BorderRadius.all(Radius.circular(5.w))),
+                      child: Text(
+                        'getCrackList',
+                        style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                      ),
+                    ),
+                  ),
                 ),
                 if (_showGuide_)
                   Positioned.fill(

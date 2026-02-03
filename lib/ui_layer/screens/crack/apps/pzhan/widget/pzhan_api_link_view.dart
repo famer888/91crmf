@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jycrpj/domain/domain.dart';
 import 'package:jycrpj/domain/model/banner_model.dart';
+import 'package:jycrpj/domain/model/category_topic_model.dart';
 import 'package:jycrpj/domain/model/home_data_model.dart';
 import 'package:jycrpj/domain/model/link_model.dart';
 import 'package:jycrpj/domain/model/part_nav_model.dart';
@@ -48,7 +49,7 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
   late final _appDomain = context.read<AppDomain>();
   late final _homeConfig = context.read<HomeConfigNotifier>();
   final ValueNotifier<List<BannerModel>> bannersNotifier = ValueNotifier([]);
-  final ValueNotifier<List<PZhanCategoryTopicModel>> topicsNotifier = ValueNotifier([]);
+  final ValueNotifier<List<CategoryTopicModel>> topicsNotifier = ValueNotifier([]);
   final ValueNotifier<List<PartModel>> partNotifier = ValueNotifier([]);
   final ValueNotifier<bool> isListNotifier = ValueNotifier(false);
 
@@ -92,7 +93,7 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
       }
 
       if (result.data['mid_style_category'] case final List data when data.isNotEmpty) {
-        topicsNotifier.value = data.map<PZhanCategoryTopicModel>((e) => PZhanCategoryTopicModel.fromJson(e)).toList();
+        topicsNotifier.value = data.map<CategoryTopicModel>((e) => CategoryTopicModel.fromJson(e)).toList();
       }
 
       if (result.data['list'] case final List data when data.isNotEmpty) {
@@ -165,13 +166,6 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
       children: [
         NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification notification) {
-            if (notification is ScrollUpdateNotification) {
-              CommonUtils.log('''
-                NestedScrollView 头部滚动通知:
-                - 类型: ${notification.runtimeType}
-                - 滚动位置: ${notification.metrics.pixels}
-                ''');
-            }
             return false;
           },
           child: NestedScrollView(
@@ -286,7 +280,7 @@ class _Header extends StatefulWidget {
   });
 
   final ValueNotifier<List<BannerModel>> bannersNotifier;
-  final ValueNotifier<List<PZhanCategoryTopicModel>> topicsNotifier;
+  final ValueNotifier<List<CategoryTopicModel>> topicsNotifier;
   final ValueNotifier<List<PartModel>> partNotifier;
   final ValueChanged<String> onLinkNavTap;
 
@@ -296,7 +290,7 @@ class _Header extends StatefulWidget {
 
 class _HeaderState extends State<_Header> {
   late final _screenUtil = ScreenUtil();
-  List<PZhanCategoryTopicModel> contentTopics = [];
+  List<CategoryTopicModel> contentTopics = [];
   bool isShowAllTopics = false;
 
   @override

@@ -259,11 +259,29 @@ class AppRouterPaths {
   /// 暗网禁区 视频搜索结果页
   static const awjqVideoSearchResult = '/awjqVideoSearchResult';
 
-  /// P站 视频搜索页面
-  static const pzhanVideoSearch = '/pzhanVideoSearch';
 
   /// 51Tiktok 视频搜索页面
   static const tiktok51VideoSearch = '/tiktok51VideoSearch';
+
+  /// 51Tiktok 视频搜索结果页面
+  static const tiktok51VideoSearchResult = '/tiktok51VideoSearchResult';
+
+
+  /// Hjsq 视频搜索页面
+  static const hjsqVideoSearch = '/hjsqVideoSearch';
+
+  /// Hjsq 视频搜索结果页面
+  static const hjsqVideoSearchResult = '/hjsqVideoSearchResult';
+
+  /// Hjsq 视频详情
+  static const hjsqVideoDetail = '/hjsqVideoDetail';
+
+  /// Hjsq 标签页面
+  static const hjsqVideoTag = '/hjsqVideoTag';
+
+
+  /// P站 视频搜索页面
+  static const pzhanVideoSearch = '/pzhanVideoSearch';
 
   /// P站 视频搜索结果页
   static const pzhanVideoSearchResult = '/pzhanVideoSearchResult';

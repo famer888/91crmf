@@ -460,11 +460,11 @@ abstract class _BaseAppRepo implements AppDomain {
     Function? failed,
     Function(List<String>)? lines,
   }) async {
-    List<String> unChecklines = (await _cacheManager.readLinesUrl()) ?? BuildConfig.apiLines;
+    List<String> unCheckLines = (await _cacheManager.readLinesUrl()) ?? BuildConfig.apiLines;
 
     // 测试服
-    unChecklines = ['https://91crapi.dyclub.co/api.php'];
-    List<String> linesTemp = [...unChecklines];
+    unCheckLines = ['https://91crapi.dyclub.co/api.php'];
+    List<String> linesTemp = [...unCheckLines];
 
     if (!kIsWeb) {
       final fdsKey = await _getFdsKey();
@@ -499,7 +499,7 @@ abstract class _BaseAppRepo implements AppDomain {
       lines?.call(linesTemp);
 
       //逻辑思路 1、异步检测所有线路 2、看是否有成功线路，有则结束检测，否则继续 3、检测GIT备用线路，成功则结束检测，否则失败
-      Future.wait(unChecklines.map((x) async {
+      Future.wait(unCheckLines.map((x) async {
         return _checkLine(x);
       })).then((result) async {
         var first = result.firstWhere((p) => p["code"] == 200, orElse: () => {});

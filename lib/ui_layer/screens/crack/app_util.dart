@@ -74,6 +74,14 @@ class AppUtil {
       unlockStatusNotifier.changeAwjqUnlockStatus(status);
     } else if (app.appName == CrackAppType.aw91.appName) {
       unlockStatusNotifier.changeAw91UnlockStatus(status);
+    } else if (app.appName == CrackAppType.hjsq.appName) {
+      unlockStatusNotifier.changeHjsqUnlockStatus(status);
+    } else if (app.appName == CrackAppType.tiktok51.appName) {
+      unlockStatusNotifier.changeTiktok51UnlockStatus(status);
+    } else if (app.appName == CrackAppType.gd.appName) {
+      unlockStatusNotifier.changeGdcmUnlockStatus(status);
+    } else if (app.appName == CrackAppType.xiaolan.appName) {
+      unlockStatusNotifier.changeXiaolanUnlockStatus(status);
     }
   }
 
@@ -105,6 +113,14 @@ class AppUtil {
         type = CrackAppType.zpc.type;
       } else if (crackApp.appName == CrackAppType.pzhan.appName) {
         type = CrackAppType.pzhan.type;
+      } else if (crackApp.appName == CrackAppType.hjsq.appName) {
+        type = CrackAppType.hjsq.type;
+      } else if (crackApp.appName == CrackAppType.tiktok51.appName) {
+        type = CrackAppType.tiktok51.type;
+      } else if (crackApp.appName == CrackAppType.gd.appName) {
+        type = CrackAppType.gd.type;
+      } else if (crackApp.appName == CrackAppType.xiaolan.appName) {
+        type = CrackAppType.xiaolan.type;
       }
       VipPayDialog.showCoinsDialog(
         context: context,

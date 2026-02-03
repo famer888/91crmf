@@ -6,6 +6,8 @@ const awjqSearchHistoryKey = 'awjq_search_history';
 const aw91SearchHistoryKey = 'aw91_search_history';
 const zpcSearchHistoryKey = 'zpc_search_history';
 const pzhanSearchHistoryKey = 'pzhan_search_history';
+const tiktok51SearchHistoryKey = 'tiktok51_search_history';
+const hjsqSearchHistoryKey = 'hjsq_search_history';
 const searchHistoryKey = 'search_history';
 
 class _CacheManager implements CacheDomain {

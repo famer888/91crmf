@@ -163,13 +163,6 @@ class _ClApiLinkViewState extends State<ClApiLinkView> {
       children: [
         NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification notification) {
-            if (notification is ScrollUpdateNotification) {
-              CommonUtils.log('''
-                NestedScrollView 头部滚动通知:
-                - 类型: ${notification.runtimeType}
-                - 滚动位置: ${notification.metrics.pixels}
-                ''');
-            }
             return false;
           },
           child: NestedScrollView(
@@ -358,8 +351,6 @@ class _HeaderState extends State<_Header> {
                     },
                     child: SizedBox(
                       width: ScreenUtil().screenWidth / (parts.length > 5 ? 5.5 : max(3, min(parts.length, 5))),
-                      // color: Colors.red,
-                      // margin: EdgeInsets.only(right: 2.w),
                       child: Column(
                         children: [
                           SizedBox(

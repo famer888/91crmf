@@ -148,13 +148,6 @@ class _ZpcApiLinkViewState extends State<ZpcApiLinkView> {
       children: [
         NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification notification) {
-            if (notification is ScrollUpdateNotification) {
-              CommonUtils.log('''
-                NestedScrollView 头部滚动通知:
-                - 类型: ${notification.runtimeType}
-                - 滚动位置: ${notification.metrics.pixels}
-                ''');
-            }
             return false;
           },
           child: NestedScrollView(

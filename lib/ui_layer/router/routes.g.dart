@@ -76,6 +76,10 @@ List<RouteBase> get $appRoutes => [
       $awjqVideoTagRoute,
       $awjqVideoSearchRoute,
       $pZhanVideoSearchRoute,
+      $hjsqVideoSearchRoute,
+      $hjsqVideoTagRoute,
+      $hjsqSearchResultRoute,
+      $hjsqVideoDetailRoute,
       $tiktok51VideoSearchRoute,
       $darkWeb91Route,
       $aw91VideoDetailRoute,
@@ -2043,6 +2047,121 @@ extension $PZhanVideoSearchRouteExtension on PZhanVideoSearchRoute {
       context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $hjsqVideoSearchRoute => GoRouteData.$route(
+      path: '/hjsqVideoSearch',
+      parentNavigatorKey: HjsqVideoSearchRoute.$parentNavigatorKey,
+      factory: $HjsqVideoSearchRouteExtension._fromState,
+    );
+
+extension $HjsqVideoSearchRouteExtension on HjsqVideoSearchRoute {
+  static HjsqVideoSearchRoute _fromState(GoRouterState state) =>
+      HjsqVideoSearchRoute(
+        args: state.uri.queryParameters['args']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/hjsqVideoSearch',
+        queryParams: {
+          'args': args,
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $hjsqVideoTagRoute => GoRouteData.$route(
+      path: '/hjsqVideoTag',
+      parentNavigatorKey: HjsqVideoTagRoute.$parentNavigatorKey,
+      factory: $HjsqVideoTagRouteExtension._fromState,
+    );
+
+extension $HjsqVideoTagRouteExtension on HjsqVideoTagRoute {
+  static HjsqVideoTagRoute _fromState(GoRouterState state) => HjsqVideoTagRoute(
+        state.extra as String,
+      );
+
+  String get location => GoRouteData.$location(
+        '/hjsqVideoTag',
+      );
+
+  void go(BuildContext context) => context.go(location, extra: $extra);
+
+  Future<T?> push<T>(BuildContext context) =>
+      context.push<T>(location, extra: $extra);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location, extra: $extra);
+
+  void replace(BuildContext context) =>
+      context.replace(location, extra: $extra);
+}
+
+RouteBase get $hjsqSearchResultRoute => GoRouteData.$route(
+      path: '/hjsqVideoSearchResult',
+      parentNavigatorKey: HjsqSearchResultRoute.$parentNavigatorKey,
+      factory: $HjsqSearchResultRouteExtension._fromState,
+    );
+
+extension $HjsqSearchResultRouteExtension on HjsqSearchResultRoute {
+  static HjsqSearchResultRoute _fromState(GoRouterState state) =>
+      HjsqSearchResultRoute(
+        word: state.uri.queryParameters['word']!,
+        type: int.parse(state.uri.queryParameters['type']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/hjsqVideoSearchResult',
+        queryParams: {
+          'word': word,
+          'type': type.toString(),
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $hjsqVideoDetailRoute => GoRouteData.$route(
+      path: '/hjsqVideoDetail',
+      parentNavigatorKey: HjsqVideoDetailRoute.$parentNavigatorKey,
+      factory: $HjsqVideoDetailRouteExtension._fromState,
+    );
+
+extension $HjsqVideoDetailRouteExtension on HjsqVideoDetailRoute {
+  static HjsqVideoDetailRoute _fromState(GoRouterState state) =>
+      HjsqVideoDetailRoute(
+        state.extra as int,
+      );
+
+  String get location => GoRouteData.$location(
+        '/hjsqVideoDetail',
+      );
+
+  void go(BuildContext context) => context.go(location, extra: $extra);
+
+  Future<T?> push<T>(BuildContext context) =>
+      context.push<T>(location, extra: $extra);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location, extra: $extra);
+
+  void replace(BuildContext context) =>
+      context.replace(location, extra: $extra);
 }
 
 RouteBase get $tiktok51VideoSearchRoute => GoRouteData.$route(
