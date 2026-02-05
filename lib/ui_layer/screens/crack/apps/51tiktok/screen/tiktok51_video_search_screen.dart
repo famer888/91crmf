@@ -312,7 +312,7 @@ class _SearchContentViewState extends State<_SearchContentView> {
 
   Future _initData() async {
     final result = await _appDomain.getConstructByApiLink(
-      apiLink: '/api/searchtiktok51/hotsearch',
+      apiLink: '/api/search51tikok/hotSearch',
       params: {},
     );
     if (result.isValid && mounted) {

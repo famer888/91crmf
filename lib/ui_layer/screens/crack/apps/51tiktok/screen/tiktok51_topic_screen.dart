@@ -116,13 +116,13 @@ class _TiktokTopicScreenState extends State<Tiktok51TopicScreen> with SingleTick
       _showThreshold = ScreenUtil().screenHeight * 0.40;
     });
     if (!initSetIndex) {
-      final index = (_homeConfig.config.pzhanSortNav ?? []).indexWhere((item) => item.type == 'new');
+      final index = (_homeConfig.config.tikok51SortNav ?? []).indexWhere((item) => item.type == 'new');
       if (index == -1) {
         // 不存在 new
-        _initSort = _homeConfig.config.pzhanSortNav?.first.type ?? '';
+        _initSort = _homeConfig.config.tikok51SortNav?.first.type ?? '';
         initialIndex = 0;
       } else {
-        _initSort = _homeConfig.config.pzhanSortNav?[index].type ?? '';
+        _initSort = _homeConfig.config.tikok51SortNav?[index].type ?? '';
         initialIndex = index;
       }
       initSetIndex = true;

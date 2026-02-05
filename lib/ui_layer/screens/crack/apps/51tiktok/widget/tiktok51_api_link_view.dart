@@ -120,7 +120,7 @@ class _Tiktok51ApiLinkViewState extends State<Tiktok51ApiLinkView> {
     });
     if (!initSetIndex) {
       if (_isDiscovery) {
-        final index = (_homeConfig.config.pzhanFindSortNav ?? []).indexWhere((item) => item.type == 'hot');
+        final index = (_homeConfig.config.tikok51FindSortNav ?? []).indexWhere((item) => item.type == 'hot');
         if (index == -1) {
           // 不存在 hot
           initialIndex = 0;
@@ -128,7 +128,7 @@ class _Tiktok51ApiLinkViewState extends State<Tiktok51ApiLinkView> {
           initialIndex = index;
         }
       } else {
-        final index = (_homeConfig.config.pzhanSortNav ?? []).indexWhere((item) => item.type == 'new');
+        final index = (_homeConfig.config.tikok51SortNav ?? []).indexWhere((item) => item.type == 'new');
         if (index == -1) {
           // 不存在 new
           initialIndex = 0;

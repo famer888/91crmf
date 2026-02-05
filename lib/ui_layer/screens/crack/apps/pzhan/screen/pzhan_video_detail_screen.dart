@@ -428,6 +428,7 @@ class _BodyState extends State<_Body> with TickerProviderStateMixin {
       AppVideoCollectButton(
         apiUrl: 'user/favorites',
         collectedColor: MyTheme.pzhanAppPrimaryColor,
+        type: CrackAppType.pzhan.type,
         isCollected: widget.data.isFavorite > 0,
         id: widget.data.id,
         callback: (isCollected) {

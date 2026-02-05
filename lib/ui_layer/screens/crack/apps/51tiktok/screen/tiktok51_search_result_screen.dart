@@ -34,7 +34,7 @@ class _Tiktok51SearchResultScreenState extends State<Tiktok51SearchResultScreen>
   }) async {
     final result = await _appDomain.getConstructByApiLink(
       apiLink: 'search51tikok/mv',
-      params: {'kwy': widget.word, 'type': widget.type, 'page': page, 'limit': pageSize},
+      params: {'kwy': widget.word, 'page': page, 'limit': pageSize},
     );
 
     if (result.status == 1) {

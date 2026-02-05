@@ -192,7 +192,7 @@ class _Tiktok51VideoDetailScreenState extends State<Tiktok51VideoDetailScreen> {
                     padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 13.w),
                     child: Row(
                       children: [
-                        Text('简介', style: MyTheme.white255_13.s16.w500),
+                        Text('jj'.tr(context: context), style: MyTheme.white255_13.s16.w500),
                         const Spacer(),
                         // ReportGestureDetector(
                         //   onTap: () {
@@ -427,7 +427,8 @@ class _BodyState extends State<_Body> with TickerProviderStateMixin {
       SizedBox(width: 20.w),
       AppVideoCollectButton(
         apiUrl: 'user/favorites',
-        collectedColor: MyTheme.pzhanAppPrimaryColor,
+        collectedColor: MyTheme.tiktok51AppPrimaryColor,
+        type: CrackAppType.tiktok51.type,
         isCollected: widget.data.isFavorite > 0,
         id: widget.data.id,
         callback: (isCollected) {
@@ -471,7 +472,7 @@ class _BodyState extends State<_Body> with TickerProviderStateMixin {
       children: tags.map((e) {
         return Convenience.buildChildActionWidget(
           onTap: () {
-            PZhanVideoTagRoute(e).push(context);
+            Tiktok51TagRoute(videoTag: e).push(context);
           },
           padding: EdgeInsets.fromLTRB(8.w, 2.w, 8.w, 2.w),
           borderRadius: BorderRadius.circular(2.w),
