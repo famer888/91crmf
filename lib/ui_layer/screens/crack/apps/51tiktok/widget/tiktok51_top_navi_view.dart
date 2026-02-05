@@ -10,9 +10,9 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/keep_alive_wrapper.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_tab_bar.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/loading.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/network_error.dart';
-import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/widget/pzhan_api_link_view.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/51tiktok/widget/tiktok51_api_link_view.dart';
 import 'package:jycrpj/ui_layer/screens/crack/crack_app_type.dart';
-import 'package:jycrpj/ui_layer/screens/crack/lock_mask.dart';
+import 'package:jycrpj/ui_layer/screens/crack/widgets/lock_mask.dart';
 import 'package:jycrpj/ui_layer/screens/crack/unlock_status_notifier.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/screens/webview/screen.dart';
@@ -49,7 +49,7 @@ class _Tiktok51TopNaviViewState extends State<Tiktok51TopNaviView> with TickerPr
       _asyncValue = const AsyncLoading();
     });
 
-    final result = await _appDomain.getConstructByApiLink(apiLink: CrackAppType.pzhan.topNavApi, params: {'id': widget.id});
+    final result = await _appDomain.getConstructByApiLink(apiLink: CrackAppType.tiktok51.topNavApi, params: {'id': widget.id});
 
     if (result.status == 1) {
       final data = result['data'];
@@ -74,8 +74,8 @@ class _Tiktok51TopNaviViewState extends State<Tiktok51TopNaviView> with TickerPr
   @override
   Widget build(BuildContext context) {
     return Selector<UnlockStatusNotifier, bool>(
-        selector: (_, notifier) => notifier.isUnlockPzhan,
-        builder: (context, isUnlockPzhan, child) {
+        selector: (_, notifier) => notifier.isUnlockTiktok51,
+        builder: (context, isUnlockTiktok51, child) {
           return Stack(children: [
             _asyncValue.maybeWhen(
               data: (data) {
@@ -87,8 +87,8 @@ class _Tiktok51TopNaviViewState extends State<Tiktok51TopNaviView> with TickerPr
                       tabController: _tabController,
                       initialIndex: _initialIndex,
                       tabBarHeight: 40.h,
-                      linearColors: const [MyTheme.pzhanAppPrimaryColor, MyTheme.pzhanAppPrimaryColor],
-                      labelStyle: TextStyle(color: MyTheme.pzhanAppPrimaryColor, fontSize: 18.sp, fontWeight: FontWeight.w600),
+                      linearColors: const [MyTheme.tiktok51AppPrimaryColor, MyTheme.tiktok51AppPrimaryColor],
+                      labelStyle: TextStyle(color: MyTheme.tiktok51AppPrimaryColor, fontSize: 18.sp, fontWeight: FontWeight.w600),
                       unselectedLabelStyle: TextStyle(
                         color: const Color.fromRGBO(255, 255, 255, 1),
                         fontSize: 16.sp,
@@ -97,7 +97,7 @@ class _Tiktok51TopNaviViewState extends State<Tiktok51TopNaviView> with TickerPr
                       titles: titles,
                       views: data.map((e) {
                         return KeepAliveWrapper(
-                          child: PZhanApiLinkView(
+                          child: Tiktok51ApiLinkView(
                             linkModel: e,
                             showRightList: true,
                             onLinkNavTap: (value) {
@@ -117,10 +117,10 @@ class _Tiktok51TopNaviViewState extends State<Tiktok51TopNaviView> with TickerPr
             ),
 
             /// ===== 蒙层（不穿透）=====
-            if (!isUnlockPzhan && widget.crackApp != null)
+            if (!isUnlockTiktok51 && widget.crackApp != null)
               LockMask(
                   crackApp: widget.crackApp!,
-                  type: CrackAppType.pzhan.type,
+                  type: CrackAppType.tiktok51.type,
                   onUnlock: () {
                     setState(() {});
                   })

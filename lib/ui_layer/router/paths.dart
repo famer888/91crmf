@@ -260,12 +260,30 @@ class AppRouterPaths {
   static const awjqVideoSearchResult = '/awjqVideoSearchResult';
 
 
+  /// 51Tiktok
+  static const tiktok51App = '/tiktok51App';
+
+  /// 51Tiktok 视频详情
+  static const tiktok51VideoDetail = '/tiktok51VideoDetail';
+
+  /// 51Tiktok 标签页面
+  static const tiktok51VideoTag = '/tiktok51VideoTag';
+
   /// 51Tiktok 视频搜索页面
   static const tiktok51VideoSearch = '/tiktok51VideoSearch';
 
   /// 51Tiktok 视频搜索结果页面
   static const tiktok51VideoSearchResult = '/tiktok51VideoSearchResult';
 
+  /// 51Tiktok 视频话题页面
+  static const tiktok51Topic = '/tiktok51Topic';
+
+  /// 51Tiktok 视频更多页面
+  static const tiktok51More = '/tiktok51More';
+
+
+  /// 海角社区
+  static const hjsqApp = '/hjsqApp';
 
   /// Hjsq 视频搜索页面
   static const hjsqVideoSearch = '/hjsqVideoSearch';

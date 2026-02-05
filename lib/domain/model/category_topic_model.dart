@@ -6,7 +6,7 @@ class CategoryTopicModel {
   final String tabName;
   final int workNum;
   final int favoritesNum;
-  final bool isFollow;
+  bool isFollow;
 
   final List<dynamic> tagsArray;
 
@@ -43,7 +43,7 @@ class CategoryTopicModel {
       midStyleType: json['mid_style_type'] ?? 0,
       groupId: json['group_id'] ?? 0,
       title: json['title'] ?? '',
-      tagsArray: json['tags_ary'],
+      tagsArray: json['tags_ary'] ?? [],
     );
   }
 

@@ -13,8 +13,8 @@ import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 
 import '../../../../../../report/ui_layer/report_gesture_detector.dart';
 
-class PZhanVideoListCard extends StatelessWidget {
-  const PZhanVideoListCard({super.key, required this.data, this.isInVideoDetail = false});
+class Tiktok51VideoListCard extends StatelessWidget {
+  const Tiktok51VideoListCard({super.key, required this.data, this.isInVideoDetail = false});
 
   final AppVideoModel data;
   final bool isInVideoDetail;
@@ -33,17 +33,17 @@ class PZhanVideoListCard extends StatelessWidget {
             duration: data.duration,
             playCount: data.playNum,
             id: data.id,
-            crackAppType: CrackAppType.pzhan.type,
+            crackAppType: CrackAppType.tiktok51.type,
             imgUrl: data.coverThumbUrl,
           ),
         );
         if (isInVideoDetail) {
           context.pop();
         }
-        PZhanVideoDetailRoute(id: data.id).push(context);
+        Tiktok51VideoDetailRoute(id: data.id).push(context);
       },
       child: SizedBox(
-        height: 134.w,
+        height: 228.w,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -51,15 +51,29 @@ class PZhanVideoListCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: 99.w,
+                  height: 193.w,
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
                       MyImage.network(imageUrl, fit: BoxFit.cover, backgroundColor: MyTheme.imageBgColor, borderRadius: 5.w),
                       Align(
                         alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.w),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.w),
+                          decoration:  BoxDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Color.fromRGBO(0, 0, 0, 0.0),
+                                Color.fromRGBO(0, 0, 0, 0.85),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(5.w),
+                              bottomRight: Radius.circular(5.w),
+                            ),
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

@@ -239,6 +239,8 @@ class Config {
     this.pzhanFindSortNav,
     this.hjsqSortNav,
     this.hjsqForumNav,
+    this.tikok51SortNav,
+    this.tikok51FindSortNav,
     this.gdSortNav,
     this.gdForumNav,
     required this.aiNav,
@@ -386,6 +388,8 @@ class Config {
   final List<AppNavModel>? hjsqSortNav;
   final List<AppNavModel>? hjsqForumNav;
   // 51Tiktok
+  final List<AppNavModel>? tikok51SortNav;
+  final List<AppNavModel>? tikok51FindSortNav;
 
   // 果冻
   final List<AppNavModel>? gdSortNav;
@@ -415,6 +419,8 @@ class Config {
         pzhanFindSortNav: List<AppNavModel>.from(json['pzhan_find_sort_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
         hjsqSortNav: List<AppNavModel>.from(json['hjsq_sort_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
         hjsqForumNav: List<AppNavModel>.from(json['hjsq_forum_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
+        tikok51SortNav: List<AppNavModel>.from(json['51tikok_sort_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
+        tikok51FindSortNav: List<AppNavModel>.from(json['51tikok_find_sort_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
         gdSortNav: List<AppNavModel>.from(json['gd_sort_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
         gdForumNav: List<AppNavModel>.from(json['gd_forum_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
         dayPrice: json['day_price'],
@@ -529,6 +535,8 @@ class Config {
         'awjq_sort_nav': awjqSortNav?.map((e) => e).toList() ?? [],
         'pzhan_sort_nav': pzhanSortNav?.map((e) => e).toList() ?? [],
         'pzhan_find_sort_nav': pzhanFindSortNav?.map((e) => e).toList() ?? [],
+        '51tikok_sort_nav': pzhanSortNav?.map((e) => e).toList() ?? [],
+        '51tikok_find_sort_nav': pzhanFindSortNav?.map((e) => e).toList() ?? [],
         'hjsq_sort_nav': hjsqSortNav?.map((e) => e).toList() ?? [],
         'hjsq_forum_nav': hjsqForumNav?.map((e) => e).toList() ?? [],
         'gd_sort_nav': gdSortNav?.map((e) => e).toList() ?? [],

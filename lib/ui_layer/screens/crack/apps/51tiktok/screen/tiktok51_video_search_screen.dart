@@ -10,10 +10,9 @@ import 'package:jycrpj/ui_layer/notifiers/home_config_notifier.dart';
 import 'package:jycrpj/ui_layer/router/routes.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/empty_data.dart';
-import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/model/pzhan_model.dart';
+import 'package:jycrpj/ui_layer/screens/crack/model/app_model.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
-import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
 
@@ -37,13 +36,13 @@ class _Tiktok51VideoSearchScreenState extends State<Tiktok51VideoSearchScreen> {
       MyToast.showText(text: 'qsrgjz'.tr());
       return;
     }
-    final searchHistory = _homeConfigNotifier.getSearchHistory(key: pzhanSearchHistoryKey);
+    final searchHistory = _homeConfigNotifier.getSearchHistory(key: tiktok51SearchHistoryKey);
 
     final title = keyword.replaceAll('/', '|');
     if (!searchHistory.contains(keyword)) {
-      _homeConfigNotifier.upsertSearchHistory(key: pzhanSearchHistoryKey, searchHistory: searchHistory..add(keyword));
+      _homeConfigNotifier.upsertSearchHistory(key: tiktok51SearchHistoryKey, searchHistory: searchHistory..add(keyword));
     }
-    PZhanSearchResultRoute(word: title, type: 1).push(context);
+    Tiktok51SearchResultRoute(word: title, type: 1).push(context);
   }
 
   @override
@@ -72,7 +71,7 @@ class _Tiktok51VideoSearchScreenState extends State<Tiktok51VideoSearchScreen> {
                       const Spacer(),
                       ReportGestureDetector(
                         onTap: () {
-                          _homeConfigNotifier.clearSearchHistory(key: pzhanSearchHistoryKey);
+                          _homeConfigNotifier.clearSearchHistory(key: tiktok51SearchHistoryKey);
                         },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -86,7 +85,7 @@ class _Tiktok51VideoSearchScreenState extends State<Tiktok51VideoSearchScreen> {
                                 MyImagePaths.appClearSearch,
                                 width: 16.w,
                                 height: 16.w,
-                                color: MyTheme.pzhanAppPrimaryColor,
+                                color: MyTheme.tiktok51AppPrimaryColor,
                               ),
                             )
                           ],
@@ -98,7 +97,7 @@ class _Tiktok51VideoSearchScreenState extends State<Tiktok51VideoSearchScreen> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Selector<HomeConfigNotifier, List<String>>(
-                    selector: (_, config) => config.getSearchHistory(key: pzhanSearchHistoryKey),
+                    selector: (_, config) => config.getSearchHistory(key: tiktok51SearchHistoryKey),
                     builder: (context, searchHistory, child) => searchHistory.isNotEmpty
                         ? Wrap(
                       spacing: 10.w,
@@ -112,8 +111,8 @@ class _Tiktok51VideoSearchScreenState extends State<Tiktok51VideoSearchScreen> {
                               onSubmitted(text);
                             },
                             onDelete: () {
-                              final history = _homeConfigNotifier.getSearchHistory(key: pzhanSearchHistoryKey);
-                              _homeConfigNotifier.upsertSearchHistory(key: pzhanSearchHistoryKey, searchHistory: history..remove(text));
+                              final history = _homeConfigNotifier.getSearchHistory(key: tiktok51SearchHistoryKey);
+                              _homeConfigNotifier.upsertSearchHistory(key: tiktok51SearchHistoryKey, searchHistory: history..remove(text));
                             },
                           )
                       ],
@@ -297,7 +296,7 @@ class _SearchContentView extends StatefulWidget {
 
 class _SearchContentViewState extends State<_SearchContentView> {
   late final _appDomain = context.read<DynamicDomain>();
-  final ValueNotifier<List<PZhanSearchHotModel>> _hotsNotifier = ValueNotifier([]);
+  final ValueNotifier<List<AppSearchHotModel>> _hotsNotifier = ValueNotifier([]);
 
   @override
   void initState() {
@@ -313,14 +312,13 @@ class _SearchContentViewState extends State<_SearchContentView> {
 
   Future _initData() async {
     final result = await _appDomain.getConstructByApiLink(
-      apiLink: '/api/searchpzhan/hotsearch',
+      apiLink: '/api/searchtiktok51/hotsearch',
       params: {},
     );
-    CommonUtils.log('获取热搜词结果:${result.data}');
     if (result.isValid && mounted) {
       final data = result.data;
       if (data['list'] case final List data when data.isNotEmpty) {
-        _hotsNotifier.value = data.map<PZhanSearchHotModel>((e) => PZhanSearchHotModel.fromJson(e)).toList();
+        _hotsNotifier.value = data.map<AppSearchHotModel>((e) => AppSearchHotModel.fromJson(e)).toList();
       }
     } else if (result.msg case final msg?) {
       MyToast.showText(text: msg);

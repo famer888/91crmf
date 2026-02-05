@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jycrpj/domain/domain.dart';
 import 'package:jycrpj/domain/model/banner_model.dart';
-import 'package:jycrpj/domain/model/category_topic_model.dart';
 import 'package:jycrpj/domain/model/feed/feed_model.dart';
 import 'package:jycrpj/domain/model/home_data_model.dart';
 import 'package:jycrpj/domain/model/link_model.dart';

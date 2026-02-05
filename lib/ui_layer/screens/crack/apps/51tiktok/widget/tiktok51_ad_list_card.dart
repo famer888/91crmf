@@ -9,8 +9,8 @@ import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 
 import '../../../../../../report/ui_layer/report_gesture_detector.dart';
 
-class PZhanAdListCard extends StatelessWidget {
-  const PZhanAdListCard({super.key, required this.ad});
+class Tiktok51AdListCard extends StatelessWidget {
+  const Tiktok51AdListCard({super.key, required this.ad});
 
   final AppVideoModel ad;
 

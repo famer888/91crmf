@@ -25,6 +25,12 @@ import 'package:jycrpj/ui_layer/screens/community/ori_create_group_chat/group_ch
 import 'package:jycrpj/ui_layer/screens/community/ori_create_group_chat/group_chat/group_chat_top_msg_content.dart';
 import 'package:jycrpj/ui_layer/screens/community/ori_create_group_chat/group_chat/group_members_content.dart';
 import 'package:jycrpj/ui_layer/screens/community/ori_create_group_chat/screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/51tiktok/screen/tiktok51_community_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/51tiktok/screen/tiktok51_more_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/51tiktok/screen/tiktok51_search_result_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/51tiktok/screen/tiktok51_tag_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/51tiktok/screen/tiktok51_topic_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/51tiktok/screen/tiktok51_video_detail_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/51tiktok/screen/tiktok51_video_search_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/91aw/screen/an91_tag_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/91aw/screen/aw91_search_result_screen.dart';
@@ -41,6 +47,7 @@ import 'package:jycrpj/ui_layer/screens/crack/apps/clsq/screen/cl_tag_screen.dar
 import 'package:jycrpj/ui_layer/screens/crack/apps/clsq/screen/cl_video_detail_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/clsq/screen/cl_video_search_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/clsq/screen/screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_community_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_search_result_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_tag_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_video_detail_screen.dart';
@@ -1372,6 +1379,21 @@ class PZhanVideoSearchRoute extends GoRouteData {
   }
 }
 
+@TypedGoRoute<HjsqCommunityRoute>(path: AppRouterPaths.hjsqApp)
+class HjsqCommunityRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppRouter.rootNavigatorKey;
+
+  const HjsqCommunityRoute({required this.id});
+  final int id;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(
+        state: state, child: HjsqCommunityScreen(id:id));
+  }
+}
+
 @TypedGoRoute<HjsqVideoSearchRoute>(path: AppRouterPaths.hjsqVideoSearch)
 class HjsqVideoSearchRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey =
@@ -1435,6 +1457,21 @@ class HjsqVideoDetailRoute extends GoRouteData {
   }
 }
 
+@TypedGoRoute<Tiktok51CommunityRoute>(path: AppRouterPaths.tiktok51App)
+class Tiktok51CommunityRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppRouter.rootNavigatorKey;
+
+  const Tiktok51CommunityRoute({required this.id});
+  final int id;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(
+        state: state, child: Tiktok51CommunityScreen(id:id));
+  }
+}
+
 @TypedGoRoute<Tiktok51VideoSearchRoute>(path: AppRouterPaths.tiktok51VideoSearch)
 class Tiktok51VideoSearchRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey =
@@ -1448,6 +1485,93 @@ class Tiktok51VideoSearchRoute extends GoRouteData {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return CommonUtils.buildSlideTransitionPage(
         state: state, child: Tiktok51VideoSearchScreen(args: args));
+  }
+}
+
+@TypedGoRoute<Tiktok51SearchResultRoute>(path: AppRouterPaths.tiktok51VideoSearchResult)
+class Tiktok51SearchResultRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppRouter.rootNavigatorKey;
+
+  const Tiktok51SearchResultRoute({required this.word, required this.type});
+
+  final String word;
+  final int type;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(
+        state: state, child: Tiktok51SearchResultScreen(word: word, type: type));
+  }
+}
+
+@TypedGoRoute<Tiktok51TopicRoute>(path: AppRouterPaths.tiktok51Topic)
+class Tiktok51TopicRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppRouter.rootNavigatorKey;
+
+  const Tiktok51TopicRoute({
+    required this.name,
+    required this.id,
+    required this.api,
+  });
+
+  final String name;
+  final String id;
+  final String api;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(
+        state: state, child: Tiktok51TopicScreen(name: name, id: id, api: api));
+  }
+}
+
+@TypedGoRoute<Tiktok51MoreRoute>(path: AppRouterPaths.tiktok51More)
+class Tiktok51MoreRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppRouter.rootNavigatorKey;
+
+  const Tiktok51MoreRoute({required this.name, required this.id, required this.api});
+
+  final String name;
+  final String id;
+  final String api;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(
+        state: state, child: Tiktok51MoreScreen(name: name, id: id, api: api));
+  }
+}
+
+@TypedGoRoute<Tiktok51VideoDetailRoute>(path: AppRouterPaths.tiktok51VideoDetail)
+class Tiktok51VideoDetailRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppRouter.rootNavigatorKey;
+
+  const Tiktok51VideoDetailRoute({required this.id});
+
+  final int id;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(state: state, child: Tiktok51VideoDetailScreen(id: id));
+  }
+}
+
+@TypedGoRoute<Tiktok51TagRoute>(path: AppRouterPaths.tiktok51VideoTag)
+class Tiktok51TagRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppRouter.rootNavigatorKey;
+
+  const Tiktok51TagRoute({required this.videoTag});
+
+  final String videoTag;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(state: state, child: Tiktok51TagScreen(videoTag: videoTag));
   }
 }
 

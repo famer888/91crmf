@@ -100,13 +100,20 @@ class _VisitAppVideoItem extends StatelessWidget {
       return tr('aw91');
     } else if (type == CrackAppType.pzhan.type) {
       return tr('pzhan');
+    } else if (type == CrackAppType.hjsq.type) {
+      return tr('hjsq');
+    } else if (type == CrackAppType.tiktok51.type) {
+      return tr('tiktok51');
+    } else if (type == CrackAppType.gd.type) {
+      return tr('gdcm');
+    } else if (type == CrackAppType.xiaolan.type) {
+      return tr('xiaolan');
     }
     return '';
   }
 
   @override
   Widget build(BuildContext context) {
-    CommonUtils.log('封面:$imageUrl');
     return ReportGestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
@@ -121,7 +128,15 @@ class _VisitAppVideoItem extends StatelessWidget {
           Aw91VideoDetailRoute(id: data.id).push(context);
         } else if (type == CrackAppType.pzhan.type) {
           PZhanVideoDetailRoute(id: data.id).push(context);
-        }
+        } else if (type == CrackAppType.hjsq.type) {
+          HjsqVideoDetailRoute(data.id).push(context);
+        } else if (type == CrackAppType.tiktok51.type) {
+          Tiktok51VideoDetailRoute(id: data.id).push(context);
+        }/* else if (type == CrackAppType.gd.type) {
+          GdVideoDetailRoute(id: data.id).push(context);
+        } else if (type == CrackAppType.xiaolan.type) {
+          XiaolanVideoDetailRoute(id: data.id).push(context);
+        }*/
       },
       child: LayoutBuilder(builder: (context, cons) {
         return Column(

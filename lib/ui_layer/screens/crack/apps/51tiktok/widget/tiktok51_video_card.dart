@@ -13,8 +13,8 @@ import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 
 import '../../../../../../report/ui_layer/report_gesture_detector.dart';
 
-class PZhanVideoCard extends StatelessWidget {
-  const PZhanVideoCard({super.key, required this.data, this.isInVideoDetail = false});
+class Tiktok51VideoCard extends StatelessWidget {
+  const Tiktok51VideoCard({super.key, required this.data, this.isInVideoDetail = false});
 
   final AppVideoModel data;
   final bool isInVideoDetail;
@@ -33,14 +33,14 @@ class PZhanVideoCard extends StatelessWidget {
             duration: data.duration,
             playCount: data.playNum,
             id: data.id,
-            crackAppType: CrackAppType.pzhan.type,
+            crackAppType: CrackAppType.tiktok51.type,
             imgUrl: data.coverThumbUrl,
           ),
         );
         if (isInVideoDetail) {
           context.pop();
         }
-        PZhanVideoDetailRoute(id: data.id).push(context);
+        Tiktok51VideoDetailRoute(id: data.id).push(context);
       },
       child: LayoutBuilder(builder: (context, cons) {
         return Column(

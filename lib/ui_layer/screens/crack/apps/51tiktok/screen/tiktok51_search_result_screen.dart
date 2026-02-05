@@ -5,7 +5,7 @@ import 'package:jycrpj/domain/domain.dart';
 import 'package:jycrpj/domain/type_def.dart';
 import 'package:jycrpj/report/ui_layer/report_search_click.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_list_view.dart';
-import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/widget/pzhan_feed_card.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/51tiktok/widget/tiktok51_feed_card.dart';
 import 'package:jycrpj/ui_layer/screens/crack/model/app_model.dart';
 import 'package:jycrpj/ui_layer/screens/crack/widgets/scroll_top_button.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
@@ -13,17 +13,17 @@ import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
 
-class PZhanSearchResultScreen extends StatefulWidget {
+class Tiktok51SearchResultScreen extends StatefulWidget {
   final String word;
   final int type;
 
-  const PZhanSearchResultScreen({super.key, required this.word, required this.type});
+  const Tiktok51SearchResultScreen({super.key, required this.word, required this.type});
 
   @override
-  State<PZhanSearchResultScreen> createState() => _PZhanSearchResultScreenState();
+  State<Tiktok51SearchResultScreen> createState() => _Tiktok51SearchResultScreenState();
 }
 
-class _PZhanSearchResultScreenState extends State<PZhanSearchResultScreen> {
+class _Tiktok51SearchResultScreenState extends State<Tiktok51SearchResultScreen> {
   late final _appDomain = context.read<AppDomain>();
   final ValueNotifier<bool> _showToTopButtonNotifier = ValueNotifier(false);
 
@@ -33,7 +33,7 @@ class _PZhanSearchResultScreenState extends State<PZhanSearchResultScreen> {
     required int type,
   }) async {
     final result = await _appDomain.getConstructByApiLink(
-      apiLink: 'searchpzhan/mv',
+      apiLink: 'search51tikok/mv',
       params: {'kwy': widget.word, 'type': widget.type, 'page': page, 'limit': pageSize},
     );
 
@@ -113,7 +113,7 @@ class _PZhanSearchResultScreenState extends State<PZhanSearchResultScreen> {
                     padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
                     childAspectRatio: MyTheme.aspectRatio,
                     crossAxisSpacing: 8.w,
-                    itemBuilder: (context, item, index) => PZhanFeedCard(isList: false, feed: item).withSearchReport({
+                    itemBuilder: (context, item, index) => Tiktok51FeedCard(isList: false, feed: item).withSearchReport({
                       "event": "keyword_click",
                       "keyword": widget.word,
                       "click_item_id": item.id,

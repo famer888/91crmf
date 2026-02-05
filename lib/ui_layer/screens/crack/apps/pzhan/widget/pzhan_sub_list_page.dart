@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/model/pzhan_model.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/widget/pzhan_feed_card.dart';
+import 'package:jycrpj/ui_layer/screens/crack/model/app_model.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 
 class PZhanSubListPage extends StatefulWidget {
   final ValueNotifier<bool> isListNotifier;
-  final ValueNotifier<List<PZhanVideoModel>> dataListNotifier;
+  final ValueNotifier<List<AppVideoModel>> dataListNotifier;
 
   const PZhanSubListPage({
     super.key,
@@ -51,7 +51,7 @@ class _PZhanSubListPageState extends State<PZhanSubListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<List<PZhanVideoModel>>(
+    return ValueListenableBuilder<List<AppVideoModel>>(
         valueListenable: widget.dataListNotifier,
         builder: (_, list, __) {
           return ValueListenableBuilder<bool>(

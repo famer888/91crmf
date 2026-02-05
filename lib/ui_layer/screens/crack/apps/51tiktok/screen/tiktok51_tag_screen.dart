@@ -7,22 +7,22 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/my_app_bar.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/screen_background.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/loading.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/network_error.dart';
-import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/widget/pzhan_feed_card.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/51tiktok/widget/tiktok51_feed_card.dart';
 import 'package:jycrpj/ui_layer/screens/crack/model/app_model.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
 
-class PZhanTagScreen extends StatefulWidget {
+class Tiktok51TagScreen extends StatefulWidget {
   final String videoTag;
 
-  const PZhanTagScreen({super.key, required this.videoTag});
+  const Tiktok51TagScreen({super.key, required this.videoTag});
 
   @override
-  State<PZhanTagScreen> createState() => _PZhanTagScreenState();
+  State<Tiktok51TagScreen> createState() => _Tiktok51TagScreenState();
 }
 
-class _PZhanTagScreenState extends State<PZhanTagScreen> {
+class _Tiktok51TagScreenState extends State<Tiktok51TagScreen> {
   AsyncValue<List<AppVideoModel>> _asyncValue = const AsyncInit();
   late final _appDomain = context.read<AppDomain>();
 
@@ -39,7 +39,7 @@ class _PZhanTagScreenState extends State<PZhanTagScreen> {
       _asyncValue = const AsyncLoading();
     });
 
-    final result = await _appDomain.getConstructByApiLink(apiLink: 'searchpzhan/mv', params: {'kwy': widget.videoTag});
+    final result = await _appDomain.getConstructByApiLink(apiLink: 'search51tikok/mv', params: {'kwy': widget.videoTag});
     if (result.status == 1) {
       if (result.data['list'] case final list when list.isNotEmpty) {
         final feedModelList = list?.map<AppVideoModel>((x) => AppVideoModel.fromJson(x)).toList();
@@ -81,7 +81,7 @@ class _PZhanTagScreenState extends State<PZhanTagScreen> {
                   ),
                   itemBuilder: (context, index) {
                     final item = data[index];
-                    return PZhanFeedCard(isList: false, feed: item);
+                    return Tiktok51FeedCard(isList: false, feed: item);
                   },
                 ),
               );

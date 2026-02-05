@@ -18,7 +18,7 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/screen_background.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/loading.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/network_error.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/video_player/shortv_mv_player.dart';
-import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/widget/pzhan_feed_card.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/51tiktok/widget/tiktok51_feed_card.dart';
 import 'package:jycrpj/ui_layer/screens/crack/crack_app_type.dart';
 import 'package:jycrpj/ui_layer/screens/crack/model/app_model.dart';
 import 'package:jycrpj/ui_layer/screens/crack/widgets/app_video_collect_button.dart';
@@ -33,16 +33,16 @@ import 'package:provider/provider.dart';
 import '../../../../../../report/ui_layer/report_general_banner.dart';
 import '../../../../../../report/ui_layer/report_gesture_detector.dart';
 
-class PZhanVideoDetailScreen extends StatefulWidget {
+class Tiktok51VideoDetailScreen extends StatefulWidget {
   final int id;
 
-  const PZhanVideoDetailScreen({super.key, required this.id});
+  const Tiktok51VideoDetailScreen({super.key, required this.id});
 
   @override
-  State<PZhanVideoDetailScreen> createState() => _PZhanVideoDetailScreenState();
+  State<Tiktok51VideoDetailScreen> createState() => _Tiktok51VideoDetailScreenState();
 }
 
-class _PZhanVideoDetailScreenState extends State<PZhanVideoDetailScreen> {
+class _Tiktok51VideoDetailScreenState extends State<Tiktok51VideoDetailScreen> {
   late final _appDomain = context.read<AppDomain>();
   final ValueNotifier<List<AppVideoModel>> _recommendVideoListNotifier = ValueNotifier([]);
   AsyncValue<AppVideoModel> _asyncValue = const AsyncInit();
@@ -68,7 +68,7 @@ class _PZhanVideoDetailScreenState extends State<PZhanVideoDetailScreen> {
       _asyncValue = const AsyncLoading();
     });
 
-    final result = await _appDomain.getConstructByApiLink(apiLink: 'mvpzhan/detail', params: {'id': widget.id});
+    final result = await _appDomain.getConstructByApiLink(apiLink: 'mv51tikok/detail', params: {'id': widget.id});
     if (result.status == 1) {
       final data = result.data;
       if (data['ads'] case final list when list.isNotEmpty) {
@@ -91,7 +91,7 @@ class _PZhanVideoDetailScreenState extends State<PZhanVideoDetailScreen> {
   }
 
   void _getVideoRecommendList() async {
-    final result = await _appDomain.getConstructByApiLink(apiLink: 'mvpzhan/recommend', params: {'id': widget.id});
+    final result = await _appDomain.getConstructByApiLink(apiLink: 'mv51tikok/recommend', params: {'id': widget.id});
     if (result.status == 1) {
       if (result.data['ads'] case final list when list.isNotEmpty) {
         _noticeList = list.map<Notice>((x) => Notice.fromJson(x)).toList();
@@ -112,7 +112,7 @@ class _PZhanVideoDetailScreenState extends State<PZhanVideoDetailScreen> {
   // 视频下载
   void _videoDownload(AppVideoModel videoData) async {
     CommonUtils.log('视频下载开始 免费状态isfree: ${videoData.isFree}');
-    final result = await _appDomain.getConstructByApiLink(apiLink: 'mvpzhan/download', params: {'id': widget.id});
+    final result = await _appDomain.getConstructByApiLink(apiLink: 'mv51tikok/download', params: {'id': widget.id});
     CommonUtils.log('视频下载:$result');
     if (result.status == 1) {
       final downloadUrl = result.data['downloadUrl'];
@@ -347,7 +347,7 @@ class _BodyState extends State<_Body> with TickerProviderStateMixin {
                             ),
                             itemBuilder: (context, index) {
                               final item = recommendVideos[index];
-                              return PZhanFeedCard(isList: false, feed: item, isInVideoDetail: true);
+                              return Tiktok51FeedCard(isList: false, feed: item, isInVideoDetail: true);
                             },
                           ),
                         );
@@ -377,22 +377,22 @@ class _BodyState extends State<_Body> with TickerProviderStateMixin {
       final banners = list
           .map(
             (e) => BannerModel(
-              id: e.id ?? 0,
-              title: e.title,
-              name: e.name,
-              linkUrl: e.linkUrl ?? '',
-              resourceUrl: e.resourceUrl ?? '',
-              redirectType: e.redirectType ?? 0,
-              router: e.router ?? '',
-              reportId: e.reportId ?? 0,
-              reportType: e.reportType ?? 0,
-              urlStr: e.urlStr ?? '',
-              adType: e.adType,
-              adSlotName: e.adSlotName,
-              advertiseCode: e.advertiseCode,
-              advertiseLocationCode: e.advertiseLocationCode,
-            ),
-          )
+          id: e.id ?? 0,
+          title: e.title,
+          name: e.name,
+          linkUrl: e.linkUrl ?? '',
+          resourceUrl: e.resourceUrl ?? '',
+          redirectType: e.redirectType ?? 0,
+          router: e.router ?? '',
+          reportId: e.reportId ?? 0,
+          reportType: e.reportType ?? 0,
+          urlStr: e.urlStr ?? '',
+          adType: e.adType,
+          adSlotName: e.adSlotName,
+          advertiseCode: e.advertiseCode,
+          advertiseLocationCode: e.advertiseLocationCode,
+        ),
+      )
           .toList();
       return Padding(padding: EdgeInsets.all(MyTheme.pagePadding), child: ReportGeneralAppsListVidget(data: banners));
     } catch (e) {

@@ -76,11 +76,18 @@ List<RouteBase> get $appRoutes => [
       $awjqVideoTagRoute,
       $awjqVideoSearchRoute,
       $pZhanVideoSearchRoute,
+      $hjsqCommunityRoute,
       $hjsqVideoSearchRoute,
       $hjsqVideoTagRoute,
       $hjsqSearchResultRoute,
       $hjsqVideoDetailRoute,
+      $tiktok51CommunityRoute,
       $tiktok51VideoSearchRoute,
+      $tiktok51SearchResultRoute,
+      $tiktok51TopicRoute,
+      $tiktok51MoreRoute,
+      $tiktok51VideoDetailRoute,
+      $tiktok51TagRoute,
       $darkWeb91Route,
       $aw91VideoDetailRoute,
       $aw91TagRoute,
@@ -2049,6 +2056,35 @@ extension $PZhanVideoSearchRouteExtension on PZhanVideoSearchRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $hjsqCommunityRoute => GoRouteData.$route(
+      path: '/hjsqApp',
+      parentNavigatorKey: HjsqCommunityRoute.$parentNavigatorKey,
+      factory: $HjsqCommunityRouteExtension._fromState,
+    );
+
+extension $HjsqCommunityRouteExtension on HjsqCommunityRoute {
+  static HjsqCommunityRoute _fromState(GoRouterState state) =>
+      HjsqCommunityRoute(
+        id: int.parse(state.uri.queryParameters['id']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/hjsqApp',
+        queryParams: {
+          'id': id.toString(),
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 RouteBase get $hjsqVideoSearchRoute => GoRouteData.$route(
       path: '/hjsqVideoSearch',
       parentNavigatorKey: HjsqVideoSearchRoute.$parentNavigatorKey,
@@ -2164,6 +2200,35 @@ extension $HjsqVideoDetailRouteExtension on HjsqVideoDetailRoute {
       context.replace(location, extra: $extra);
 }
 
+RouteBase get $tiktok51CommunityRoute => GoRouteData.$route(
+      path: '/tiktok51App',
+      parentNavigatorKey: Tiktok51CommunityRoute.$parentNavigatorKey,
+      factory: $Tiktok51CommunityRouteExtension._fromState,
+    );
+
+extension $Tiktok51CommunityRouteExtension on Tiktok51CommunityRoute {
+  static Tiktok51CommunityRoute _fromState(GoRouterState state) =>
+      Tiktok51CommunityRoute(
+        id: int.parse(state.uri.queryParameters['id']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/tiktok51App',
+        queryParams: {
+          'id': id.toString(),
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 RouteBase get $tiktok51VideoSearchRoute => GoRouteData.$route(
       path: '/tiktok51VideoSearch',
       parentNavigatorKey: Tiktok51VideoSearchRoute.$parentNavigatorKey,
@@ -2180,6 +2245,159 @@ extension $Tiktok51VideoSearchRouteExtension on Tiktok51VideoSearchRoute {
         '/tiktok51VideoSearch',
         queryParams: {
           'args': args,
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $tiktok51SearchResultRoute => GoRouteData.$route(
+      path: '/tiktok51VideoSearchResult',
+      parentNavigatorKey: Tiktok51SearchResultRoute.$parentNavigatorKey,
+      factory: $Tiktok51SearchResultRouteExtension._fromState,
+    );
+
+extension $Tiktok51SearchResultRouteExtension on Tiktok51SearchResultRoute {
+  static Tiktok51SearchResultRoute _fromState(GoRouterState state) =>
+      Tiktok51SearchResultRoute(
+        word: state.uri.queryParameters['word']!,
+        type: int.parse(state.uri.queryParameters['type']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/tiktok51VideoSearchResult',
+        queryParams: {
+          'word': word,
+          'type': type.toString(),
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $tiktok51TopicRoute => GoRouteData.$route(
+      path: '/tiktok51Topic',
+      parentNavigatorKey: Tiktok51TopicRoute.$parentNavigatorKey,
+      factory: $Tiktok51TopicRouteExtension._fromState,
+    );
+
+extension $Tiktok51TopicRouteExtension on Tiktok51TopicRoute {
+  static Tiktok51TopicRoute _fromState(GoRouterState state) =>
+      Tiktok51TopicRoute(
+        name: state.uri.queryParameters['name']!,
+        id: state.uri.queryParameters['id']!,
+        api: state.uri.queryParameters['api']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/tiktok51Topic',
+        queryParams: {
+          'name': name,
+          'id': id,
+          'api': api,
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $tiktok51MoreRoute => GoRouteData.$route(
+      path: '/tiktok51More',
+      parentNavigatorKey: Tiktok51MoreRoute.$parentNavigatorKey,
+      factory: $Tiktok51MoreRouteExtension._fromState,
+    );
+
+extension $Tiktok51MoreRouteExtension on Tiktok51MoreRoute {
+  static Tiktok51MoreRoute _fromState(GoRouterState state) => Tiktok51MoreRoute(
+        name: state.uri.queryParameters['name']!,
+        id: state.uri.queryParameters['id']!,
+        api: state.uri.queryParameters['api']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/tiktok51More',
+        queryParams: {
+          'name': name,
+          'id': id,
+          'api': api,
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $tiktok51VideoDetailRoute => GoRouteData.$route(
+      path: '/tiktok51VideoDetail',
+      parentNavigatorKey: Tiktok51VideoDetailRoute.$parentNavigatorKey,
+      factory: $Tiktok51VideoDetailRouteExtension._fromState,
+    );
+
+extension $Tiktok51VideoDetailRouteExtension on Tiktok51VideoDetailRoute {
+  static Tiktok51VideoDetailRoute _fromState(GoRouterState state) =>
+      Tiktok51VideoDetailRoute(
+        id: int.parse(state.uri.queryParameters['id']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/tiktok51VideoDetail',
+        queryParams: {
+          'id': id.toString(),
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $tiktok51TagRoute => GoRouteData.$route(
+      path: '/tiktok51VideoTag',
+      parentNavigatorKey: Tiktok51TagRoute.$parentNavigatorKey,
+      factory: $Tiktok51TagRouteExtension._fromState,
+    );
+
+extension $Tiktok51TagRouteExtension on Tiktok51TagRoute {
+  static Tiktok51TagRoute _fromState(GoRouterState state) => Tiktok51TagRoute(
+        videoTag: state.uri.queryParameters['video-tag']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/tiktok51VideoTag',
+        queryParams: {
+          'video-tag': videoTag,
         },
       );
 

@@ -16,7 +16,7 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/event_bus/event_bus.dart'
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_list_view.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_tab_bar.dart';
-import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/widget/pzhan_feed_card.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/51tiktok/widget/tiktok51_feed_card.dart';
 import 'package:jycrpj/ui_layer/screens/crack/model/app_model.dart';
 import 'package:jycrpj/ui_layer/screens/crack/widgets/scroll_top_button.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
@@ -29,8 +29,8 @@ import '../../../../../../report/ui_layer/report_general_banner.dart';
 import '../../../../../../report/ui_layer/report_gesture_detector.dart';
 import '../../../widgets/grid_list_switch.dart';
 
-class PZhanApiLinkView extends StatefulWidget {
-  const PZhanApiLinkView({
+class Tiktok51ApiLinkView extends StatefulWidget {
+  const Tiktok51ApiLinkView({
     super.key,
     this.showRightList = false,
     required this.linkModel,
@@ -42,10 +42,10 @@ class PZhanApiLinkView extends StatefulWidget {
   final bool showRightList;
 
   @override
-  State<PZhanApiLinkView> createState() => _PZhanApiLinkViewState();
+  State<Tiktok51ApiLinkView> createState() => _Tiktok51ApiLinkViewState();
 }
 
-class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
+class _Tiktok51ApiLinkViewState extends State<Tiktok51ApiLinkView> {
   late final _appDomain = context.read<AppDomain>();
   late final _homeConfig = context.read<HomeConfigNotifier>();
   final ValueNotifier<List<BannerModel>> bannersNotifier = ValueNotifier([]);
@@ -53,9 +53,9 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
   final ValueNotifier<List<PartModel>> partNotifier = ValueNotifier([]);
   final ValueNotifier<bool> isListNotifier = ValueNotifier(false);
 
-  bool get _isDiscovery => widget.linkModel.api == '/api/tabnewpzhan/list_discovery';
+  bool get _isDiscovery => widget.linkModel.api == '/api/tabnew51tikok/list_discovery';
 
-  List<AppNavModel> get _titles => _isDiscovery ? (_homeConfig.config.pzhanFindSortNav ?? []) : (_homeConfig.config.pzhanSortNav ?? []);
+  List<AppNavModel> get _titles => _isDiscovery ? (_homeConfig.config.tikok51FindSortNav ?? []) : (_homeConfig.config.tikok51SortNav ?? []);
 
   // 当前tab选中的位置
   int initialIndex = 0;
@@ -72,6 +72,7 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
     required String type,
   }) async {
     final param = Map.from(widget.linkModel.params)
+      ..['nag_id'] = '4'
       ..['page'] = page
       ..['limit'] = pageSize
       ..['sort'] = type;
@@ -96,7 +97,7 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
         topicsNotifier.value = data.map<CategoryTopicModel>((e) => CategoryTopicModel.fromJson(e)).toList();
       }
 
-      if (result.data['list'] case final List data when data.isNotEmpty) {
+      if (result.data['bot_style_two'] case final List data when data.isNotEmpty) {
         return data.map<AppVideoModel>((e) => AppVideoModel.fromJson(e)).toList();
       }
     } else {
@@ -177,6 +178,7 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
                   topicsNotifier: topicsNotifier,
                   partNotifier: partNotifier,
                   onLinkNavTap: widget.onLinkNavTap,
+                  linkModel: widget.linkModel,
                 ),
               ),
             ],
@@ -188,12 +190,12 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
               isScrollable: true,
               linearColors: const [Colors.transparent, Colors.transparent],
               tabBarPadding: EdgeInsets.symmetric(vertical: 6.w, horizontal: MyTheme.pagePadding),
-              labelStyle: TextStyle(color: MyTheme.pzhanAppPrimaryColor, fontSize: 16.sp, fontWeight: FontWeight.w500),
+              labelStyle: TextStyle(color: MyTheme.tiktok51AppPrimaryColor, fontSize: 16.sp, fontWeight: FontWeight.w600),
               unselectedLabelStyle: TextStyle(color: const Color.fromRGBO(255, 255, 255, 0.8), fontSize: 16.sp, fontWeight: FontWeight.w400),
               titles: isInit ? _titles.map<String>((e) => e.title).toList() : [],
               tabBarRightWidget: widget.showRightList
                   ? GridListSwitch(
-                      color: MyTheme.pzhanAppPrimaryColor,
+                      color: MyTheme.tiktok51AppPrimaryColor,
                       callback: (isList) {
                         isListNotifier.value = isList;
                       })
@@ -216,7 +218,6 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
                                     final double totalPixels = headerPixels + tabPixels;
                                     final bool shouldShow = totalPixels > _showThreshold;
                                     if (shouldShow != _showToTopBtn.value) {
-                                      CommonUtils.log('标签页滚动: header=$headerPixels, tab=$tabPixels, total=$totalPixels');
                                       _showToTopBtn.value = shouldShow;
                                     }
                                   }
@@ -224,7 +225,7 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
                                 },
                                 child: MyListView.list(
                                   scrollController: PrimaryScrollController.of(context),
-                                  itemBuilder: (context, item, index) => PZhanFeedCard(isList: true, feed: item),
+                                  itemBuilder: (context, item, index) => Tiktok51FeedCard(isList: true, feed: item),
                                   onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
                                 ),
                               )
@@ -237,7 +238,6 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
                                     final double totalPixels = headerPixels + tabPixels;
                                     final bool shouldShow = totalPixels > _showThreshold;
                                     if (shouldShow != _showToTopBtn.value) {
-                                      CommonUtils.log('网格页滚动: header=$headerPixels, tab=$tabPixels, total=$totalPixels');
                                       _showToTopBtn.value = shouldShow;
                                     }
                                   }
@@ -249,7 +249,7 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
                                   childAspectRatio: MyTheme.aspectRatio,
                                   crossAxisSpacing: 8.w,
                                   mainAxisSpacing: 10.w,
-                                  itemBuilder: (context, item, index) => PZhanFeedCard(isList: false, feed: item),
+                                  itemBuilder: (context, item, index) => Tiktok51FeedCard(isList: false, feed: item),
                                   onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
                                 ),
                               );
@@ -277,12 +277,14 @@ class _Header extends StatefulWidget {
     required this.topicsNotifier,
     required this.partNotifier,
     required this.onLinkNavTap,
+    required this.linkModel,
   });
 
   final ValueNotifier<List<BannerModel>> bannersNotifier;
   final ValueNotifier<List<CategoryTopicModel>> topicsNotifier;
   final ValueNotifier<List<PartModel>> partNotifier;
   final ValueChanged<String> onLinkNavTap;
+  final LinkModel linkModel;
 
   @override
   State<_Header> createState() => _HeaderState();
@@ -344,7 +346,7 @@ class _HeaderState extends State<_Header> {
                         if (partsItem.type == '0') {
                           widget.onLinkNavTap(linkUrl);
                         } else if (partsItem.type == '1') {
-                          MoreVideoRoute(name: partsItem.title, id: linkUrl, api: 'mvpzhan/list_construct').push(context);
+                          MoreVideoRoute(name: partsItem.title, id: linkUrl, api: 'tabnew51tikok/list_tab_mv').push(context);
                         }
                       }
                     },
@@ -408,7 +410,23 @@ class _HeaderState extends State<_Header> {
                             child: ReportGestureDetector(
                               behavior: HitTestBehavior.translucent,
                               onTap: () {
-                                MoreVideoRoute(name: topic.tabName, id: topic.tabId.toString(), api: 'tabnewpzhan/list_tab_mv').push(context);
+                                if (topic.id == -1) {
+                                  // 特有
+                                  final id = widget.linkModel.id;
+                                  Tiktok51MoreRoute(
+                                    name: topic.tabName,
+                                    id: '$id',
+                                    api: 'tabnew51tikok/tab_list',
+                                  ).push(context);
+                                } else {
+                                  // tiktok 特有的页面
+                                  Tiktok51TopicRoute(
+                                    name: topic.tabName,
+                                    id: topic.tabId.toString(),
+                                    api: 'tabnew51tikok/list_tab_mv',
+                                  ).push(context);
+                                }
+                                // MoreVideoRoute(name: topic.tabName, id: topic.tabId.toString(), api: 'tabnew51tikok/list_tab_mv').push(context);
                               },
                               child: Text(topic.tabName, style: MyTheme.white13),
                             ),

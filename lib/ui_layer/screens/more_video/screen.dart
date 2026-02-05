@@ -4,13 +4,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jycrpj/domain/remote_domain/domains/dynamic.dart';
 import 'package:jycrpj/domain/type_def.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/51tiktok/widget/tiktok51_feed_card.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/91aw/widget/aw91_feed_card.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/awjq/widget/awjq_feed_card.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/clsq/widget/cl_feed_card.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/widget/hjsq_feed_card.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/widget/pzhan_feed_card.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/zpc/widget/zpc_feed_card.dart';
 import 'package:jycrpj/ui_layer/screens/crack/crack_app_type.dart';
-import 'package:jycrpj/ui_layer/utils/common_utils.dart';
+import 'package:jycrpj/ui_layer/screens/crack/model/app_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../../domain/model/feed/feed_model.dart';
@@ -21,7 +23,6 @@ import '../common_widgets/my_app_bar.dart';
 import '../common_widgets/my_list_view.dart';
 import '../common_widgets/my_tab_bar.dart';
 import '../common_widgets/screen_background.dart';
-import '../crack/apps/pzhan/model/pzhan_model.dart';
 import '../theme.dart';
 
 class MoreVideoScreen extends StatefulWidget {
@@ -62,6 +63,12 @@ class _MoreVideoScreenState extends State<MoreVideoScreen> {
       } else if (apiPrefix == 'tabnewpzhan') {
         // pzhan
         _appType = CrackAppType.pzhan.type;
+      } else if (apiPrefix == 'mvhjsq') {
+        // hjsq
+        _appType = CrackAppType.hjsq.type;
+      } else if (apiPrefix == 'tabnew51tikok') {
+        // 51tiktok
+        _appType = CrackAppType.tiktok51.type;
       }
     }
     super.initState();
@@ -129,7 +136,7 @@ class _VideoViewState extends State<_VideoView> {
     super.dispose();
   }
 
-  Future<List<PZhanVideoModel>> _getPZhanData({
+  Future<List<AppVideoModel>> _getPZhanData({
     required int page,
     required int pageSize,
   }) async {
@@ -141,8 +148,7 @@ class _VideoViewState extends State<_VideoView> {
     });
     if (result.status == 1) {
       if (result.data['list'] case final List data when data.isNotEmpty) {
-        final feedModelList = data.map<PZhanVideoModel>((x) => PZhanVideoModel.fromJson(x)).toList();
-        CommonUtils.log('获取的结果:$feedModelList');
+        final feedModelList = data.map<AppVideoModel>((x) => AppVideoModel.fromJson(x)).toList();
         return feedModelList;
       }
       return [];
@@ -173,7 +179,6 @@ class _VideoViewState extends State<_VideoView> {
       if (result.status == 1) {
         if (result.data['list'] case final List data when data.isNotEmpty) {
           final feedModelList = data.map<FeedModel>((x) => FeedModel.fromJson(x)).toList();
-          CommonUtils.log('获取的结果:$feedModelList');
           return feedModelList;
         }
         return [];
@@ -202,6 +207,8 @@ class _VideoViewState extends State<_VideoView> {
       return AwjqFeedCard(feed: feed);
     } else if (widget.appType == CrackAppType.aw91.type) {
       return Aw91FeedCard(feed: feed);
+    } else if (widget.appType == CrackAppType.hjsq.type) {
+      return HjsqFeedCard(feed: feed);
     } else {
       return FeedCard(feed: feed);
     }
@@ -215,6 +222,14 @@ class _VideoViewState extends State<_VideoView> {
         childAspectRatio: MyTheme.aspectRatio,
         crossAxisSpacing: 8.w,
         itemBuilder: (_, item, __) => PZhanFeedCard(feed: item),
+        onFetchingMore: (currentPage, pageSize) => _getPZhanData(page: currentPage, pageSize: pageSize),
+      );
+    } else if (widget.appType == CrackAppType.tiktok51.type) {
+      return MyListView.grid(
+        padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 5.w),
+        childAspectRatio: MyTheme.aspectRatio,
+        crossAxisSpacing: 8.w,
+        itemBuilder: (_, item, __) => Tiktok51FeedCard(feed: item),
         onFetchingMore: (currentPage, pageSize) => _getPZhanData(page: currentPage, pageSize: pageSize),
       );
     } else {

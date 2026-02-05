@@ -7,6 +7,7 @@ import 'package:jycrpj/ui_layer/screens/black/widget/interval_gesture_widget.dar
 import 'package:jycrpj/ui_layer/screens/black/widget/subscript.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_list_view.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_community_screen.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -97,6 +98,12 @@ class _BuyChildScreenState extends State<BuyChildScreen> {
         } else if (buyItemModel.appName == 'zpc') {
           // 91制片厂
           const ZpcCommunityRoute(id: 1).push(context);
+        } else if (buyItemModel.appName == 'hjsq') {
+          // 海角社区
+          const HjsqCommunityRoute(id: 1).push(context);
+        } else if (buyItemModel.appName == '51tiktok') {
+          // 51Tiktok
+          const Tiktok51CommunityRoute(id: 1).push(context);
         }
       },
       child: Column(

@@ -1,4 +1,4 @@
-class PZhanVideoModel {
+class AppVideoModel {
   int id;
   String fanId;
   int uid;
@@ -16,6 +16,7 @@ class PZhanVideoModel {
   int isAw;
   int isOriginal;
   int favoriteNum;
+  int isPay;
   String playUrl;
   String payUrlFull;
   int myTicketNumber;
@@ -44,7 +45,7 @@ class PZhanVideoModel {
   String? advertiseCode;
   String? advertiseLocationCode;
 
-  PZhanVideoModel({
+  AppVideoModel({
     this.id = 0,
     this.fanId = '',
     this.uid = 0,
@@ -62,6 +63,7 @@ class PZhanVideoModel {
     this.isAw = 0,
     this.isOriginal = 0,
     this.favoriteNum = 0,
+    this.isPay = 0,
     this.playUrl = '',
     this.source240 = '',
     this.payUrlFull = '',
@@ -88,8 +90,8 @@ class PZhanVideoModel {
     this.advertiseLocationCode = '',
   });
 
-  factory PZhanVideoModel.fromJson(Map<String, dynamic> json) {
-    return PZhanVideoModel(
+  factory AppVideoModel.fromJson(Map<String, dynamic> json) {
+    return AppVideoModel(
         id: json['id'] ?? 0,
         fanId: json['fan_id'] ?? '',
         uid: json['uid'] ?? 0,
@@ -107,6 +109,7 @@ class PZhanVideoModel {
         isAw: json['is_aw'] ?? 0,
         isOriginal: json['is_original'] ?? 0,
         favoriteNum: json['favorite_num'] ?? 0,
+        isPay: json['is_pay'] ?? 0,
         playUrl: json['play_url'] ?? '',
         source240: json['source_240'] ?? '',
         playNum: json['play_num'] ?? 0,
@@ -152,6 +155,7 @@ class PZhanVideoModel {
       'is_aw': isAw,
       'is_original': isOriginal,
       'favorite_num': favoriteNum,
+      'is_pay': isPay,
       'play_url': playUrl,
       'source_240': source240,
       'play_num': playNum,
@@ -179,7 +183,7 @@ class PZhanVideoModel {
     };
   }
 
-  PZhanVideoModel copyWith({
+  AppVideoModel copyWith({
     int? id,
     String? fanId,
     int? uid,
@@ -218,7 +222,7 @@ class PZhanVideoModel {
     String? advertiseCode,
     String? advertiseLocationCode,
   }) {
-    return PZhanVideoModel(
+    return AppVideoModel(
       id: id ?? this.id,
       fanId: fanId ?? this.fanId,
       uid: uid ?? this.uid,
@@ -260,19 +264,19 @@ class PZhanVideoModel {
   }
 }
 
-class PZhanSearchHotModel {
+class AppSearchHotModel {
   String title;
   String num;
   int rank;
 
-  PZhanSearchHotModel({
+  AppSearchHotModel({
     this.title = '',
     this.num = '',
     this.rank = 0,
   });
 
-  factory PZhanSearchHotModel.fromJson(Map<String, dynamic> json) {
-    return PZhanSearchHotModel(
+  factory AppSearchHotModel.fromJson(Map<String, dynamic> json) {
+    return AppSearchHotModel(
       title: json['title'] ?? '',
       num: json['num'] ?? '',
       rank: json['rank'] ?? 0,
@@ -288,19 +292,19 @@ class PZhanSearchHotModel {
   }
 }
 
-class PZhanMidStyleUpModel {
+class AppMidStyleUpModel {
   final String title;
   final int groupId;
   final List<MidStyleUpListModel> list;
 
-  PZhanMidStyleUpModel({
+  AppMidStyleUpModel({
     this.title = '',
     this.groupId = 0,
     this.list = const [],
   });
 
-  factory PZhanMidStyleUpModel.fromJson(Map<String, dynamic> json) {
-    return PZhanMidStyleUpModel(
+  factory AppMidStyleUpModel.fromJson(Map<String, dynamic> json) {
+    return AppMidStyleUpModel(
       title: json['title'] ?? '',
       groupId: json['group_id'] ?? 0,
       list: json['list'] != null ? List<MidStyleUpListModel>.from(json['list'].map((e) => MidStyleUpListModel.fromJson(e))) : [],

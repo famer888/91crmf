@@ -39,8 +39,8 @@ class _Tiktok51CommunityScreenState extends State<Tiktok51CommunityScreen> {
       children: [
         ScreenBackground(
           child: Selector<UnlockStatusNotifier, bool>(
-              selector: (_, notifier) => notifier.isUnlockPzhan,
-              builder: (context, isUnlockPzhan, child) {
+              selector: (_, notifier) => notifier.isUnlockTiktok51,
+              builder: (context, isUnlockTiktok51, child) {
                 return Scaffold(
                   appBar: SearchAppBar(
                     showLeftBack: false,
@@ -48,7 +48,7 @@ class _Tiktok51CommunityScreenState extends State<Tiktok51CommunityScreen> {
                     type: CrackAppType.tiktok51,
                     openEndDrawer: widget.openEndDrawer,
                     onTap: () {
-                      if (isUnlockPzhan) {
+                      if (isUnlockTiktok51) {
                         const Tiktok51VideoSearchRoute(args: '').push(context);
                       } else {
                         if (widget.crackApp == null) return;

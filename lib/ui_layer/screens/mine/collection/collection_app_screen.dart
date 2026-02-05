@@ -85,6 +85,14 @@ class _CollectAppVideoItem extends StatelessWidget {
       return tr('awjq');
     } else if (type == CrackAppType.aw91.type) {
       return tr('aw91');
+    } else if (type == CrackAppType.hjsq.type) {
+      return tr('hjsq');
+    } else if (type == CrackAppType.tiktok51.type) {
+      return tr('tiktok51');
+    } else if (type == CrackAppType.gd.type) {
+      return tr('gdcm');
+    } else if (type == CrackAppType.xiaolan.type) {
+      return tr('xiaolan');
     }
     return '';
   }
@@ -103,7 +111,15 @@ class _CollectAppVideoItem extends StatelessWidget {
           AnWangRestrictedDetailRoute(id: data.id ?? 0).push(context);
         } else if (type == CrackAppType.aw91.type) {
           Aw91VideoDetailRoute(id: data.id ?? 0).push(context);
-        }
+        } else if (type == CrackAppType.hjsq.type) {
+          HjsqVideoDetailRoute(data.id ?? 0).push(context);
+        } else if (type == CrackAppType.tiktok51.type) {
+          Tiktok51VideoDetailRoute(id: data.id ?? 0).push(context);
+        } /* else if (type == CrackAppType.gd.type) {
+          GdVideoDetailRoute(id: data.id ?? 0).push(context);
+        } else if (type == CrackAppType.xiaolan.type) {
+          XiaolanVideoDetailRoute(id: data.id ?? 0).push(context);
+        }  */
       },
       child: LayoutBuilder(builder: (context, cons) {
         return Column(
