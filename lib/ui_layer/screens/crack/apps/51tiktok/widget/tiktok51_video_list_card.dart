@@ -26,7 +26,7 @@ class Tiktok51VideoListCard extends StatelessWidget {
     return ReportGestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        AppVideoVisitUtil.updateVisitRecord(
+        AppVisitUtil.updateCrackAppVisitRecord(
           context,
           VideoVisitModel(
             title: data.title,

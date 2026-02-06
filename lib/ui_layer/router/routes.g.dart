@@ -62,6 +62,8 @@ List<RouteBase> get $appRoutes => [
       $mineIncomeDetailRoute,
       $mineCollectionRoute,
       $userCenterRoute,
+      $vlogSearchRoute,
+      $vlogSearchResultRoute,
       $chatMessageRoute,
       $mineFollowingRoute,
       $originalEnterRoute,
@@ -176,8 +178,8 @@ RouteBase get $statefulShellRoute => StatefulShellRouteData.$route(
         StatefulShellBranchData.$branch(
           routes: [
             GoRouteData.$route(
-              path: '/dship',
-              factory: $DShipRouteExtension._fromState,
+              path: '/vlog',
+              factory: $VlogRouteExtension._fromState,
             ),
           ],
         ),
@@ -256,11 +258,11 @@ extension $BlackRouteExtension on BlackRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $DShipRouteExtension on DShipRoute {
-  static DShipRoute _fromState(GoRouterState state) => const DShipRoute();
+extension $VlogRouteExtension on VlogRoute {
+  static VlogRoute _fromState(GoRouterState state) => const VlogRoute();
 
   String get location => GoRouteData.$location(
-        '/dship',
+        '/vlog',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -1666,6 +1668,63 @@ extension $UserCenterRouteExtension on UserCenterRoute {
 
   String get location => GoRouteData.$location(
         '/userCenter/${Uri.encodeComponent(aff)}',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $vlogSearchRoute => GoRouteData.$route(
+      path: '/search',
+      parentNavigatorKey: VlogSearchRoute.$parentNavigatorKey,
+      factory: $VlogSearchRouteExtension._fromState,
+    );
+
+extension $VlogSearchRouteExtension on VlogSearchRoute {
+  static VlogSearchRoute _fromState(GoRouterState state) => VlogSearchRoute(
+        word: state.uri.queryParameters['word']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/search',
+        queryParams: {
+          'word': word,
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $vlogSearchResultRoute => GoRouteData.$route(
+      path: '/searchResult',
+      parentNavigatorKey: VlogSearchResultRoute.$parentNavigatorKey,
+      factory: $VlogSearchResultRouteExtension._fromState,
+    );
+
+extension $VlogSearchResultRouteExtension on VlogSearchResultRoute {
+  static VlogSearchResultRoute _fromState(GoRouterState state) =>
+      VlogSearchResultRoute(
+        word: state.uri.queryParameters['word']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/searchResult',
+        queryParams: {
+          'word': word,
+        },
       );
 
   void go(BuildContext context) => context.go(location);

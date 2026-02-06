@@ -14,8 +14,10 @@ import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import '../../../../report/ui_layer/report_gesture_detector.dart';
 
 class VlogCommentSheet extends StatefulWidget {
-  const VlogCommentSheet({super.key, this.id = 0, this.onClose});
+  const VlogCommentSheet({super.key, this.id = 0, this.onClose, this.commentCount = 0});
+
   final int id;
+  final int commentCount;
   final Function? onClose;
 
   @override
@@ -28,19 +30,20 @@ class VlogCommentSheetState extends State<VlogCommentSheet> {
 
   /// 文本框焦点
   final inputFocusNode = FocusNode();
-  final hintNotifier = ValueNotifier('wyddxf'.tr());
+  final hintNotifier = ValueNotifier('qsrnxsdh'.tr());
 
   late final domain = context.read<VlogDomain>();
 
+  int _commentId = -1;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    _commentId = -1;
   }
 
   @override
   void didUpdateWidget(covariant VlogCommentSheet oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (MediaQuery.of(context).viewInsets.bottom == 0) {
@@ -72,27 +75,29 @@ class VlogCommentSheetState extends State<VlogCommentSheet> {
   @override
   Widget build(BuildContext context) {
     return AnimatedPadding(
-        padding: MediaQuery.of(context).viewInsets,
-        duration: const Duration(milliseconds: 100),
-        child: Container(
-            height: ScreenUtil().screenHeight * 0.5,
-            decoration: BoxDecoration(
-              color: MyTheme.bgColor,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10.w),
-                topRight: Radius.circular(10.w),
-              ),
-            ),
-            child: ReportGestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: configContentView(),
-            )));
+      padding: MediaQuery.of(context).viewInsets,
+      duration: const Duration(milliseconds: 100),
+      child: Container(
+        height: ScreenUtil().screenHeight * 0.5,
+        decoration: BoxDecoration(
+          color: MyTheme.bgColor,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10.w),
+            topRight: Radius.circular(10.w),
+          ),
+        ),
+        child: ReportGestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: configContentView(context),
+        ),
+      ),
+    );
   }
 
-  Widget configContentView() {
+  Widget configContentView(BuildContext context) {
     return ReportGestureDetector(
       onTap: () {
         inputFocusNode.unfocus();
@@ -101,24 +106,35 @@ class VlogCommentSheetState extends State<VlogCommentSheet> {
         children: [
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10.w),
-            child:
-                Text('pl'.tr(context: context), style: MyTheme.white255_16_M),
+            child: Text('${'pl'.tr(context: context)}(${widget.commentCount})', style: MyTheme.white255_16_M),
           ),
           Expanded(
             child: MyListView.list(
               padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-              itemBuilder: (context, item, index) =>
-                  CommentTile(data: item, type: 2),
-              onFetchingMore: (currentPage, pageSize) =>
-                  _getData(currentPage: currentPage, limit: pageSize),
+              itemBuilder: (context, item, index) => CommentTile(
+                data: item,
+                type: 2,
+                secondaryCommentCallback: (commentId) {
+                  _commentId = commentId;
+                  FocusScope.of(context).requestFocus(inputFocusNode);
+                },
+              ),
+              onFetchingMore: (currentPage, pageSize) => _getData(currentPage: currentPage, limit: pageSize),
             ),
           ),
           CommentInput(
-            controller: textEditingController,
+            showAvatar: false,
             focusNode: inputFocusNode,
             hintNotifier: hintNotifier,
+            controller: textEditingController,
             onSubmitted: () async {
-              await _sendComment(text: textEditingController.text);
+              if (_commentId != -1) {
+                // 回复评论
+                await _sendSecondaryComment(context, text: textEditingController.text);
+              } else {
+                // 回复帖子
+                await _sendComment(context, text: textEditingController.text);
+              }
             },
           ),
         ],
@@ -126,7 +142,7 @@ class VlogCommentSheetState extends State<VlogCommentSheet> {
     );
   }
 
-  Future<void> _sendComment({required String text}) async {
+  Future<void> _sendComment(BuildContext context, {required String text}) async {
     if (text.trim().isEmpty) {
       MyToast.showText(text: 'qsrnr'.tr(context: context));
       return;
@@ -141,6 +157,29 @@ class VlogCommentSheetState extends State<VlogCommentSheet> {
 
     textEditingController.clear();
     inputFocusNode.unfocus();
-    Navigator.pop(context);
+    if (context.mounted) {
+      Navigator.pop(context);
+    }
+  }
+
+  Future<void> _sendSecondaryComment(BuildContext context, {required String text}) async {
+    if (text.trim().isEmpty) {
+      MyToast.showText(text: 'qsrnr'.tr(context: context));
+      return;
+    }
+    MyToast.showLoading(text: 'fbioz'.tr(context: context));
+    final result = await domain.vlogSecondaryComment(
+      commentId: _commentId,
+      text: text,
+    );
+    _commentId = -1;
+    MyToast.closeAllLoading();
+    MyToast.showText(text: result.msg ?? '');
+
+    textEditingController.clear();
+    inputFocusNode.unfocus();
+    if (context.mounted) {
+      Navigator.pop(context);
+    }
   }
 }

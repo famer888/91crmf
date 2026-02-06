@@ -88,9 +88,7 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
       _asyncValue = AsyncData(data);
     } else {
       if (res.msg case final msg? when msg.isNotEmpty) {
-        MyToast.showText(
-          text: msg,
-        );
+        MyToast.showText(text: msg);
       }
       _asyncValue = const AsyncError();
     }
@@ -105,26 +103,24 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
     return ScreenBackground(
       child: Scaffold(
         body: _asyncValue.maybeWhen(
-            orElse: () => const LoadingView(),
-            error: (_, __) => Column(
-                  children: [
-                    UserTopicBarWidget('', key: _topicBarKey),
-                    Expanded(child: NetworkErrorView(onTap: _initData)),
-                  ],
-                ),
-            data: (data) => configContent(data)),
+          orElse: () => const LoadingView(),
+          error: (_, __) => Column(
+            children: [
+              UserTopicBarWidget('', key: _topicBarKey),
+              Expanded(child: NetworkErrorView(onTap: _initData)),
+            ],
+          ),
+          data: (data) => configContent(data),
+        ),
       ),
     );
   }
 
   Widget configContent(CreatorInfo data) {
     return Stack(children: [
-      SizedBox(
-        width: double.infinity,
-        height: 300.w,
-        // child:
-        //     const MyImage.asset(MyImagePaths.appUserCenterBg, fit: BoxFit.fill),
-      ),
+      SizedBox(width: double.infinity, height: 300.w
+          // child: const MyImage.asset(MyImagePaths.appUserCenterBg, fit: BoxFit.fill),
+          ),
       Column(
         children: [
           UserTopicBarWidget(data.nickname ?? '', key: _topicBarKey),
@@ -132,9 +128,7 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
             child: NestedScrollView(
               controller: controller,
               headerSliverBuilder: (_, __) => [
-                SliverToBoxAdapter(
-                  child: configUserInfoView(data),
-                ),
+                SliverToBoxAdapter(child: configUserInfoView(data)),
               ],
               body: configSubListView(data),
             ),
@@ -166,7 +160,6 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
 
   Widget configUserInfoView(CreatorInfo data) {
     final aff = '${data.aff}';
-
     final city = (data.city?.isNotEmpty ?? false) ? data.city : '火星';
     final sex = data.sex == 0 ? '保密' : (data.sex == 1 ? '男' : '女');
     List<String> tags = (data.fetish ?? '').split(',').where((element) => element.isNotEmpty).toList();
@@ -183,12 +176,7 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              MyAvatar(
-                thumb: data.thumb,
-                size: 63.w,
-                gradient: MyTheme.gradient_90_114,
-                margin: 2,
-              ),
+              MyAvatar(thumb: data.thumb, size: 63.w, gradient: MyTheme.gradient_90_114, margin: 2),
               SizedBox(height: 10.w),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,10 +185,7 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        data.nickname ?? 'kkyh'.tr(context: context),
-                        style: MyTheme.white16bold,
-                      ),
+                      Text(data.nickname ?? 'kkyh'.tr(context: context), style: MyTheme.white16bold),
                       SizedBox(width: 5.w),
                       MemberVipWidget(vipImage: data.vipImg),
                     ],
@@ -210,24 +195,19 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       RichText(
-                          text: TextSpan(children: [
-                        TextSpan(
-                          text: CommonUtils.renderFixedNumber(data.followCount ?? 0),
-                          style: MyTheme.gray102_15,
-                        ),
-                        TextSpan(
-                          text: '${'fans'.tr(context: context)}  ',
-                          style: MyTheme.gray102_15,
-                        )
-                      ])),
+                        text: TextSpan(children: [
+                          TextSpan(
+                            text: CommonUtils.renderFixedNumber(data.followCount ?? 0),
+                            style: MyTheme.gray102_15,
+                          ),
+                          TextSpan(text: '${'fans'.tr(context: context)}  ', style: MyTheme.gray102_15)
+                        ]),
+                      ),
                       data.agent == 1
                           ? Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  'kkyhrz'.tr(context: context),
-                                  style: MyTheme.gray102_15,
-                                ),
+                                Text('kkyhrz'.tr(context: context), style: MyTheme.gray102_15),
                                 SizedBox(width: 2.w),
                                 Icon(
                                   Icons.verified_sharp,
@@ -264,21 +244,16 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                                   ).push(context);
                                 },
                                 child: Container(
-                                  height: 24.w,
-                                  width: 80.w,
+                                  height: 25.w,
                                   alignment: Alignment.center,
+                                  padding: EdgeInsets.symmetric(horizontal: 10.w),
                                   decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: MyTheme.cyanColor00edfd,
-                                      width: 0.5.w,
-                                    ),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(2.w),
-                                    ),
+                                    border: Border.all(color: MyTheme.blueColor81_151_241, width: 1.w),
+                                    borderRadius: BorderRadius.all(Radius.circular(5.w)),
                                   ),
                                   child: Text(
                                     'sxta'.tr(context: context),
-                                    style: MyTheme.blue96_13_M,
+                                    style: MyTheme.blue96_13_M.copyWith(color: MyTheme.blueColor81_151_241, fontSize: 12.sp),
                                   ),
                                 ),
                               ),
@@ -286,8 +261,9 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                       member.uuid == data.uuid
                           ? const SizedBox.shrink()
                           : Selector<UserNotifier, bool>(
-                              selector: (_, notifier) => notifier.userFollowingStatus.contains('${data.aff}'),
+                              selector: (_, notifier) => notifier.userFollowingStatus.contains(aff),
                               builder: (_, isFollowed, __) {
+                                CommonUtils.log('关注状态:$isFollowed');
                                 return Container(
                                   margin: EdgeInsets.only(left: 10.w),
                                   child: FollowButton(
@@ -296,11 +272,11 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                                         await userNotifier.changeUserFollow('${data.aff}');
                                       }),
                                 );
-                              })
+                              }),
                     ],
-                  )
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         );
@@ -522,11 +498,7 @@ class _UserTopicBarWidgetState extends State<UserTopicBarWidget> {
             alignment: Alignment.center,
             width: 40.w,
             height: 40.w,
-            child: Image.asset(
-              MyImagePaths.appBackIcon,
-              width: 20.w,
-              height: 20.w,
-            ),
+            child: Image.asset(MyImagePaths.appBackIcon, width: 20.w, height: 20.w),
           ),
           onTap: () {
             context.pop();

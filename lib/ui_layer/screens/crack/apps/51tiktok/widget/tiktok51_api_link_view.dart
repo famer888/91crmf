@@ -72,7 +72,7 @@ class _Tiktok51ApiLinkViewState extends State<Tiktok51ApiLinkView> {
     required String type,
   }) async {
     final param = Map.from(widget.linkModel.params)
-      ..['nag_id'] = '4'
+      ..['nag_id'] = widget.linkModel.id
       ..['page'] = page
       ..['limit'] = pageSize
       ..['sort'] = type;
@@ -191,7 +191,7 @@ class _Tiktok51ApiLinkViewState extends State<Tiktok51ApiLinkView> {
               linearColors: const [Colors.transparent, Colors.transparent],
               tabBarPadding: EdgeInsets.symmetric(vertical: 6.w, horizontal: MyTheme.pagePadding),
               labelStyle: TextStyle(color: MyTheme.tiktok51AppPrimaryColor, fontSize: 16.sp, fontWeight: FontWeight.w600),
-              unselectedLabelStyle: TextStyle(color: const Color.fromRGBO(255, 255, 255, 0.8), fontSize: 16.sp, fontWeight: FontWeight.w400),
+              unselectedLabelStyle: TextStyle(color: const Color.fromRGBO(255, 255, 255, 1), fontSize: 16.sp, fontWeight: FontWeight.w500),
               titles: isInit ? _titles.map<String>((e) => e.title).toList() : [],
               tabBarRightWidget: widget.showRightList
                   ? GridListSwitch(

@@ -7,13 +7,11 @@ import 'package:provider/provider.dart';
 import '../../../domain/model/banner_model.dart';
 import '../../../domain/model/black_model.dart';
 import '../../../domain/remote_domain/domains/black_domain.dart';
+import '../../../report/ui_layer/report_general_banner.dart';
 import '../../notifiers/user_notifier.dart';
 import '../../utils/my_toast.dart';
-import '../common_widgets/general_banner.dart';
 import '../common_widgets/my_list_view.dart';
 import '../theme.dart';
-
-import '../../../report/ui_layer/report_general_banner.dart';
 
 class BlackTagScreen extends StatefulWidget {
   final BlackModel blockModel;

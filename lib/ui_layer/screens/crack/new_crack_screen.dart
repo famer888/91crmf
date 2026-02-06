@@ -238,24 +238,6 @@ class _NewCrackScreenState extends State<NewCrackScreen> {
                     );
                   }),
                 ),
-                Positioned(
-                  top: 25.w,
-                  left: 20.w,
-                  child: GestureDetector(
-                    onTap: () async {
-                      await _getCrackData();
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: 10.w),
-                      decoration: BoxDecoration(color: MyTheme.blueColor63, borderRadius: BorderRadius.all(Radius.circular(5.w))),
-                      child: Text(
-                        'getCrackList',
-                        style: TextStyle(color: Colors.white, fontSize: 16.sp),
-                      ),
-                    ),
-                  ),
-                ),
                 if (_showGuide_)
                   Positioned.fill(
                     child: Builder(builder: (scaffoldContext) {

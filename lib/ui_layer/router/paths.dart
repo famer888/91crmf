@@ -34,6 +34,12 @@ class AppRouterPaths {
 
   static const vlogSecond = '/vlogSecond';
 
+  /// 短视频搜索
+  static const vlogSearch = '/search';
+
+  /// 短视频搜索结果
+  static const vlogSearchResult = '/searchResult';
+
   /// soul 群聊列表
   static const soulGroupChatList = '/soulGroupChatList';
 

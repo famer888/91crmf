@@ -54,6 +54,7 @@ import 'package:jycrpj/domain/remote_domain/domains/buy.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:jycrpj/report/event_tracking.dart';
 import 'package:jycrpj/report/ui_layer/report_timing_interceptor.dart';
+import 'package:jycrpj/ui_layer/screens/common_widgets/video_player/model/shorttv_search_model.dart';
 import 'package:jycrpj/ui_layer/screens/mine/visitrecord/visit_model.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:utils/utils.dart';

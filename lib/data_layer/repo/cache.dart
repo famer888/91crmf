@@ -8,6 +8,7 @@ const zpcSearchHistoryKey = 'zpc_search_history';
 const pzhanSearchHistoryKey = 'pzhan_search_history';
 const tiktok51SearchHistoryKey = 'tiktok51_search_history';
 const hjsqSearchHistoryKey = 'hjsq_search_history';
+const dspSearchHistoryKey = 'dsp_search_history';
 const searchHistoryKey = 'search_history';
 
 class _CacheManager implements CacheDomain {
@@ -31,6 +32,7 @@ class _CacheManager implements CacheDomain {
   final _startScreenAdsKey = 'startScreenAdsKey';
   final _crackAppVideoKey = 'crack_app_video';
   final _blackPostKey = 'black_post';
+  final _vlogPostKey = 'vlog_post';
   final _guideKey = 'guide';
 
   final _downloadVideoTasksKey = 'download_video_tasks';
@@ -134,6 +136,32 @@ class _CacheManager implements CacheDomain {
       return e.toJson();
     }).toList();
     await appBox.upsert(_blackPostKey, feedModelList);
+  }
+
+  /// 读取短视频浏览记录
+  @override
+  Future<List<VlogModel>?> readVlogVisitList() async {
+    final vlogVisitModels = await appBox.read(_vlogPostKey);
+    try {
+      final list = (vlogVisitModels as List).map((e) {
+        final map = Map<String, dynamic>.from(e);
+        final vlogListItemModel = VlogModel.fromJson(map);
+        return vlogListItemModel;
+      }).toList();
+      return list;
+    } catch (e) {
+      CommonUtils.log('#####读取短视频帖子浏览记录#####${e.toString()}');
+    }
+    return null;
+  }
+
+  /// 更新短视频浏览记录
+  @override
+  Future<void> upsertVlogVisitList({required List<VlogModel> vlogVisitModels}) async {
+    List<Map<String, dynamic>> feedModelList = vlogVisitModels.map((e) {
+      return e.toJson();
+    }).toList();
+    await appBox.upsert(_vlogPostKey, feedModelList);
   }
 
   @override

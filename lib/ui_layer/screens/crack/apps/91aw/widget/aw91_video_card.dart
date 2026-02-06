@@ -26,7 +26,7 @@ class Aw91VideoCard extends StatelessWidget {
     return ReportGestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () async {
-        AppVideoVisitUtil.updateVisitRecord(
+        AppVisitUtil.updateCrackAppVisitRecord(
           context,
           VideoVisitModel(
             title: data.title,

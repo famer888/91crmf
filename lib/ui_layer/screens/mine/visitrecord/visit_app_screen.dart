@@ -14,9 +14,7 @@ import '../../theme.dart';
 import '../../../../report/ui_layer/report_gesture_detector.dart';
 
 class VisitAppScreen extends StatefulWidget {
-  final int type;
-
-  const VisitAppScreen({super.key, required this.type});
+  const VisitAppScreen({super.key});
 
   @override
   State<VisitAppScreen> createState() => _VisitAppScreenState();
@@ -24,7 +22,6 @@ class VisitAppScreen extends StatefulWidget {
 
 class _VisitAppScreenState extends State<VisitAppScreen> {
   final ValueNotifier<List<VideoVisitModel>> _visitFeedModelsNotifier = ValueNotifier([]);
-
 
   @override
   void initState() {
@@ -43,7 +40,7 @@ class _VisitAppScreenState extends State<VisitAppScreen> {
   }
 
   void _getVisitVideoData() async {
-    final List<VideoVisitModel>? visitFeedModels = await AppVideoVisitUtil.getAppVisitRecord(context);
+    final List<VideoVisitModel>? visitFeedModels = await AppVisitUtil.getAppVisitRecord(context);
     if (visitFeedModels == null) {
       _visitFeedModelsNotifier.value = [];
     } else {
@@ -58,26 +55,30 @@ class _VisitAppScreenState extends State<VisitAppScreen> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-        valueListenable: _visitFeedModelsNotifier,
-        builder: (context, visitFeedModels, child) {
-          return Container(
-            alignment: Alignment.topCenter,
-            child: visitFeedModels.isEmpty ? PageEmptyDataView(text: 'mysj'.tr(context: context)) : GridView.builder(
-                shrinkWrap: true,
-                padding: EdgeInsets.only(top: 8.w),
-                itemCount: visitFeedModels.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 8.w,
-                  crossAxisSpacing: 8.w,
-                  childAspectRatio: 170 / 120,
+      valueListenable: _visitFeedModelsNotifier,
+      builder: (context, visitFeedModels, child) {
+        return Container(
+          alignment: Alignment.topCenter,
+          child: visitFeedModels.isEmpty
+              ? PageEmptyDataView(text: 'mysj'.tr(context: context))
+              : GridView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.only(top: 8.w),
+                  itemCount: visitFeedModels.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 8.w,
+                    crossAxisSpacing: 8.w,
+                    childAspectRatio: 170 / 120,
+                  ),
+                  itemBuilder: (context, index) {
+                    final feedModel = visitFeedModels[index];
+                    return _VisitAppVideoItem(feedModel);
+                  },
                 ),
-                itemBuilder: (context, index) {
-                  final feedModel = visitFeedModels[index];
-                  return _VisitAppVideoItem(feedModel);
-                }),
-          );
-        });
+        );
+      },
+    );
   }
 }
 
@@ -132,7 +133,7 @@ class _VisitAppVideoItem extends StatelessWidget {
           HjsqVideoDetailRoute(data.id).push(context);
         } else if (type == CrackAppType.tiktok51.type) {
           Tiktok51VideoDetailRoute(id: data.id).push(context);
-        }/* else if (type == CrackAppType.gd.type) {
+        } /* else if (type == CrackAppType.gd.type) {
           GdVideoDetailRoute(id: data.id).push(context);
         } else if (type == CrackAppType.xiaolan.type) {
           XiaolanVideoDetailRoute(id: data.id).push(context);
@@ -193,4 +194,3 @@ class _VisitAppVideoItem extends StatelessWidget {
     );
   }
 }
-

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:jycrpj/domain/api_validator.dart';
 import 'package:jycrpj/domain/model/navigator_model.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/video_player/shortv_player.dart';
 import 'package:photo_view/photo_view_gallery.dart';
@@ -116,7 +117,7 @@ class VlogPlayScreenState extends State<VlogPlayScreen> {
       apiLink: _apiUrl,
       params: param,
     );
-    if (res.status == 1) {
+    if (res.isValid) {
       if (res.data == null) {
         isAction = false;
         return;
@@ -127,8 +128,7 @@ class VlogPlayScreenState extends State<VlogPlayScreen> {
         data = res.data['blogger_mvs'];
       }
 
-      List<VlogModel> tp =
-          (data as List).map((x) => VlogModel.fromJson(x)).toList();
+      List<VlogModel> tp = (data as List).map((x) => VlogModel.fromJson(x)).toList();
       if (page == 1) {
         array = tp;
       } else if (tp.isNotEmpty) {
@@ -161,9 +161,7 @@ class VlogPlayScreenState extends State<VlogPlayScreen> {
                 strokeWidth: 2,
                 onRefresh: headerRefresh,
                 child: PhotoViewGallery.builder(
-                    scrollPhysics: _singlePlay == 1
-                        ? const NeverScrollableScrollPhysics()
-                        : const BouncingScrollPhysics(),
+                    scrollPhysics: _singlePlay == 1 ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
                     itemCount: array.length,
                     scrollDirection: Axis.vertical,
                     pageController: _pageController,
@@ -187,14 +185,15 @@ class VlogPlayScreenState extends State<VlogPlayScreen> {
 
                       if (e.imgUrl != null) {
                         return PhotoViewGalleryPageOptions.customChild(
-                            initialScale: 1.0,
-                            minScale: 1.0,
-                            maxScale: 1.0,
-                            disableGestures: true,
-                            child: CommonUtils.adModuleInShortFlowUI(
-                              context,
-                              e,
-                            ));
+                          initialScale: 1.0,
+                          minScale: 1.0,
+                          maxScale: 1.0,
+                          disableGestures: true,
+                          child: CommonUtils.adModuleInShortFlowUI(
+                            context,
+                            e,
+                          ),
+                        );
                       }
 
                       if (!kIsWeb) {
@@ -208,10 +207,7 @@ class VlogPlayScreenState extends State<VlogPlayScreen> {
                         disableGestures: true,
                         child: e.mvType == 1
                             ? VideoDetailScreen(id: '${e.id}') //, noback: true)
-                            : ShortVPlayer(
-                                info: e,
-                                keepBottomBlank: widget.keepBottomBlank,
-                              ),
+                            : ShortVPlayer(info: e, keepBottomBlank: widget.keepBottomBlank),
                       );
                     }),
               );
@@ -246,7 +242,6 @@ class VlogPlayScreenState extends State<VlogPlayScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     if (!kIsWeb) {
       // PreloadUtils.removeCurrentTask();
       // discrip.cancel();

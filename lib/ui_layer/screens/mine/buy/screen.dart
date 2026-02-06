@@ -40,12 +40,10 @@ import 'package:provider/provider.dart';
 import 'buy_child_screen.dart';
 
 class BuyTabModel {
-
   final String title;
   final int type;
 
   BuyTabModel({required this.title, required this.type});
-
 }
 
 class MineBuyScreen extends StatefulWidget {
@@ -55,12 +53,12 @@ class MineBuyScreen extends StatefulWidget {
   State<MineBuyScreen> createState() => _MineBuyScreenState();
 }
 
-// todo 我的购买 和 购买App 界面
 class _MineBuyScreenState extends State<MineBuyScreen> {
   late final homeConfigNotifier = context.read<HomeConfigNotifier>();
   final _tabTitles = [
     BuyTabModel(title: tr('app'), type: 0),
     BuyTabModel(title: tr('home_hl'), type: 1),
+    BuyTabModel(title: tr('home_dsp'), type: 2),
   ];
 
   @override
@@ -88,6 +86,7 @@ class _MineBuyScreenState extends State<MineBuyScreen> {
           views: const [
             KeepAliveWrapper(child: BuyChildScreen(type: 0, isList: false)),
             KeepAliveWrapper(child: BuyChildScreen(type: 1, isList: true)),
+            KeepAliveWrapper(child: _VlogVideoView()),
           ],
         ),
       ),
@@ -346,10 +345,7 @@ class _VlogVideoViewState extends State<_VlogVideoView> {
               CommonUtils.openRoute(context, item.toJson());
             }
           }),
-      onFetchingMore: (currentPage, pageSize) => _getData(
-        page: currentPage,
-        pageSize: pageSize,
-      ),
+      onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize),
     );
   }
 }

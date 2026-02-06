@@ -14,6 +14,7 @@ import 'package:jycrpj/ui_layer/notifiers/home_config_notifier.dart';
 import 'package:jycrpj/ui_layer/router/routes.dart';
 import 'package:jycrpj/ui_layer/screens/asmr/card/voice_gird_card.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/game/card/game_card.dart';
+import 'package:jycrpj/ui_layer/screens/mine/collection/collection_vlog_screen.dart';
 import 'package:jycrpj/ui_layer/screens/vlog/card/vlog_card.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:provider/provider.dart';
@@ -88,7 +89,7 @@ class _MineCollectionScreenState extends State<MineCollectionScreen> {
               child: _ASMRView(),
             ),
             const KeepAliveWrapper(
-              child: _VlogVideoView(),
+              child: CollectionVlogScreen(),
             ),
             const KeepAliveWrapper(
               child: _GameView(),
@@ -288,75 +289,6 @@ class _ASMRViewState extends State<_ASMRView> {
     return MyListView.grid(
       contentPadding: 15.w,
       itemBuilder: (context, item, index) => VoiceGirdCard(data: item),
-      onFetchingMore: (currentPage, pageSize) => _getData(
-        page: currentPage,
-        pageSize: pageSize,
-      ),
-    );
-  }
-}
-
-class _VlogVideoView extends StatefulWidget {
-  const _VlogVideoView();
-
-  @override
-  State<_VlogVideoView> createState() => _VlogVideoViewState();
-}
-
-class _VlogVideoViewState extends State<_VlogVideoView> {
-  late final _domain = context.read<VlogDomain>();
-  List<VlogModel> array = [];
-
-  int _page = 1;
-  int _limit = 15;
-
-  Future<List<VlogModel>?> _getData({
-    required int page,
-    required int pageSize,
-  }) async {
-    _page = page;
-    _limit = pageSize;
-
-    final result = await _domain.vlogFavoriteList(page: page, limit: pageSize);
-    if (result.isValid) {
-      List<VlogModel> tp = List.from(result.data ?? []);
-      if (page == 1) {
-        array = tp;
-      } else {
-        array.addAll(tp);
-      }
-      return tp;
-    } else {
-      return null;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MyListView.grid(
-      padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-      childAspectRatio: UILayerConst.vlogVideoRatio,
-      crossAxisSpacing: 10.w,
-      itemBuilder: (_, item, index) => VlogCard(
-          data: item,
-          onTapFunc: (type) {
-            if (type == 1) {
-              //点击短视频视频
-              AppGlobal.shortVideosInfo = {
-                'list': array,
-                'page': _page,
-                'index': index,
-                'api': 'vlog/list_favorite',
-                'params': {
-                  'limit': _limit,
-                }
-              };
-              const VlogSecondRoute().push(context);
-            } else {
-              //广告类型
-              CommonUtils.openRoute(context, item.toJson());
-            }
-          }),
       onFetchingMore: (currentPage, pageSize) => _getData(
         page: currentPage,
         pageSize: pageSize,

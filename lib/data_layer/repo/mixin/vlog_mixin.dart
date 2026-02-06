@@ -43,6 +43,13 @@ mixin _Vlog on _BaseAppRepo implements VlogDomain {
       _vlogService.vlogComment(id: id, text: text).deserialize().guard;
 
   @override
+  AsyncResult vlogSecondaryComment({
+    required int commentId,
+    required String text,
+  }) =>
+      _vlogService.vlogSecondaryComment(commentId: commentId, text: text).deserialize().guard;
+
+  @override
   AsyncResult<List<VideoCommentListModel>?> vlogCommentList({
     required int limit,
     required int page,

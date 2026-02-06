@@ -1,3 +1,5 @@
+import 'package:jycrpj/ui_layer/screens/common_widgets/video_player/model/shorttv_search_model.dart';
+
 import '../../model/black_model.dart';
 import '../../type_def.dart';
 
@@ -43,5 +45,7 @@ abstract class BlackDomain {
 
   /// 黑料标签列表
   AsyncResult<BlackLabelListModel> getBlackLabelList({required int page, required int limit, required String tag});
+
+  AsyncResult<BlackSearchListModel> searchList({required int page, required int limit, required String word});
 
 }

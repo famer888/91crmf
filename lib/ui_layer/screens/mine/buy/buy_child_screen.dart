@@ -218,3 +218,19 @@ class _BuyChildScreenState extends State<BuyChildScreen> {
     return const SizedBox();
   }
 }
+
+// 短视频
+class DspChildScreen extends StatefulWidget {
+  const DspChildScreen({super.key});
+
+  @override
+  State<DspChildScreen> createState() => _DspChildScreenState();
+}
+
+class _DspChildScreenState extends State<DspChildScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+

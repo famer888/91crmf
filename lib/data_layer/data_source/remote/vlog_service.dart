@@ -52,13 +52,23 @@ class VlogService extends BaseService {
         'text': text,
       });
 
+  /// 二级评论
+  AsyncJson vlogSecondaryComment({
+    required int commentId,
+    required String text,
+  }) =>
+      post('/comment', data: {
+        'comment_id': commentId,
+        'text': text,
+      });
+
   ///评论列表
   AsyncJson vlogCommentList({
     required int limit,
     required int page,
     required int id,
   }) =>
-      post('/list_comment', data: {
+      post('/vlog_comments', data: {
         'page': page,
         'limit': limit,
         'id': id,

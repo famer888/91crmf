@@ -49,11 +49,17 @@ class HomeConfigNotifier extends ChangeNotifier {
     final aw91SearchHistory = await _domain.cache.readSearchHistory(key: aw91SearchHistoryKey);
     final zpcSearchHistory = await _domain.cache.readSearchHistory(key: zpcSearchHistoryKey);
     final pzhanSearchHistory = await _domain.cache.readSearchHistory(key: pzhanSearchHistoryKey);
+    final hjsqSearchHistory = await _domain.cache.readSearchHistory(key: hjsqSearchHistoryKey);
+    final tiktokSearchHistory = await _domain.cache.readSearchHistory(key: tiktok51SearchHistoryKey);
+    final dspSearchHistory = await _domain.cache.readSearchHistory(key: dspSearchHistoryKey);
     _searchHistoryMap[clSearchHistoryKey] = clSearchHistory;
     _searchHistoryMap[awjqSearchHistoryKey] = awjqSearchHistory;
     _searchHistoryMap[aw91SearchHistoryKey] = aw91SearchHistory;
     _searchHistoryMap[zpcSearchHistoryKey] = zpcSearchHistory;
     _searchHistoryMap[pzhanSearchHistoryKey] = pzhanSearchHistory;
+    _searchHistoryMap[hjsqSearchHistoryKey] = hjsqSearchHistory;
+    _searchHistoryMap[tiktok51SearchHistoryKey] = tiktokSearchHistory;
+    _searchHistoryMap[dspSearchHistoryKey] = dspSearchHistory;
   }
 
   Future<Json?> uploadImage(XFile xFile) async {
