@@ -89,15 +89,15 @@ class _Tiktok51ApiLinkViewState extends State<Tiktok51ApiLinkView> {
     }
 
     if (result.status == 1) {
-      if (result.data['banner'] case final List data when data.isNotEmpty) {
+      if (result.data['banner'] case final List data when data.isNotEmpty && bannersNotifier.value.isEmpty) {
         bannersNotifier.value = data.map((e) => BannerModel.fromJson(e)).toList();
       }
 
-      if (result.data['mid_style_category'] case final List data when data.isNotEmpty) {
+      if (result.data['mid_style_category'] case final List data when data.isNotEmpty && topicsNotifier.value.isEmpty) {
         topicsNotifier.value = data.map<CategoryTopicModel>((e) => CategoryTopicModel.fromJson(e)).toList();
       }
 
-      if (result.data['bot_style_two'] case final List data when data.isNotEmpty) {
+      if (result.data['list'] case final List data when data.isNotEmpty) {
         return data.map<AppVideoModel>((e) => AppVideoModel.fromJson(e)).toList();
       }
     } else {
