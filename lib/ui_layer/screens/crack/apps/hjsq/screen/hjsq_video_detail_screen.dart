@@ -197,14 +197,15 @@ class _HjsqVideoDetailScreenState extends State<HjsqVideoDetailScreen> {
                 ),
                 Container(color: const Color.fromRGBO(255, 255, 255, 0.9), height: 0.2.w),
                 Expanded(
-                    child: _Body(
-                  id: widget.id,
-                  data: data,
-                  recommendVideoListNotifier: _recommendVideoListNotifier,
-                  downloadCallback: () async {
-                    _videoDownload(data.detail);
-                  },
-                )),
+                  child: _Body(
+                    id: widget.id,
+                    data: data,
+                    recommendVideoListNotifier: _recommendVideoListNotifier,
+                    downloadCallback: () async {
+                      _videoDownload(data.detail);
+                    },
+                  ),
+                ),
               ],
             ),
           ),
