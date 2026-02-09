@@ -66,7 +66,6 @@ import 'package:jycrpj/ui_layer/screens/crack/apps/zpc/screen/zpc_video_search_s
 import 'package:jycrpj/ui_layer/screens/crack/crack_main_page.dart';
 import 'package:jycrpj/ui_layer/screens/crack/crack_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/new_crack_screen.dart';
-import 'package:jycrpj/ui_layer/screens/dsp/dship_screen.dart';
 import 'package:jycrpj/ui_layer/screens/game/detail/screen.dart';
 import 'package:jycrpj/ui_layer/screens/game/more/screen.dart.dart';
 import 'package:jycrpj/ui_layer/screens/game/nav/screen.dart.dart';
@@ -266,13 +265,6 @@ class AIServerRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) => const AiServerScreen();
-}
-
-class DShipRoute extends GoRouteData {
-  const DShipRoute();
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) => const DshipScreen();
 }
 
 class BlackRoute extends GoRouteData {
@@ -1195,13 +1187,14 @@ class VideoDetailRoute extends GoRouteData {
 class AnWangRestrictedRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
 
-  const AnWangRestrictedRoute({required this.id});
+  const AnWangRestrictedRoute({required this.id, required this.showMoreButton});
 
   final int id;
+  final bool showMoreButton;
 
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
-    return CommonUtils.buildSlideTransitionPage(state: state, child: AwRestrictedAreaScreen(id: id));
+    return CommonUtils.buildSlideTransitionPage(state: state, child: AwRestrictedAreaScreen(id: id, showMoreButton: showMoreButton));
   }
 }
 
@@ -1279,13 +1272,14 @@ class PZhanVideoSearchRoute extends GoRouteData {
 class HjsqCommunityRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
 
-  const HjsqCommunityRoute({required this.id});
+  const HjsqCommunityRoute({required this.id, required this.showMoreButton});
 
   final int id;
+  final bool showMoreButton;
 
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
-    return CommonUtils.buildSlideTransitionPage(state: state, child: HjsqCommunityScreen(id: id));
+    return CommonUtils.buildSlideTransitionPage(state: state, child: HjsqCommunityScreen(id: id, showMoreButton: showMoreButton));
   }
 }
 
@@ -1350,13 +1344,14 @@ class HjsqVideoDetailRoute extends GoRouteData {
 class Tiktok51CommunityRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
 
-  const Tiktok51CommunityRoute({required this.id});
+  const Tiktok51CommunityRoute({required this.id, required this.showMoreButton});
 
   final int id;
+  final bool showMoreButton;
 
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
-    return CommonUtils.buildSlideTransitionPage(state: state, child: Tiktok51CommunityScreen(id: id));
+    return CommonUtils.buildSlideTransitionPage(state: state, child: Tiktok51CommunityScreen(id: id, showMoreButton: showMoreButton));
   }
 }
 
@@ -1457,13 +1452,14 @@ class Tiktok51TagRoute extends GoRouteData {
 class DarkWeb91Route extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
 
-  const DarkWeb91Route({required this.id});
+  const DarkWeb91Route({required this.id, required this.showMoreButton});
 
   final int id;
+  final bool showMoreButton;
 
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
-    return CommonUtils.buildSlideTransitionPage(state: state, child: Aw91CommunityScreen(id: id));
+    return CommonUtils.buildSlideTransitionPage(state: state, child: Aw91CommunityScreen(id: id, showMoreButton: showMoreButton));
   }
 }
 
@@ -1513,13 +1509,14 @@ class Aw91VideoSearchRoute extends GoRouteData {
 class ZpcCommunityRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
 
-  const ZpcCommunityRoute({required this.id});
+  const ZpcCommunityRoute({required this.id, required this.showMoreButton});
 
   final int id;
+  final bool showMoreButton;
 
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
-    return CommonUtils.buildSlideTransitionPage(state: state, child: ZpcCommunityScreen(id: id));
+    return CommonUtils.buildSlideTransitionPage(state: state, child: ZpcCommunityScreen(id: id, showMoreButton: showMoreButton));
   }
 }
 
@@ -1569,13 +1566,14 @@ class ZpcVideoSearchRoute extends GoRouteData {
 class ClCommunityRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
 
-  const ClCommunityRoute({required this.id});
+  const ClCommunityRoute({required this.id, required this.showMoreButton});
 
   final int id;
+  final bool showMoreButton;
 
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
-    return CommonUtils.buildSlideTransitionPage(state: state, child: ClCommunityScreen(id: id));
+    return CommonUtils.buildSlideTransitionPage(state: state, child: ClCommunityScreen(id: id, showMoreButton: showMoreButton));
   }
 }
 

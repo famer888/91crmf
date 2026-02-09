@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jycrpj/ui_layer/screens/vlog/widgets/comment_widget.dart';
+import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:jycrpj/domain/api_validator.dart';
 import 'package:jycrpj/domain/model/video_comment_model.dart';
@@ -40,6 +41,14 @@ class VlogCommentSheetState extends State<VlogCommentSheet> {
   void initState() {
     super.initState();
     _commentId = -1;
+    inputFocusNode.addListener(() {
+      if (!inputFocusNode.hasFocus) {
+        hintNotifier.value = 'qsrnxsdh'.tr();
+        CommonUtils.log('软键盘收起');
+      } else {
+        CommonUtils.log('软键盘弹起');
+      }
+    });
   }
 
   @override
@@ -47,6 +56,7 @@ class VlogCommentSheetState extends State<VlogCommentSheet> {
     super.didUpdateWidget(oldWidget);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (MediaQuery.of(context).viewInsets.bottom == 0) {
+        hintNotifier.value = 'qsrnxsdh'.tr();
         inputFocusNode.unfocus();
       } else {}
     });
@@ -54,6 +64,7 @@ class VlogCommentSheetState extends State<VlogCommentSheet> {
 
   @override
   void dispose() {
+    inputFocusNode.dispose();
     super.dispose();
   }
 
@@ -100,6 +111,7 @@ class VlogCommentSheetState extends State<VlogCommentSheet> {
   Widget configContentView(BuildContext context) {
     return ReportGestureDetector(
       onTap: () {
+        hintNotifier.value = 'qsrnxsdh'.tr();
         inputFocusNode.unfocus();
       },
       child: Column(
@@ -114,8 +126,9 @@ class VlogCommentSheetState extends State<VlogCommentSheet> {
               itemBuilder: (context, item, index) => CommentTile(
                 data: item,
                 type: 2,
-                secondaryCommentCallback: (commentId) {
+                secondaryCommentCallback: (commentId, nickname) {
                   _commentId = commentId;
+                  hintNotifier.value = '${'hf'.tr(context: context)} @$nickname';
                   FocusScope.of(context).requestFocus(inputFocusNode);
                 },
               ),
@@ -135,6 +148,7 @@ class VlogCommentSheetState extends State<VlogCommentSheet> {
                 // 回复帖子
                 await _sendComment(context, text: textEditingController.text);
               }
+              hintNotifier.value = 'qsrnxsdh'.tr();
             },
           ),
         ],
@@ -156,6 +170,7 @@ class VlogCommentSheetState extends State<VlogCommentSheet> {
     MyToast.showText(text: result.msg ?? '');
 
     textEditingController.clear();
+    hintNotifier.value = 'qsrnxsdh'.tr();
     inputFocusNode.unfocus();
     if (context.mounted) {
       Navigator.pop(context);
@@ -177,6 +192,7 @@ class VlogCommentSheetState extends State<VlogCommentSheet> {
     MyToast.showText(text: result.msg ?? '');
 
     textEditingController.clear();
+    hintNotifier.value = 'qsrnxsdh'.tr();
     inputFocusNode.unfocus();
     if (context.mounted) {
       Navigator.pop(context);

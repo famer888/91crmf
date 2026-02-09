@@ -21,8 +21,7 @@ class HomeConfigNotifier extends ChangeNotifier {
   late Config _config;
 
   List<String> getSearchHistory({required String key}) {
-    final searchHistory = _searchHistoryMap[key] ?? [];
-    return [...searchHistory];
+    return (_searchHistoryMap[key] ?? []).reversed.take(10).toList();
   }
 
   final Map<String, List<String>> _searchHistoryMap = {};

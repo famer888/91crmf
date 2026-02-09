@@ -86,7 +86,7 @@ class _HjsqVideoDetailScreenState extends State<HjsqVideoDetailScreen> {
     if (result.status == 1) {
       if (result.data case final list when list.isNotEmpty) {
         final feedModelList = list.map<FeedModel>((x) => FeedModel.fromJson(x)).toList();
-        if (context.mounted) {
+        if (mounted) {
           _recommendVideoListNotifier.value = feedModelList;
         }
       }
@@ -404,7 +404,7 @@ class _BodyState extends State<_Body> with TickerProviderStateMixin {
       ),
       SizedBox(width: 20.w),
       HjsqCollectButton(
-        apiUrl: 'mvhjsq/favorites',
+        apiUrl: 'user/favorites',
         isCollected: widget.data.detail.userFavorites > 0,
         id: widget.data.detail.id ?? 0,
         callback: (isCollected) {

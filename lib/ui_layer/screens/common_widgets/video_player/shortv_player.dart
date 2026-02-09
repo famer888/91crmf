@@ -6,6 +6,7 @@ import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jycrpj/domain/api_validator.dart';
 import 'package:jycrpj/domain/domain.dart';
 import 'package:jycrpj/domain/model/member_model.dart';
@@ -158,7 +159,7 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
                   info: widget.info,
                   isPreview: isPreview,
                   skiPreview: () {
-                    showAlertVp();
+                    showAlertVp(context);
                   },
                   likeAct: () {
                     likeVideoRes();
@@ -215,7 +216,7 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
         });
   }
 
-  void showAlertVp({bool goby = false}) {
+  void showAlertVp(BuildContext context, {bool goby = false}) {
     final userNotifier = context.read<UserNotifier>();
     Member user = userNotifier.member;
     int money = user.money;
@@ -228,6 +229,10 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
     if (widget.info?.isFree == 2) {
       VipPayDialog.showCoinsDialog(context: context, member: user, coins: needmoney.toDouble(), onPay: () {
         byVideoRes(money - needmoney); //直接购买
+        final router = GoRouter.of(context);
+        if (context.mounted && router.canPop()) {
+          context.pop();
+        }
       });
       // MyDialog.showAnimationDialog(
       //     cancelTxt: 'qx'.tr(context: context),
@@ -256,7 +261,9 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
       //       }
       //     });
     } else {
+      // flickManager?.flickControlManager?.pause();
       VipPayDialog.showVipDialog(context);
+
       // MyDialog.showAnimationDialog(
       //     cancelTxt: 'fxlvip'.tr(context: context),
       //     confirmTxt: 'czvip'.tr(context: context),
@@ -282,6 +289,7 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
       widget.info?.source_240 = res.data["url"] ?? '';
       await CommonUtils.clearPassiveCache(videoUrl: widget.info?.source_240 ?? '');
       initURL();
+      MyToast.showText(text: tr('gmcg'));
     } else {
       MyToast.showText(text: res.msg ?? '');
     }

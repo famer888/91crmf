@@ -1,22 +1,23 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:jycrpj/domain/api_validator.dart';
-import 'package:jycrpj/domain/model/navigator_model.dart';
-import 'package:jycrpj/ui_layer/screens/common_widgets/video_player/shortv_player.dart';
-import 'package:photo_view/photo_view_gallery.dart';
-import 'package:provider/provider.dart';
 import 'package:jycrpj/app_global.dart';
+import 'package:jycrpj/domain/api_validator.dart';
 import 'package:jycrpj/domain/domain.dart';
+import 'package:jycrpj/domain/model/navigator_model.dart';
 import 'package:jycrpj/domain/model/vlog_model.dart';
 import 'package:jycrpj/domain/type_def.dart';
 import 'package:jycrpj/ui_layer/notifiers/home_config_notifier.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/empty_data.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/loading.dart';
+import 'package:jycrpj/ui_layer/screens/common_widgets/video_player/shortv_player.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/screens/video_detail/screen.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
+import 'package:photo_view/photo_view_gallery.dart';
+import 'package:provider/provider.dart';
 
 class VlogPlayScreen extends StatefulWidget {
   VlogPlayScreen(

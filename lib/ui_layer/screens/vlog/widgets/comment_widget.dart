@@ -86,7 +86,9 @@ class _CommentViewState extends State<CommentView> {
           Expanded(
             child: MyListView.list(
               padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-              itemBuilder: (context, item, index) => CommentTile(data: item, type: 1, secondaryCommentCallback: (commentId) {}),
+              itemBuilder: (context, item, index) => CommentTile(data: item, type: 1, secondaryCommentCallback: (commentId, nickname) {
+                CommonUtils.log('1 回复评论: commentId:$commentId - nickname:$nickname');
+              }),
               onFetchingMore: (currentPage, pageSize) => _getData(currentPage: currentPage, limit: pageSize),
             ),
           ),
@@ -105,7 +107,7 @@ class _CommentViewState extends State<CommentView> {
   }
 }
 
-typedef SecondaryCommentCallback = void Function(int commentId);
+typedef SecondaryCommentCallback = void Function(int commentId, String nickname);
 
 class CommentTile extends StatelessWidget {
   const CommentTile({super.key, required this.data, required this.type, required this.secondaryCommentCallback});
@@ -243,7 +245,7 @@ class CommentTile extends StatelessWidget {
             ReportGestureDetector(
               onTap: () {
                 if (data.id != null) {
-                  secondaryCommentCallback.call(data.id!);
+                  secondaryCommentCallback.call(data.id!, member?.nickname ?? '');
                 }
               },
               child: Container(
@@ -266,28 +268,6 @@ class CommentTile extends StatelessWidget {
         _ReplyListView(data: data, secondaryCommentCallback: secondaryCommentCallback),
       ],
     );
-  }
-
-  List<Widget> _buildReply(BuildContext context, VideoCommentListModel data) {
-    return [
-      if (data.comments != null && data.comments!.isNotEmpty) SizedBox(height: 10.w),
-      if (data.comments != null && data.comments!.isNotEmpty)
-        ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: data.comments!.length,
-            itemBuilder: (context, index) {
-              final item = data.comments![index];
-              return CommentTile(
-                data: item,
-                type: 2,
-                secondaryCommentCallback: (commentId) {
-                  // _commentId = commentId;
-                  // FocusScope.of(context).requestFocus(inputFocusNode);
-                },
-              );
-            }),
-    ];
   }
 }
 
@@ -423,7 +403,7 @@ class _ReplyCommentTile extends StatelessWidget {
             ReportGestureDetector(
               onTap: () {
                 if (data.id != null) {
-                  secondaryCommentCallback.call(data.id!);
+                  secondaryCommentCallback.call(data.id!, member?.nickname ?? '');
                 }
               },
               child: Container(

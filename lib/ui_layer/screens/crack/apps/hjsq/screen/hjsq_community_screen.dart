@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 class HjsqCommunityScreen extends StatefulWidget {
   final int id;
   final CrackApp? crackApp;
+  final bool showMoreButton;
   final VoidCallback? openEndDrawer;
 
   const HjsqCommunityScreen({
@@ -21,6 +22,7 @@ class HjsqCommunityScreen extends StatefulWidget {
     required this.id,
     this.crackApp,
     this.openEndDrawer,
+    this.showMoreButton = true,
   });
 
   @override
@@ -47,6 +49,7 @@ class _HjsqCommunityScreenState extends State<HjsqCommunityScreen> {
                     isCrackApp: true,
                     type: CrackAppType.hjsq,
                     openEndDrawer: widget.openEndDrawer,
+                    showMoreButton: widget.showMoreButton,
                     onTap: () {
                       if (isUnlockHjsq) {
                         const HjsqVideoSearchRoute(args: '').push(context);

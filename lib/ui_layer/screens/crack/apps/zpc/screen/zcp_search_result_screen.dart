@@ -39,6 +39,12 @@ class _ZpcSearchResultScreenState extends State<ZpcSearchResultScreen> {
 
     if (result.status == 1) {
       final feedModelList = result.data?.map<FeedModel>((x) => FeedModel.fromJson(x)).toList();
+      if (feedModelList == null) {
+        return [];
+      }
+      if (feedModelList.isEmpty) {
+        return [];
+      }
       return feedModelList;
     } else {
       MyToast.showText(text: result.msg ?? '');

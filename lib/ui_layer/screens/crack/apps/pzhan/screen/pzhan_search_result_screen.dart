@@ -42,7 +42,12 @@ class _PZhanSearchResultScreenState extends State<PZhanSearchResultScreen> {
       if (data != null) {
         if (data['list'] case final List data when data.isNotEmpty) {
           final feedModelList = data.map<AppVideoModel>((x) => AppVideoModel.fromJson(x)).toList();
+          if (feedModelList.isEmpty) {
+            return [];
+          }
           return feedModelList;
+        } else {
+          return [];
         }
       }
     } else {

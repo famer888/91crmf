@@ -1952,12 +1952,15 @@ extension $AnWangRestrictedRouteExtension on AnWangRestrictedRoute {
   static AnWangRestrictedRoute _fromState(GoRouterState state) =>
       AnWangRestrictedRoute(
         id: int.parse(state.uri.queryParameters['id']!),
+        showMoreButton:
+            _$boolConverter(state.uri.queryParameters['show-more-button']!),
       );
 
   String get location => GoRouteData.$location(
         '/awjq',
         queryParams: {
           'id': id.toString(),
+          'show-more-button': showMoreButton.toString(),
         },
       );
 
@@ -2125,12 +2128,15 @@ extension $HjsqCommunityRouteExtension on HjsqCommunityRoute {
   static HjsqCommunityRoute _fromState(GoRouterState state) =>
       HjsqCommunityRoute(
         id: int.parse(state.uri.queryParameters['id']!),
+        showMoreButton:
+            _$boolConverter(state.uri.queryParameters['show-more-button']!),
       );
 
   String get location => GoRouteData.$location(
         '/hjsqApp',
         queryParams: {
           'id': id.toString(),
+          'show-more-button': showMoreButton.toString(),
         },
       );
 
@@ -2269,12 +2275,15 @@ extension $Tiktok51CommunityRouteExtension on Tiktok51CommunityRoute {
   static Tiktok51CommunityRoute _fromState(GoRouterState state) =>
       Tiktok51CommunityRoute(
         id: int.parse(state.uri.queryParameters['id']!),
+        showMoreButton:
+            _$boolConverter(state.uri.queryParameters['show-more-button']!),
       );
 
   String get location => GoRouteData.$location(
         '/tiktok51App',
         queryParams: {
           'id': id.toString(),
+          'show-more-button': showMoreButton.toString(),
         },
       );
 
@@ -2479,12 +2488,15 @@ RouteBase get $darkWeb91Route => GoRouteData.$route(
 extension $DarkWeb91RouteExtension on DarkWeb91Route {
   static DarkWeb91Route _fromState(GoRouterState state) => DarkWeb91Route(
         id: int.parse(state.uri.queryParameters['id']!),
+        showMoreButton:
+            _$boolConverter(state.uri.queryParameters['show-more-button']!),
       );
 
   String get location => GoRouteData.$location(
         '/aw91',
         queryParams: {
           'id': id.toString(),
+          'show-more-button': showMoreButton.toString(),
         },
       );
 
@@ -2593,12 +2605,15 @@ RouteBase get $zpcCommunityRoute => GoRouteData.$route(
 extension $ZpcCommunityRouteExtension on ZpcCommunityRoute {
   static ZpcCommunityRoute _fromState(GoRouterState state) => ZpcCommunityRoute(
         id: int.parse(state.uri.queryParameters['id']!),
+        showMoreButton:
+            _$boolConverter(state.uri.queryParameters['show-more-button']!),
       );
 
   String get location => GoRouteData.$location(
         '/zpcApp',
         queryParams: {
           'id': id.toString(),
+          'show-more-button': showMoreButton.toString(),
         },
       );
 
@@ -2704,12 +2719,15 @@ RouteBase get $clCommunityRoute => GoRouteData.$route(
 extension $ClCommunityRouteExtension on ClCommunityRoute {
   static ClCommunityRoute _fromState(GoRouterState state) => ClCommunityRoute(
         id: int.parse(state.uri.queryParameters['id']!),
+        showMoreButton:
+            _$boolConverter(state.uri.queryParameters['show-more-button']!),
       );
 
   String get location => GoRouteData.$location(
         '/caoliu',
         queryParams: {
           'id': id.toString(),
+          'show-more-button': showMoreButton.toString(),
         },
       );
 

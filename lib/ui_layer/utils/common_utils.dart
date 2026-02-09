@@ -1151,7 +1151,8 @@ class CommonUtils {
                     ReportGestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
-                        enterUserCenter?.call();
+                        // 屏蔽点击头像跳转
+                        // enterUserCenter?.call();
                       },
                       child: data.member == null
                           ? Container(
@@ -1188,21 +1189,22 @@ class CommonUtils {
                               ),
                             ),
                     ),
-                    data.member == null
-                        ? Container()
-                        : (data.member?.isFollow ?? 0) == 1
-                            ? Container()
-                            : Positioned(
-                                bottom: 3.w,
-                                right: 8.w,
-                                child: ReportGestureDetector(
-                                  behavior: HitTestBehavior.translucent,
-                                  onTap: () {
-                                    follow?.call();
-                                  },
-                                  child: MyImage.asset(MyImagePaths.appShortFocus, width: 14.w, height: 14.w),
-                                ),
-                              ),
+                    // 屏蔽关注按钮
+                    // data.member == null
+                    //     ? Container()
+                    //     : (data.member?.isFollow ?? 0) == 1
+                    //         ? Container()
+                    //         : Positioned(
+                    //             bottom: 3.w,
+                    //             right: 8.w,
+                    //             child: ReportGestureDetector(
+                    //               behavior: HitTestBehavior.translucent,
+                    //               onTap: () {
+                    //                 follow?.call();
+                    //               },
+                    //               child: MyImage.asset(MyImagePaths.appShortFocus, width: 14.w, height: 14.w),
+                    //             ),
+                    //           ),
                   ]),
                 ),
                 SizedBox(height: 15.w),

@@ -218,6 +218,12 @@ class _KeywordTile extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback onDelete;
 
+  String _limitText(String text, int maxChars) {
+    final chars = text.characters;
+    if (chars.length <= maxChars) return text;
+    return chars.take(maxChars).toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -230,11 +236,16 @@ class _KeywordTile extends StatelessWidget {
           ReportGestureDetector(
             onTap: onTap,
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 100.w),
+              constraints: BoxConstraints(maxWidth: 114.w),
               child: Text(
-                text,
-                style: TextStyle(color: const Color.fromRGBO(255, 255, 255, 0.7), fontSize: 14.sp, fontWeight: FontWeight.w400),
+                _limitText(text, 8),
+                style: TextStyle(
+                  color: const Color.fromRGBO(255, 255, 255, 0.7),
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w400,
+                ),
                 maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ),

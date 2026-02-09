@@ -1,14 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:jycrpj/domain/model/crack_model.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 
 class CrackStatusTag extends StatelessWidget {
-  final int isFree;
+  final CrackApp appData;
 
   const CrackStatusTag({
     super.key,
-    required this.isFree,
+    required this.appData,
   });
 
   @override
@@ -16,18 +17,28 @@ class CrackStatusTag extends StatelessWidget {
     String text = '';
     LinearGradient gradient = MyTheme.gradient_90_135;
 
-    switch (isFree) {
+    switch (appData.isfree) {
       case 0:
         text = 'mf'.tr(context: context);
         gradient = MyTheme.gradient_90_135;
         break;
       case 1:
-        text = 'vvp'.tr(context: context);
-        gradient = MyTheme.vip_gradient_90_135;
+        if (appData.isPay) {
+          text = 'ygm'.tr(context: context);
+          gradient = MyTheme.ygm_gradient_90_135;
+        } else {
+          text = 'vvp'.tr(context: context);
+          gradient = MyTheme.vip_gradient_90_135;
+        }
         break;
       case 2:
-        text = 'jb'.tr(context: context);
-        gradient = MyTheme.gradient_90_114;
+        if (appData.isPay) {
+          text = 'ygm'.tr(context: context);
+          gradient = MyTheme.ygm_gradient_90_135;
+        } else {
+          text = 'jb'.tr(context: context);
+          gradient = MyTheme.gradient_90_114;
+        }
         break;
     }
     return Positioned(

@@ -138,6 +138,8 @@ class _VisitAppVideoItem extends StatelessWidget {
         } else if (type == CrackAppType.xiaolan.type) {
           XiaolanVideoDetailRoute(id: data.id).push(context);
         }*/
+
+        AppVisitUtil.updateCrackAppVisitRecord(context, data);
       },
       child: LayoutBuilder(builder: (context, cons) {
         return Column(
@@ -152,6 +154,23 @@ class _VisitAppVideoItem extends StatelessWidget {
                     fit: StackFit.expand,
                     children: [
                       MyImage.network(imageUrl, fit: BoxFit.cover, backgroundColor: MyTheme.imageBgColor, borderRadius: 5.w),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          height: 22.w,
+                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.w),
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Color.fromRGBO(16, 16, 16, 0.05),
+                                Color.fromRGBO(16, 16, 16, 0.9),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: Padding(

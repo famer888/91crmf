@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 class Tiktok51CommunityScreen extends StatefulWidget {
   final int id;
   final CrackApp? crackApp;
+  final bool showMoreButton;
   final VoidCallback? openEndDrawer;
 
   const Tiktok51CommunityScreen({
@@ -21,6 +22,7 @@ class Tiktok51CommunityScreen extends StatefulWidget {
     required this.id,
     this.crackApp,
     this.openEndDrawer,
+    this.showMoreButton = true,
   });
 
   @override
@@ -47,6 +49,7 @@ class _Tiktok51CommunityScreenState extends State<Tiktok51CommunityScreen> {
                     isCrackApp: true,
                     type: CrackAppType.tiktok51,
                     openEndDrawer: widget.openEndDrawer,
+                    showMoreButton: widget.showMoreButton,
                     onTap: () {
                       if (isUnlockTiktok51) {
                         const Tiktok51VideoSearchRoute(args: '').push(context);

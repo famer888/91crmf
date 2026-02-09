@@ -17,8 +17,6 @@ import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../../report/ui_layer/report_general_banner.dart';
-
 import '../../../../../../report/ui_layer/report_gesture_detector.dart';
 
 class ClVideoSearchScreen extends StatefulWidget {
@@ -197,6 +195,12 @@ class _KeywordTile extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback onDelete;
 
+  String _limitText(String text, int maxChars) {
+    final chars = text.characters;
+    if (chars.length <= maxChars) return text;
+    return chars.take(maxChars).toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -209,8 +213,13 @@ class _KeywordTile extends StatelessWidget {
           ReportGestureDetector(
             onTap: onTap,
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 100.w),
-              child: Text(text, style: MyTheme.white255_14, maxLines: 1),
+              constraints: BoxConstraints(maxWidth: 114.w),
+              child: Text(
+                _limitText(text, 8),
+                style: MyTheme.white255_14,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
           // Container(color: const Color(0xffffffff), height: 13.w, width: 1.w, margin: EdgeInsets.symmetric(horizontal: 10.w)),
@@ -361,7 +370,8 @@ class _SearchContentViewState extends State<_SearchContentView> {
                                       child: Text(
                                         '${index + 1}',
                                         style: TextStyle(
-                                          color: Color(index == 0 ? 0xFFFF4242 : (index == 1 ? 0xFFFFAD42 : (index == 2 ? 0xFF7E42FF : 0xFFFFFFFF))),
+                                          color: Color(
+                                              index == 0 ? 0xFFFF4242 : (index == 1 ? 0xFFFFAD42 : (index == 2 ? 0xFF7E42FF : 0xFFFFFFFF))),
                                           fontSize: 15.sp,
                                           fontWeight: FontWeight.w600,
                                           overflow: TextOverflow.ellipsis,

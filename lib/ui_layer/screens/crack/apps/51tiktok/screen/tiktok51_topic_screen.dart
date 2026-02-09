@@ -418,38 +418,38 @@ class _HeaderState extends State<_Header> {
                     ],
                   ),
                   const Spacer(),
-                  SizedBox(width: 10.w),
-                  ReportGestureDetector(
-                    onTap: () async {
-                      final result = await dynamicDomain.getConstructByApiLink(
-                        apiLink: 'tabnew51tikok/follow_tab',
-                        params: {'tab_id': widget.tabInfo.tabId},
-                      );
-                      if (result.isValid) {
-                        widget.tabInfo.isFollow = true;
-                        setState(() {
-                          isFollowed = !isFollowed;
-                        });
-                      }
-                    },
-                    behavior: HitTestBehavior.translucent,
-                    child: Container(
-                      height: 28.w,
-                      padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 4.5.w),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: isFollowed ? Colors.transparent : MyTheme.tiktok51AppPrimaryColor,
-                        borderRadius: BorderRadius.circular(5.w),
-                        border: Border.all(color: isFollowed ? MyTheme.tiktok51AppPrimaryColor : Colors.transparent, width: 1.5.w),
-                      ),
-                      child: Text(
-                        isFollowed ? 'ygz'.tr(context: context) : 'jgz'.tr(context: context),
-                        style: isFollowed
-                            ? MyTheme.blue80_12.copyWith(color: MyTheme.tiktok51AppPrimaryColor, fontWeight: FontWeight.w600)
-                            : MyTheme.white12.copyWith(fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                  ),
+                  // SizedBox(width: 10.w),
+                  // ReportGestureDetector(
+                  //   onTap: () async {
+                  //     final result = await dynamicDomain.getConstructByApiLink(
+                  //       apiLink: 'tabnew51tikok/follow_tab',
+                  //       params: {'tab_id': widget.tabInfo.tabId},
+                  //     );
+                  //     if (result.isValid) {
+                  //       widget.tabInfo.isFollow = true;
+                  //       setState(() {
+                  //         isFollowed = !isFollowed;
+                  //       });
+                  //     }
+                  //   },
+                  //   behavior: HitTestBehavior.translucent,
+                  //   child: Container(
+                  //     height: 28.w,
+                  //     padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 4.5.w),
+                  //     alignment: Alignment.center,
+                  //     decoration: BoxDecoration(
+                  //       color: isFollowed ? Colors.transparent : MyTheme.tiktok51AppPrimaryColor,
+                  //       borderRadius: BorderRadius.circular(5.w),
+                  //       border: Border.all(color: isFollowed ? MyTheme.tiktok51AppPrimaryColor : Colors.transparent, width: 1.5.w),
+                  //     ),
+                  //     child: Text(
+                  //       isFollowed ? 'ygz'.tr(context: context) : 'jgz'.tr(context: context),
+                  //       style: isFollowed
+                  //           ? MyTheme.blue80_12.copyWith(color: MyTheme.tiktok51AppPrimaryColor, fontWeight: FontWeight.w600)
+                  //           : MyTheme.white12.copyWith(fontWeight: FontWeight.w600),
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(width: MyTheme.pagePadding),
                 ],
               ),

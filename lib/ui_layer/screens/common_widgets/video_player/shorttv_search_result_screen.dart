@@ -20,6 +20,7 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_list_view.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_tab_bar.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/video_player/model/shorttv_search_model.dart';
+import 'package:jycrpj/ui_layer/screens/crack/widgets/scroll_top_button.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/screens/vlog/card/vlog_card.dart';
@@ -243,8 +244,11 @@ class _DspView extends StatefulWidget {
 
 class _DspViewState extends State<_DspView> {
   late final _domain = context.read<VlogDomain>();
-  String _word = '';
+  final ScrollController _scrollController = ScrollController();
+  final ValueNotifier<bool> _showToTopBtn = ValueNotifier(false);
+  double _showThreshold = 0;
 
+  String _word = '';
   List<VlogModel> array = [];
   int _page = 1;
   int _limit = 15;
@@ -253,11 +257,19 @@ class _DspViewState extends State<_DspView> {
   void initState() {
     super.initState();
     _word = widget.initialWord;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showThreshold = ScreenUtil().screenHeight * 0.40;
+    });
+    _scrollController.addListener(() {
+      _showToTopBtn.value = (_scrollController.offset > _showThreshold);
+    });
     widget.refreshNotifier.addListener(_onSearchRefresh);
   }
 
   @override
   void dispose() {
+    _scrollController.dispose();
+    _showToTopBtn.dispose();
     widget.refreshNotifier.removeListener(_onSearchRefresh);
     super.dispose();
   }
@@ -272,7 +284,7 @@ class _DspViewState extends State<_DspView> {
       // ⭐ 搜索词变化 = 全量重置
       _page = 1;
       array.clear();
-
+      _scrollController.jumpTo(0);
       setState(() {}); // 通知 MyListView 重建
     }
   }
@@ -301,43 +313,65 @@ class _DspViewState extends State<_DspView> {
     return tp;
   }
 
+  void _scrollToTop() {
+    if (!_scrollController.hasClients) return;
+
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MyListView.grid(
-      key: ValueKey(_word),
-      // ⭐ 非常关键：搜索词变化 → 重建列表
-      padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-      childAspectRatio: UILayerConst.vlogVideoRatio,
-      crossAxisSpacing: 10.w,
-      itemBuilder: (_, item, index) => VlogCard(
-          data: item,
-          onTapFunc: (type) {
-            if (type == 1) {
-              //点击短视频视频
-              AppGlobal.shortVideosInfo = {
-                'list': array,
-                'page': _page,
-                'index': index,
-                'api': 'vlog/search',
-                'params': {
-                  'limit': _limit,
-                  'word': _word,
+    return Stack(
+      children: [
+        MyListView.grid(
+          key: ValueKey(_word),
+          scrollController: _scrollController,
+          padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
+          childAspectRatio: UILayerConst.vlogVideoRatio,
+          crossAxisSpacing: 10.w,
+          itemBuilder: (_, item, index) => VlogCard(
+              data: item,
+              onTapFunc: (type) {
+                if (type == 1) {
+                  //点击短视频视频
+                  AppGlobal.shortVideosInfo = {
+                    'list': array,
+                    'page': _page,
+                    'index': index,
+                    'api': 'vlog/search',
+                    'params': {
+                      'limit': _limit,
+                      'word': _word,
+                    }
+                  };
+                  const VlogSecondRoute().push(context);
+                } else {
+                  //广告类型
+                  CommonUtils.openRoute(context, item.toJson());
                 }
-              };
-              const VlogSecondRoute().push(context);
-            } else {
-              //广告类型
-              CommonUtils.openRoute(context, item.toJson());
-            }
-          }).withSearchReport({
-        "event": "keyword_click",
-        "keyword": _word,
-        "click_item_id": item.id,
-        "click_item_type_key": "vlog",
-        "click_item_type_name": "短视频",
-        "click_ position": index,
-      }),
-      onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize),
+              }).withSearchReport({
+            "event": "keyword_click",
+            "keyword": _word,
+            "click_item_id": item.id,
+            "click_item_type_key": "vlog",
+            "click_item_type_name": "短视频",
+            "click_ position": index,
+          }),
+          onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize),
+        ),
+        Positioned(
+          right: 20.w,
+          bottom: 42.w,
+          child: ScrollTopButton(
+            showToTopButtonNotifier: _showToTopBtn,
+            scrollTopCallback: _scrollToTop,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -358,6 +392,9 @@ class _HlView extends StatefulWidget {
 class _HlViewState extends State<_HlView> {
   late final _blockDomain = context.read<BlackDomain>();
   late final _screenUtils = ScreenUtil();
+  final ScrollController _scrollController = ScrollController();
+  final ValueNotifier<bool> _showToTopBtn = ValueNotifier(false);
+  double _showThreshold = 0;
 
   String _word = '';
 
@@ -365,11 +402,19 @@ class _HlViewState extends State<_HlView> {
   void initState() {
     super.initState();
     _word = widget.initialWord;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showThreshold = ScreenUtil().screenHeight * 0.40;
+    });
+    _scrollController.addListener(() {
+      _showToTopBtn.value = (_scrollController.offset > _showThreshold);
+    });
     widget.refreshNotifier.addListener(_onSearchRefresh);
   }
 
   @override
   void dispose() {
+    _scrollController.dispose();
+    _showToTopBtn.dispose();
     widget.refreshNotifier.removeListener(_onSearchRefresh);
     super.dispose();
   }
@@ -380,6 +425,7 @@ class _HlViewState extends State<_HlView> {
 
     if (value.type == 1 && value.word.isNotEmpty && value.word != _word) {
       _word = value.word;
+      _scrollController.jumpTo(0);
       setState(() {}); // 通知 MyListView 重建
     }
   }
@@ -395,28 +441,49 @@ class _HlViewState extends State<_HlView> {
     return list;
   }
 
+  void _scrollToTop() {
+    if (!_scrollController.hasClients) return;
+
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    // return Text('设置什么', style: MyTheme.white255_13_M,);
-    return MyListView.list(
-      key: ValueKey(_word),
-      // ⭐ 非常关键：搜索词变化 → 重建列表
-      contentPadding: 15.w,
-      padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-      itemBuilder: (context, item, index) => BlackItemWidget(
-        item: item,
-        itemWidth: (_screenUtils.screenWidth - MyTheme.pagePadding * 2),
-      ).withSearchReport(
-        {
-          "event": "keyword_click",
-          "keyword": _word,
-          "click_item_id": item.id,
-          "click_item_type_key": "black",
-          "click_item_type_name": "黑料",
-          "click_ position": index,
-        },
-      ),
-      onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize),
+    return Stack(
+      children: [
+        MyListView.list(
+          key: ValueKey(_word),
+          scrollController: _scrollController,
+          contentPadding: 15.w,
+          padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
+          itemBuilder: (context, item, index) => BlackItemWidget(
+            item: item,
+            itemWidth: (_screenUtils.screenWidth - MyTheme.pagePadding * 2),
+          ).withSearchReport(
+            {
+              "event": "keyword_click",
+              "keyword": _word,
+              "click_item_id": item.id,
+              "click_item_type_key": "black",
+              "click_item_type_name": "黑料",
+              "click_ position": index,
+            },
+          ),
+          onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize),
+        ),
+        Positioned(
+          right: 20.w,
+          bottom: 42.w,
+          child: ScrollTopButton(
+            showToTopButtonNotifier: _showToTopBtn,
+            scrollTopCallback: _scrollToTop,
+          ),
+        ),
+      ],
     );
   }
 }

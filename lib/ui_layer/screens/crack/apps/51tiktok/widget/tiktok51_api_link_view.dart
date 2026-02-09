@@ -312,7 +312,6 @@ class _HeaderState extends State<_Header> {
             );
           },
         ),
-        SizedBox(height: 10.w),
         ValueListenableBuilder(
           valueListenable: widget.partNotifier,
           builder: (context, parts, child) {

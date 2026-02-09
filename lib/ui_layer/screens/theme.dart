@@ -257,6 +257,12 @@ class MyTheme {
     end: Alignment.centerRight,
   );
 
+  static const LinearGradient ygm_gradient_90_135 = LinearGradient(
+    colors: [Color.fromRGBO(30, 211, 70, 1), Color.fromRGBO(9, 170, 44, 1)],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+
   static const Color imageBgColor = Color.fromRGBO(255, 255, 255, 0.03);
 
   static final TextStyle jellyCyan_18 = TextStyle(

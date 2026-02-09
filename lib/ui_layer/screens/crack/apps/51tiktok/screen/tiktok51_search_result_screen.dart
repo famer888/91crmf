@@ -38,16 +38,19 @@ class _Tiktok51SearchResultScreenState extends State<Tiktok51SearchResultScreen>
     );
 
     if (result.status == 1) {
-      final data = result.data;
-      if (data != null) {
-        if (data['list'] case final List data when data.isNotEmpty) {
-          final feedModelList = data.map<AppVideoModel>((x) => AppVideoModel.fromJson(x)).toList();
-          return feedModelList;
+      if (result.data['list'] case final List data when data.isNotEmpty) {
+        final feedModelList = data.map<AppVideoModel>((x) => AppVideoModel.fromJson(x)).toList();
+        if (feedModelList.isEmpty) {
+          return [];
         }
+        return feedModelList;
+      } else {
+        return [];
       }
     } else {
       MyToast.showText(text: result.msg ?? '');
     }
+
     return null;
   }
 

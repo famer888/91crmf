@@ -59,6 +59,23 @@ class ZpcVideoCard extends StatelessWidget {
                   MyImage.network(imageUrl, fit: BoxFit.cover, backgroundColor: MyTheme.imageBgColor, borderRadius: 5.w),
                   Align(
                     alignment: Alignment.bottomCenter,
+                    child: Container(
+                      height: 22.w,
+                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.w),
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Color.fromRGBO(16, 16, 16, 0.05),
+                            Color.fromRGBO(16, 16, 16, 0.9),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8.w),
                       child: Row(
@@ -87,65 +104,5 @@ class ZpcVideoCard extends StatelessWidget {
         );
       }),
     );
-    // return ReportGestureDetector(
-    //   behavior: HitTestBehavior.translucent,
-    //   onTap: () {
-    //     AppVideoVisitUtil.updateVisitRecord(
-    //       context,
-    //       VideoVisitModel(
-    //         title: data.title,
-    //         duration: data.duration,
-    //         playCount: data.playCt,
-    //         id: data.id,
-    //         crackAppType: CrackAppType.zpc.type,
-    //         imgUrl: data.coverHorizontal,
-    //       ),
-    //     );
-    //     if (isInVideoDetail) {
-    //       context.pop();
-    //     }
-    //     ZpcVideoDetailRoute(data.id).push(context);
-    //   },
-    //   child: LayoutBuilder(builder: (context, cons) {
-    //     return Column(
-    //       mainAxisAlignment: MainAxisAlignment.start,
-    //       crossAxisAlignment: CrossAxisAlignment.start,
-    //       children: [
-    //         SizedBox(
-    //           height: 99.w,
-    //           child: Stack(
-    //             fit: StackFit.expand,
-    //             children: [
-    //               MyImage.network(imageUrl, fit: BoxFit.cover, backgroundColor: MyTheme.imageBgColor, borderRadius: 5.w),
-    //               Align(
-    //                 alignment: Alignment.bottomCenter,
-    //                 child: Padding(
-    //                   padding: EdgeInsets.symmetric(horizontal: 8.w),
-    //                   child: Row(
-    //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //                     children: [
-    //                       Text('${CommonUtils.renderFixedNumber(data.playCt)}${'bf'.tr()}', style: MyTheme.white12medium),
-    //                       Text(RelativeDateFormat.getHMTime(time: data.duration), style: MyTheme.white12medium),
-    //                     ],
-    //                   ),
-    //                 ),
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //         SizedBox(height: 3.w),
-    //         Container(
-    //           alignment: Alignment.centerLeft,
-    //           child: Text(
-    //             data.title,
-    //             style: appType == CrackAppType.zpc.type ? MyTheme.white09_15_M.s14 : MyTheme.black13.s14,
-    //             maxLines: 1,
-    //             overflow: TextOverflow.ellipsis,
-    //           ),
-    //         ),
-    //       ],
-    //     );
-    //   }),
-    // );
   }
 }

@@ -87,6 +87,8 @@ class _CollectAppVideoItem extends StatelessWidget {
       return tr('aw91');
     } else if (type == CrackAppType.hjsq.type) {
       return tr('hjsq');
+    } else if (type == CrackAppType.pzhan.type) {
+      return tr('pzhan');
     } else if (type == CrackAppType.tiktok51.type) {
       return tr('tiktok51');
     } else if (type == CrackAppType.gd.type) {
@@ -134,6 +136,23 @@ class _CollectAppVideoItem extends StatelessWidget {
                     fit: StackFit.expand,
                     children: [
                       MyImage.network(data.coverHorizontal ?? '', fit: BoxFit.cover, backgroundColor: MyTheme.imageBgColor, borderRadius: 5.w),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          height: 22.w,
+                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.w),
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Color.fromRGBO(16, 16, 16, 0.05),
+                                Color.fromRGBO(16, 16, 16, 0.9),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: Padding(

@@ -38,12 +38,11 @@ class _HjsqSearchResultScreenState extends State<HjsqSearchResultScreen> {
     );
 
     if (result.status == 1) {
-      final data = result.data;
-      if (data != null) {
-        if (data['list'] case final List data when data.isNotEmpty) {
-          final feedModelList = data.map<FeedModel>((x) => FeedModel.fromJson(x)).toList();
-          return feedModelList;
-        }
+      if (result.data case final List data when data.isNotEmpty) {
+        final feedModelList = data.map<FeedModel>((x) => FeedModel.fromJson(x)).toList();
+        return feedModelList;
+      } else {
+        return [];
       }
     } else {
       MyToast.showText(text: result.msg ?? '');

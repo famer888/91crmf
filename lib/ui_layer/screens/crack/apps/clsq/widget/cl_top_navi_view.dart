@@ -70,7 +70,7 @@ class _ClTopNaviViewState extends State<ClTopNaviView> with TickerProviderStateM
             linkUrl: '',
             resourceUrl: '',
             redirectType: 0,
-            name: '17岁',
+            name: '精品',
             type: 0,
             desc: '',
             api: 'mvhjgj/discover2',

@@ -44,11 +44,10 @@ class _HjsqCollectButtonState extends State<HjsqCollectButton> {
     super.initState();
   }
 
-  // 'type'      => 'required|integer',  24 表示  草榴, 25 表示 91 暗网 ,26 表示 暗网禁区  27表示  91 制片厂
   Future<void> onCollect() async {
     final result = await _appDomain.getConstructByApiLink(
       apiLink: widget.apiUrl,
-      params: {'type': '24'/*'${CrackAppType.hjsq.type}'*/, 'relatedId': widget.id},
+      params: {'type': CrackAppType.hjsq.type, 'relatedId': widget.id},
     );
     if (result.status == 1) {
       onChangeCollected();

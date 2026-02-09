@@ -160,73 +160,6 @@ class _CrackAppDrawerState extends State<CrackAppDrawer> {
   }) {
     return ReportGestureDetector(
       onTap: onTap,
-      // () {
-      // if (isCrack) {
-      //   // _routeAppDetails(context, appData);
-      //
-      //   if (appData.isfree == 0) {
-      //     // 免费
-      //     _routeAppDetails(context, appData);
-      //   } else if (appData.isfree == 1) {
-      //     // vip解锁
-      //     if ((_userNotifier.member.vipAppPrivilege ?? 0) > 0) {
-      //       // 已经获得vip权限
-      //       _routeAppDetails(context, appData);
-      //     } else {
-      //       // vip弹窗
-      //       VipPayDialog.showVipDialog(context);
-      //     }
-      //   } else if (appData.isfree == 2) {
-      //     // 金币解锁
-      //     if ((_userNotifier.member.coinsAppPrivilege ?? 0) > 0) {
-      //       // 已经获得金币权限
-      //       _routeAppDetails(context, appData);
-      //     } else {
-      //       if (appData.isPay) {
-      //         // 已经购买过
-      //         _routeAppDetails(context, appData);
-      //       } else {
-      //         // 金币弹窗
-      //         VipPayDialog.showCoinsDialog(
-      //           context: context,
-      //           barrierDismissible: false,
-      //           member: _userNotifier.member,
-      //           coins: appData.coins.toDouble(),
-      //           onPay: () async {
-      //             // 支付
-      //             int type = 0;
-      //             if (appData.appName == 'hjgj') {
-      //               type = CrackAppType.clsq.type;
-      //             } else if (appData.appName == 'awjq') {
-      //               type = CrackAppType.awjq.type;
-      //             } else if (appData.appName == '91aw') {
-      //               type = CrackAppType.aw91.type;
-      //             } else if (appData.appName == 'zpc') {
-      //               type = CrackAppType.zpc.type;
-      //             }
-      //             final result = await _userDomain.userAppBuy(source: appData.appName, type: type);
-      //             if (result.status == 1) {
-      //               appData.isPay = true;
-      //               MyToast.showText(text: result.data?.message ?? '');
-      //               if (context.mounted) {
-      //                 context.pop();
-      //                 _routeAppDetails(context, appData);
-      //               }
-      //             } else {
-      //               if (context.mounted) {
-      //                 context.pop();
-      //               }
-      //               MyToast.showText(text: result.msg ?? '');
-      //             }
-      //           },
-      //         );
-      //       }
-      //     }
-      //   }
-      // } else {
-      //   _showRuleDialog();
-      // }
-      // },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -244,7 +177,7 @@ class _CrackAppDrawerState extends State<CrackAppDrawer> {
             height: itemWidth,
             child: Stack(children: [
               MyImage.network(appData.logo, fit: BoxFit.cover, borderRadius: 10.w, width: itemWidth, height: itemWidth),
-              if (isCrack) CrackStatusTag(isFree: appData.isfree),
+              if (isCrack) CrackStatusTag(appData: appData),
             ]),
           ),
           SizedBox(height: 3.w),

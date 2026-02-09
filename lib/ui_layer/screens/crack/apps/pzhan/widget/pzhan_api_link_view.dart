@@ -368,7 +368,6 @@ class _HeaderState extends State<_Header> {
             );
           },
         ),
-        SizedBox(height: 10.w),
         ValueListenableBuilder(
           valueListenable: widget.topicsNotifier,
           builder: (context, topics, child) {
@@ -383,7 +382,7 @@ class _HeaderState extends State<_Header> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(bottom: 3.w),
+                  padding: EdgeInsets.only(bottom: 3.w, top: 10.w),
                   child: GridView.builder(
                       shrinkWrap: true,
                       addRepaintBoundaries: false,

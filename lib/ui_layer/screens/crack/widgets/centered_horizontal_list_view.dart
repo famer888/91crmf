@@ -141,7 +141,7 @@ class _CenteredHorizontalListViewState extends State<CenteredHorizontalListView>
                         child: Stack(
                           children: [
                             MyImage.network(crackApp.logo, fit: BoxFit.cover, borderRadius: 10.w),
-                            CrackStatusTag(isFree: crackApp.isfree),
+                            CrackStatusTag(appData: crackApp),
                           ],
                         ),
                       ),

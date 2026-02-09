@@ -298,7 +298,6 @@ class _HeaderState extends State<_Header> {
             );
           },
         ),
-        SizedBox(height: 10.w),
         ValueListenableBuilder(
           valueListenable: widget.partNotifier,
           builder: (context, parts, child) {
@@ -306,7 +305,7 @@ class _HeaderState extends State<_Header> {
             // parts = parts.sublist(0, 3);
             // parts.add(PartModel.fromJson(parts.first.toJson()));
             return Container(
-              margin: EdgeInsets.only(top: 10.w, bottom: 5.w),
+              margin: EdgeInsets.only(top: 10.w, bottom: 3.w),
               height: 70.w,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,

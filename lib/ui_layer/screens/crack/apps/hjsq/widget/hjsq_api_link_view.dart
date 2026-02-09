@@ -203,7 +203,6 @@ class _HjsqApiLinkViewState extends State<HjsqApiLinkView> {
                                     final double totalPixels = headerPixels + tabPixels;
                                     final bool shouldShow = totalPixels > _showThreshold;
                                     if (shouldShow != _showToTopBtn.value) {
-                                      CommonUtils.log('标签页滚动: header=$headerPixels, tab=$tabPixels, total=$totalPixels');
                                       _showToTopBtn.value = shouldShow;
                                     }
                                   }
@@ -224,7 +223,6 @@ class _HjsqApiLinkViewState extends State<HjsqApiLinkView> {
                                     final double totalPixels = headerPixels + tabPixels;
                                     final bool shouldShow = totalPixels > _showThreshold;
                                     if (shouldShow != _showToTopBtn.value) {
-                                      CommonUtils.log('网格页滚动: header=$headerPixels, tab=$tabPixels, total=$totalPixels');
                                       _showToTopBtn.value = shouldShow;
                                     }
                                   }
@@ -296,7 +294,6 @@ class _HeaderState extends State<_Header> {
             );
           },
         ),
-        SizedBox(height: 10.w),
         ValueListenableBuilder(
           valueListenable: widget.partNotifier,
           builder: (context, parts, child) {
@@ -304,7 +301,7 @@ class _HeaderState extends State<_Header> {
             // parts = parts.sublist(0, 3);
             // parts.add(PartModel.fromJson(parts.first.toJson()));
             return Container(
-              margin: EdgeInsets.only(top: 10.w, bottom: 5.w),
+              margin: EdgeInsets.only(top: 10.w, bottom: 3.w),
               height: 70.w,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -365,8 +362,12 @@ class _HeaderState extends State<_Header> {
             if (isGirlTopic) {
               contentTopics = topics;
             } else {
-              if (topics.length > 8 && !isShowAllTopics) {
-                contentTopics = topics.sublist(0, 8);
+              if (topics.length > 8) {
+                if (!isShowAllTopics) {
+                  contentTopics = topics.sublist(0, 8);
+                } else {
+                  contentTopics = topics;
+                }
               } else {
                 contentTopics = topics;
               }
@@ -378,80 +379,81 @@ class _HeaderState extends State<_Header> {
                 isGirlTopic
                     ? girdTopicView(contentTopics)
                     : Padding(
-                  padding: EdgeInsets.only(bottom: 5.w),
-                  child: GridView.builder(
-                      shrinkWrap: true,
-                      addRepaintBoundaries: false,
-                      addAutomaticKeepAlives: false,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: contentTopics.length,
-                      padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 4,
-                        childAspectRatio: 80.w / 35.w,
-                        mainAxisSpacing: 10.w,
-                        crossAxisSpacing: 10.w,
-                      ),
-                      itemBuilder: (context, index) {
-                        final topic = topics[index];
-                        return DecoratedBox(
-                          decoration: ShapeDecoration(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(2.w),
+                        padding: EdgeInsets.only(bottom: 5.w),
+                        child: GridView.builder(
+                            shrinkWrap: true,
+                            addRepaintBoundaries: false,
+                            addAutomaticKeepAlives: false,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: contentTopics.length,
+                            padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4,
+                              childAspectRatio: 80.w / 35.w,
+                              mainAxisSpacing: 10.w,
+                              crossAxisSpacing: 10.w,
                             ),
-                            color: const Color(0xff262631),
-                          ),
-                          child: Center(
-                            child: ReportGestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () {
-                                final linkUrl = topic.linkUrl;
-                                final redirectType = topic.redirectType;
-                                if (linkUrl.isEmpty) {
-                                  return;
-                                }
+                            itemBuilder: (context, index) {
+                              final topic = topics[index];
+                              return DecoratedBox(
+                                decoration: ShapeDecoration(
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.w)),
+                                  color: const Color.fromRGBO(35, 34, 55, 1),
+                                ),
+                                child: Center(
+                                  child: ReportGestureDetector(
+                                    behavior: HitTestBehavior.translucent,
+                                    onTap: () {
+                                      final linkUrl = topic.linkUrl;
+                                      final redirectType = topic.redirectType;
+                                      if (linkUrl.isEmpty) {
+                                        return;
+                                      }
 
-                                if (redirectType < 3) {
-                                  CommonUtils.openRoute(context, topic.toJson());
-                                } else {
-                                  if (topic.openType == 0) {
-                                    widget.onLinkNavTap(topic.linkUrl);
-                                  } else if (topic.openType == 1) {
-                                    MoreVideoRoute(name: topic.name, id: topic.linkUrl, api: 'mvhjgj/list_construct').push(context);
-                                  }
-                                }
-                              },
-                              child: Text(topic.name, style: MyTheme.white13),
-                            ),
-                          ),
-                        );
-                      }),
-                ),
+                                      if (redirectType < 3) {
+                                        CommonUtils.openRoute(context, topic.toJson());
+                                      } else {
+                                        if (topic.openType == 0) {
+                                          widget.onLinkNavTap(topic.linkUrl);
+                                        } else if (topic.openType == 1) {
+                                          MoreVideoRoute(name: topic.name, id: topic.linkUrl, api: 'mvhjgj/list_construct').push(context);
+                                        }
+                                      }
+                                    },
+                                    child: Text(topic.name, style: MyTheme.white13),
+                                  ),
+                                ),
+                              );
+                            }),
+                      ),
                 isGirlTopic ? Container() : SizedBox(height: 5.w),
                 isGirlTopic
                     ? Container()
                     : Offstage(
-                  offstage: widget.topicsNotifier.value.length <= 8 || isShowAllTopics,
-                  child: InkWell(
-                    onTap: () {
-                      isShowAllTopics = true;
-                      if (mounted) {
-                        setState(() {});
-                      }
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 10.w),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('zkckgd'.tr(context: context), style: MyTheme.white08_12),
-                          SizedBox(width: 3.w),
-                          MyImage.asset(MyImagePaths.appDownGray, width: 10.w, height: 10.w)
-                        ],
+                        offstage: false,
+                        child: ReportGestureDetector(
+                          onTap: () {
+                            isShowAllTopics = !isShowAllTopics;
+                            if (mounted) {
+                              setState(() {});
+                            }
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 10.w),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  isShowAllTopics ? 'shckgd'.tr(context: context) : 'zkckgd'.tr(context: context),
+                                  style: MyTheme.white08_12.copyWith(color: const Color.fromRGBO(118, 120, 129, 1)),
+                                ),
+                                SizedBox(width: 3.w),
+                                MyImage.asset(isShowAllTopics ? MyImagePaths.appUpIcon : MyImagePaths.appDownIcon, width: 10.w, height: 10.w)
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
               ],
             );
           },

@@ -49,86 +49,86 @@ class _ZpcVideoSearchScreenState extends State<ZpcVideoSearchScreen> {
   Widget build(BuildContext context) {
     return ColoredBox(
       color: Theme.of(context).scaffoldBackgroundColor,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          Theme(
-            data: Theme.of(context).copyWith(scaffoldBackgroundColor: Colors.white),
-            child: Scaffold(
-        appBar: _SearchBar(
-          textEditingController: searchTextEditController,
-          onSubmitted: onSubmitted,
-        ),
-        body: ListView(
-          padding: EdgeInsets.only(left: MyTheme.pagePadding, right: MyTheme.pagePadding, bottom: 50.w),
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 15.w),
-              child: Row(
-                children: [
-                  Text('ssjl'.tr(context: context), style: TextStyle(color: MyTheme.blackColor32, fontSize: 16.sp, fontWeight: FontWeight.w500)),
-                  const Spacer(),
-                  ReportGestureDetector(
-                    onTap: () {
-                      _homeConfigNotifier.clearSearchHistory(key: zpcSearchHistoryKey);
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(tr('qcssjl'), style: TextStyle(color: MyTheme.blackColor32, fontSize: 12.sp, fontWeight: FontWeight.w400)),
-                        SizedBox(width: 5.w),
-                        SizedBox(
-                          width: 16.w,
-                          height: 16.w,
-                          child: MyImage.asset(
-                            MyImagePaths.appClearSearch,
-                            width: 16.w,
-                            height: 16.w,
-                            color: MyTheme.zpcAppPrimaryColor,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+      child: Stack(fit: StackFit.expand, children: [
+        Theme(
+          data: Theme.of(context).copyWith(scaffoldBackgroundColor: Colors.white),
+          child: Scaffold(
+            appBar: _SearchBar(
+              textEditingController: searchTextEditController,
+              onSubmitted: onSubmitted,
             ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Selector<HomeConfigNotifier, List<String>>(
-                selector: (_, config) => config.getSearchHistory(key: zpcSearchHistoryKey),
-                builder: (context, searchHistory, child) => searchHistory.isNotEmpty
-                    ? Wrap(
-                  spacing: 10.w,
-                  runSpacing: 10.w,
-                  children: [
-                    for (final text in searchHistory)
-                      _KeywordTile(
-                        text: text,
+            body: ListView(
+              padding: EdgeInsets.only(left: MyTheme.pagePadding, right: MyTheme.pagePadding, bottom: 50.w),
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 15.w),
+                  child: Row(
+                    children: [
+                      Text('ssjl'.tr(context: context),
+                          style: TextStyle(color: MyTheme.blackColor32, fontSize: 16.sp, fontWeight: FontWeight.w500)),
+                      const Spacer(),
+                      ReportGestureDetector(
                         onTap: () {
-                          searchTextEditController.text = text;
-                          onSubmitted(text);
+                          _homeConfigNotifier.clearSearchHistory(key: zpcSearchHistoryKey);
                         },
-                        onDelete: () {
-                          final history = _homeConfigNotifier.getSearchHistory(key: zpcSearchHistoryKey);
-                          _homeConfigNotifier.upsertSearchHistory(key: zpcSearchHistoryKey, searchHistory: history..remove(text));
-                        },
-                      )
-                  ],
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(tr('qcssjl'), style: TextStyle(color: MyTheme.blackColor32, fontSize: 12.sp, fontWeight: FontWeight.w400)),
+                            SizedBox(width: 5.w),
+                            SizedBox(
+                              width: 16.w,
+                              height: 16.w,
+                              child: MyImage.asset(
+                                MyImagePaths.appClearSearch,
+                                width: 16.w,
+                                height: 16.w,
+                                color: MyTheme.zpcAppPrimaryColor,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Selector<HomeConfigNotifier, List<String>>(
+                    selector: (_, config) => config.getSearchHistory(key: zpcSearchHistoryKey),
+                    builder: (context, searchHistory, child) => searchHistory.isNotEmpty
+                        ? Wrap(
+                            spacing: 10.w,
+                            runSpacing: 10.w,
+                            children: [
+                              for (final text in searchHistory)
+                                _KeywordTile(
+                                  text: text,
+                                  onTap: () {
+                                    searchTextEditController.text = text;
+                                    onSubmitted(text);
+                                  },
+                                  onDelete: () {
+                                    final history = _homeConfigNotifier.getSearchHistory(key: zpcSearchHistoryKey);
+                                    _homeConfigNotifier.upsertSearchHistory(key: zpcSearchHistoryKey, searchHistory: history..remove(text));
+                                  },
+                                )
+                            ],
+                          )
+                        : PageEmptyDataView(text: 'myss'.tr(context: context)),
+                  ),
+                ),
+                _SearchContentView(
+                  onSubmitted: (text) {
+                    searchTextEditController.text = text;
+                    onSubmitted(text);
+                  },
                 )
-                    : PageEmptyDataView(text: 'myss'.tr(context: context)),
-              ),
+              ],
             ),
-            _SearchContentView(
-              onSubmitted: (text) {
-                searchTextEditController.text = text;
-                onSubmitted(text);
-              },
-            )
-          ],
+          ),
         ),
-      ),
-    ),]),
+      ]),
     );
   }
 }
@@ -162,11 +162,11 @@ class _SearchBarState extends State<_SearchBar> {
           children: [
             ReportGestureDetector(
               child: Image.asset(
-                              MyImagePaths.appBackIcon,
-                              width: 20.w,
-                              height: 20.w,
-                              color:const Color.fromRGBO(51, 51, 51, 1),
-                            ),
+                MyImagePaths.appBackIcon,
+                width: 20.w,
+                height: 20.w,
+                color: const Color.fromRGBO(51, 51, 51, 1),
+              ),
               onTap: () => context.pop(),
             ),
             Expanded(
@@ -186,7 +186,8 @@ class _SearchBarState extends State<_SearchBar> {
               onTap: () {
                 widget.onSubmitted.call(textEditingController.text);
               },
-              child: Text('ss'.tr(context: context), style: TextStyle(color: MyTheme.blackColor32, fontSize: 14.sp, fontWeight: FontWeight.w400)),
+              child:
+                  Text('ss'.tr(context: context), style: TextStyle(color: MyTheme.blackColor32, fontSize: 14.sp, fontWeight: FontWeight.w400)),
             ),
           ],
         ),
@@ -206,6 +207,12 @@ class _KeywordTile extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback onDelete;
 
+  String _limitText(String text, int maxChars) {
+    final chars = text.characters;
+    if (chars.length <= maxChars) return text;
+    return chars.take(maxChars).toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -218,8 +225,13 @@ class _KeywordTile extends StatelessWidget {
           ReportGestureDetector(
             onTap: onTap,
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 100.w),
-              child: Text(text, style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.w400), maxLines: 1),
+              constraints: BoxConstraints(maxWidth: 114.w),
+              child: Text(
+                _limitText(text, 8),
+                style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.w400),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
           // Container(color: const Color(0xffffffff), height: 13.w, width: 1.w, margin: EdgeInsets.symmetric(horizontal: 10.w)),
@@ -325,90 +337,98 @@ class _SearchContentViewState extends State<_SearchContentView> {
         //     : const SizedBox.shrink(),
         hotTags.isNotEmpty
             ? Column(
-          children: [
-            SizedBox(height: 30.w),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(width: 4.w),
-                Text('rmtj'.tr(context: context), style: TextStyle(color: MyTheme.blackColor32, fontSize: 16.sp, fontWeight: FontWeight.w500), textAlign: TextAlign.center),
-                const Spacer(),
-              ],
-            ),
-            ListView.builder(
-                shrinkWrap: true,
-                addRepaintBoundaries: false,
-                addAutomaticKeepAlives: false,
-                padding: EdgeInsets.zero,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) => ReportGestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    widget.onSubmitted(hotTags[index].work);
-                  },
-                  child: SizedBox(
-                    height: 35.w,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(width: 5.w),
-                        SizedBox(
-                          height: ScreenUtil().setWidth(20),
-                          width: ScreenUtil().setWidth(20),
-                          // decoration: BoxDecoration(
-                          //     gradient: LinearGradient(
-                          //       colors: [
-                          //         Color(index == 0 ? 0xFFFF4242 : (index == 1 ? 0xFFFFAD42 : (index == 2 ? 0xFF7E42FF : 0xFFFFFFFF))),
-                          //         Color(index == 0 ? 0xFFFF4242 : (index == 1 ? 0xFFFFAD42 : (index == 2 ? 0xFF7E42FF : 0xFFFFFFFF)))
-                          //       ],
-                          //       begin: Alignment.centerLeft,
-                          //       end: Alignment.centerRight,
-                          //     ),
-                          //     borderRadius: const BorderRadius.all(Radius.circular(3))),
-                          child: Center(
-                            child: Text(
-                              '${index + 1}',
-                              style: TextStyle(
-                                color: Color(index == 0 ? 0xFFFF4242 : index == 1 ? 0xFFFFAD42 : index == 2 ? 0xFF7E42FF : 0xFF939393),
-                                fontSize: 15.sp,
-                                fontWeight: FontWeight.w600,
-                                overflow: TextOverflow.ellipsis,
-                                decoration: TextDecoration.none,
+                children: [
+                  SizedBox(height: 30.w),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(width: 4.w),
+                      Text('rmtj'.tr(context: context),
+                          style: TextStyle(color: MyTheme.blackColor32, fontSize: 16.sp, fontWeight: FontWeight.w500),
+                          textAlign: TextAlign.center),
+                      const Spacer(),
+                    ],
+                  ),
+                  ListView.builder(
+                      shrinkWrap: true,
+                      addRepaintBoundaries: false,
+                      addAutomaticKeepAlives: false,
+                      padding: EdgeInsets.zero,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) => ReportGestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () {
+                              widget.onSubmitted(hotTags[index].work);
+                            },
+                            child: SizedBox(
+                              height: 35.w,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(width: 5.w),
+                                  SizedBox(
+                                    height: ScreenUtil().setWidth(20),
+                                    width: ScreenUtil().setWidth(20),
+                                    // decoration: BoxDecoration(
+                                    //     gradient: LinearGradient(
+                                    //       colors: [
+                                    //         Color(index == 0 ? 0xFFFF4242 : (index == 1 ? 0xFFFFAD42 : (index == 2 ? 0xFF7E42FF : 0xFFFFFFFF))),
+                                    //         Color(index == 0 ? 0xFFFF4242 : (index == 1 ? 0xFFFFAD42 : (index == 2 ? 0xFF7E42FF : 0xFFFFFFFF)))
+                                    //       ],
+                                    //       begin: Alignment.centerLeft,
+                                    //       end: Alignment.centerRight,
+                                    //     ),
+                                    //     borderRadius: const BorderRadius.all(Radius.circular(3))),
+                                    child: Center(
+                                      child: Text(
+                                        '${index + 1}',
+                                        style: TextStyle(
+                                          color: Color(index == 0
+                                              ? 0xFFFF4242
+                                              : index == 1
+                                                  ? 0xFFFFAD42
+                                                  : index == 2
+                                                      ? 0xFF7E42FF
+                                                      : 0xFF939393),
+                                          fontSize: 15.sp,
+                                          fontWeight: FontWeight.w600,
+                                          overflow: TextOverflow.ellipsis,
+                                          decoration: TextDecoration.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 8.w),
+                                  Expanded(
+                                    child: Text(
+                                      hotTags[index].work,
+                                      style: TextStyle(
+                                        color: const Color.fromRGBO(23, 21, 24, 1),
+                                        fontSize: 14.sp,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      MyImage.asset(MyImagePaths.appSearHotkeyN, width: 14.w, height: 14.w),
+                                      SizedBox(width: 5.w),
+                                      Text(
+                                        '${CommonUtils.renderFixedNumber(hotTags[index].num)}${'wcll'.tr(context: context)}',
+                                        style: TextStyle(color: MyTheme.blackColor32, fontSize: 15.sp, fontWeight: FontWeight.w400),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: 8.w),
-                        Expanded(
-                          child: Text(
-                            hotTags[index].work,
-                            style: TextStyle(
-                              color: const Color.fromRGBO(23, 21, 24, 1),
-                              fontSize: 14.sp,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            maxLines: 1,
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            MyImage.asset(MyImagePaths.appSearHotkeyN, width: 14.w, height: 14.w),
-                            SizedBox(width: 5.w),
-                            Text(
-                              '${CommonUtils.renderFixedNumber(hotTags[index].num)}${'wcll'.tr(context: context)}',
-                              style: TextStyle(color: MyTheme.blackColor32, fontSize: 15.sp, fontWeight: FontWeight.w400),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                itemCount: hotTags.length),
-          ],
-        )
+                      itemCount: hotTags.length),
+                ],
+              )
             : const SizedBox.shrink(),
       ],
     );
