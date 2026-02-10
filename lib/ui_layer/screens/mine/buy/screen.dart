@@ -339,7 +339,7 @@ class _VlogVideoViewState extends State<_VlogVideoView> {
                   'limit': _limit,
                 }
               };
-              const VlogSecondRoute().push(context);
+              const VlogSecondRoute(userGlobalData: true).push(context);
             } else {
               //广告类型
               CommonUtils.openRoute(context, item.toJson());

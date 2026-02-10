@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jycrpj/domain/async_value.dart';
+import 'package:jycrpj/domain/domain.dart';
 import 'package:jycrpj/domain/model/crack_model.dart';
 import 'package:jycrpj/domain/remote_domain/domains/crack.dart';
 import 'package:jycrpj/domain/remote_domain/domains/user.dart';
@@ -41,6 +42,8 @@ class _NewCrackScreenState extends State<NewCrackScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late final _screenUtil = ScreenUtil();
   late final _crackDomain = context.read<CrackDomain>();
+  late final _appDomain = context.read<AppDomain>();
+  late final _cacheDomain = context.read<CacheDomain>();
   late final _userDomain = context.read<UserDomain>();
   late final _homeConfigNotifier = context.read<HomeConfigNotifier>();
   late final _userNotifier = context.read<UserNotifier>();
@@ -58,8 +61,9 @@ class _NewCrackScreenState extends State<NewCrackScreen> {
     if (!mounted) return;
     setState(() {});
 
+    CommonUtils.log('缓存token:${_appDomain.info} - ${_appDomain.cache}');
     try {
-      final resCrackRes = await _crackDomain.getCrackList(isCrack: 1);
+      final resCrackRes = await _crackDomain.getCrackList(isCrack: 1, );
       // 如果任一接口返回 status != 1 则视为错误
       if (resCrackRes.status != 1) {
         _asyncValue = const AsyncError();

@@ -166,6 +166,7 @@ class _ClApiLinkViewState extends State<ClApiLinkView> {
             return false;
           },
           child: NestedScrollView(
+            controller: _nestedController,
             headerSliverBuilder: (_, __) => [
               SliverToBoxAdapter(
                 child: _Header(

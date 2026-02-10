@@ -9,7 +9,8 @@ import 'package:jycrpj/ui_layer/screens/vlog/vlog_play_screen.dart';
 import '../../../report/ui_layer/report_gesture_detector.dart';
 
 class VlogSecondPage extends StatefulWidget {
-  const VlogSecondPage({super.key});
+  final bool userGlobalData;
+  const VlogSecondPage({super.key, required this.userGlobalData});
 
   @override
   State<VlogSecondPage> createState() => _VlogSecondPageState();
@@ -27,7 +28,7 @@ class _VlogSecondPageState extends State<VlogSecondPage> {
       color: MyTheme.bgColor,
       child: Stack(
         children: [
-          Positioned.fill(child: VlogPlayScreen(userGlobalData: true, keepBottomBlank: true)),
+          Positioned.fill(child: VlogPlayScreen(userGlobalData: widget.userGlobalData, keepBottomBlank: true)),
           Positioned(
             left: 2.w,
             top: MyTheme.statusHeight,

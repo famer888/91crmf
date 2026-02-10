@@ -190,10 +190,7 @@ class VlogPlayScreenState extends State<VlogPlayScreen> {
                           minScale: 1.0,
                           maxScale: 1.0,
                           disableGestures: true,
-                          child: CommonUtils.adModuleInShortFlowUI(
-                            context,
-                            e,
-                          ),
+                          child: CommonUtils.adModuleInShortFlowUI(context, e),
                         );
                       }
 

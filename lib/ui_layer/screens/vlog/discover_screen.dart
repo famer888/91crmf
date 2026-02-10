@@ -60,12 +60,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       // tabBarHeight: 32.w,
       // tabBarPadding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.w),
       titles: [for (final title in titles) title.title],
-      views: [
-        for (final NavigatorModel model in titles)
-          KeepAliveWrapper(
-            child: DiscoverContentView(sort: model, key: Key(model.title)),
-          )
-      ],
+      views: [for (final NavigatorModel model in titles) KeepAliveWrapper(child: DiscoverContentView(sort: model, key: Key(model.title)))],
     );
   }
 }
@@ -163,7 +158,7 @@ class DiscoverContentViewState extends State<DiscoverContentView> {
                     },
                   };
 
-                  const VlogSecondRoute().push(context);
+                  const VlogSecondRoute(userGlobalData: true).push(context);
                 } else {
                   //广告类型
                   CommonUtils.openRoute(context, item.toJson());

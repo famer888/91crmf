@@ -111,6 +111,8 @@ class _CollectAppVideoItem extends StatelessWidget {
           ClVideoDetailRoute(data.id ?? 0).push(context);
         } else if (type == CrackAppType.awjq.type) {
           AnWangRestrictedDetailRoute(id: data.id ?? 0).push(context);
+        } else if (type == CrackAppType.pzhan.type) {
+          PZhanVideoDetailRoute(id: data.id ?? 0).push(context);
         } else if (type == CrackAppType.aw91.type) {
           Aw91VideoDetailRoute(id: data.id ?? 0).push(context);
         } else if (type == CrackAppType.hjsq.type) {

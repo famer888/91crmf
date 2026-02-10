@@ -151,6 +151,7 @@ class _ZpcApiLinkViewState extends State<ZpcApiLinkView> {
             return false;
           },
           child: NestedScrollView(
+            controller: _nestedController,
             headerSliverBuilder: (_, __) => [
               SliverToBoxAdapter(
                 child: _Header(

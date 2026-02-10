@@ -372,11 +372,16 @@ RouteBase get $vlogSecondRoute => GoRouteData.$route(
     );
 
 extension $VlogSecondRouteExtension on VlogSecondRoute {
-  static VlogSecondRoute _fromState(GoRouterState state) =>
-      const VlogSecondRoute();
+  static VlogSecondRoute _fromState(GoRouterState state) => VlogSecondRoute(
+        userGlobalData:
+            _$boolConverter(state.uri.queryParameters['user-global-data']!),
+      );
 
   String get location => GoRouteData.$location(
         '/vlogSecond',
+        queryParams: {
+          'user-global-data': userGlobalData.toString(),
+        },
       );
 
   void go(BuildContext context) => context.go(location);
@@ -387,6 +392,17 @@ extension $VlogSecondRouteExtension on VlogSecondRoute {
       context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
+}
+
+bool _$boolConverter(String value) {
+  switch (value) {
+    case 'true':
+      return true;
+    case 'false':
+      return false;
+    default:
+      throw UnsupportedError('Cannot convert "$value" into a bool.');
+  }
 }
 
 RouteBase get $vlogTagRoute => GoRouteData.$route(
@@ -978,17 +994,6 @@ const _$CommunityIssueTypeEnumMap = {
   CommunityIssueType.video: 'video',
   CommunityIssueType.imageAndText: 'image-and-text',
 };
-
-bool _$boolConverter(String value) {
-  switch (value) {
-    case 'true':
-      return true;
-    case 'false':
-      return false;
-    default:
-      throw UnsupportedError('Cannot convert "$value" into a bool.');
-  }
-}
 
 extension<T extends Enum> on Map<T, String> {
   T _$fromName(String value) =>

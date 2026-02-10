@@ -154,6 +154,7 @@ class _Aw91ApiLinkViewState extends State<Aw91ApiLinkView> {
             return false;
           },
           child: NestedScrollView(
+            controller: _nestedController,
             headerSliverBuilder: (_, __) => [
               SliverToBoxAdapter(
                 child: _Header(
@@ -188,17 +189,53 @@ class _Aw91ApiLinkViewState extends State<Aw91ApiLinkView> {
                       valueListenable: isListNotifier,
                       builder: (context, isList, child) {
                         return isList
-                            ? MyListView.list(
-                                itemBuilder: (context, item, index) => Aw91FeedCard(isList: true, feed: item),
-                                onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
+                            ? NotificationListener<ScrollNotification>(
+                                // 添加在这里
+                                onNotification: (ScrollNotification notification) {
+                                  if (notification is ScrollUpdateNotification) {
+                                    // 获取当前标签页的滚动位置
+                                    final double tabPixels = notification.metrics.pixels;
+                                    // 获取 NestedScrollView header 的滚动位置
+                                    final double headerPixels = _nestedController.hasClients ? _nestedController.offset : 0;
+                                    // 计算总滚动量
+                                    final double totalPixels = headerPixels + tabPixels;
+                                    final bool shouldShow = totalPixels > _showThreshold;
+                                    if (shouldShow != _showToTopBtn.value) {
+                                      _showToTopBtn.value = shouldShow;
+                                    }
+                                  }
+                                  return false;
+                                },
+                                child: MyListView.list(
+                                  itemBuilder: (context, item, index) => Aw91FeedCard(isList: true, feed: item),
+                                  onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
+                                ),
                               )
-                            : MyListView.grid(
-                                padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
-                                childAspectRatio: MyTheme.aspectRatio,
-                                crossAxisSpacing: 8.w,
-                                mainAxisSpacing: 10.w,
-                                itemBuilder: (context, item, index) => Aw91FeedCard(isList: false, feed: item),
-                                onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
+                            : NotificationListener<ScrollNotification>(
+                                // 添加在这里
+                                onNotification: (ScrollNotification notification) {
+                                  if (notification is ScrollUpdateNotification) {
+                                    // 获取当前标签页的滚动位置
+                                    final double tabPixels = notification.metrics.pixels;
+                                    // 获取 NestedScrollView header 的滚动位置
+                                    final double headerPixels = _nestedController.hasClients ? _nestedController.offset : 0;
+                                    // 计算总滚动量
+                                    final double totalPixels = headerPixels + tabPixels;
+                                    final bool shouldShow = totalPixels > _showThreshold;
+                                    if (shouldShow != _showToTopBtn.value) {
+                                      _showToTopBtn.value = shouldShow;
+                                    }
+                                  }
+                                  return false;
+                                },
+                                child: MyListView.grid(
+                                  padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
+                                  childAspectRatio: MyTheme.aspectRatio,
+                                  crossAxisSpacing: 8.w,
+                                  mainAxisSpacing: 10.w,
+                                  itemBuilder: (context, item, index) => Aw91FeedCard(isList: false, feed: item),
+                                  onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
+                                ),
                               );
                       }),
               ],

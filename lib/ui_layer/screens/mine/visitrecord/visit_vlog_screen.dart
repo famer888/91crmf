@@ -79,12 +79,12 @@ class _VisitVlogScreenState extends State<VisitVlogScreen> {
                             'list': visitVlogModels,
                             'page': 1,
                             'index': index,
-                            'api': 'vlog/list_tag',
+                            'api': 'vlog/list_sort',
                             'params': {
                               'limit': 15,
                             }
                           };
-                          const VlogSecondRoute().push(context);
+                          const VlogSecondRoute(userGlobalData: true).push(context);
                         } else {
                           //广告类型
                           CommonUtils.openRoute(context, item.toJson());

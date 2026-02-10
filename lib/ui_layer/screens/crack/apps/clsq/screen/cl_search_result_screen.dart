@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jycrpj/domain/domain.dart';
@@ -26,7 +25,9 @@ class ClSearchResultScreen extends StatefulWidget {
 
 class _ClSearchResultScreenState extends State<ClSearchResultScreen> {
   late final _appDomain = context.read<AppDomain>();
+  final ScrollController _scrollController = ScrollController();
   final ValueNotifier<bool> _showToTopButtonNotifier = ValueNotifier(false);
+  double _showThreshold = 0;
 
   Future<List<FeedModel>?> _getData({
     required int page,
@@ -56,17 +57,25 @@ class _ClSearchResultScreenState extends State<ClSearchResultScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showThreshold = ScreenUtil().screenHeight * 0.40;
+    });
+    _scrollController.addListener(() {
+      _showToTopButtonNotifier.value = (_scrollController.offset > _showThreshold);
+    });
   }
 
   @override
   void dispose() {
+    _scrollController.dispose();
     _showToTopButtonNotifier.dispose();
     super.dispose();
   }
 
   void _scrollToTop() {
-    // 由于没有直接的 ScrollController，使用 PrimaryScrollController
-    PrimaryScrollController.of(context).animateTo(
+    if (!_scrollController.hasClients) return;
+
+    _scrollController.animateTo(
       0,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
@@ -77,43 +86,33 @@ class _ClSearchResultScreenState extends State<ClSearchResultScreen> {
   Widget build(BuildContext context) {
     return ScreenBackground(
       child: Scaffold(
-        appBar: MyAppBar(title: 'ssjg'.tr(context: context)),
-        body: NotificationListener<ScrollNotification>(
-          onNotification: (ScrollNotification notification) {
-            if (notification is ScrollUpdateNotification) {
-              final showButton = notification.metrics.pixels > 300;
-              if (showButton != _showToTopButtonNotifier.value) {
-                _showToTopButtonNotifier.value = showButton;
-              }
-            }
-            return false;
-          },
-          child: Stack(
-            children: [
-              MyListView.grid(
-                padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
-                childAspectRatio: MyTheme.aspectRatio,
-                crossAxisSpacing: 8.w,
-                itemBuilder: (context, item, index) => ClFeedCard(isList: false, feed: item).withSearchReport({
-                  "event": "keyword_click",
-                  "keyword": widget.word,
-                  "click_item_id": item.id,
-                  "click_item_type_key": "video",
-                  "click_item_type_name": "视频",
-                  "click_ position": index,
-                }),
-                onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: widget.type),
+        appBar: MyAppBar(title: widget.word),
+        body: Stack(
+          children: [
+            MyListView.grid(
+              scrollController: _scrollController,
+              padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
+              childAspectRatio: MyTheme.aspectRatio,
+              crossAxisSpacing: 8.w,
+              itemBuilder: (context, item, index) => ClFeedCard(isList: false, feed: item).withSearchReport({
+                "event": "keyword_click",
+                "keyword": widget.word,
+                "click_item_id": item.id,
+                "click_item_type_key": "video",
+                "click_item_type_name": "视频",
+                "click_ position": index,
+              }),
+              onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: widget.type),
+            ),
+            Positioned(
+              bottom: 40.w,
+              right: 20.w,
+              child: ScrollTopButton(
+                showToTopButtonNotifier: _showToTopButtonNotifier,
+                scrollTopCallback: _scrollToTop,
               ),
-              Positioned(
-                bottom: 40.w,
-                right: 20.w,
-                child: ScrollTopButton(
-                  showToTopButtonNotifier: _showToTopButtonNotifier,
-                  scrollTopCallback: _scrollToTop,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

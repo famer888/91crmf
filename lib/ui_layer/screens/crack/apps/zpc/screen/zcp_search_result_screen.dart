@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jycrpj/domain/domain.dart';
@@ -25,7 +24,9 @@ class ZpcSearchResultScreen extends StatefulWidget {
 
 class _ZpcSearchResultScreenState extends State<ZpcSearchResultScreen> {
   late final _appDomain = context.read<AppDomain>();
+  final ScrollController _scrollController = ScrollController();
   final ValueNotifier<bool> _showToTopButtonNotifier = ValueNotifier(false);
+  double _showThreshold = 0;
 
   Future<List<FeedModel>?> _getData({
     required int page,
@@ -55,17 +56,25 @@ class _ZpcSearchResultScreenState extends State<ZpcSearchResultScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showThreshold = ScreenUtil().screenHeight * 0.40;
+    });
+    _scrollController.addListener(() {
+      _showToTopButtonNotifier.value = (_scrollController.offset > _showThreshold);
+    });
   }
 
   @override
   void dispose() {
+    _scrollController.dispose();
     _showToTopButtonNotifier.dispose();
     super.dispose();
   }
 
   void _scrollToTop() {
-    // 由于没有直接的 ScrollController，使用 PrimaryScrollController
-    PrimaryScrollController.of(context).animateTo(
+    if (!_scrollController.hasClients) return;
+
+    _scrollController.animateTo(
       0,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
@@ -83,8 +92,10 @@ class _ZpcSearchResultScreenState extends State<ZpcSearchResultScreen> {
             data: Theme.of(context).copyWith(scaffoldBackgroundColor: Colors.white),
             child: Scaffold(
               appBar: AppBar(
-                  title: Text('ssjg'.tr(context: context),
-                      style: TextStyle(color: MyTheme.blackColor32, fontSize: 16.sp, fontWeight: FontWeight.w500)),
+                  title: Text(
+                    widget.word,
+                    style: TextStyle(color: MyTheme.blackColor32, fontSize: 16.sp, fontWeight: FontWeight.w500),
+                  ),
                   leading: IconButton(
                     onPressed: () {
                       Navigator.pop(context);
@@ -97,42 +108,32 @@ class _ZpcSearchResultScreenState extends State<ZpcSearchResultScreen> {
                     ),
                   ),
                   centerTitle: true),
-              body: NotificationListener<ScrollNotification>(
-                onNotification: (ScrollNotification notification) {
-                  if (notification is ScrollUpdateNotification) {
-                    final showButton = notification.metrics.pixels > 300;
-                    if (showButton != _showToTopButtonNotifier.value) {
-                      _showToTopButtonNotifier.value = showButton;
-                    }
-                  }
-                  return false;
-                },
-                child: Stack(
-                  children: [
-                    MyListView.grid(
-                      padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
-                      childAspectRatio: MyTheme.aspectRatio,
-                      crossAxisSpacing: 8.w,
-                      itemBuilder: (context, item, index) => ZpcFeedCard(isList: false, feed: item).withSearchReport({
-                        "event": "keyword_click",
-                        "keyword": widget.word,
-                        "click_item_id": item.id,
-                        "click_item_type_key": "video",
-                        "click_item_type_name": "视频",
-                        "click_ position": index,
-                      }),
-                      onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: widget.type),
+              body: Stack(
+                children: [
+                  MyListView.grid(
+                    scrollController: _scrollController,
+                    padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
+                    childAspectRatio: MyTheme.aspectRatio,
+                    crossAxisSpacing: 8.w,
+                    itemBuilder: (context, item, index) => ZpcFeedCard(isList: false, feed: item).withSearchReport({
+                      "event": "keyword_click",
+                      "keyword": widget.word,
+                      "click_item_id": item.id,
+                      "click_item_type_key": "video",
+                      "click_item_type_name": "视频",
+                      "click_ position": index,
+                    }),
+                    onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: widget.type),
+                  ),
+                  Positioned(
+                    bottom: 40.w,
+                    right: 20.w,
+                    child: ScrollTopButton(
+                      showToTopButtonNotifier: _showToTopButtonNotifier,
+                      scrollTopCallback: _scrollToTop,
                     ),
-                    Positioned(
-                      bottom: 40.w,
-                      right: 20.w,
-                      child: ScrollTopButton(
-                        showToTopButtonNotifier: _showToTopButtonNotifier,
-                        scrollTopCallback: _scrollToTop,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

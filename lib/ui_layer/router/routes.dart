@@ -313,11 +313,12 @@ class BlockTagListRoute extends GoRouteData {
 class VlogSecondRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
 
-  const VlogSecondRoute();
+  const VlogSecondRoute({required this.userGlobalData});
+  final bool userGlobalData;
 
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
-    return CommonUtils.buildSlideTransitionPage(state: state, child: const VlogSecondPage());
+    return CommonUtils.buildSlideTransitionPage(state: state, child: VlogSecondPage(userGlobalData: userGlobalData));
   }
 }
 

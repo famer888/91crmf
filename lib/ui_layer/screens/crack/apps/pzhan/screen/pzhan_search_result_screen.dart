@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jycrpj/domain/domain.dart';
@@ -25,7 +24,9 @@ class PZhanSearchResultScreen extends StatefulWidget {
 
 class _PZhanSearchResultScreenState extends State<PZhanSearchResultScreen> {
   late final _appDomain = context.read<AppDomain>();
+  final ScrollController _scrollController = ScrollController();
   final ValueNotifier<bool> _showToTopButtonNotifier = ValueNotifier(false);
+  double _showThreshold = 0;
 
   Future<List<AppVideoModel>?> _getData({
     required int page,
@@ -59,17 +60,25 @@ class _PZhanSearchResultScreenState extends State<PZhanSearchResultScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showThreshold = ScreenUtil().screenHeight * 0.40;
+    });
+    _scrollController.addListener(() {
+      _showToTopButtonNotifier.value = (_scrollController.offset > _showThreshold);
+    });
   }
 
   @override
   void dispose() {
+    _scrollController.dispose();
     _showToTopButtonNotifier.dispose();
     super.dispose();
   }
 
   void _scrollToTop() {
-    // 由于没有直接的 ScrollController，使用 PrimaryScrollController
-    PrimaryScrollController.of(context).animateTo(
+    if (!_scrollController.hasClients) return;
+
+    _scrollController.animateTo(
       0,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
@@ -80,41 +89,34 @@ class _PZhanSearchResultScreenState extends State<PZhanSearchResultScreen> {
   Widget build(BuildContext context) {
     return ColoredBox(
       color: Theme.of(context).scaffoldBackgroundColor,
-      child: Stack(fit: StackFit.expand, children: [
-        Theme(
-          data: Theme.of(context).copyWith(scaffoldBackgroundColor: Colors.black),
-          child: Scaffold(
-            appBar: AppBar(
-                backgroundColor: Colors.black,
-                title: Text(
-                  'ssjg'.tr(context: context),
-                  style: TextStyle(color: MyTheme.whiteColor, fontSize: 16.sp, fontWeight: FontWeight.w500),
-                ),
-                leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Image.asset(
-                    MyImagePaths.appBackIcon,
-                    width: 20.w,
-                    height: 20.w,
-                    color: const Color.fromRGBO(255, 255, 255, 1),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Theme(
+            data: Theme.of(context).copyWith(scaffoldBackgroundColor: Colors.black),
+            child: Scaffold(
+              appBar: AppBar(
+                  backgroundColor: Colors.black,
+                  title: Text(
+                    widget.word,
+                    style: TextStyle(color: MyTheme.whiteColor, fontSize: 16.sp, fontWeight: FontWeight.w500),
                   ),
-                ),
-                centerTitle: true),
-            body: NotificationListener<ScrollNotification>(
-              onNotification: (ScrollNotification notification) {
-                if (notification is ScrollUpdateNotification) {
-                  final showButton = notification.metrics.pixels > 300;
-                  if (showButton != _showToTopButtonNotifier.value) {
-                    _showToTopButtonNotifier.value = showButton;
-                  }
-                }
-                return false;
-              },
-              child: Stack(
+                  leading: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Image.asset(
+                      MyImagePaths.appBackIcon,
+                      width: 20.w,
+                      height: 20.w,
+                      color: const Color.fromRGBO(255, 255, 255, 1),
+                    ),
+                  ),
+                  centerTitle: true),
+              body: Stack(
                 children: [
                   MyListView.grid(
+                    scrollController: _scrollController,
                     padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
                     childAspectRatio: MyTheme.aspectRatio,
                     crossAxisSpacing: 8.w,
@@ -140,8 +142,8 @@ class _PZhanSearchResultScreenState extends State<PZhanSearchResultScreen> {
               ),
             ),
           ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 }
