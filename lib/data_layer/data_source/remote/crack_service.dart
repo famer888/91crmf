@@ -7,6 +7,6 @@ class CrackService extends BaseService {
   @override
   final service = 'crack';
 
-  AsyncJson getCrackList({String token = '', required int isCrack}) => post('/list', data: {'token': token, 'is_crack': isCrack});
+  AsyncJson getCrackList({required int isCrack}) => post('/list', data: {'is_crack': isCrack});
 
 }
