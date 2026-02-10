@@ -22,6 +22,9 @@ class AppUtil {
       if ((member.vipAppPrivilege ?? 0) > 0) {
         return true;
       }
+      if (crackApp.isPay) {
+        return true;
+      }
       return false;
     } else if (crackApp.isfree == 2) {
       // 金币解锁
