@@ -37,12 +37,8 @@ class _ClVideoSearchScreenState extends State<ClVideoSearchScreen> {
       MyToast.showText(text: 'qsrgjz'.tr());
       return;
     }
-    final searchHistory = _homeConfigNotifier.getSearchHistory(key: clSearchHistoryKey);
-
+    _homeConfigNotifier.upsertSearchHistory(key: clSearchHistoryKey, searchWord: keyword);
     final title = keyword.replaceAll('/', '|');
-    if (!searchHistory.contains(keyword)) {
-      _homeConfigNotifier.upsertSearchHistory(key: clSearchHistoryKey, searchHistory: searchHistory..add(keyword));
-    }
     ClSearchResultRoute(word: title, type: 1).push(context);
   }
 
@@ -105,8 +101,7 @@ class _ClVideoSearchScreenState extends State<ClVideoSearchScreen> {
                                 onSubmitted(text);
                               },
                               onDelete: () {
-                                final history = _homeConfigNotifier.getSearchHistory(key: clSearchHistoryKey);
-                                _homeConfigNotifier.upsertSearchHistory(key: clSearchHistoryKey, searchHistory: history..remove(text));
+                                _homeConfigNotifier.removeSearchHistory(key: clSearchHistoryKey, searchWord: text);
                               },
                             )
                         ],
@@ -213,9 +208,10 @@ class _KeywordTile extends StatelessWidget {
           ReportGestureDetector(
             onTap: onTap,
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 114.w),
+              constraints: BoxConstraints(maxWidth: 104.w),
               child: Text(
-                _limitText(text, 8),
+                // _limitText(text, 8),
+                text,
                 style: MyTheme.white255_14,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

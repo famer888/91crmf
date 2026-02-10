@@ -36,12 +36,8 @@ class _Tiktok51VideoSearchScreenState extends State<Tiktok51VideoSearchScreen> {
       MyToast.showText(text: 'qsrgjz'.tr());
       return;
     }
-    final searchHistory = _homeConfigNotifier.getSearchHistory(key: tiktok51SearchHistoryKey);
-
+    _homeConfigNotifier.upsertSearchHistory(key: tiktok51SearchHistoryKey, searchWord: keyword);
     final title = keyword.replaceAll('/', '|');
-    if (!searchHistory.contains(keyword)) {
-      _homeConfigNotifier.upsertSearchHistory(key: tiktok51SearchHistoryKey, searchHistory: searchHistory..add(keyword));
-    }
     Tiktok51SearchResultRoute(word: title, type: 1).push(context);
   }
 
@@ -100,23 +96,22 @@ class _Tiktok51VideoSearchScreenState extends State<Tiktok51VideoSearchScreen> {
                     selector: (_, config) => config.getSearchHistory(key: tiktok51SearchHistoryKey),
                     builder: (context, searchHistory, child) => searchHistory.isNotEmpty
                         ? Wrap(
-                      spacing: 10.w,
-                      runSpacing: 10.w,
-                      children: [
-                        for (final text in searchHistory)
-                          _KeywordTile(
-                            text: text,
-                            onTap: () {
-                              searchTextEditController.text = text;
-                              onSubmitted(text);
-                            },
-                            onDelete: () {
-                              final history = _homeConfigNotifier.getSearchHistory(key: tiktok51SearchHistoryKey);
-                              _homeConfigNotifier.upsertSearchHistory(key: tiktok51SearchHistoryKey, searchHistory: history..remove(text));
-                            },
+                            spacing: 10.w,
+                            runSpacing: 10.w,
+                            children: [
+                              for (final text in searchHistory)
+                                _KeywordTile(
+                                  text: text,
+                                  onTap: () {
+                                    searchTextEditController.text = text;
+                                    onSubmitted(text);
+                                  },
+                                  onDelete: () {
+                                    _homeConfigNotifier.removeSearchHistory(key: tiktok51SearchHistoryKey, searchWord: text);
+                                  },
+                                )
+                            ],
                           )
-                      ],
-                    )
                         : PageEmptyDataView(text: 'myss'.tr(context: context)),
                   ),
                 ),
@@ -235,9 +230,10 @@ class _KeywordTile extends StatelessWidget {
           ReportGestureDetector(
             onTap: onTap,
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 114.w),
+              constraints: BoxConstraints(maxWidth: 104.w),
               child: Text(
-                _limitText(text, 8),
+                // _limitText(text, 8),
+                text,
                 style: TextStyle(color: const Color.fromRGBO(255, 255, 255, 0.7), fontSize: 14.sp, fontWeight: FontWeight.w400),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -380,80 +376,80 @@ class _SearchContentViewState extends State<_SearchContentView> {
                       padding: EdgeInsets.zero,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) => ReportGestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () {
-                          widget.onSubmitted(hots[index].title);
-                        },
-                        child: SizedBox(
-                          height: 35.w,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(width: 5.w),
-                              SizedBox(
-                                height: ScreenUtil().setWidth(20),
-                                width: ScreenUtil().setWidth(20),
-                                // decoration: BoxDecoration(
-                                //     gradient: LinearGradient(
-                                //       colors: [
-                                //         Color(index == 0 ? 0xFFFF4242 : (index == 1 ? 0xFFFFAD42 : (index == 2 ? 0xFF7E42FF : 0xFFFFFFFF))),
-                                //         Color(index == 0 ? 0xFFFF4242 : (index == 1 ? 0xFFFFAD42 : (index == 2 ? 0xFF7E42FF : 0xFFFFFFFF)))
-                                //       ],
-                                //       begin: Alignment.centerLeft,
-                                //       end: Alignment.centerRight,
-                                //     ),
-                                //     borderRadius: const BorderRadius.all(Radius.circular(3))),
-                                child: Center(
-                                  child: Text(
-                                    '${index + 1}',
-                                    style: TextStyle(
-                                      color: Color(index == 0
-                                          ? 0xFFFF4242
-                                          : index == 1
-                                          ? 0xFFFFAD42
-                                          : index == 2
-                                          ? 0xFF7E42FF
-                                          : 0xFF939393),
-                                      fontSize: 15.sp,
-                                      fontWeight: FontWeight.w600,
-                                      overflow: TextOverflow.ellipsis,
-                                      decoration: TextDecoration.none,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 8.w),
-                              Expanded(
-                                child: Text(
-                                  hots[index].title,
-                                  style: TextStyle(
-                                    color: const Color.fromRGBO(255, 255, 255, 1),
-                                    fontSize: 14.sp,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  maxLines: 1,
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () {
+                              widget.onSubmitted(hots[index].title);
+                            },
+                            child: SizedBox(
+                              height: 35.w,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  MyImage.asset(MyImagePaths.appSearHotkeyN, width: 14.w, height: 14.w),
                                   SizedBox(width: 5.w),
-                                  Text(
-                                    '${hots[index].num}${'cll'.tr(context: context)}',
-                                    style: TextStyle(
-                                      color: const Color.fromRGBO(255, 255, 255, 0.7),
-                                      fontSize: 15.sp,
-                                      fontWeight: FontWeight.w400,
+                                  SizedBox(
+                                    height: ScreenUtil().setWidth(20),
+                                    width: ScreenUtil().setWidth(20),
+                                    // decoration: BoxDecoration(
+                                    //     gradient: LinearGradient(
+                                    //       colors: [
+                                    //         Color(index == 0 ? 0xFFFF4242 : (index == 1 ? 0xFFFFAD42 : (index == 2 ? 0xFF7E42FF : 0xFFFFFFFF))),
+                                    //         Color(index == 0 ? 0xFFFF4242 : (index == 1 ? 0xFFFFAD42 : (index == 2 ? 0xFF7E42FF : 0xFFFFFFFF)))
+                                    //       ],
+                                    //       begin: Alignment.centerLeft,
+                                    //       end: Alignment.centerRight,
+                                    //     ),
+                                    //     borderRadius: const BorderRadius.all(Radius.circular(3))),
+                                    child: Center(
+                                      child: Text(
+                                        '${index + 1}',
+                                        style: TextStyle(
+                                          color: Color(index == 0
+                                              ? 0xFFFF4242
+                                              : index == 1
+                                                  ? 0xFFFFAD42
+                                                  : index == 2
+                                                      ? 0xFF7E42FF
+                                                      : 0xFF939393),
+                                          fontSize: 15.sp,
+                                          fontWeight: FontWeight.w600,
+                                          overflow: TextOverflow.ellipsis,
+                                          decoration: TextDecoration.none,
+                                        ),
+                                      ),
                                     ),
+                                  ),
+                                  SizedBox(width: 8.w),
+                                  Expanded(
+                                    child: Text(
+                                      hots[index].title,
+                                      style: TextStyle(
+                                        color: const Color.fromRGBO(255, 255, 255, 1),
+                                        fontSize: 14.sp,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      MyImage.asset(MyImagePaths.appSearHotkeyN, width: 14.w, height: 14.w),
+                                      SizedBox(width: 5.w),
+                                      Text(
+                                        '${hots[index].num}${'cll'.tr(context: context)}',
+                                        style: TextStyle(
+                                          color: const Color.fromRGBO(255, 255, 255, 0.7),
+                                          fontSize: 15.sp,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
                       itemCount: hots.length),
                 ],
               );

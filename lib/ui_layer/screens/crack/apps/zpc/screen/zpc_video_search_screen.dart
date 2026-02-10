@@ -36,12 +36,8 @@ class _ZpcVideoSearchScreenState extends State<ZpcVideoSearchScreen> {
       MyToast.showText(text: 'qsrgjz'.tr());
       return;
     }
-    final searchHistory = _homeConfigNotifier.getSearchHistory(key: zpcSearchHistoryKey);
-
+    _homeConfigNotifier.upsertSearchHistory(key: zpcSearchHistoryKey, searchWord: keyword);
     final title = keyword.replaceAll('/', '|');
-    if (!searchHistory.contains(keyword)) {
-      _homeConfigNotifier.upsertSearchHistory(key: zpcSearchHistoryKey, searchHistory: searchHistory..add(keyword));
-    }
     ZpcSearchResultRoute(word: title, type: 1).push(context);
   }
 
@@ -109,8 +105,7 @@ class _ZpcVideoSearchScreenState extends State<ZpcVideoSearchScreen> {
                                     onSubmitted(text);
                                   },
                                   onDelete: () {
-                                    final history = _homeConfigNotifier.getSearchHistory(key: zpcSearchHistoryKey);
-                                    _homeConfigNotifier.upsertSearchHistory(key: zpcSearchHistoryKey, searchHistory: history..remove(text));
+                                    _homeConfigNotifier.removeSearchHistory(key: zpcSearchHistoryKey, searchWord: text);
                                   },
                                 )
                             ],
@@ -225,9 +220,10 @@ class _KeywordTile extends StatelessWidget {
           ReportGestureDetector(
             onTap: onTap,
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 114.w),
+              constraints: BoxConstraints(maxWidth: 104.w),
               child: Text(
-                _limitText(text, 8),
+                // _limitText(text, 8),
+                text,
                 style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.w400),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

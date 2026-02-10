@@ -37,12 +37,8 @@ class _ShorttvSearchScreenState extends State<ShorttvSearchScreen> {
       MyToast.showText(text: 'qsrgjz'.tr());
       return;
     }
-    final searchHistory = _homeConfigNotifier.getSearchHistory(key: dspSearchHistoryKey);
-
+    _homeConfigNotifier.upsertSearchHistory(key: dspSearchHistoryKey, searchWord: keyword);
     final title = keyword.replaceAll('/', '|');
-    if (!searchHistory.contains(keyword)) {
-      _homeConfigNotifier.upsertSearchHistory(key: dspSearchHistoryKey, searchHistory: searchHistory..add(keyword));
-    }
     VlogSearchResultRoute(word: title).push(context);
   }
 
@@ -114,8 +110,7 @@ class _ShorttvSearchScreenState extends State<ShorttvSearchScreen> {
                                       onSubmitted(text);
                                     },
                                     onDelete: () {
-                                      final history = _homeConfigNotifier.getSearchHistory(key: dspSearchHistoryKey);
-                                      _homeConfigNotifier.upsertSearchHistory(key: dspSearchHistoryKey, searchHistory: history..remove(text));
+                                      _homeConfigNotifier.removeSearchHistory(key: dspSearchHistoryKey, searchWord: text);
                                     },
                                   ),
                               ],
@@ -236,9 +231,10 @@ class _KeywordTile extends StatelessWidget {
           ReportGestureDetector(
             onTap: onTap,
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 114.w),
+              constraints: BoxConstraints(maxWidth: 104.w),
               child: Text(
-                _limitText(text, 8),
+                // _limitText(text, 8),
+                  text,
                 style: TextStyle(
                   color: const Color.fromRGBO(255, 255, 255, 0.7),
                   fontSize: 14.sp,

@@ -54,13 +54,9 @@ class _ShorttvSearchResultScreenState extends State<ShorttvSearchResultScreen> w
       MyToast.showText(text: 'qsrgjz'.tr());
       return;
     }
-    final searchHistory = _homeConfigNotifier.getSearchHistory(key: dspSearchHistoryKey);
+    _homeConfigNotifier.upsertSearchHistory(key: dspSearchHistoryKey, searchWord: keyword);
 
     final title = keyword.replaceAll('/', '|');
-    if (!searchHistory.contains(keyword)) {
-      _homeConfigNotifier.upsertSearchHistory(key: dspSearchHistoryKey, searchHistory: searchHistory..add(keyword));
-    }
-
     if (_searchTextEditController.text.isEmpty) return;
     final currentIndex = _tabController.index;
     _refreshNotifier.value = SearchData(type: currentIndex, word: title);

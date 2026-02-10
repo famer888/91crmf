@@ -8,20 +8,17 @@ import 'package:provider/provider.dart';
 import '../../../domain/api_validator.dart';
 import '../../../domain/model/search_model.dart';
 import '../../../domain/remote_domain/domains/search.dart';
+import '../../../report/ui_layer/report_general_banner.dart';
+import '../../../report/ui_layer/report_gesture_detector.dart';
 import '../../notifiers/home_config_notifier.dart';
 import '../../router/routes.dart';
 import '../../utils/common_utils.dart';
 import '../../utils/my_toast.dart';
-import '../common_widgets/general_banner.dart';
 import '../common_widgets/my_image.dart';
 import '../common_widgets/screen_background.dart';
 import '../common_widgets/status/empty_data.dart';
 import '../image_paths.dart';
 import '../theme.dart';
-
-import '../../../report/ui_layer/report_general_banner.dart';
-
-import '../../../report/ui_layer/report_gesture_detector.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -39,12 +36,8 @@ class _SearchScreenState extends State<SearchScreen> {
       MyToast.showText(text: 'qsrgjz'.tr());
       return;
     }
-    final searchHistory = _homeConfigNotifier.getSearchHistory(key: searchHistoryKey);
-
+    _homeConfigNotifier.upsertSearchHistory(key: searchHistoryKey, searchWord: keyword);
     final title = keyword.replaceAll('/', '|');
-    if (!searchHistory.contains(keyword)) {
-      _homeConfigNotifier.upsertSearchHistory(key: searchHistoryKey, searchHistory: searchHistory..add(keyword));
-    }
     SearchResultRoute(title).push(context);
   }
 
@@ -95,8 +88,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 onSubmitted(text);
                               },
                               onDelete: () {
-                                final history = _homeConfigNotifier.getSearchHistory(key: searchHistoryKey);
-                                _homeConfigNotifier.upsertSearchHistory(key: searchHistoryKey, searchHistory: history..remove(text));
+                                _homeConfigNotifier.removeSearchHistory(key: searchHistoryKey, searchWord: text);
                               },
                             )
                         ],

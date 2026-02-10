@@ -113,10 +113,37 @@ class HomeConfigNotifier extends ChangeNotifier {
   }
 
   /// 更新搜索记录
-  Future<void> upsertSearchHistory({required String key, required List<String> searchHistory}) async {
-    await _domain.cache.upsertSearchHistory(key: key, searchHistory: searchHistory);
+  // Future<void> upsertSearchHistory({required String key, required List<String> searchHistory}) async {
+  //   await _domain.cache.upsertSearchHistory(key: key, searchHistory: searchHistory);
+  //   _searchHistoryMap[key]?.clear();
+  //   _searchHistoryMap[key]?.addAll(searchHistory);
+  //   notifyListeners();
+  // }
+  Future<void> upsertSearchHistory({required String key, required String searchWord}) async {
+    final searchHistoryList = await _domain.cache.readSearchHistory(key: key);
+    // 初始化
+    final List<String> list = searchHistoryList;
+    // ⭐ 关键：先移除旧的
+    list.removeWhere((e) => e == searchWord);
+    // ⭐ 插入到最后
+    list.add(searchWord);
+    await _domain.cache.upsertSearchHistory(key: key, searchHistory: list);
+
     _searchHistoryMap[key]?.clear();
-    _searchHistoryMap[key]?.addAll(searchHistory);
+    _searchHistoryMap[key]?.addAll(list);
+    notifyListeners();
+  }
+
+  Future<void> removeSearchHistory({required String key, required String searchWord}) async {
+    final searchHistoryList = await _domain.cache.readSearchHistory(key: key);
+    // 初始化
+    final List<String> list = searchHistoryList;
+    // ⭐ 关键：先移除旧的
+    list.removeWhere((e) => e == searchWord);
+    await _domain.cache.upsertSearchHistory(key: key, searchHistory: list);
+
+    _searchHistoryMap[key]?.clear();
+    _searchHistoryMap[key]?.addAll(list);
     notifyListeners();
   }
 

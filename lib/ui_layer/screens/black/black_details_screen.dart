@@ -67,7 +67,7 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
           final blackDetailModel = result.data;
           final curBlackDetailsModel = blackDetailModel!.cur;
           _titleNotifier.value =
-          curBlackDetailsModel != null && curBlackDetailsModel.category.isNotEmpty ? curBlackDetailsModel.category[0].name : 'hlxq'.tr();
+              curBlackDetailsModel != null && curBlackDetailsModel.category.isNotEmpty ? curBlackDetailsModel.category[0].name : 'hlxq'.tr();
 
           _asyncValue = AsyncData(blackDetailModel);
         }
@@ -113,7 +113,8 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
       tempParams['comment_id'] = replyItemModel?.id;
     }
 
-    final result = await _blackDomain.publishBlackComment(cid: (replyItemModel?.id == null) ? selectedId : replyItemModel?.id, content: inputController.text.trim());
+    final result = await _blackDomain.publishBlackComment(
+        cid: (replyItemModel?.id == null) ? selectedId : replyItemModel?.id, content: inputController.text.trim());
     if (result.status == 1) {
       BotToast.showText(text: result.msg ?? '');
       onDismissFocus();
@@ -185,7 +186,7 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return ScreenBackground(
-      appBg: MyImage.asset(MyImagePaths.appBg, fit:BoxFit.cover, width: ScreenUtil().screenWidth, height: 148.w),
+      appBg: MyImage.asset(MyImagePaths.appBg, fit: BoxFit.cover, width: ScreenUtil().screenWidth, height: 148.w),
       child: Scaffold(
         appBar: MyAppBar(
           titleWidget: ValueListenableBuilder(
@@ -208,10 +209,12 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
                 children: [
                   Expanded(
                     child: MyListView.list(
-                      header: BlackDetailContentView(data: data, goNewBlackDetailCallback: (id) {
-                        selectedId = id;
-                        _getBlockDetail();
-                      }),
+                      header: BlackDetailContentView(
+                          data: data,
+                          goNewBlackDetailCallback: (id) {
+                            selectedId = id;
+                            _getBlockDetail();
+                          }),
                       padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: MyTheme.pagePadding),
                       itemBuilder: (context, item, index) {
                         return BlackCommentView(
@@ -528,7 +531,7 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
   /// 评论
   Widget _buildBottomActionWidget(BlackDetailModel? data) {
     Widget current = Row(children: [
-      SizedBox(width: 12.w),
+      SizedBox(width: 18.w),
       Expanded(
         child: Convenience.buildContainerWidget(
           alignment: Alignment.centerLeft,
@@ -561,13 +564,18 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
           data?.cur?.favoriteNum += isCollected ? 1 : -1;
         },
       ),
-      SizedBox(width: 5.w),
+      SizedBox(width: 8.w),
       _buildActionItemWidget(MyImagePaths.appCustomSend, 'fasong'.tr(context: context), onSendMessage),
-      SizedBox(width: 12.w),
+      SizedBox(width: 18.w),
     ]);
 
     return Convenience.buildChildActionWidget(
-        width: double.infinity, constraints: BoxConstraints(minHeight: 56.w), color: const Color.fromRGBO(22, 22, 34, 1), child: current);
+      padding: EdgeInsets.symmetric(vertical: 10.w),
+      width: double.infinity,
+      constraints: BoxConstraints(minHeight: 56.w),
+      color: const Color.fromRGBO(22, 22, 34, 1),
+      child: current,
+    );
   }
 
   Widget _buildActionItemWidget(iconName, title, void Function()? onTap) {
