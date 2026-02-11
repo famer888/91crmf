@@ -92,9 +92,10 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
         bannersNotifier.value = data.map((e) => BannerModel.fromJson(e)).toList();
       }
 
-      if (result.data['mid_style_category'] case final List data when data.isNotEmpty && bannersNotifier.value.isEmpty) {
+      if (result.data['mid_style_category'] case final List data when data.isNotEmpty && topicsNotifier.value.isEmpty) {
         topicsNotifier.value = data.map<CategoryTopicModel>((e) => CategoryTopicModel.fromJson(e)).toList();
       }
+
 
       if (result.data['list'] case final List data when data.isNotEmpty) {
         return data.map<AppVideoModel>((e) => AppVideoModel.fromJson(e)).toList();
