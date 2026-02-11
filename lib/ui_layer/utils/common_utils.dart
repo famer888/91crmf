@@ -974,86 +974,97 @@ class CommonUtils {
     var vflag = false;
     if (data.source_240.toString().isEmpty) {
       if (user.vipLevel < 1 && data.isFree == 1) {
-        //需要VIP
-        // dgt = SizedBox(
-        //     height: 22.5.w,
-        //     child: Row(
-        //       mainAxisAlignment: MainAxisAlignment.start,
-        //       children: [
-        //         // MyImage.asset(
-        //         //   MyImagePaths.appVlogVipbg,
-        //         //   width: 160.w,
-        //         //   height: 30.w,
-        //         //   fit: BoxFit.fill,
-        //         // ),
-        //       ],
-        //     ));
+        // 需要VIP解锁
+        if ((user.vipVlogPrivilege ?? 0) > 0) {
+          // 有vip权限
+        } else {
+          // dgt = SizedBox(
+          //     height: 22.5.w,
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.start,
+          //       children: [
+          //         // MyImage.asset(
+          //         //   MyImagePaths.appVlogVipbg,
+          //         //   width: 160.w,
+          //         //   height: 30.w,
+          //         //   fit: BoxFit.fill,
+          //         // ),
+          //       ],
+          //     ));
 
-        // 创建一个TextPainter对象
-        TextPainter textPainter = TextPainter(textDirection: ui.TextDirection.ltr);
-        String tempStr = "${data.coins ?? 0}${'jbgm'.tr(context: context)}";
-        // 设置文本样式
-        textPainter.text = TextSpan(text: tempStr, style: MyTheme.black13_11);
-        // 布局文本
-        textPainter.layout();
-        // 获取文本宽度
-        double textWidth = textPainter.size.width + 26.w;
+          // 创建一个TextPainter对象
+          TextPainter textPainter = TextPainter(textDirection: ui.TextDirection.ltr);
+          String tempStr = "${data.coins ?? 0}${'jbgm'.tr(context: context)}";
+          // 设置文本样式
+          textPainter.text = TextSpan(text: tempStr, style: MyTheme.black13_11);
+          // 布局文本
+          textPainter.layout();
+          // 获取文本宽度
+          double textWidth = textPainter.size.width + 26.w;
 
-        dgt = ClipRRect(
-          borderRadius: BorderRadius.circular(12.0.w),
-          child: Container(
-            constraints: BoxConstraints(minHeight: 24.w),
-            width: textWidth.w,
-            alignment: Alignment.center,
-            color: MyTheme.blueColor64,
-            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.w),
-            child: DefaultTextStyle(
-              textAlign: TextAlign.center,
-              style: MyTheme.white11,
-              child: Text.rich(TextSpan(children: [TextSpan(text: 'czvip'.tr(context: context))])),
+          dgt = ClipRRect(
+            borderRadius: BorderRadius.circular(12.0.w),
+            child: Container(
+              width: textWidth.w,
+              alignment: Alignment.center,
+              color: MyTheme.blueColor64,
+              constraints: BoxConstraints(minHeight: 24.w),
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.w),
+              child: DefaultTextStyle(
+                style: MyTheme.white11,
+                textAlign: TextAlign.center,
+                child: Text.rich(TextSpan(children: [TextSpan(text: 'czvip'.tr(context: context))])),
+              ),
             ),
-          ),
-        );
-        vflag = true;
-      } else if (data.isFree == 2) {
-        // 创建一个TextPainter对象
-        TextPainter textPainter = TextPainter(
-          textDirection: ui.TextDirection.ltr,
-        );
-        String tempStr = "${data.coins ?? 0}${'jbgm'.tr(context: context)}";
-        // 设置文本样式
-        textPainter.text = TextSpan(
-          text: tempStr,
-          style: MyTheme.black13_11,
-        );
-        // 布局文本
-        textPainter.layout();
-        // 获取文本宽度
-        double textWidth = textPainter.size.width + 26.w;
+          );
 
-        dgt = ClipRRect(
-          borderRadius: BorderRadius.circular(12.0.w),
-          child: Container(
-            constraints: BoxConstraints(minHeight: 24.w),
-            width: textWidth.w,
-            color: MyTheme.blueColor64,
-            alignment: Alignment.center,
-            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.w),
-            child: DefaultTextStyle(
-              textAlign: TextAlign.center,
-              style: MyTheme.white11,
-              child: Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(text: "${data.coins ?? 0}"),
-                    TextSpan(text: 'jbgm'.tr(context: context)),
-                  ],
+          vflag = true;
+        }
+      } else if (data.isFree == 2) {
+        // 金币解锁
+        if ((user.coinsVlogPrivilege ?? 0) > 0) {
+          // 有金币权限
+        } else {
+          // 创建一个TextPainter对象
+          TextPainter textPainter = TextPainter(
+            textDirection: ui.TextDirection.ltr,
+          );
+          String tempStr = "${data.coins ?? 0}${'jbgm'.tr(context: context)}";
+          // 设置文本样式
+          textPainter.text = TextSpan(
+            text: tempStr,
+            style: MyTheme.black13_11,
+          );
+          // 布局文本
+          textPainter.layout();
+          // 获取文本宽度
+          double textWidth = textPainter.size.width + 26.w;
+
+          dgt = ClipRRect(
+            borderRadius: BorderRadius.circular(12.0.w),
+            child: Container(
+              constraints: BoxConstraints(minHeight: 24.w),
+              width: textWidth.w,
+              color: MyTheme.blueColor64,
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.w),
+              child: DefaultTextStyle(
+                textAlign: TextAlign.center,
+                style: MyTheme.white11,
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(text: "${data.coins ?? 0}"),
+                      TextSpan(text: 'jbgm'.tr(context: context)),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        );
-        vflag = true;
+          );
+
+          vflag = true;
+        }
       }
     }
     return Positioned(
@@ -1123,8 +1134,7 @@ class CommonUtils {
                       )
                     : const SizedBox.shrink(),
                 vflag ? SizedBox(height: 10.w) : Container(),
-                vflag
-                    ? Listener(
+                vflag ? Listener(
                         behavior: HitTestBehavior.opaque, // ⭐ 必须 opaque
                         onPointerDown: (_) {
                           // 直接拦截触摸

@@ -99,6 +99,8 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
       if (result.data['list'] case final List data when data.isNotEmpty) {
         return data.map<AppVideoModel>((e) => AppVideoModel.fromJson(e)).toList();
       }
+
+      return [];
     } else {
       MyToast.showText(text: result.msg ?? '');
     }
