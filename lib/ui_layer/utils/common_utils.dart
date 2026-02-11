@@ -1099,12 +1099,25 @@ class CommonUtils {
                         children: data.tagList!
                             .take(3)
                             .map(
-                              (tag) => InkWell(
-                                onTap: () {
+                              (tag) => Listener(
+                                behavior: HitTestBehavior.opaque, // ⭐ 必须 opaque
+                                onPointerDown: (_) {
+                                  // 直接拦截触摸
+                                },
+                                onPointerUp: (_) {
                                   VlogTagRoute(tag: tag).push(context);
                                 },
-                                child: Text('#$tag', style: MyTheme.blue80_12.copyWith(color: MyTheme.whiteColor)),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 2.w, horizontal: 3.w),
+                                  child: Text('#$tag', style: MyTheme.blue80_12.copyWith(color: MyTheme.whiteColor)),
+                                ),
                               ),
+                              //     InkWell(
+                              //   onTap: () {
+                              //     VlogTagRoute(tag: tag).push(context);
+                              //   },
+                              //   child: Text('#$tag', style: MyTheme.blue80_12.copyWith(color: MyTheme.whiteColor)),
+                              // ),
                             )
                             .toList(),
                       )
@@ -1274,18 +1287,37 @@ class CommonUtils {
                   ),
                 ),
                 SizedBox(height: 15.w),
-                ReportGestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () {
-                      const ShareInviteRoute().push(context);
-                    },
+                Listener(
+                  behavior: HitTestBehavior.opaque, // ⭐ 必须 opaque
+                  onPointerDown: (_) {
+                    // 直接拦截触摸
+                  },
+                  onPointerUp: (_) {
+                    const ShareInviteRoute().push(context);
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 6.w, horizontal: 4.w),
                     child: Column(
                       children: [
                         MyImage.asset(MyImagePaths.appShortShare, width: 25.w, height: 25.w),
                         SizedBox(height: 1.w),
                         Text('fx'.tr(), style: MyTheme.white12medium),
                       ],
-                    )),
+                    ),
+                  ),
+                ),
+                // ReportGestureDetector(
+                //     behavior: HitTestBehavior.translucent,
+                //     onTap: () {
+                //       const ShareInviteRoute().push(context);
+                //     },
+                //     child: Column(
+                //       children: [
+                //         MyImage.asset(MyImagePaths.appShortShare, width: 25.w, height: 25.w),
+                //         SizedBox(height: 1.w),
+                //         Text('fx'.tr(), style: MyTheme.white12medium),
+                //       ],
+                //     )),
                 SizedBox(height: 15.w),
                 // ReportGestureDetector(
                 //   behavior: HitTestBehavior.translucent,
