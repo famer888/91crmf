@@ -30,8 +30,7 @@ class VlogTagScreen extends StatefulWidget {
 
 class _VlogTagScreenState extends State<VlogTagScreen> {
   late final _homeConfig = context.read<HomeConfigNotifier>();
-  late final List<NavigatorModel> titles =
-      _homeConfig.config.vlogTagSortNav ?? [];
+  late final List<NavigatorModel> titles = _homeConfig.config.vlogTagSortNav ?? [];
 
   @override
   void initState() {
@@ -58,8 +57,7 @@ class _VlogTagScreenState extends State<VlogTagScreen> {
         children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-            child: const Divider(
-                thickness: 0.5, height: 0.5, color: MyTheme.white02Color),
+            child: const Divider(thickness: 0.5, height: 0.5, color: MyTheme.white02Color),
           ),
           Expanded(child: configContentView())
         ],
@@ -75,8 +73,12 @@ class _VlogTagScreenState extends State<VlogTagScreen> {
       views: [
         for (final NavigatorModel sort in titles)
           KeepAliveWrapper(
-              child: VlogTagContentView(
-                  tag: widget.tag, sort: sort, key: Key(sort.type)))
+            child: VlogTagContentView(
+              tag: widget.tag,
+              sort: sort,
+              key: Key(sort.type),
+            ),
+          ),
       ],
     );
   }
@@ -99,8 +101,7 @@ class VlogTagContentViewState extends State<VlogTagContentView> {
   int _page = 1;
   int _limit = 15;
 
-  Future<List<VlogModel>?> _getData(
-      {required int page, required int pageSize, required String type}) async {
+  Future<List<VlogModel>?> _getData({required int page, required int pageSize, required String type}) async {
     _page = page;
     _limit = pageSize;
 
@@ -151,8 +152,7 @@ class VlogTagContentViewState extends State<VlogTagContentView> {
               CommonUtils.openRoute(context, item.toJson());
             }
           }),
-      onFetchingMore: (currentPage, pageSize) => _getData(
-          page: currentPage, pageSize: pageSize, type: widget.sort.type),
+      onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: widget.sort.type),
     );
   }
 }

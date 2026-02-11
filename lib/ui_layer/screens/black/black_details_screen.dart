@@ -162,6 +162,7 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
 
   /// 失去焦点
   void onDismissFocus() {
+    hintNotifier.value = 'qsrnxsdh'.tr();
     inputController.clear();
     replyItemModel = null;
     _inputFocusNode.unfocus();
@@ -172,6 +173,25 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
     selectedId = widget.id;
     _getBlockDetail();
     super.initState();
+    _inputFocusNode.addListener(() {
+      if (!_inputFocusNode.hasFocus) {
+        hintNotifier.value = 'qsrnxsdh'.tr();
+        CommonUtils.log('软键盘收起');
+      } else {
+        CommonUtils.log('软键盘弹起');
+      }
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant BlackDetailsScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (MediaQuery.of(context).viewInsets.bottom == 0) {
+        hintNotifier.value = 'qsrnxsdh'.tr();
+        _inputFocusNode.unfocus();
+      } else {}
+    });
   }
 
   @override
@@ -222,8 +242,8 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
                           commentData: item,
                           onReply: () {
                             replyItemModel = item;
-                            hintNotifier.value = '${'hf'.tr()}@${item.user.nickname}';
-                            _inputFocusNode.requestFocus();
+                            hintNotifier.value = '${'hf'.tr()} @${item.user.nickname}';
+                            FocusScope.of(context).requestFocus(_inputFocusNode);
                           },
                           onMoreCommentTap: () => _showMoreReview(item),
                           changeLike: () => _changeCommentLike(item.id),
@@ -538,18 +558,20 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
           borderRadius: BorderRadius.circular(20.w),
           color: MyTheme.white25501Color,
           height: 40.w,
-          child: Convenience.buildTextFieldContainer(
-            alignment: Alignment.centerLeft,
-            focusNode: _inputFocusNode,
-            controller: inputController,
-            height: 40.w,
-            margin: EdgeInsets.symmetric(horizontal: 12.5.w),
-            maxLines: 10,
-            padding: EdgeInsets.symmetric(vertical: 2.5.w),
-            hintText: replyItemModel != null ? '@${replyItemModel?.user.nickname}' : '善语结善缘，恶言伤人心',
-            hintStyle: MyTheme.white255_13_M.white25506.w500.s15,
-            style: MyTheme.white255_13_M.white25508.w500.s15.h1_5,
-          ),
+          child: ValueListenableBuilder(valueListenable: hintNotifier, builder: (_, hint, __) {
+            return Convenience.buildTextFieldContainer(
+              alignment: Alignment.centerLeft,
+              focusNode: _inputFocusNode,
+              controller: inputController,
+              height: 40.w,
+              margin: EdgeInsets.symmetric(horizontal: 12.5.w),
+              maxLines: 10,
+              padding: EdgeInsets.symmetric(vertical: 2.5.w),
+              hintText: hint,
+              hintStyle: MyTheme.white255_13_M.white25506.w500.s15,
+              style: MyTheme.white255_13_M.white25508.w500.s15.h1_5,
+            );
+          }),
         ),
       ),
       SizedBox(width: 5.w),

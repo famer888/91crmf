@@ -997,12 +997,12 @@ class CommonUtils {
         // 布局文本
         textPainter.layout();
         // 获取文本宽度
-        double textWidth = textPainter.size.width + 20;
+        double textWidth = textPainter.size.width + 26.w;
 
         dgt = ClipRRect(
-          borderRadius: BorderRadius.circular(10.0.w),
+          borderRadius: BorderRadius.circular(12.0.w),
           child: Container(
-            constraints: BoxConstraints(minHeight: 26.w),
+            constraints: BoxConstraints(minHeight: 24.w),
             width: textWidth.w,
             alignment: Alignment.center,
             color: MyTheme.blueColor64,
@@ -1029,12 +1029,12 @@ class CommonUtils {
         // 布局文本
         textPainter.layout();
         // 获取文本宽度
-        double textWidth = textPainter.size.width + 20;
+        double textWidth = textPainter.size.width + 26.w;
 
         dgt = ClipRRect(
-          borderRadius: BorderRadius.circular(10.0.w),
+          borderRadius: BorderRadius.circular(12.0.w),
           child: Container(
-            constraints: BoxConstraints(minHeight: 26.w),
+            constraints: BoxConstraints(minHeight: 24.w),
             width: textWidth.w,
             color: MyTheme.blueColor64,
             alignment: Alignment.center,
