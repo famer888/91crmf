@@ -316,6 +316,13 @@ class AppRouterPaths {
   /// P站 标签页面
   static const pzhanVideoTag = '/pzhanVideoTag';
 
+  /// P站 视频话题页面
+  static const pzhanTopic = '/pzhanTopic';
+
+  /// P站 视频更多页面
+  static const pzhanMore = '/pzhanMore';
+
+
   /// 草榴社区
   static const caoliu = '/caoliu';
 

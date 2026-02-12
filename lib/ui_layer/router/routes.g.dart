@@ -102,6 +102,8 @@ List<RouteBase> get $appRoutes => [
       $clVideoDetailRoute,
       $clVideoTagRoute,
       $pZhanVideoTagRoute,
+      $pZhanTopicRoute,
+      $pZhanMoreRoute,
       $clVideoSearchRoute,
       $clSearchResultRoute,
       $zpcSearchResultRoute,
@@ -2827,6 +2829,70 @@ extension $PZhanVideoTagRouteExtension on PZhanVideoTagRoute {
 
   void replace(BuildContext context) =>
       context.replace(location, extra: $extra);
+}
+
+RouteBase get $pZhanTopicRoute => GoRouteData.$route(
+      path: '/pzhanTopic',
+      parentNavigatorKey: PZhanTopicRoute.$parentNavigatorKey,
+      factory: $PZhanTopicRouteExtension._fromState,
+    );
+
+extension $PZhanTopicRouteExtension on PZhanTopicRoute {
+  static PZhanTopicRoute _fromState(GoRouterState state) => PZhanTopicRoute(
+        name: state.uri.queryParameters['name']!,
+        id: state.uri.queryParameters['id']!,
+        api: state.uri.queryParameters['api']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/pzhanTopic',
+        queryParams: {
+          'name': name,
+          'id': id,
+          'api': api,
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $pZhanMoreRoute => GoRouteData.$route(
+      path: '/pzhanMore',
+      parentNavigatorKey: PZhanMoreRoute.$parentNavigatorKey,
+      factory: $PZhanMoreRouteExtension._fromState,
+    );
+
+extension $PZhanMoreRouteExtension on PZhanMoreRoute {
+  static PZhanMoreRoute _fromState(GoRouterState state) => PZhanMoreRoute(
+        name: state.uri.queryParameters['name']!,
+        id: state.uri.queryParameters['id']!,
+        api: state.uri.queryParameters['api']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/pzhanMore',
+        queryParams: {
+          'name': name,
+          'id': id,
+          'api': api,
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
 
 RouteBase get $clVideoSearchRoute => GoRouteData.$route(

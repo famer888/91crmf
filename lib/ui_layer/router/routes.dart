@@ -54,8 +54,10 @@ import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_search_resul
 import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_tag_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_video_detail_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_video_search_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_more_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_search_result_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_tag_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_topic_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_video_detail_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_video_search_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/zpc/screen/screen.dart';
@@ -1617,6 +1619,42 @@ class PZhanVideoTagRoute extends GoRouteData {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return CommonUtils.buildSlideTransitionPage(state: state, child: PZhanTagScreen(videoTag: $extra));
+  }
+}
+
+@TypedGoRoute<PZhanTopicRoute>(path: AppRouterPaths.pzhanTopic)
+class PZhanTopicRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
+
+  const PZhanTopicRoute({
+    required this.name,
+    required this.id,
+    required this.api,
+  });
+
+  final String name;
+  final String id;
+  final String api;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(state: state, child: PZhanTopicScreen(name: name, id: id, api: api));
+  }
+}
+
+@TypedGoRoute<PZhanMoreRoute>(path: AppRouterPaths.pzhanMore)
+class PZhanMoreRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
+
+  const PZhanMoreRoute({required this.name, required this.id, required this.api});
+
+  final String name;
+  final String id;
+  final String api;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(state: state, child: PZhanMoreScreen(name: name, id: id, api: api));
   }
 }
 

@@ -13,8 +13,8 @@ import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:provider/provider.dart';
 
-class Tiktok51MoreScreen extends StatefulWidget {
-  const Tiktok51MoreScreen({
+class PZhanMoreScreen extends StatefulWidget {
+  const PZhanMoreScreen({
     super.key,
     required this.name,
     required this.id,
@@ -26,10 +26,10 @@ class Tiktok51MoreScreen extends StatefulWidget {
   final String api;
 
   @override
-  State<Tiktok51MoreScreen> createState() => _Tiktok51MoreScreenState();
+  State<PZhanMoreScreen> createState() => _PZhanMoreScreenState();
 }
 
-class _Tiktok51MoreScreenState extends State<Tiktok51MoreScreen> {
+class _PZhanMoreScreenState extends State<PZhanMoreScreen> {
   late final dynamicDomain = context.read<DynamicDomain>();
   bool _isInit = true;
 
@@ -64,23 +64,23 @@ class _Tiktok51MoreScreenState extends State<Tiktok51MoreScreen> {
       appBar: MyAppBar(title: widget.name),
       body: MyListView.list(
         scrollController: PrimaryScrollController.of(context),
-        itemBuilder: (context, item, index) => _Tiktok51MoreCard(data: item),
+        itemBuilder: (context, item, index) => _PZhanMoreCard(data: item),
         onFetchingMore: (currentPage, pageSize) => _getTabList(page: currentPage, limit: pageSize),
       ),
     );
   }
 }
 
-class _Tiktok51MoreCard extends StatefulWidget {
-  const _Tiktok51MoreCard({required this.data});
+class _PZhanMoreCard extends StatefulWidget {
+  const _PZhanMoreCard({required this.data});
 
   final CategoryTopicModel data;
 
   @override
-  State<_Tiktok51MoreCard> createState() => _Tiktok51MoreCardState();
+  State<_PZhanMoreCard> createState() => _PZhanMoreCardState();
 }
 
-class _Tiktok51MoreCardState extends State<_Tiktok51MoreCard> {
+class _PZhanMoreCardState extends State<_PZhanMoreCard> {
   late final dynamicDomain = context.read<DynamicDomain>();
   bool isFollowed = false;
 
@@ -121,12 +121,12 @@ class _Tiktok51MoreCardState extends State<_Tiktok51MoreCard> {
                 SizedBox(height: 4.w),
                 Text(
                   '${CommonUtils.renderEnFixedNumber(widget.data.favoritesNum)}${'gz'.tr(context: context)}',
-                  style: MyTheme.white12medium.copyWith(fontWeight: FontWeight.w500),
+                  style: MyTheme.white12medium.copyWith(fontWeight: FontWeight.w500, color: MyTheme.grayColor180),
                 ),
                 SizedBox(height: 4.w),
                 Text(
                   '${CommonUtils.renderEnFixedNumber(widget.data.workNum)}${'zp'.tr(context: context)}',
-                  style: MyTheme.white12medium.copyWith(fontWeight: FontWeight.w500),
+                  style: MyTheme.white12medium.copyWith(fontWeight: FontWeight.w500, color: MyTheme.grayColor180),
                 ),
               ],
             ),
@@ -135,7 +135,7 @@ class _Tiktok51MoreCardState extends State<_Tiktok51MoreCard> {
           ReportGestureDetector(
             onTap: () async {
               final result = await dynamicDomain.getConstructByApiLink(
-                apiLink: 'tabnew51tikok/follow_tab',
+                apiLink: 'tabnewpzhan/follow_tab',
                 params: {'tab_id': widget.data.tabId},
               );
               if (result.isValid) {
@@ -151,15 +151,15 @@ class _Tiktok51MoreCardState extends State<_Tiktok51MoreCard> {
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.w),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: isFollowed ? Colors.transparent : MyTheme.tiktok51AppPrimaryColor,
-                borderRadius: BorderRadius.circular(5.w),
-                border: Border.all(color: isFollowed ? MyTheme.tiktok51AppPrimaryColor : Colors.transparent, width: 1.w),
+                color: isFollowed ? Colors.transparent : MyTheme.pzhanAppPrimaryColor,
+                borderRadius: BorderRadius.circular(16.w),
+                border: Border.all(color: isFollowed ? MyTheme.pzhanAppPrimaryColor : Colors.transparent, width: 1.w),
               ),
               child: Text(
                 isFollowed ? 'ygz'.tr(context: context) : 'jgz'.tr(context: context),
                 style: isFollowed
-                    ? MyTheme.blue80_12.copyWith(color: MyTheme.tiktok51AppPrimaryColor, fontWeight: FontWeight.w500)
-                    : MyTheme.white12.copyWith(fontWeight: FontWeight.w500),
+                    ? MyTheme.blue80_12.copyWith(color: MyTheme.pzhanAppPrimaryColor, fontWeight: FontWeight.w500)
+                    : MyTheme.white12.copyWith(fontWeight: FontWeight.w600, color: MyTheme.blackColor),
               ),
             ),
           )

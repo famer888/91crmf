@@ -180,6 +180,7 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
                   topicsNotifier: topicsNotifier,
                   partNotifier: partNotifier,
                   onLinkNavTap: widget.onLinkNavTap,
+                  linkModel: widget.linkModel,
                 ),
               ),
             ],
@@ -219,7 +220,6 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
                                     final double totalPixels = headerPixels + tabPixels;
                                     final bool shouldShow = totalPixels > _showThreshold;
                                     if (shouldShow != _showToTopBtn.value) {
-                                      CommonUtils.log('标签页滚动: header=$headerPixels, tab=$tabPixels, total=$totalPixels');
                                       _showToTopBtn.value = shouldShow;
                                     }
                                   }
@@ -240,7 +240,6 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
                                     final double totalPixels = headerPixels + tabPixels;
                                     final bool shouldShow = totalPixels > _showThreshold;
                                     if (shouldShow != _showToTopBtn.value) {
-                                      CommonUtils.log('网格页滚动: header=$headerPixels, tab=$tabPixels, total=$totalPixels');
                                       _showToTopBtn.value = shouldShow;
                                     }
                                   }
@@ -280,12 +279,14 @@ class _Header extends StatefulWidget {
     required this.topicsNotifier,
     required this.partNotifier,
     required this.onLinkNavTap,
+    required this.linkModel,
   });
 
   final ValueNotifier<List<BannerModel>> bannersNotifier;
   final ValueNotifier<List<CategoryTopicModel>> topicsNotifier;
   final ValueNotifier<List<PartModel>> partNotifier;
   final ValueChanged<String> onLinkNavTap;
+  final LinkModel linkModel;
 
   @override
   State<_Header> createState() => _HeaderState();
@@ -410,7 +411,22 @@ class _HeaderState extends State<_Header> {
                             child: ReportGestureDetector(
                               behavior: HitTestBehavior.translucent,
                               onTap: () {
-                                MoreVideoRoute(name: topic.tabName, id: topic.tabId.toString(), api: 'tabnewpzhan/list_tab_mv').push(context);
+                                if (topic.id == -1) {
+                                  // 特有
+                                  final id = widget.linkModel.id;
+                                  PZhanMoreRoute(
+                                    name: topic.tabName,
+                                    id: '$id',
+                                    api: 'tabnewpzhan/tab_list',
+                                  ).push(context);
+                                } else {
+                                  PZhanTopicRoute(
+                                    name: topic.tabName,
+                                    id: topic.tabId.toString(),
+                                    api: 'tabnewpzhan/list_tab_mv',
+                                  ).push(context);
+                                  // MoreVideoRoute(name: topic.tabName, id: topic.tabId.toString(), api: 'tabnewpzhan/list_tab_mv').push(context);
+                                }
                               },
                               child: Text(topic.tabName, style: MyTheme.white13),
                             ),

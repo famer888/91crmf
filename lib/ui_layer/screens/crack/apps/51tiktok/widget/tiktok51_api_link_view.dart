@@ -404,8 +404,8 @@ class _HeaderState extends State<_Header> {
                         final topic = topics[index];
                         return DecoratedBox(
                           decoration: ShapeDecoration(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.w)),
                             color: MyTheme.blackColor32,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.w)),
                           ),
                           child: Center(
                             child: ReportGestureDetector(
@@ -426,8 +426,8 @@ class _HeaderState extends State<_Header> {
                                     id: topic.tabId.toString(),
                                     api: 'tabnew51tikok/list_tab_mv',
                                   ).push(context);
-                                }
                                 // MoreVideoRoute(name: topic.tabName, id: topic.tabId.toString(), api: 'tabnew51tikok/list_tab_mv').push(context);
+                                }
                               },
                               child: Text(topic.tabName, style: MyTheme.white13),
                             ),

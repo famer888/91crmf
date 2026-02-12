@@ -429,31 +429,33 @@ class _HeaderState extends State<_Header> {
                 isGirlTopic ? Container() : SizedBox(height: 5.w),
                 isGirlTopic
                     ? Container()
-                    : Offstage(
-                        offstage: false,
-                        child: ReportGestureDetector(
-                          onTap: () {
-                            isShowAllTopics = !isShowAllTopics;
-                            if (mounted) {
-                              setState(() {});
-                            }
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 10.w),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  isShowAllTopics ? 'shckgd'.tr(context: context) : 'zkckgd'.tr(context: context),
-                                  style: MyTheme.white08_12.copyWith(color: const Color.fromRGBO(118, 120, 129, 1)),
+                    : (contentTopics.length > 8)
+                        ? Offstage(
+                            offstage: false,
+                            child: ReportGestureDetector(
+                              onTap: () {
+                                isShowAllTopics = !isShowAllTopics;
+                                if (mounted) {
+                                  setState(() {});
+                                }
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 10.w),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      isShowAllTopics ? 'shckgd'.tr(context: context) : 'zkckgd'.tr(context: context),
+                                      style: MyTheme.white08_12.copyWith(color: const Color.fromRGBO(118, 120, 129, 1)),
+                                    ),
+                                    SizedBox(width: 3.w),
+                                    MyImage.asset(isShowAllTopics ? MyImagePaths.appUpIcon : MyImagePaths.appDownIcon, width: 10.w, height: 10.w)
+                                  ],
                                 ),
-                                SizedBox(width: 3.w),
-                                MyImage.asset(isShowAllTopics ? MyImagePaths.appUpIcon : MyImagePaths.appDownIcon, width: 10.w, height: 10.w)
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
+                          )
+                        : const SizedBox(),
               ],
             );
           },
