@@ -5,7 +5,6 @@ import 'package:jycrpj/domain/async_value.dart';
 import 'package:jycrpj/domain/domain.dart';
 import 'package:jycrpj/domain/model/crack_model.dart';
 import 'package:jycrpj/domain/remote_domain/domains/crack.dart';
-import 'package:jycrpj/domain/remote_domain/domains/user.dart';
 import 'package:jycrpj/report/ui_layer/report_gesture_detector.dart';
 import 'package:jycrpj/ui_layer/notifiers/home_config_notifier.dart';
 import 'package:jycrpj/ui_layer/notifiers/user_notifier.dart';
@@ -43,7 +42,6 @@ class _NewCrackScreenState extends State<NewCrackScreen> {
   late final _screenUtil = ScreenUtil();
   late final _crackDomain = context.read<CrackDomain>();
   late final _appDomain = context.read<AppDomain>();
-  late final _cacheDomain = context.read<CacheDomain>();
   late final _userDomain = context.read<UserDomain>();
   late final _homeConfigNotifier = context.read<HomeConfigNotifier>();
   late final _userNotifier = context.read<UserNotifier>();
