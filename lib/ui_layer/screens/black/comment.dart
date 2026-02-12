@@ -145,15 +145,15 @@ class _Header extends StatelessWidget {
                     Text(user.nickname, style: MyTheme.white23_12),
                     // ReportGestureDetector(
                     //   onTap: () {
-                        // if ((member.username ?? '').isEmpty) {
-                        //   MyToast.showText(text: 'zcyhcz'.tr(context: context));
-                        //   return;
-                        // }
-                        // final uuid = user.uuid;
-                        // final nick = user.nickname;
-                        // final url = user.thumb.isNotEmpty == true ? user.thumb : ' ';
-                        // ChatMessageRoute(nickName: Uri.encodeComponent(nick), thumb: Uri.encodeComponent(url), toUuid: uuid).push(context);
-                      // },
+                    // if ((member.username ?? '').isEmpty) {
+                    //   MyToast.showText(text: 'zcyhcz'.tr(context: context));
+                    //   return;
+                    // }
+                    // final uuid = user.uuid;
+                    // final nick = user.nickname;
+                    // final url = user.thumb.isNotEmpty == true ? user.thumb : ' ';
+                    // ChatMessageRoute(nickName: Uri.encodeComponent(nick), thumb: Uri.encodeComponent(url), toUuid: uuid).push(context);
+                    // },
                     //   child: Container(
                     //       width: 40.w,
                     //       height: 17.w,
@@ -221,7 +221,7 @@ class _Header extends StatelessWidget {
                 SizedBox(height: 4.w),
                 Row(
                   children: [
-                    if (user.vipLevel.isVip()) Padding(padding: EdgeInsets.only(right: 8.w), child: MemberVipWidget(vipImage:  member.vipImg)),
+                    if (user.vipLevel.isVip()) Padding(padding: EdgeInsets.only(right: 8.w), child: MemberVipWidget(vipImage: member.vipImg)),
                     Text(
                       RelativeDateFormat.format(date: DateTime.parse(commentData.createdAt)),
                       // "${commentData.cityname ?? "csxq".tr(context: context)}·${RelativeDateFormat.format(date: DateTime.parse(commentData.createdAt ?? ""))}",
@@ -334,7 +334,7 @@ class _RepliesView extends StatelessWidget {
                 margin: EdgeInsets.only(left: 40.w),
                 padding: EdgeInsets.all(10.w),
                 width: double.infinity,
-                color: const Color(0xFF15152a),
+                color: const Color.fromRGBO(22, 22, 34, 1),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -367,10 +367,7 @@ class _RepliesView extends StatelessWidget {
                               borderRadius: BorderRadius.circular(2.w),
                             ),
                             child: Center(
-                              child: Text(
-                                'gdhf'.tr(context: context),
-                                style: MyTheme.white255_12,
-                              ),
+                              child: Text('gdhf'.tr(context: context), style: MyTheme.white255_12),
                             ),
                           ),
                         ),
