@@ -330,6 +330,7 @@ class MyTheme {
   static const pzhanAppPrimaryColor = Color.fromRGBO(255, 145, 0, 1);
   static const pzhanAppBgColor = Color.fromRGBO(1, 1, 1, 1);
   static const pzhanAppSearchBarBackgroundColor = Color.fromRGBO(58, 57, 62, 1);
+  static const pzhanFollowColor = Color.fromRGBO(50, 51, 63, 1);
 
   static const tiktok51AppPrimaryColor = Color.fromRGBO(255, 46, 89, 1);
   static const tiktok51AppBgColor = Color.fromRGBO(24, 26, 37, 1);

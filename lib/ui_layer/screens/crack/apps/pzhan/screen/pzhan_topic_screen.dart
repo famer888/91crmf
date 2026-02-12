@@ -46,7 +46,7 @@ class _PZhanTopicScreenState extends State<PZhanTopicScreen> with SingleTickerPr
   final ValueNotifier<bool> isListNotifier = ValueNotifier(false);
   late final TabController _tabController;
 
-  List<AppNavModel> get _titles => _homeConfig.config.tikok51SortNav ?? [];
+  List<AppNavModel> get _titles => _homeConfig.config.pzhanSortNav ?? [];
 
   // 当前tab选中的位置
   int initialIndex = 0;
@@ -116,13 +116,13 @@ class _PZhanTopicScreenState extends State<PZhanTopicScreen> with SingleTickerPr
       _showThreshold = ScreenUtil().screenHeight * 0.40;
     });
     if (!initSetIndex) {
-      final index = (_homeConfig.config.tikok51SortNav ?? []).indexWhere((item) => item.type == 'new');
+      final index = (_homeConfig.config.pzhanSortNav ?? []).indexWhere((item) => item.type == 'new');
       if (index == -1) {
         // 不存在 new
-        _initSort = _homeConfig.config.tikok51SortNav?.first.type ?? '';
+        _initSort = _homeConfig.config.pzhanSortNav?.first.type ?? '';
         initialIndex = 0;
       } else {
-        _initSort = _homeConfig.config.tikok51SortNav?[index].type ?? '';
+        _initSort = _homeConfig.config.pzhanSortNav?[index].type ?? '';
         initialIndex = index;
       }
       initSetIndex = true;
@@ -393,42 +393,47 @@ class _HeaderState extends State<_Header> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(width: MyTheme.pagePadding),
-                  Text('${'zps'.tr(context: context)} ${CommonUtils.renderEnFixedNumber(widget.tabInfo.workNum)}', style: MyTheme.white13medium.s14),
+                  Text('${'zps'.tr(context: context)} ${CommonUtils.renderEnFixedNumber(widget.tabInfo.workNum)}',
+                      style: MyTheme.white13medium.s14),
                   SizedBox(width: 28.w),
-                  Text('${'sc'.tr(context: context)} ${CommonUtils.renderEnFixedNumber(widget.tabInfo.favoritesNum)}', style: MyTheme.white13medium.s14),
+                  Text('${'sc'.tr(context: context)} ${CommonUtils.renderEnFixedNumber(widget.tabInfo.favoritesNum)}',
+                      style: MyTheme.white13medium.s14),
                   const Spacer(),
-                  // SizedBox(width: 10.w),
-                  // ReportGestureDetector(
-                  //   onTap: () async {
-                  //     final result = await dynamicDomain.getConstructByApiLink(
-                  //       apiLink: 'tabnew51tikok/follow_tab',
-                  //       params: {'tab_id': widget.tabInfo.tabId},
-                  //     );
-                  //     if (result.isValid) {
-                  //       widget.tabInfo.isFollow = true;
-                  //       setState(() {
-                  //         isFollowed = !isFollowed;
-                  //       });
-                  //     }
-                  //   },
-                  //   behavior: HitTestBehavior.translucent,
-                  //   child: Container(
-                  //     height: 28.w,
-                  //     padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 4.5.w),
-                  //     alignment: Alignment.center,
-                  //     decoration: BoxDecoration(
-                  //       color: isFollowed ? Colors.transparent : MyTheme.pzhanAppPrimaryColor,
-                  //       borderRadius: BorderRadius.circular(5.w),
-                  //       border: Border.all(color: isFollowed ? MyTheme.pzhanAppPrimaryColor : Colors.transparent, width: 1.5.w),
-                  //     ),
-                  //     child: Text(
-                  //       isFollowed ? 'ygz'.tr(context: context) : 'jgz'.tr(context: context),
-                  //       style: isFollowed
-                  //           ? MyTheme.blue80_12.copyWith(color: MyTheme.pzhanAppPrimaryColor, fontWeight: FontWeight.w600)
-                  //           : MyTheme.white12.copyWith(fontWeight: FontWeight.w600),
-                  //     ),
-                  //   ),
-                  // ),
+                  SizedBox(width: 10.w),
+                  ReportGestureDetector(
+                    onTap: () async {
+                      final result = await dynamicDomain.getConstructByApiLink(
+                        apiLink: 'tabnewpzhan/follow_tab',
+                        params: {'tab_id': widget.tabInfo.tabId},
+                      );
+                      if (result.isValid) {
+                        widget.tabInfo.isFollow = true;
+                        setState(() {
+                          isFollowed = !isFollowed;
+                        });
+                      }
+                    },
+                    behavior: HitTestBehavior.translucent,
+                    child: Container(
+                      height: 28.w,
+                      padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 4.5.w),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: isFollowed ? MyTheme.pzhanAppSearchBarBackgroundColor : MyTheme.pzhanAppPrimaryColor,
+                        borderRadius: BorderRadius.circular(16.w),
+                        // border: Border.all(
+                        //   color: isFollowed ? MyTheme.pzhanAppPrimaryColor : MyTheme.pzhanAppSearchBarBackgroundColor,
+                        //   width: 1.5.w,
+                        // ),
+                      ),
+                      child: Text(
+                        isFollowed ? 'ygz'.tr(context: context) : 'jgz'.tr(context: context),
+                        style: isFollowed
+                            ? MyTheme.blue80_12.copyWith(color: MyTheme.whiteColor, fontWeight: FontWeight.w600)
+                            : MyTheme.white12.copyWith(fontWeight: FontWeight.w600, color: MyTheme.blackColor),
+                      ),
+                    ),
+                  ),
                   SizedBox(width: MyTheme.pagePadding),
                 ],
               ),

@@ -438,14 +438,17 @@ class _HeaderState extends State<_Header> {
                   //     padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 4.5.w),
                   //     alignment: Alignment.center,
                   //     decoration: BoxDecoration(
-                  //       color: isFollowed ? Colors.transparent : MyTheme.tiktok51AppPrimaryColor,
+                  //       color: isFollowed ? MyTheme.pzhanAppSearchBarBackgroundColor : MyTheme.tiktok51AppPrimaryColor,
                   //       borderRadius: BorderRadius.circular(5.w),
-                  //       border: Border.all(color: isFollowed ? MyTheme.tiktok51AppPrimaryColor : Colors.transparent, width: 1.5.w),
+                  //       // border: Border.all(
+                  //       //   color: isFollowed ? MyTheme.tiktok51AppPrimaryColor : MyTheme.pzhanAppSearchBarBackgroundColor,
+                  //       //   width: 1.5.w,
+                  //       // ),
                   //     ),
                   //     child: Text(
                   //       isFollowed ? 'ygz'.tr(context: context) : 'jgz'.tr(context: context),
                   //       style: isFollowed
-                  //           ? MyTheme.blue80_12.copyWith(color: MyTheme.tiktok51AppPrimaryColor, fontWeight: FontWeight.w600)
+                  //           ? MyTheme.blue80_12.copyWith(color: MyTheme.whiteColor, fontWeight: FontWeight.w600)
                   //           : MyTheme.white12.copyWith(fontWeight: FontWeight.w600),
                   //     ),
                   //   ),
