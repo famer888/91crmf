@@ -45,6 +45,13 @@ mixin _Black on _BaseAppRepo implements BlackDomain {
   AsyncResult publishBlackComment({required int cid, required String content}) =>
       _blackService.publishBlackComment(cid: cid, content: content).deserializeJsonBy((e) => e).guard;
 
+  /// 回复评论
+  /// @param mid 黑料id 必传
+  /// @param content 评论内容 必传
+  @override
+  AsyncResult publishCommentBlackComment({required int commentId, required String content}) =>
+      _blackService.publishCommentBlackComment(commentId: commentId, content: content).deserializeJsonBy((e) => e).guard;
+
   /// 黑料标签列表
   @override
   AsyncResult<BlackLabelListModel> getBlackLabelList({required int page, required int limit, required String tag}) =>

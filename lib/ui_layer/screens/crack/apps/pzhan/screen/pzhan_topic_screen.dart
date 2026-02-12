@@ -399,41 +399,41 @@ class _HeaderState extends State<_Header> {
                   Text('${'sc'.tr(context: context)} ${CommonUtils.renderEnFixedNumber(widget.tabInfo.favoritesNum)}',
                       style: MyTheme.white13medium.s14),
                   const Spacer(),
-                  SizedBox(width: 10.w),
-                  ReportGestureDetector(
-                    onTap: () async {
-                      final result = await dynamicDomain.getConstructByApiLink(
-                        apiLink: 'tabnewpzhan/follow_tab',
-                        params: {'tab_id': widget.tabInfo.tabId},
-                      );
-                      if (result.isValid) {
-                        widget.tabInfo.isFollow = true;
-                        setState(() {
-                          isFollowed = !isFollowed;
-                        });
-                      }
-                    },
-                    behavior: HitTestBehavior.translucent,
-                    child: Container(
-                      height: 28.w,
-                      padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 4.5.w),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: isFollowed ? MyTheme.pzhanAppSearchBarBackgroundColor : MyTheme.pzhanAppPrimaryColor,
-                        borderRadius: BorderRadius.circular(16.w),
-                        // border: Border.all(
-                        //   color: isFollowed ? MyTheme.pzhanAppPrimaryColor : MyTheme.pzhanAppSearchBarBackgroundColor,
-                        //   width: 1.5.w,
-                        // ),
-                      ),
-                      child: Text(
-                        isFollowed ? 'ygz'.tr(context: context) : 'jgz'.tr(context: context),
-                        style: isFollowed
-                            ? MyTheme.blue80_12.copyWith(color: MyTheme.whiteColor, fontWeight: FontWeight.w600)
-                            : MyTheme.white12.copyWith(fontWeight: FontWeight.w600, color: MyTheme.blackColor),
-                      ),
-                    ),
-                  ),
+                  // SizedBox(width: 10.w),
+                  // ReportGestureDetector(
+                  //   onTap: () async {
+                  //     final result = await dynamicDomain.getConstructByApiLink(
+                  //       apiLink: 'tabnewpzhan/follow_tab',
+                  //       params: {'tab_id': widget.tabInfo.tabId},
+                  //     );
+                  //     if (result.isValid) {
+                  //       widget.tabInfo.isFollow = true;
+                  //       setState(() {
+                  //         isFollowed = !isFollowed;
+                  //       });
+                  //     }
+                  //   },
+                  //   behavior: HitTestBehavior.translucent,
+                  //   child: Container(
+                  //     height: 28.w,
+                  //     padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 4.5.w),
+                  //     alignment: Alignment.center,
+                  //     decoration: BoxDecoration(
+                  //       color: isFollowed ? MyTheme.pzhanAppSearchBarBackgroundColor : MyTheme.pzhanAppPrimaryColor,
+                  //       borderRadius: BorderRadius.circular(16.w),
+                  //       // border: Border.all(
+                  //       //   color: isFollowed ? MyTheme.pzhanAppPrimaryColor : MyTheme.pzhanAppSearchBarBackgroundColor,
+                  //       //   width: 1.5.w,
+                  //       // ),
+                  //     ),
+                  //     child: Text(
+                  //       isFollowed ? 'ygz'.tr(context: context) : 'jgz'.tr(context: context),
+                  //       style: isFollowed
+                  //           ? MyTheme.blue80_12.copyWith(color: MyTheme.whiteColor, fontWeight: FontWeight.w600)
+                  //           : MyTheme.white12.copyWith(fontWeight: FontWeight.w600, color: MyTheme.blackColor),
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(width: MyTheme.pagePadding),
                 ],
               ),

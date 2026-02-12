@@ -61,6 +61,12 @@ class BlackService extends BaseService {
         'content': content,
       });
 
+  /// 回复评论
+  AsyncJson publishCommentBlackComment({required int commentId, required String content}) => post('/create_comment', data: {
+    'comment_id': commentId,
+    'content': content,
+  });
+
   /// 黑料标签列表
   AsyncJson getBlackLabelList({required int page, required int limit, required String tag}) => post('/list_contents_tag', data: {
         'page': page,

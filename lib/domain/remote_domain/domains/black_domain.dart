@@ -43,6 +43,9 @@ abstract class BlackDomain {
   /// @param content 评论内容 必传
   AsyncResult publishBlackComment({required int cid, required String content});
 
+  /// 回复评论
+  AsyncResult publishCommentBlackComment({required int commentId, required String content});
+
   /// 黑料标签列表
   AsyncResult<BlackLabelListModel> getBlackLabelList({required int page, required int limit, required String tag});
 

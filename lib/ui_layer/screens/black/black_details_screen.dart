@@ -102,26 +102,36 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
       MyToast.showText(text: 'qspl'.tr(context: context));
       return;
     }
-    Map<String, dynamic> tempParams = {
-      'content': inputController.text.trim(),
-    };
 
-    ///
     if (replyItemModel?.id == null) {
-      tempParams['cid'] = selectedId;
+      // 回复帖子
+      final result = await _blackDomain.publishBlackComment(
+        cid: selectedId,
+        content: inputController.text.trim(),
+      );
+      if (result.status == 1) {
+        BotToast.showText(text: result.msg ?? '');
+        onDismissFocus();
+      } else {
+        BotToast.showText(text: result.msg ?? '');
+        onDismissFocus(); // 收回键盘
+      }
     } else {
-      tempParams['comment_id'] = replyItemModel?.id;
+      // 回复评论
+      final result = await _blackDomain.publishCommentBlackComment(
+        commentId: replyItemModel!.id,
+        content: inputController.text.trim(),
+      );
+      if (result.status == 1) {
+        BotToast.showText(text: result.msg ?? '');
+        onDismissFocus();
+      } else {
+        BotToast.showText(text: result.msg ?? '');
+        onDismissFocus(); // 收回键盘
+      }
     }
 
-    final result = await _blackDomain.publishBlackComment(
-        cid: (replyItemModel?.id == null) ? selectedId : replyItemModel?.id, content: inputController.text.trim());
-    if (result.status == 1) {
-      BotToast.showText(text: result.msg ?? '');
-      onDismissFocus();
-    } else {
-      BotToast.showText(text: result.msg ?? '');
-      onDismissFocus(); // 收回键盘
-    }
+
   }
 
   Future<bool> _changeCommentLike(int id) async {
@@ -558,20 +568,22 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
           borderRadius: BorderRadius.circular(20.w),
           color: MyTheme.white25501Color,
           height: 40.w,
-          child: ValueListenableBuilder(valueListenable: hintNotifier, builder: (_, hint, __) {
-            return Convenience.buildTextFieldContainer(
-              alignment: Alignment.centerLeft,
-              focusNode: _inputFocusNode,
-              controller: inputController,
-              height: 40.w,
-              margin: EdgeInsets.symmetric(horizontal: 12.5.w),
-              maxLines: 10,
-              padding: EdgeInsets.symmetric(vertical: 2.5.w),
-              hintText: hint,
-              hintStyle: MyTheme.white255_13_M.white25506.w500.s15,
-              style: MyTheme.white255_13_M.white25508.w500.s15.h1_5,
-            );
-          }),
+          child: ValueListenableBuilder(
+              valueListenable: hintNotifier,
+              builder: (_, hint, __) {
+                return Convenience.buildTextFieldContainer(
+                  alignment: Alignment.centerLeft,
+                  focusNode: _inputFocusNode,
+                  controller: inputController,
+                  height: 40.w,
+                  margin: EdgeInsets.symmetric(horizontal: 12.5.w),
+                  maxLines: 10,
+                  padding: EdgeInsets.symmetric(vertical: 2.5.w),
+                  hintText: hint,
+                  hintStyle: MyTheme.white255_13_M.white25506.w500.s15,
+                  style: MyTheme.white255_13_M.white25508.w500.s15.h1_5,
+                );
+              }),
         ),
       ),
       SizedBox(width: 5.w),
@@ -602,7 +614,9 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
 
   Widget _buildActionItemWidget(iconName, title, void Function()? onTap) {
     return ReportGestureDetector(
-      onTap: onTap,
+      onTap: () {
+        onTap?.call();
+      },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[

@@ -141,37 +141,37 @@ class _PZhanMoreCardState extends State<_PZhanMoreCard> {
               ),
             ),
             SizedBox(width: 10.w),
-            ReportGestureDetector(
-              onTap: () async {
-                final result = await dynamicDomain.getConstructByApiLink(
-                  apiLink: 'tabnewpzhan/follow_tab',
-                  params: {'tab_id': widget.data.tabId},
-                );
-                if (result.isValid) {
-                  widget.data.isFollow = true;
-                  setState(() {
-                    isFollowed = !isFollowed;
-                  });
-                }
-              },
-              behavior: HitTestBehavior.translucent,
-              child: Container(
-                height: 28.w,
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.w),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: isFollowed ? MyTheme.pzhanAppSearchBarBackgroundColor : MyTheme.pzhanAppPrimaryColor,
-                  borderRadius: BorderRadius.circular(16.w),
-                  // border: Border.all(color: isFollowed ? MyTheme.pzhanAppPrimaryColor : MyTheme.pzhanAppSearchBarBackgroundColor, width: 1.w),
-                ),
-                child: Text(
-                  isFollowed ? 'ygz'.tr(context: context) : 'jgz'.tr(context: context),
-                  style: isFollowed
-                      ? MyTheme.blue80_12.copyWith(color: MyTheme.whiteColor, fontWeight: FontWeight.w600)
-                      : MyTheme.white12.copyWith(fontWeight: FontWeight.w600, color: MyTheme.blackColor),
-                ),
-              ),
-            )
+            // ReportGestureDetector(
+            //   onTap: () async {
+            //     final result = await dynamicDomain.getConstructByApiLink(
+            //       apiLink: 'tabnewpzhan/follow_tab',
+            //       params: {'tab_id': widget.data.tabId},
+            //     );
+            //     if (result.isValid) {
+            //       widget.data.isFollow = true;
+            //       setState(() {
+            //         isFollowed = !isFollowed;
+            //       });
+            //     }
+            //   },
+            //   behavior: HitTestBehavior.translucent,
+            //   child: Container(
+            //     height: 28.w,
+            //     padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.w),
+            //     alignment: Alignment.center,
+            //     decoration: BoxDecoration(
+            //       color: isFollowed ? MyTheme.pzhanAppSearchBarBackgroundColor : MyTheme.pzhanAppPrimaryColor,
+            //       borderRadius: BorderRadius.circular(16.w),
+            //       // border: Border.all(color: isFollowed ? MyTheme.pzhanAppPrimaryColor : MyTheme.pzhanAppSearchBarBackgroundColor, width: 1.w),
+            //     ),
+            //     child: Text(
+            //       isFollowed ? 'ygz'.tr(context: context) : 'jgz'.tr(context: context),
+            //       style: isFollowed
+            //           ? MyTheme.blue80_12.copyWith(color: MyTheme.whiteColor, fontWeight: FontWeight.w600)
+            //           : MyTheme.white12.copyWith(fontWeight: FontWeight.w600, color: MyTheme.blackColor),
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),
