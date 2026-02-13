@@ -7,6 +7,7 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/my_tab_bar.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/screen_background.dart';
 import 'package:jycrpj/ui_layer/screens/mine/collection/collection_app_screen.dart';
 import 'package:jycrpj/ui_layer/screens/mine/collection/collection_black_screen.dart';
+import 'package:jycrpj/ui_layer/screens/mine/collection/collection_vlog_screen.dart';
 
 class MineNewCollectionScreen extends StatefulWidget {
   const MineNewCollectionScreen({super.key});
@@ -16,7 +17,7 @@ class MineNewCollectionScreen extends StatefulWidget {
 }
 
 class _MineNewCollectionScreenState extends State<MineNewCollectionScreen> {
-  final _tabTitles = [tr('app'), tr('home_hl')];
+  final _tabTitles = [tr('app'), tr('home_hl'), tr('home_dsp')];
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +26,14 @@ class _MineNewCollectionScreenState extends State<MineNewCollectionScreen> {
         appBar: MyAppBar(title: 'wdsc'.tr(context: context)),
         body: TabBarWithView.line(
           labelStyle: TextStyle(
-            color: const Color.fromRGBO(255, 255, 255, 1),
             fontSize: 18.sp,
+            color: const Color.fromRGBO(255, 255, 255, 1),
             overflow: TextOverflow.visible,
             decoration: TextDecoration.none,
           ),
           unselectedLabelStyle: TextStyle(
-            color: const Color.fromRGBO(255, 255, 255, 0.8),
             fontSize: 17.sp,
+            color: const Color.fromRGBO(255, 255, 255, 0.8),
             overflow: TextOverflow.visible,
             decoration: TextDecoration.none,
           ),
@@ -43,6 +44,7 @@ class _MineNewCollectionScreenState extends State<MineNewCollectionScreen> {
           views: const [
             KeepAliveWrapper(child: CollectionAppScreen()),
             KeepAliveWrapper(child: CollectionBlackScreen()),
+            KeepAliveWrapper(child: CollectionVlogScreen()),
           ],
         ),
       ),

@@ -21,6 +21,7 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/video_player/shortv_mv_pl
 import 'package:jycrpj/ui_layer/screens/crack/apps/91aw/widget/aw91_collect_button.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/91aw/widget/aw91_feed_card.dart';
 import 'package:jycrpj/ui_layer/screens/crack/crack_app_type.dart';
+import 'package:jycrpj/ui_layer/screens/crack/widgets/scroll_top_button.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
@@ -29,7 +30,6 @@ import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../report/ui_layer/report_general_banner.dart';
-
 import '../../../../../../report/ui_layer/report_gesture_detector.dart';
 
 class Aw91VideoDetailScreen extends StatefulWidget {
@@ -232,68 +232,123 @@ class _Body extends StatefulWidget {
 }
 
 class _BodyState extends State<_Body> with TickerProviderStateMixin {
+  final ScrollController _scrollController = ScrollController();
+  final ValueNotifier<bool> _showToTopButtonNotifier = ValueNotifier(false);
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    _showToTopButtonNotifier.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    // 当滚动位置超过300时显示按钮
+    if (_scrollController.offset > 300 && !_showToTopButtonNotifier.value) {
+      setState(() {
+        _showToTopButtonNotifier.value = true;
+      });
+    } else if (_scrollController.offset <= 300 && _showToTopButtonNotifier.value) {
+      setState(() {
+        _showToTopButtonNotifier.value = false;
+      });
+    }
+  }
+
+  // 回到顶部的方法
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(color: Color.fromRGBO(16, 16, 16, 1)),
-      child: CustomScrollView(physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()), slivers: [
-        SliverList.list(
-          children: [
-            SizedBox(height: 10.w),
-            Row(
-              children: [
-                SizedBox(width: 13.w),
-                Expanded(
-                  child: Text(
-                    (widget.data.detail.desc != null && widget.data.detail.desc!.isNotEmpty == true)
-                        ? widget.data.detail.desc!
-                        : (widget.data.detail.title ?? ''),
-                    style: MyTheme.white255_14.w400,
-                    maxLines: 2,
-                    softWrap: true,
-                  ),
-                ),
-                SizedBox(width: 13.w),
-              ],
-            ),
-            if (widget.data.detail.tags != null && widget.data.detail.tags!.isNotEmpty) _buildTagListWidget(widget.data.detail.tags!),
-            SizedBox(height: 10.w),
-            _buildStatisticalDataWidget(),
-            _buildBannerWidget(widget.data.banner),
-            Row(
-              children: [
-                SizedBox(width: 13.w),
-                Expanded(child: Text('xgtj'.tr(context: context), style: MyTheme.white255_12.s16.w500)),
-                SizedBox(width: 13.w),
-              ],
-            ),
-            SizedBox(height: 10.w),
-            ValueListenableBuilder(
-                valueListenable: widget.recommendVideoListNotifier,
-                builder: (context, recommendVideos, child) {
-                  return Padding(
-                    padding: EdgeInsets.all(MyTheme.pagePadding),
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      itemCount: recommendVideos.length,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10.w,
-                        mainAxisSpacing: 10.w,
-                        childAspectRatio: MyTheme.aspectRatio,
+      child: Stack(
+        children: [
+          CustomScrollView(
+            controller: _scrollController,
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            slivers: [
+              SliverList.list(
+                children: [
+                  SizedBox(height: 10.w),
+                  Row(
+                    children: [
+                      SizedBox(width: 13.w),
+                      Expanded(
+                        child: Text(
+                          (widget.data.detail.desc != null && widget.data.detail.desc!.isNotEmpty == true)
+                              ? widget.data.detail.desc!
+                              : (widget.data.detail.title ?? ''),
+                          style: MyTheme.white255_14.w400,
+                          maxLines: 2,
+                          softWrap: true,
+                        ),
                       ),
-                      itemBuilder: (context, index) {
-                        final item = recommendVideos[index];
-                        return Aw91FeedCard(isList: false, feed: item, isInVideoDetail: true);
-                      },
-                    ),
-                  );
-                }),
-            SizedBox(height: 10.w),
-          ],
-        ),
-      ]),
+                      SizedBox(width: 13.w),
+                    ],
+                  ),
+                  if (widget.data.detail.tags != null && widget.data.detail.tags!.isNotEmpty) _buildTagListWidget(widget.data.detail.tags!),
+                  SizedBox(height: 10.w),
+                  _buildStatisticalDataWidget(),
+                  _buildBannerWidget(widget.data.banner),
+                  Row(
+                    children: [
+                      SizedBox(width: 13.w),
+                      Expanded(child: Text('xgtj'.tr(context: context), style: MyTheme.white255_12.s16.w500)),
+                      SizedBox(width: 13.w),
+                    ],
+                  ),
+                  SizedBox(height: 10.w),
+                  ValueListenableBuilder(
+                      valueListenable: widget.recommendVideoListNotifier,
+                      builder: (context, recommendVideos, child) {
+                        return Padding(
+                          padding: EdgeInsets.all(MyTheme.pagePadding),
+                          child: GridView.builder(
+                            shrinkWrap: true,
+                            itemCount: recommendVideos.length,
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10.w,
+                              mainAxisSpacing: 10.w,
+                              childAspectRatio: MyTheme.aspectRatio,
+                            ),
+                            itemBuilder: (context, index) {
+                              final item = recommendVideos[index];
+                              return Aw91FeedCard(isList: false, feed: item, isInVideoDetail: true);
+                            },
+                          ),
+                        );
+                      }),
+                  SizedBox(height: 10.w),
+                ],
+              ),
+            ],
+          ),
+          Positioned(
+            bottom: 110.w,
+            right: 20.w,
+            child: ScrollTopButton(
+              showToTopButtonNotifier: _showToTopButtonNotifier,
+              scrollTopCallback: _scrollToTop,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

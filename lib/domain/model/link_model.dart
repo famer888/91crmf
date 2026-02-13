@@ -17,9 +17,12 @@ class LinkModel {
     this.uiType = 0,
     this.isNavPrepend = false,
     this.current = false,
-    this.midStyle = 0,
-    this.botStyle = 0,
+    this.midStyle = '',
+    this.botStyle = '',
     this.showIcon = false,
+    this.router = '',
+    this.openType = 0,
+    this.urlStr = '',
   });
 
   int id;
@@ -39,9 +42,12 @@ class LinkModel {
   int uiType;
   bool isNavPrepend;
   bool current;
-  int midStyle;
-  int botStyle;
+  String midStyle;
+  String botStyle;
   bool showIcon;
+  String router;
+  int openType;
+  String urlStr;
 
   factory LinkModel.fromJson(Map<String, dynamic> json) => LinkModel(
         id: json['id'],
@@ -60,9 +66,12 @@ class LinkModel {
         api: json['api'] ?? '',
         params: json['params'],
         uiType: json['ui_type'] ?? 0,
-        midStyle: json['mid_style'] ?? 0,
-        botStyle: json['bot_style'] ?? 0,
+        midStyle: '${json['mid_style'] ?? 0}',
+        botStyle: '${json['bot_style'] ?? 0}',
         showIcon: json['show_icon'] ?? false,
+        router: json['router'] ?? '',
+        openType: json['open_type'] ?? 0,
+        urlStr: json['url_str'] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -85,5 +94,8 @@ class LinkModel {
         'mid_style': midStyle,
         'bot_style': botStyle,
         'show_icon': showIcon,
+        'router': router,
+        'open_type': openType,
+        'url_str': urlStr,
       };
 }

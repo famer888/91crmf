@@ -318,7 +318,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
     }
 
     return CustomScrollView(
-      // controller: widget.scrollController,
+      controller: widget.scrollController,
       physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       slivers: sliver,
     );

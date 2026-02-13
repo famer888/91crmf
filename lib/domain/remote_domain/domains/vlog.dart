@@ -30,6 +30,12 @@ abstract class VlogDomain {
     required String text,
   });
 
+  /// 二级评论
+  AsyncResult vlogSecondaryComment({
+    required int commentId,
+    required String text,
+  });
+
   ///评论列表
   AsyncResult<List<VideoCommentListModel>?> vlogCommentList({
     required int limit,

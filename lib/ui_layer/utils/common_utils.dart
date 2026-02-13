@@ -56,8 +56,7 @@ class CommonUtils {
       SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
     } else if (Platform.isIOS) {
       //导航栏状态栏文字颜色
-      SystemChrome.setSystemUIOverlayStyle(
-          isLight ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark);
+      SystemChrome.setSystemUIOverlayStyle(isLight ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark);
     }
   }
 
@@ -85,11 +84,8 @@ class CommonUtils {
   //苹果PWA浏览器
   static bool isPWA() {
     if (kIsWeb) {
-      final isStandalone =
-          html.window.matchMedia('(display-mode: standalone)').matches;
-      final isIOSStandalone =
-          js_util.getProperty(html.window.navigator, 'standalone') as bool? ??
-              false;
+      final isStandalone = html.window.matchMedia('(display-mode: standalone)').matches;
+      final isIOSStandalone = js_util.getProperty(html.window.navigator, 'standalone') as bool? ?? false;
       return isStandalone || isIOSStandalone;
     }
     return false;
@@ -104,8 +100,7 @@ class CommonUtils {
 
     /// 转 emoji
     final Pattern unicodePattern = RegExp(r'\\\\u([0-9A-Fa-f]{4})');
-    final String newStr =
-        str.replaceAllMapped(unicodePattern, (Match unicodeMatch) {
+    final String newStr = str.replaceAllMapped(unicodePattern, (Match unicodeMatch) {
       final int hexCode = int.parse(unicodeMatch.group(1)!, radix: 16);
       final unicode = String.fromCharCode(hexCode);
       return unicode;
@@ -131,8 +126,7 @@ class CommonUtils {
             decoration: TextDecoration.none);
     // StyleTheme.font(size: 14, color: const Color.fromRGBO(25, 103, 210, 1));
     List<InlineSpan> contentList = [];
-    RegExp exp = RegExp(
-        r'(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?');
+    RegExp exp = RegExp(r'(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?');
     Iterable<RegExpMatch> matches = exp.allMatches(text);
 
     int index = 0;
@@ -174,16 +168,13 @@ class CommonUtils {
     if (isCopy) {
       return SelectableText.rich(
         TextSpan(children: contentList),
-        strutStyle: const StrutStyle(
-            forceStrutHeight: true, height: 1, leading: kIsWeb ? 1.1 : 0.8),
+        strutStyle: const StrutStyle(forceStrutHeight: true, height: 1, leading: kIsWeb ? 1.1 : 0.8),
       );
     }
     return RichText(
         textAlign: TextAlign.left,
-        text: TextSpan(
-            children: contentList..insert(0, extraSpan ?? const TextSpan())),
-        strutStyle: const StrutStyle(
-            forceStrutHeight: true, height: 1, leading: kIsWeb ? 1.1 : 0.8));
+        text: TextSpan(children: contentList..insert(0, extraSpan ?? const TextSpan())),
+        strutStyle: const StrutStyle(forceStrutHeight: true, height: 1, leading: kIsWeb ? 1.1 : 0.8));
   }
 
   static launchUrl(String url) async {
@@ -378,18 +369,11 @@ class CommonUtils {
   }
 
   static formatNum(double number, int postion) {
-    if ((number.toString().length - number.toString().lastIndexOf('.') - 1) <
-        postion) {
+    if ((number.toString().length - number.toString().lastIndexOf('.') - 1) < postion) {
       //小数点后有几位小数
-      return number
-          .toStringAsFixed(postion)
-          .substring(0, number.toString().lastIndexOf('.') + postion + 1)
-          .toString();
+      return number.toStringAsFixed(postion).substring(0, number.toString().lastIndexOf('.') + postion + 1).toString();
     } else {
-      return number
-          .toString()
-          .substring(0, number.toString().lastIndexOf('.') + postion + 1)
-          .toString();
+      return number.toString().substring(0, number.toString().lastIndexOf('.') + postion + 1).toString();
     }
   }
 
@@ -417,8 +401,7 @@ class CommonUtils {
           const end = Offset.zero;
           const curve = Curves.easeInOut;
 
-          var tween =
-              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
           var offsetAnimation = animation.drive(tween);
 
           return SlideTransition(
@@ -447,9 +430,7 @@ class CommonUtils {
   static bool isIPhoneWeb() {
     if (kIsWeb) {
       final userAgent = html.window.navigator.userAgent.toLowerCase();
-      return userAgent.contains('iphone') ||
-          userAgent.contains('ipad') ||
-          userAgent.contains('ipod');
+      return userAgent.contains('iphone') || userAgent.contains('ipad') || userAgent.contains('ipod');
     }
     return false;
   }
@@ -499,24 +480,14 @@ class CommonUtils {
 
   //下载APP
   static Future<void> downLoadApp(BuildContext context) async {
-    String site = Provider.of<HomeConfigNotifier>(context, listen: false)
-            .homeData
-            .config
-            .pwaDownloadUrl ??
-        '';
-    String apk = Provider.of<HomeConfigNotifier>(context, listen: false)
-            .homeData
-            .config
-            .pwaApk ??
-        '';
+    String site = Provider.of<HomeConfigNotifier>(context, listen: false).homeData.config.pwaDownloadUrl ?? '';
+    String apk = Provider.of<HomeConfigNotifier>(context, listen: false).homeData.config.pwaApk ?? '';
     Uri u = Uri.parse(html.window.location.href);
     String aff = u.queryParameters[BuildConfig.affCodeKey] ?? "";
 
     if (isIPhoneWeb()) {
       if (isSafariBrowser()) {
-        await url_launcher.launchUrl(
-            Uri.parse('$site/index.php/index/mobileConfig?aff_code=$aff'),
-            webOnlyWindowName: '_self');
+        await url_launcher.launchUrl(Uri.parse('$site/index.php/index/mobileConfig?aff_code=$aff'), webOnlyWindowName: '_self');
         await Future.delayed(const Duration(seconds: 2));
         bool flag = await url_launcher.launchUrl(
           Uri.parse('$site/js/embedded.mobileprovision?v=1'),
@@ -544,9 +515,9 @@ class CommonUtils {
     if (data['link_url'] case final String url when url.isNotEmpty) {
       if (data['report_id'] != null) {
         context.read<HomeDomain>().reqAdClickCount(
-          id: data['report_id'],
-          type: data['report_type'],
-        );
+              id: data['report_id'],
+              type: data['report_type'],
+            );
       }
 
       if (data['redirect_type'] == 1) {
@@ -648,8 +619,7 @@ class CommonUtils {
   }
 
   static Future<XFile?> pickImage() async {
-    if (await ImagePicker().pickImage(source: ImageSource.gallery)
-        case final xFile? when await _pngLimitSize(xFile)) {
+    if (await ImagePicker().pickImage(source: ImageSource.gallery) case final xFile? when await _pngLimitSize(xFile)) {
       return xFile;
     }
     return null;
@@ -750,15 +720,10 @@ class CommonUtils {
   static Widget buildNotifyWidget(List<TipModel> tips) {
     if (tips.isEmpty) return const SizedBox();
     return Padding(
-      padding: EdgeInsets.only(
-          left: MyTheme.pagePadding,
-          top: 8.w,
-          right: MyTheme.pagePadding,
-          bottom: 3.w),
+      padding: EdgeInsets.only(left: MyTheme.pagePadding, top: 8.w, right: MyTheme.pagePadding, bottom: 3.w),
       child: Row(
         children: [
-          MyImage.asset(MyImagePaths.appLivesNoticeIcon,
-              width: 18.w, height: 14.w),
+          MyImage.asset(MyImagePaths.appLivesNoticeIcon, width: 18.w, height: 14.w),
           Expanded(
             child: Stack(
               children: [
@@ -768,10 +733,7 @@ class CommonUtils {
                   height: 20.w,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [
-                        Color.fromARGB(255, 0, 0, 0),
-                        Color.fromARGB(0, 0, 0, 0)
-                      ],
+                      colors: [Color.fromARGB(255, 0, 0, 0), Color.fromARGB(0, 0, 0, 0)],
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
                     ),
@@ -791,8 +753,7 @@ class CommonUtils {
       PermissionStatus storageStatus = await Permission.camera.status;
       if (storageStatus == PermissionStatus.denied) {
         storageStatus = await Permission.camera.request();
-        if (storageStatus == PermissionStatus.denied ||
-            storageStatus == PermissionStatus.permanentlyDenied) {
+        if (storageStatus == PermissionStatus.denied || storageStatus == PermissionStatus.permanentlyDenied) {
           MyToast.showText(text: tr('qdkqx'));
           return;
         } else {}
@@ -812,11 +773,10 @@ class CommonUtils {
     if (kIsWeb) {
       dynamic blob = html.Blob([bytes]);
       String url = html.Url.createObjectUrlFromBlob(blob);
-      html.AnchorElement anchor =
-          html.document.createElement('a') as html.AnchorElement
-            ..href = url
-            ..style.display = 'none'
-            ..download = '${CommonUtils.randomId(16)}.jpg';
+      html.AnchorElement anchor = html.document.createElement('a') as html.AnchorElement
+        ..href = url
+        ..style.display = 'none'
+        ..download = '${CommonUtils.randomId(16)}.jpg';
       html.document.body?.children.add(anchor);
 // download
       anchor.click();
@@ -824,8 +784,7 @@ class CommonUtils {
       html.document.body?.children.remove(anchor);
       html.Url.revokeObjectUrl(url);
     } else {
-      final result =
-          await ImageGallerySaverPlus.saveImage(bytes); //这个是核心的保存图片的插件
+      final result = await ImageGallerySaverPlus.saveImage(bytes); //这个是核心的保存图片的插件
       if (result['isSuccess']) {
         MyToast.showText(text: tr('tpybc'));
       } else if (Platform.isAndroid) {
@@ -841,8 +800,7 @@ class CommonUtils {
   static Future<Uint8List?> isolatedImage(String url) async {
     Uint8List? bytes;
     if (kIsWeb) {
-      html.HttpRequest xhr = await html.HttpRequest.request(
-          method: 'GET', url, responseType: 'arraybuffer');
+      html.HttpRequest xhr = await html.HttpRequest.request(method: 'GET', url, responseType: 'arraybuffer');
       if (xhr.response != null) {
         ByteBuffer bb = xhr.response;
         bytes = bb.asUint8List();
@@ -975,8 +933,7 @@ class CommonUtils {
       if (videoUrl != null) {
         if (videoUrl.contains('.m3u8')) {
           try {
-            String folderName = stringByHashEncode(videoUrl.substring(
-                videoUrl.lastIndexOf('/') + 1, videoUrl.indexOf('.m3u8')));
+            String folderName = stringByHashEncode(videoUrl.substring(videoUrl.lastIndexOf('/') + 1, videoUrl.indexOf('.m3u8')));
             cachePath += '/$folderName';
           } catch (e) {
             CommonUtils.log(e);
@@ -1017,107 +974,97 @@ class CommonUtils {
     var vflag = false;
     if (data.source_240.toString().isEmpty) {
       if (user.vipLevel < 1 && data.isFree == 1) {
-        //需要VIP
-        // dgt = SizedBox(
-        //     height: 22.5.w,
-        //     child: Row(
-        //       mainAxisAlignment: MainAxisAlignment.start,
-        //       children: [
-        //         // MyImage.asset(
-        //         //   MyImagePaths.appVlogVipbg,
-        //         //   width: 160.w,
-        //         //   height: 30.w,
-        //         //   fit: BoxFit.fill,
-        //         // ),
-        //       ],
-        //     ));
+        // 需要VIP解锁
+        if ((user.vipVlogPrivilege ?? 0) > 0) {
+          // 有vip权限
+        } else {
+          // dgt = SizedBox(
+          //     height: 22.5.w,
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.start,
+          //       children: [
+          //         // MyImage.asset(
+          //         //   MyImagePaths.appVlogVipbg,
+          //         //   width: 160.w,
+          //         //   height: 30.w,
+          //         //   fit: BoxFit.fill,
+          //         // ),
+          //       ],
+          //     ));
 
-        // 创建一个TextPainter对象
-        TextPainter textPainter = TextPainter(
-          textDirection: ui.TextDirection.ltr,
-        );
-        String tempStr = "${data.coins ?? 0}${'jbgm'.tr(context: context)}";
-        // 设置文本样式
-        textPainter.text = TextSpan(
-          text: tempStr,
-          style: MyTheme.black13_11,
-        );
-        // 布局文本
-        textPainter.layout();
-        // 获取文本宽度
-        double textWidth = textPainter.size.width + 20;
+          // 创建一个TextPainter对象
+          TextPainter textPainter = TextPainter(textDirection: ui.TextDirection.ltr);
+          String tempStr = "${data.coins ?? 0}${'jbgm'.tr(context: context)}";
+          // 设置文本样式
+          textPainter.text = TextSpan(text: tempStr, style: MyTheme.black13_11);
+          // 布局文本
+          textPainter.layout();
+          // 获取文本宽度
+          double textWidth = textPainter.size.width + 26.w;
 
-        dgt = ClipRRect(
-          borderRadius: BorderRadius.circular(10.0.w),
-          child: Container(
-            color: MyTheme.blueColor64,
-            child: SizedBox(
-              height: 20.0.w,
+          dgt = ClipRRect(
+            borderRadius: BorderRadius.circular(12.0.w),
+            child: Container(
               width: textWidth.w,
-              child: Center(
-                child: DefaultTextStyle(
-                  textAlign: TextAlign.center,
-                  style: MyTheme.white11,
-                  child: Text.rich(
-                    TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'czvip'.tr(context: context),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+              alignment: Alignment.center,
+              color: MyTheme.blueColor64,
+              constraints: BoxConstraints(minHeight: 24.w),
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.w),
+              child: DefaultTextStyle(
+                style: MyTheme.white11,
+                textAlign: TextAlign.center,
+                child: Text.rich(TextSpan(children: [TextSpan(text: 'czvip'.tr(context: context))])),
               ),
             ),
-          ),
-        );
-        vflag = true;
+          );
+
+          vflag = true;
+        }
       } else if (data.isFree == 2) {
-        // 创建一个TextPainter对象
-        TextPainter textPainter = TextPainter(
-          textDirection: ui.TextDirection.ltr,
-        );
-        String tempStr = "${data.coins ?? 0}${'jbgm'.tr(context: context)}";
-        // 设置文本样式
-        textPainter.text = TextSpan(
-          text: tempStr,
-          style: MyTheme.black13_11,
-        );
-        // 布局文本
-        textPainter.layout();
-        // 获取文本宽度
-        double textWidth = textPainter.size.width + 20;
+        // 金币解锁
+        if ((user.coinsVlogPrivilege ?? 0) > 0) {
+          // 有金币权限
+        } else {
+          // 创建一个TextPainter对象
+          TextPainter textPainter = TextPainter(
+            textDirection: ui.TextDirection.ltr,
+          );
+          String tempStr = "${data.coins ?? 0}${'jbgm'.tr(context: context)}";
+          // 设置文本样式
+          textPainter.text = TextSpan(
+            text: tempStr,
+            style: MyTheme.black13_11,
+          );
+          // 布局文本
+          textPainter.layout();
+          // 获取文本宽度
+          double textWidth = textPainter.size.width + 26.w;
 
-        dgt = ClipRRect(
-          borderRadius: BorderRadius.circular(10.0.w),
-          child: Container(
-            color: MyTheme.blueColor64,
-            child: SizedBox(
-              height: 20.0.w,
+          dgt = ClipRRect(
+            borderRadius: BorderRadius.circular(12.0.w),
+            child: Container(
+              constraints: BoxConstraints(minHeight: 24.w),
               width: textWidth.w,
-              child: Center(
-                child: DefaultTextStyle(
-                  textAlign: TextAlign.center,
-                  style: MyTheme.white11,
-                  child: Text.rich(
-                    TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "${data.coins ?? 0}",
-                        ),
-                        TextSpan(
-                          text: 'jbgm'.tr(context: context),
-                        ),
-                      ],
-                    ),
+              color: MyTheme.blueColor64,
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.w),
+              child: DefaultTextStyle(
+                textAlign: TextAlign.center,
+                style: MyTheme.white11,
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(text: "${data.coins ?? 0}"),
+                      TextSpan(text: 'jbgm'.tr(context: context)),
+                    ],
                   ),
                 ),
               ),
             ),
-          ),
-        );
-        vflag = true;
+          );
+
+          vflag = true;
+        }
       }
     }
     return Positioned(
@@ -1142,51 +1089,73 @@ class CommonUtils {
                           color: Colors.white,
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
-                          shadows: const [
-                            Shadow(color: Colors.black54, offset: Offset(1, 1))
-                          ],
+                          shadows: const [Shadow(color: Colors.black54, offset: Offset(1, 1))],
                         ),
                       ),
                 SizedBox(height: 10.w),
-                Text(data.title ?? "",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14.sp,
-                      shadows: const [
-                        Shadow(color: Colors.black54, offset: Offset(1, 1))
-                      ],
-                    )),
-                (data.tagList?.isNotEmpty ?? false)
-                    ? SizedBox(height: 10.w)
-                    : Container(),
+                Text(
+                  maxLines: 3,
+                  data.title ?? "",
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: Colors.white,
+                    shadows: const [Shadow(color: Colors.black54, offset: Offset(1, 1))],
+                  ),
+                ),
+                (data.tagList?.isNotEmpty ?? false) ? SizedBox(height: 10.w) : Container(),
                 List.from(data.tagList ?? []).isNotEmpty
                     ? Wrap(
                         runSpacing: 8.w,
                         spacing: 15.w,
-                        children: List.from(data.tagList ?? [])
+                        children: data.tagList!
+                            .take(3)
                             .map(
-                              (tag) => InkWell(
-                                onTap: () {
+                              (tag) => Listener(
+                                behavior: HitTestBehavior.opaque, // ⭐ 必须 opaque
+                                onPointerDown: (_) {
+                                  // 直接拦截触摸
+                                },
+                                onPointerUp: (_) {
                                   VlogTagRoute(tag: tag).push(context);
                                 },
-                                child: Text(
-                                  '#$tag',
-                                  style: MyTheme.blue80_12,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 2.w, horizontal: 3.w),
+                                  child: Text('#$tag', style: MyTheme.blue80_12.copyWith(color: MyTheme.whiteColor)),
                                 ),
                               ),
+                              //     InkWell(
+                              //   onTap: () {
+                              //     VlogTagRoute(tag: tag).push(context);
+                              //   },
+                              //   child: Text('#$tag', style: MyTheme.blue80_12.copyWith(color: MyTheme.whiteColor)),
+                              // ),
                             )
                             .toList(),
                       )
-                    : Container(),
+                    : const SizedBox.shrink(),
                 vflag ? SizedBox(height: 10.w) : Container(),
-                vflag
-                    ? ReportGestureDetector(
+                vflag ? Listener(
+                        behavior: HitTestBehavior.opaque, // ⭐ 必须 opaque
+                        onPointerDown: (_) {
+                          // 直接拦截触摸
+                        },
+                        onPointerUp: (_) {
+                          showAlert?.call();
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 6.w,
+                            horizontal: 4.w,
+                          ),
+                          child: dgt,
+                        ),
+                      ) /*ReportGestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
                           showAlert?.call();
                         },
                         child: dgt,
-                      )
+                      )*/
                     : Container(),
               ],
             ),
@@ -1205,17 +1174,15 @@ class CommonUtils {
                     ReportGestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
-                        enterUserCenter?.call();
+                        // 屏蔽点击头像跳转
+                        // enterUserCenter?.call();
                       },
                       child: data.member == null
                           ? Container(
                               decoration: BoxDecoration(
                                 color: Colors.black.withOpacity(0.43),
                                 borderRadius: BorderRadius.circular(20.w),
-                                border: Border.all(
-                                  color: Colors.white, // 设置边框颜色
-                                  width: 1, // 设置边框宽度
-                                ),
+                                border: Border.all(color: Colors.white, width: 1),
                               ),
                               width: 30.w,
                               height: 30.w,
@@ -1233,10 +1200,7 @@ class CommonUtils {
                               decoration: BoxDecoration(
                                 color: Colors.black.withOpacity(0.43),
                                 borderRadius: BorderRadius.circular(15.w),
-                                border: Border.all(
-                                  color: Colors.white, // 设置边框颜色
-                                  width: 1, // 设置边框宽度
-                                ),
+                                border: Border.all(color: Colors.white, width: 1),
                               ),
                               width: 30.w,
                               height: 30.w,
@@ -1248,23 +1212,22 @@ class CommonUtils {
                               ),
                             ),
                     ),
-                    data.member == null
-                        ? Container()
-                        : (data.member?.isFollow ?? 0) == 1
-                            ? Container()
-                            : Positioned(
-                                bottom: 3.w,
-                                right: 8.w,
-                                child: ReportGestureDetector(
-                                  behavior: HitTestBehavior.translucent,
-                                  onTap: () {
-                                    follow?.call();
-                                  },
-                                  child: MyImage.asset(
-                                      MyImagePaths.appShortFocus,
-                                      width: 14.w,
-                                      height: 14.w),
-                                )),
+                    // 屏蔽关注按钮
+                    // data.member == null
+                    //     ? Container()
+                    //     : (data.member?.isFollow ?? 0) == 1
+                    //         ? Container()
+                    //         : Positioned(
+                    //             bottom: 3.w,
+                    //             right: 8.w,
+                    //             child: ReportGestureDetector(
+                    //               behavior: HitTestBehavior.translucent,
+                    //               onTap: () {
+                    //                 follow?.call();
+                    //               },
+                    //               child: MyImage.asset(MyImagePaths.appShortFocus, width: 14.w, height: 14.w),
+                    //             ),
+                    //           ),
                   ]),
                 ),
                 SizedBox(height: 15.w),
@@ -1277,18 +1240,14 @@ class CommonUtils {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       MyImage.asset(
-                        data.isLike == 1
-                            ? MyImagePaths.appShortLikeH
-                            : MyImagePaths.appShortLikeN,
+                        data.isLike == 1 ? MyImagePaths.appShortLikeH : MyImagePaths.appShortLikeN,
                         width: 25.w,
                         height: 25.w,
                       ),
                       Text(
                         renderFixedNumber(
                             // 如果用户点赞了 但是 countLike == 0 就直接显示1
-                            data.isLike == 1 && data.countLike == 0
-                                ? 1
-                                : data.countLike ?? 0),
+                            data.isLike == 1 && data.countLike == 0 ? 1 : data.countLike ?? 0),
                         style: MyTheme.white12medium,
                       ),
                     ],
@@ -1303,8 +1262,7 @@ class CommonUtils {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      MyImage.asset(MyImagePaths.appShortReview,
-                          width: 25.w, height: 25.w),
+                      MyImage.asset(MyImagePaths.appShortReview, width: 25.w, height: 25.w),
                       SizedBox(height: 1.w),
                       Text(
                         renderFixedNumber(data.countComment ?? 0),
@@ -1323,9 +1281,7 @@ class CommonUtils {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       MyImage.asset(
-                        data.isFavorite == 1
-                            ? MyImagePaths.appVlogCollectionS
-                            : MyImagePaths.appVlogCollectionN,
+                        data.isFavorite == 1 ? MyImagePaths.appVlogCollectionS : MyImagePaths.appVlogCollectionN,
                         width: 25.w,
                         height: 25.w,
                         fit: BoxFit.cover,
@@ -1334,31 +1290,44 @@ class CommonUtils {
                       Text(
                         renderFixedNumber(
                             // 如果用户收藏了 但是 favorites == 0 就直接显示1
-                            data.isFavorite == 1 && data.favorites == 0
-                                ? 1
-                                : data.favorites ?? 0),
+                            data.isFavorite == 1 && data.favorites == 0 ? 1 : data.favorites ?? 0),
                         style: MyTheme.white12medium,
                       ),
                     ],
                   ),
                 ),
                 SizedBox(height: 15.w),
-                ReportGestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () {
-                      const MineShareToUserRoute().push(context);
-                    },
+                Listener(
+                  behavior: HitTestBehavior.opaque, // ⭐ 必须 opaque
+                  onPointerDown: (_) {
+                    // 直接拦截触摸
+                  },
+                  onPointerUp: (_) {
+                    const ShareInviteRoute().push(context);
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 6.w, horizontal: 4.w),
                     child: Column(
                       children: [
-                        MyImage.asset(MyImagePaths.appShortShare,
-                            width: 25.w, height: 25.w),
+                        MyImage.asset(MyImagePaths.appShortShare, width: 25.w, height: 25.w),
                         SizedBox(height: 1.w),
-                        Text(
-                          'fx'.tr(),
-                          style: MyTheme.white12medium,
-                        ),
+                        Text('fx'.tr(), style: MyTheme.white12medium),
                       ],
-                    )),
+                    ),
+                  ),
+                ),
+                // ReportGestureDetector(
+                //     behavior: HitTestBehavior.translucent,
+                //     onTap: () {
+                //       const ShareInviteRoute().push(context);
+                //     },
+                //     child: Column(
+                //       children: [
+                //         MyImage.asset(MyImagePaths.appShortShare, width: 25.w, height: 25.w),
+                //         SizedBox(height: 1.w),
+                //         Text('fx'.tr(), style: MyTheme.white12medium),
+                //       ],
+                //     )),
                 SizedBox(height: 15.w),
                 // ReportGestureDetector(
                 //   behavior: HitTestBehavior.translucent,
@@ -1445,9 +1414,7 @@ class CommonUtils {
                         children: [
                           const Spacer(),
                           Container(
-                            padding: EdgeInsets.only(
-                                left: MyTheme.pagePadding,
-                                right: MyTheme.pagePadding),
+                            padding: EdgeInsets.only(left: MyTheme.pagePadding, right: MyTheme.pagePadding),
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
                                 begin: Alignment.topCenter,
@@ -1472,11 +1439,7 @@ class CommonUtils {
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 15.sp,
-                                          shadows: const [
-                                            Shadow(
-                                                color: Colors.black54,
-                                                offset: Offset(1, 1))
-                                          ],
+                                          shadows: const [Shadow(color: Colors.black54, offset: Offset(1, 1))],
                                         ),
                                         maxLines: 999,
                                       )),
@@ -1536,8 +1499,7 @@ class RelativeDateFormat {
   /// 时间转换
   static String format({DateTime? date}) {
     if (date case final target?) {
-      num delta =
-          DateTime.now().millisecondsSinceEpoch - target.millisecondsSinceEpoch;
+      num delta = DateTime.now().millisecondsSinceEpoch - target.millisecondsSinceEpoch;
 
       if (delta < 1 * oneMinute) {
         num seconds = toSeconds(delta);
@@ -1606,20 +1568,19 @@ class RelativeDateFormat {
   }
 
   /// 格式化两位数不足补0
-  static String formatTwoDigitNumber(int number) =>
-      number.toString().padLeft(2, '0');
-
-
-
-      
+  static String formatTwoDigitNumber(int number) => number.toString().padLeft(2, '0');
 }
+
 class DashedBorderPainter extends CustomPainter {
   final double borderRadius;
   final Color color;
+
   /// 边框线条宽度
   final double strokeWidth;
+
   /// 虚线段的长度
   final double dashWidth;
+
   /// 虚线段之间的间距
   final double dashSpace;
 
@@ -1649,9 +1610,7 @@ class DashedBorderPainter extends CustomPainter {
   void _drawDashedRect(Canvas canvas, Paint paint, RRect rect) {
     double x = rect.tlRadius.x;
     while (x < rect.width - rect.trRadius.x) {
-      final endX = (x + dashWidth < rect.width - rect.trRadius.x) 
-          ? x + dashWidth 
-          : rect.width - rect.trRadius.x;
+      final endX = (x + dashWidth < rect.width - rect.trRadius.x) ? x + dashWidth : rect.width - rect.trRadius.x;
       canvas.drawLine(Offset(x, 0), Offset(endX, 0), paint);
       x = endX + dashSpace;
     }
@@ -1668,9 +1627,7 @@ class DashedBorderPainter extends CustomPainter {
 
     double y = rect.trRadius.y;
     while (y < rect.height - rect.brRadius.y) {
-      final endY = (y + dashWidth < rect.height - rect.brRadius.y) 
-          ? y + dashWidth 
-          : rect.height - rect.brRadius.y;
+      final endY = (y + dashWidth < rect.height - rect.brRadius.y) ? y + dashWidth : rect.height - rect.brRadius.y;
       canvas.drawLine(Offset(rect.width, y), Offset(rect.width, endY), paint);
       y = endY + dashSpace;
     }
@@ -1687,9 +1644,7 @@ class DashedBorderPainter extends CustomPainter {
 
     x = rect.width - rect.brRadius.x;
     while (x > rect.blRadius.x) {
-      final endX = (x - dashWidth > rect.blRadius.x) 
-          ? x - dashWidth 
-          : rect.blRadius.x;
+      final endX = (x - dashWidth > rect.blRadius.x) ? x - dashWidth : rect.blRadius.x;
       canvas.drawLine(Offset(x, rect.height), Offset(endX, rect.height), paint);
       x = endX - dashSpace;
     }
@@ -1706,9 +1661,7 @@ class DashedBorderPainter extends CustomPainter {
 
     y = rect.height - rect.blRadius.y;
     while (y > rect.tlRadius.y) {
-      final endY = (y - dashWidth > rect.tlRadius.y) 
-          ? y - dashWidth 
-          : rect.tlRadius.y;
+      final endY = (y - dashWidth > rect.tlRadius.y) ? y - dashWidth : rect.tlRadius.y;
       canvas.drawLine(Offset(0, y), Offset(0, endY), paint);
       y = endY - dashSpace;
     }

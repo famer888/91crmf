@@ -3,9 +3,9 @@ part of '../repo.dart';
 mixin _Crack on _BaseAppRepo implements CrackDomain {
 
   @override
-  AsyncResult<CrackModel> getCrackList({String token = '', required int isCrack})
+  AsyncResult<CrackModel> getCrackList({required int isCrack})
     => _crackService
-      .getCrackList(token: token, isCrack: isCrack)
+      .getCrackList(isCrack: isCrack)
       .deserializeJsonBy(CrackModel.fromJson)
       .guard;
 }

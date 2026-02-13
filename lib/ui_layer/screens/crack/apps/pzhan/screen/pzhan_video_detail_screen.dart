@@ -18,10 +18,11 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/screen_background.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/loading.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/network_error.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/video_player/shortv_mv_player.dart';
-import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/model/pzhan_model.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/widget/pzhan_feed_card.dart';
 import 'package:jycrpj/ui_layer/screens/crack/crack_app_type.dart';
+import 'package:jycrpj/ui_layer/screens/crack/model/app_model.dart';
 import 'package:jycrpj/ui_layer/screens/crack/widgets/app_video_collect_button.dart';
+import 'package:jycrpj/ui_layer/screens/crack/widgets/scroll_top_button.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
@@ -43,8 +44,8 @@ class PZhanVideoDetailScreen extends StatefulWidget {
 
 class _PZhanVideoDetailScreenState extends State<PZhanVideoDetailScreen> {
   late final _appDomain = context.read<AppDomain>();
-  final ValueNotifier<List<PZhanVideoModel>> _recommendVideoListNotifier = ValueNotifier([]);
-  AsyncValue<PZhanVideoModel> _asyncValue = const AsyncInit();
+  final ValueNotifier<List<AppVideoModel>> _recommendVideoListNotifier = ValueNotifier([]);
+  AsyncValue<AppVideoModel> _asyncValue = const AsyncInit();
   List<Notice>? _noticeList;
 
   @override
@@ -74,7 +75,7 @@ class _PZhanVideoDetailScreenState extends State<PZhanVideoDetailScreen> {
         _noticeList = list.map<Notice>((x) => Notice.fromJson(x)).toList();
       }
       if (data['row'] != null) {
-        final videoDetailData = PZhanVideoModel.fromJson(data['row']);
+        final videoDetailData = AppVideoModel.fromJson(data['row']);
         _asyncValue = AsyncData(videoDetailData);
       }
     } else {
@@ -96,7 +97,7 @@ class _PZhanVideoDetailScreenState extends State<PZhanVideoDetailScreen> {
         _noticeList = list.map<Notice>((x) => Notice.fromJson(x)).toList();
       }
       if (result.data['list'] case final list when list.isNotEmpty) {
-        final feedModelList = list.map<PZhanVideoModel>((x) => PZhanVideoModel.fromJson(x)).toList();
+        final feedModelList = list.map<AppVideoModel>((x) => AppVideoModel.fromJson(x)).toList();
         if (mounted) {
           _recommendVideoListNotifier.value = feedModelList;
         }
@@ -109,7 +110,7 @@ class _PZhanVideoDetailScreenState extends State<PZhanVideoDetailScreen> {
   }
 
   // 视频下载
-  void _videoDownload(PZhanVideoModel videoData) async {
+  void _videoDownload(AppVideoModel videoData) async {
     CommonUtils.log('视频下载开始 免费状态isfree: ${videoData.isFree}');
     final result = await _appDomain.getConstructByApiLink(apiLink: 'mvpzhan/download', params: {'id': widget.id});
     CommonUtils.log('视频下载:$result');
@@ -122,7 +123,7 @@ class _PZhanVideoDetailScreenState extends State<PZhanVideoDetailScreen> {
     }
   }
 
-  Future<void> _startDownload(String downloadUrl, PZhanVideoModel videoData) async {
+  Future<void> _startDownload(String downloadUrl, AppVideoModel videoData) async {
     // 先判断本地有没有
     final userNotifier = context.read<UserNotifier>();
     final privilegeDomain = context.read<PrivilegeDomain>();
@@ -236,7 +237,7 @@ class _PZhanVideoDetailScreenState extends State<PZhanVideoDetailScreen> {
 }
 
 class _Body extends StatefulWidget {
-  final ValueNotifier<List<PZhanVideoModel>> recommendVideoListNotifier;
+  final ValueNotifier<List<AppVideoModel>> recommendVideoListNotifier;
 
   const _Body({
     required this.id,
@@ -247,7 +248,7 @@ class _Body extends StatefulWidget {
   });
 
   final int id;
-  final PZhanVideoModel data;
+  final AppVideoModel data;
   final List<Notice>? banners;
   final VoidCallback? downloadCallback;
 
@@ -256,61 +257,116 @@ class _Body extends StatefulWidget {
 }
 
 class _BodyState extends State<_Body> with TickerProviderStateMixin {
+  final ScrollController _scrollController = ScrollController();
+  final ValueNotifier<bool> _showToTopButtonNotifier = ValueNotifier(false);
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    _showToTopButtonNotifier.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    // 当滚动位置超过300时显示按钮
+    if (_scrollController.offset > 300 && !_showToTopButtonNotifier.value) {
+      setState(() {
+        _showToTopButtonNotifier.value = true;
+      });
+    } else if (_scrollController.offset <= 300 && _showToTopButtonNotifier.value) {
+      setState(() {
+        _showToTopButtonNotifier.value = false;
+      });
+    }
+  }
+
+  // 回到顶部的方法
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(color: Color.fromRGBO(16, 16, 16, 1)),
-      child: CustomScrollView(physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()), slivers: [
-        SliverList.list(
-          children: [
-            SizedBox(height: 10.w),
-            Row(
-              children: [
-                SizedBox(width: 13.w),
-                Expanded(
-                  child: Text(widget.data.title, style: MyTheme.white255_14.w400, maxLines: 2, softWrap: true),
-                ),
-                SizedBox(width: 13.w),
-              ],
-            ),
-            if (widget.data.tagsList.isNotEmpty) _buildTagListWidget(widget.data.tagsList.join(',')),
-            SizedBox(height: 10.w),
-            _buildStatisticalDataWidget(),
-            _buildBannerWidget(widget.banners),
-            Row(
-              children: [
-                SizedBox(width: 13.w),
-                Expanded(child: Text('xgtj'.tr(context: context), style: MyTheme.white255_12.s16.w500)),
-                SizedBox(width: 13.w),
-              ],
-            ),
-            SizedBox(height: 10.w),
-            ValueListenableBuilder(
-                valueListenable: widget.recommendVideoListNotifier,
-                builder: (context, recommendVideos, child) {
-                  return Padding(
-                    padding: EdgeInsets.all(MyTheme.pagePadding),
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      itemCount: recommendVideos.length,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10.w,
-                        mainAxisSpacing: 10.w,
-                        childAspectRatio: MyTheme.aspectRatio,
+      child: Stack(
+        children: [
+          CustomScrollView(
+            controller: _scrollController, // 添加 controller
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            slivers: [
+              SliverList.list(
+                children: [
+                  SizedBox(height: 10.w),
+                  Row(
+                    children: [
+                      SizedBox(width: 13.w),
+                      Expanded(
+                        child: Text(widget.data.title, style: MyTheme.white255_14.w400, maxLines: 2, softWrap: true),
                       ),
-                      itemBuilder: (context, index) {
-                        final item = recommendVideos[index];
-                        return PZhanFeedCard(isList: false, feed: item, isInVideoDetail: true);
-                      },
-                    ),
-                  );
-                }),
-            SizedBox(height: 10.w),
-          ],
-        ),
-      ]),
+                      SizedBox(width: 13.w),
+                    ],
+                  ),
+                  if (widget.data.tagsList.isNotEmpty) _buildTagListWidget(widget.data.tagsList.join(',')),
+                  SizedBox(height: 10.w),
+                  _buildStatisticalDataWidget(),
+                  _buildBannerWidget(widget.banners),
+                  Row(
+                    children: [
+                      SizedBox(width: 13.w),
+                      Expanded(child: Text('xgtj'.tr(context: context), style: MyTheme.white255_12.s16.w500)),
+                      SizedBox(width: 13.w),
+                    ],
+                  ),
+                  SizedBox(height: 10.w),
+                  ValueListenableBuilder(
+                      valueListenable: widget.recommendVideoListNotifier,
+                      builder: (context, recommendVideos, child) {
+                        return Padding(
+                          padding: EdgeInsets.all(MyTheme.pagePadding),
+                          child: GridView.builder(
+                            shrinkWrap: true,
+                            itemCount: recommendVideos.length,
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10.w,
+                              mainAxisSpacing: 10.w,
+                              childAspectRatio: MyTheme.aspectRatio,
+                            ),
+                            itemBuilder: (context, index) {
+                              final item = recommendVideos[index];
+                              return PZhanFeedCard(isList: false, feed: item, isInVideoDetail: true);
+                            },
+                          ),
+                        );
+                      }),
+                  SizedBox(height: 10.w),
+                ],
+              ),
+            ],
+          ),
+          Positioned(
+            bottom: 110.w,
+            right: 20.w,
+            child: ScrollTopButton(
+              showToTopButtonNotifier: _showToTopButtonNotifier,
+              scrollTopCallback: _scrollToTop,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -372,6 +428,7 @@ class _BodyState extends State<_Body> with TickerProviderStateMixin {
       AppVideoCollectButton(
         apiUrl: 'user/favorites',
         collectedColor: MyTheme.pzhanAppPrimaryColor,
+        type: CrackAppType.pzhan.type,
         isCollected: widget.data.isFavorite > 0,
         id: widget.data.id,
         callback: (isCollected) {
@@ -436,7 +493,7 @@ class _BodyState extends State<_Body> with TickerProviderStateMixin {
 class VideoView extends StatelessWidget {
   const VideoView({super.key, required this.data});
 
-  final PZhanVideoModel data;
+  final AppVideoModel data;
 
   @override
   Widget build(BuildContext context) {

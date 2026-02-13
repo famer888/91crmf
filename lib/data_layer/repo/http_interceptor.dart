@@ -21,8 +21,7 @@ class AutoEncryptAndDecryptInterceptor extends Interceptor {
   static bool _warnJump = false;
 
   @override
-  void onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     final Map data = {..._appInfo};
 
     if (options.data != null) {
@@ -52,8 +51,7 @@ class AutoEncryptAndDecryptInterceptor extends Interceptor {
     if (response.data case final Map data when data['data'] != null) {
       Map<dynamic, dynamic> result = Map.from(response.data);
 
-      response.data =
-          await fd.compute(PlatformAwareCrypto.decryptResData, response.data);
+      response.data = await fd.compute(PlatformAwareCrypto.decryptResData, response.data);
       // response.data = await PlatformAwareCrypto.decryptResData(response.data);
 
       if (response.requestOptions.path.contains('home/config')) {
@@ -88,8 +86,11 @@ class AutoEncryptAndDecryptInterceptor extends Interceptor {
       BotToast.showWidget(
           toastBuilder: (cancelFunc) => Stack(
                 children: [
-                  AbsorbPointer(
-                    child: Container(),
+                  Positioned.fill(
+                    child: AbsorbPointer(
+                      absorbing: true,
+                      child: Container(color: const Color.fromRGBO(0, 0, 0, 0.35)),
+                    ),
                   ),
                   RegularDialog(
                     title: '',
@@ -108,7 +109,7 @@ class AutoEncryptAndDecryptInterceptor extends Interceptor {
       if (AppGlobal.context != null) {
         final apiDio = AppGlobal.context!.read<AppRepo>().apiDio;
         Map<String, dynamic> map = {
-          'url': response.requestOptions.path,
+          'url': response.requestOptions.baseUrl + response.requestOptions.path,
           'req_header': Map.from(response.requestOptions.headers),
           'res_header': Map.from(response.headers.map),
           'data': response.data,

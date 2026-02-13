@@ -2,19 +2,18 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jycrpj/domain/model/banner_model.dart';
+import 'package:jycrpj/domain/model/category_topic_model.dart';
 import 'package:jycrpj/ui_layer/router/routes.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
-import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/model/pzhan_model.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 
 import '../../../../../../report/ui_layer/report_general_banner.dart';
-
 import '../../../../../../report/ui_layer/report_gesture_detector.dart';
 
 class PZhanBannerTopicsView extends StatefulWidget {
   final ValueNotifier<List<BannerModel>> bannersNotifier;
-  final ValueNotifier<List<PZhanCategoryTopicModel>> topicsNotifier;
+  final ValueNotifier<List<CategoryTopicModel>> topicsNotifier;
   final Color titleColor;
   final Color topicBackgroundColor;
   final Color zkTextColor;
@@ -37,7 +36,7 @@ class PZhanBannerTopicsView extends StatefulWidget {
 }
 
 class _PZhanBannerTopicsViewState extends State<PZhanBannerTopicsView> {
-  List<PZhanCategoryTopicModel> contentTopics = [];
+  List<CategoryTopicModel> contentTopics = [];
   bool isShowAllTopics = false;
 
   @override
@@ -153,7 +152,7 @@ class _PZhanBannerTopicsViewState extends State<PZhanBannerTopicsView> {
     ]);
   }
 
-  Widget girdTopicView(List<PZhanCategoryTopicModel> contentTopics) {
+  Widget girdTopicView(List<CategoryTopicModel> contentTopics) {
     return SizedBox(
       height: 75.w,
       // padding: EdgeInsets.all(5.w),

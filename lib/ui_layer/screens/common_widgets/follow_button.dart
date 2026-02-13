@@ -6,8 +6,8 @@ import '../theme.dart';
 import '../../../report/ui_layer/report_gesture_detector.dart';
 
 class FollowButton extends StatelessWidget {
-  const FollowButton(
-      {super.key, required this.isFollowed, required this.onTap});
+  const FollowButton({super.key, required this.isFollowed, required this.onTap});
+
   final bool isFollowed;
   final VoidCallback onTap;
 
@@ -24,17 +24,13 @@ class FollowButton extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 10.w),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            color: isFollowed ? MyTheme.cyanColor00edfd : Colors.transparent,
-            borderRadius: BorderRadius.circular(12.5.w),
-            border: Border.all(
-                color:
-                    isFollowed ? Colors.transparent : MyTheme.cyanColor00edfd,
-                width: 1.w)),
+          color: isFollowed ? MyTheme.blueColor81_151_241 : Colors.transparent,
+          borderRadius: BorderRadius.circular(5.w),
+          border: Border.all(color: isFollowed ? Colors.transparent : MyTheme.blueColor81_151_241, width: 1.w),
+        ),
         child: Text(
-          isFollowed
-              ? 'ygz'.tr(context: context)
-              : '+${'gz'.tr(context: context)}',
-          style: isFollowed ? MyTheme.white11 : MyTheme.blue80_11,
+          isFollowed ? 'ygz'.tr(context: context) : '+${'gz'.tr(context: context)}',
+          style: isFollowed ? MyTheme.white12 : MyTheme.blue80_12.copyWith(color: MyTheme.blueColor81_151_241),
         ),
       ),
     );

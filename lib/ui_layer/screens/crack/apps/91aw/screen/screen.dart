@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 class Aw91CommunityScreen extends StatefulWidget {
   final int id;
   final CrackApp? crackApp;
+  final bool showMoreButton;
   final VoidCallback? openEndDrawer;
 
   const Aw91CommunityScreen({
@@ -21,6 +22,7 @@ class Aw91CommunityScreen extends StatefulWidget {
     required this.id,
     this.crackApp,
     this.openEndDrawer,
+    this.showMoreButton = true,
   });
 
   @override
@@ -43,10 +45,11 @@ class _Aw91CommunityScreenState extends State<Aw91CommunityScreen> {
               builder: (context, isUnlockAw91, child) {
                 return Scaffold(
                   appBar: SearchAppBar(
-                    showLeftBack: false,
                     isCrackApp: true,
+                    showLeftBack: false,
                     type: CrackAppType.aw91,
                     openEndDrawer: widget.openEndDrawer,
+                    showMoreButton: widget.showMoreButton,
                     onTap: () {
                       if (isUnlockAw91) {
                         const Aw91VideoSearchRoute(args: '').push(context);

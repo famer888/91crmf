@@ -10,7 +10,7 @@ import 'package:jycrpj/ui_layer/notifiers/home_config_notifier.dart';
 import 'package:jycrpj/ui_layer/router/routes.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/empty_data.dart';
-import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/model/pzhan_model.dart';
+import 'package:jycrpj/ui_layer/screens/crack/model/app_model.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
@@ -37,12 +37,8 @@ class _PZhanVideoSearchScreenState extends State<PZhanVideoSearchScreen> {
       MyToast.showText(text: 'qsrgjz'.tr());
       return;
     }
-    final searchHistory = _homeConfigNotifier.getSearchHistory(key: pzhanSearchHistoryKey);
-
+    _homeConfigNotifier.upsertSearchHistory(key: pzhanSearchHistoryKey, searchWord: keyword);
     final title = keyword.replaceAll('/', '|');
-    if (!searchHistory.contains(keyword)) {
-      _homeConfigNotifier.upsertSearchHistory(key: pzhanSearchHistoryKey, searchHistory: searchHistory..add(keyword));
-    }
     PZhanSearchResultRoute(word: title, type: 1).push(context);
   }
 
@@ -112,8 +108,7 @@ class _PZhanVideoSearchScreenState extends State<PZhanVideoSearchScreen> {
                                     onSubmitted(text);
                                   },
                                   onDelete: () {
-                                    final history = _homeConfigNotifier.getSearchHistory(key: pzhanSearchHistoryKey);
-                                    _homeConfigNotifier.upsertSearchHistory(key: pzhanSearchHistoryKey, searchHistory: history..remove(text));
+                                    _homeConfigNotifier.removeSearchHistory(key: pzhanSearchHistoryKey, searchWord: text);
                                   },
                                 )
                             ],
@@ -218,6 +213,12 @@ class _KeywordTile extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback onDelete;
 
+  String _limitText(String text, int maxChars) {
+    final chars = text.characters;
+    if (chars.length <= maxChars) return text;
+    return chars.take(maxChars).toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -230,10 +231,16 @@ class _KeywordTile extends StatelessWidget {
           ReportGestureDetector(
             onTap: onTap,
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 100.w),
+              constraints: BoxConstraints(maxWidth: 104.w),
               child: Text(
+                // _limitText(text, 8),
                 text,
-                style: TextStyle(color: const Color.fromRGBO(255, 255, 255, 0.7), fontSize: 14.sp, fontWeight: FontWeight.w400),
+                style: TextStyle(
+                  color: const Color.fromRGBO(255, 255, 255, 0.7),
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w400,
+                  overflow: TextOverflow.ellipsis,
+                ),
                 maxLines: 1,
               ),
             ),
@@ -297,7 +304,7 @@ class _SearchContentView extends StatefulWidget {
 
 class _SearchContentViewState extends State<_SearchContentView> {
   late final _appDomain = context.read<DynamicDomain>();
-  final ValueNotifier<List<PZhanSearchHotModel>> _hotsNotifier = ValueNotifier([]);
+  final ValueNotifier<List<AppSearchHotModel>> _hotsNotifier = ValueNotifier([]);
 
   @override
   void initState() {
@@ -320,7 +327,7 @@ class _SearchContentViewState extends State<_SearchContentView> {
     if (result.isValid && mounted) {
       final data = result.data;
       if (data['list'] case final List data when data.isNotEmpty) {
-        _hotsNotifier.value = data.map<PZhanSearchHotModel>((e) => PZhanSearchHotModel.fromJson(e)).toList();
+        _hotsNotifier.value = data.map<AppSearchHotModel>((e) => AppSearchHotModel.fromJson(e)).toList();
       }
     } else if (result.msg case final msg?) {
       MyToast.showText(text: msg);

@@ -13,6 +13,7 @@ class UserNotifier extends ChangeNotifier {
   UserNotifier(this._remoteDomain) {
     _remoteDomain.tokenStatusStream.listen(_tokenStatusListener);
   }
+
   final RemoteDomain _remoteDomain;
 
   bool get isInit => _isInit;
@@ -22,6 +23,7 @@ class UserNotifier extends ChangeNotifier {
   late Member _member;
 
   SystemNotice? _systemNotice;
+
   SystemNotice? get systemNotice => _systemNotice;
 
   MyTokenStatus? get tokenStatus => _tokenStatus;
@@ -37,6 +39,20 @@ class UserNotifier extends ChangeNotifier {
   Set<String> get userFollowingStatus => {..._userFollowingStatus};
   final Set<String> _userFollowingStatus = {};
   final Set<String> _isLoadingFollowUser = {};
+
+  void addUserFollowStatus(String id) {
+    if (!_userFollowingStatus.contains(id)) {
+      _userFollowingStatus.add(id);
+      notifyListeners();
+    }
+  }
+
+  void removeUserFollowStatus(String id) {
+    if (_userFollowingStatus.contains(id)) {
+      _userFollowingStatus.add(id);
+      notifyListeners();
+    }
+  }
 
   void patchUserFollowStatus(Iterable<String> ids) {
     _userFollowingStatus.addAll(ids);
@@ -160,7 +176,8 @@ class UserNotifier extends ChangeNotifier {
     _member = _member.copyWith(aiDrawValue: num);
     notifyListeners();
   }
- void setAiNovelValue({required int num}) {
+
+  void setAiNovelValue({required int num}) {
     _member = _member.copyWith(aiNovelValue: num);
     notifyListeners();
   }

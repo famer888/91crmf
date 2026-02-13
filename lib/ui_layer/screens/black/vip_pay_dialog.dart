@@ -15,7 +15,7 @@ import '../image_paths.dart';
 import '../theme.dart';
 
 class VipPayDialog {
-  static void showVipDialog(BuildContext context) {
+  static void showVipDialog(BuildContext context, {VoidCallback? cancelCallback}) {
     MyDialog.showDialog(
       context: context,
       child: RegularDialog(
@@ -39,7 +39,7 @@ class VipPayDialog {
                   children: [
                     Text('wxts'.tr(context: context), style: MyTheme.white255_13_M.s18),
                     SizedBox(height: 27.w),
-                    Text('jbhcjs'.tr(context: context), style: MyTheme.white255_13.s14.w400),
+                    Text('jbcjs'.tr(context: context), style: MyTheme.white255_13.s14.w400),
                     SizedBox(height: 40.w),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -80,7 +80,10 @@ class VipPayDialog {
                 Align(
                   alignment: Alignment.topRight,
                   child: ReportGestureDetector(
-                    onTap: () => context.pop(),
+                    onTap: () {
+                      context.pop();
+                      cancelCallback?.call();
+                    },
                     child: SizedBox(
                       width: 20.w,
                       height: 20.w,

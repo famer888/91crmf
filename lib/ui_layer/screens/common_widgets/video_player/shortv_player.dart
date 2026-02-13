@@ -1,13 +1,12 @@
 // ignore_for_file: non_constant_identifier_names
 import 'dart:math';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
-import 'package:visibility_detector/visibility_detector.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jycrpj/domain/api_validator.dart';
 import 'package:jycrpj/domain/domain.dart';
 import 'package:jycrpj/domain/model/member_model.dart';
@@ -16,14 +15,18 @@ import 'package:jycrpj/domain/type_def.dart';
 import 'package:jycrpj/ui_layer/notifiers/user_notifier.dart';
 import 'package:jycrpj/ui_layer/router/routes.dart';
 import 'package:jycrpj/ui_layer/screens/asmr/voice_player/voice_player_manager.dart';
-import 'package:jycrpj/ui_layer/screens/common_widgets/dialog/my_dialog.dart';
+import 'package:jycrpj/ui_layer/screens/black/vip_pay_dialog.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/video_player/utils/nvideourl_minxin.dart';
+import 'package:jycrpj/ui_layer/screens/crack/app_video_visit_util.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
-import 'package:jycrpj/ui_layer/screens/vlog/widgets/vlog_comment_sheet.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
+import 'package:jycrpj/ui_layer/screens/vlog/widgets/vlog_comment_sheet.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
+import 'package:provider/provider.dart';
+import 'package:video_player/video_player.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../../report/ui_layer/report_gesture_detector.dart';
 
@@ -61,13 +64,15 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initURL();
   }
 
   void initURL() async {
     if (widget.info == null) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AppVisitUtil.updateVlogVisitRecord(context, widget.info!);
+    });
     String source_240 = widget.info?.source_240 ?? '';
     String preview_url = widget.info?.previewUrl ?? '';
 
@@ -132,22 +137,19 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
                 playerLoadingFallback: Stack(
                   children: [
                     Positioned.fill(
-                        child: MyImage.network(widget.info?.coverVertical ?? '',
-                            fit: BoxFit.contain,
-                            backgroundColor: MyTheme.bgColor)),
+                      child: MyImage.network(widget.info?.coverVertical ?? '', fit: BoxFit.contain, backgroundColor: MyTheme.bgColor),
+                    ),
                     Center(
                       child: SizedBox(
                         height: 40,
                         width: 40,
                         child: CircularProgressIndicator(
                           backgroundColor: Colors.grey[400],
-                          valueColor: const AlwaysStoppedAnimation(
-                            MyTheme.blueColor64,
-                          ),
+                          valueColor: const AlwaysStoppedAnimation(MyTheme.blueColor64),
                           strokeWidth: 1.5,
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 controls: SinkPortraitWidget(
@@ -157,7 +159,7 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
                   info: widget.info,
                   isPreview: isPreview,
                   skiPreview: () {
-                    showAlertVp();
+                    showAlertVp(context);
                   },
                   likeAct: () {
                     likeVideoRes();
@@ -166,17 +168,26 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
                     collectVideoRes();
                   },
                   commentAct: () {
-                    showMoreVideoComment(
-                        context: context, data: widget.info?.id);
+                    showMoreVideoComment(context: context, data: widget.info?.id, commentCount: widget.info?.countComment ?? 0);
                   },
                   followAct: () {
                     followUserRes();
                   },
                   enterUserCenterAct: () {
+                    //跳转到个人中心
                     if (widget.info?.member != null) {
-                      //跳转到个人中心
-                      UserCenterRoute('${widget.info?.member?.aff}')
-                          .push(context);
+                      final aff = '${widget.info?.member?.aff}';
+                      final userNotifier = context.read<UserNotifier>();
+                      if ((widget.info?.member?.isFollow ?? 0) > 0) {
+                        if (!userNotifier.userFollowingStatus.contains(aff)) {
+                          userNotifier.addUserFollowStatus(aff);
+                        }
+                      } else {
+                        if (userNotifier.userFollowingStatus.contains(aff)) {
+                          userNotifier.removeUserFollowStatus(aff);
+                        }
+                      }
+                      UserCenterRoute(aff).push(context);
                     }
                   },
                   keepBottomBlank: widget.keepBottomBlank,
@@ -186,16 +197,13 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
                 playerErrorFallback: Container(),
                 videoFit: BoxFit.contain,
                 backgroundColor: MyTheme.bgColor,
-                controls: SinkPortraitWidget(
-                  flickManager: flickManager!,
-                  info: widget.info,
-                ),
+                controls: SinkPortraitWidget(flickManager: flickManager!, info: widget.info),
               ),
             ),
           );
   }
 
-  showMoreVideoComment({required BuildContext context, dynamic data}) {
+  showMoreVideoComment({required BuildContext context, dynamic data, int commentCount = 0}) {
     return showModalBottomSheet(
         backgroundColor: Colors.transparent,
         isScrollControlled: true,
@@ -203,15 +211,15 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
         builder: (BuildContext context) {
           return StatefulBuilder(builder: (ctx, setBottomSheetState) {
             //评论弹窗
-            return VlogCommentSheet(id: data);
+            return VlogCommentSheet(id: data, commentCount: commentCount);
           });
         });
   }
 
-  void showAlertVp({bool goby = false}) {
+  void showAlertVp(BuildContext context, {bool goby = false}) {
     final userNotifier = context.read<UserNotifier>();
     Member user = userNotifier.member;
-    int money = user.money ?? 0;
+    int money = user.money;
     int needmoney = widget.info?.coins ?? 0;
     bool isInsufficient = money < needmoney;
     if (goby && !isInsufficient) {
@@ -219,55 +227,55 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
       return;
     }
     if (widget.info?.isFree == 2) {
-      MyDialog.showAnimationDialog(
-          cancelTxt: 'qx'.tr(context: context),
-          confirmTxt: isInsufficient
-              ? 'qwcz'.tr(context: context)
-              : 'gmgk'.tr(context: context),
-          setContent: () {
-            return Column(
-              children: [
-                Text('gmspkwz'.tr(context: context),
-                    style: MyTheme.black13,
-                    maxLines: 3,
-                    textAlign: TextAlign.center),
-                SizedBox(height: 15.w),
-                Text("$needmoney${'jb'.tr(context: context)}",
-                    style: MyTheme.jellyCyan_15, textAlign: TextAlign.center),
-                SizedBox(height: 15.w),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("${'ktvpzk'.tr(context: context)}：$money",
-                        style: MyTheme.black13),
-                  ],
-                ),
-              ],
-            );
-          },
-          confirm: () {
-            if (isInsufficient) {
-              const CoinRechargeRoute().push(context);
-            } else {
-              byVideoRes(money - needmoney); //直接购买
-            }
-          });
+      VipPayDialog.showCoinsDialog(context: context, member: user, coins: needmoney.toDouble(), onPay: () {
+        byVideoRes(money - needmoney); //直接购买
+        final router = GoRouter.of(context);
+        if (context.mounted && router.canPop()) {
+          context.pop();
+        }
+      });
+      // MyDialog.showAnimationDialog(
+      //     cancelTxt: 'qx'.tr(context: context),
+      //     confirmTxt: isInsufficient ? 'qwcz'.tr(context: context) : 'gmgk'.tr(context: context),
+      //     setContent: () {
+      //       return Column(
+      //         children: [
+      //           Text('gmspkwz'.tr(context: context), style: MyTheme.black13, maxLines: 3, textAlign: TextAlign.center),
+      //           SizedBox(height: 15.w),
+      //           Text("$needmoney${'jb'.tr(context: context)}", style: MyTheme.jellyCyan_15, textAlign: TextAlign.center),
+      //           SizedBox(height: 15.w),
+      //           Row(
+      //             mainAxisAlignment: MainAxisAlignment.center,
+      //             children: [
+      //               Text("${'ktvpzk'.tr(context: context)}：$money", style: MyTheme.black13),
+      //             ],
+      //           ),
+      //         ],
+      //       );
+      //     },
+      //     confirm: () {
+      //       if (isInsufficient) {
+      //         const CoinRechargeRoute().push(context);
+      //       } else {
+      //         byVideoRes(money - needmoney); //直接购买
+      //       }
+      //     });
     } else {
-      MyDialog.showAnimationDialog(
-          cancelTxt: 'fxlvip'.tr(context: context),
-          confirmTxt: 'czvip'.tr(context: context),
-          setContent: () {
-            return Text('gmvkwz'.tr(context: context),
-                style: MyTheme.black13,
-                maxLines: 3,
-                textAlign: TextAlign.center);
-          },
-          cancel: () {
-            const MineShareToUserRoute().push(context);
-          },
-          confirm: () {
-            const VipCenterRoute().push(context);
-          });
+      // flickManager?.flickControlManager?.pause();
+      VipPayDialog.showVipDialog(context);
+
+      // MyDialog.showAnimationDialog(
+      //     cancelTxt: 'fxlvip'.tr(context: context),
+      //     confirmTxt: 'czvip'.tr(context: context),
+      //     setContent: () {
+      //       return Text('gmvkwz'.tr(context: context), style: MyTheme.black13, maxLines: 3, textAlign: TextAlign.center);
+      //     },
+      //     cancel: () {
+      //       const MineShareToUserRoute().push(context);
+      //     },
+      //     confirm: () {
+      //       const VipCenterRoute().push(context);
+      //     });
     }
   }
 
@@ -279,9 +287,9 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
     if (res.isValid) {
       userNotifier.setMoney(money: money);
       widget.info?.source_240 = res.data["url"] ?? '';
-      await CommonUtils.clearPassiveCache(
-          videoUrl: widget.info?.source_240 ?? '');
+      await CommonUtils.clearPassiveCache(videoUrl: widget.info?.source_240 ?? '');
       initURL();
+      MyToast.showText(text: tr('gmcg'));
     } else {
       MyToast.showText(text: res.msg ?? '');
     }
@@ -314,11 +322,9 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
   }
 
   Future<void> followUserRes() async {
-    final res = await userDomain.communityFollowUser(
-        aff: '${widget.info?.member?.aff}');
+    final res = await userDomain.communityFollowUser(aff: '${widget.info?.member?.aff}');
     if (res.isValid) {
-      widget.info?.member?.isFollow =
-          widget.info?.member?.isFollow == 1 ? 0 : 1;
+      widget.info?.member?.isFollow = widget.info?.member?.isFollow == 1 ? 0 : 1;
       if (mounted) setState(() {});
     } else {
       MyToast.showText(text: res.msg ?? '');
@@ -385,10 +391,8 @@ class _SinkPortraitWidgetState extends State<SinkPortraitWidget> {
   }
 
   _onHorizontalDragStart(DragStartDetails details) {
-    _currentPos = flickManager?.flickVideoManager?.videoPlayerValue?.position ??
-        const Duration(seconds: 0);
-    _duration = flickManager?.flickVideoManager?.videoPlayerValue?.duration ??
-        const Duration(seconds: 0);
+    _currentPos = flickManager?.flickVideoManager?.videoPlayerValue?.position ?? const Duration(seconds: 0);
+    _duration = flickManager?.flickVideoManager?.videoPlayerValue?.duration ?? const Duration(seconds: 0);
 
     setState(() {
       updatePrevDx = details.globalPosition.dx;
@@ -412,8 +416,7 @@ class _SinkPortraitWidgetState extends State<SinkPortraitWidget> {
     // 计算进度条的比例
     double durProgCheck = _duration.inMilliseconds.toDouble() / 100;
     int checkTransfrom = (movePropCheck * durProgCheck).toInt();
-    int dragRange =
-        isBefore ? updatePosX + checkTransfrom : updatePosX - checkTransfrom;
+    int dragRange = isBefore ? updatePosX + checkTransfrom : updatePosX - checkTransfrom;
 
     // 是否溢出 最大
     int lastSecond = _duration.inMilliseconds;
@@ -473,9 +476,7 @@ class _SinkPortraitWidgetState extends State<SinkPortraitWidget> {
     String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
     String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
     int inHours = duration.inHours;
-    return inHours > 0
-        ? "$inHours:$twoDigitMinutes:$twoDigitSeconds"
-        : "$twoDigitMinutes:$twoDigitSeconds";
+    return inHours > 0 ? "$inHours:$twoDigitMinutes:$twoDigitSeconds" : "$twoDigitMinutes:$twoDigitSeconds";
   }
 
   Widget _buildLinearProgress() {
@@ -547,17 +548,12 @@ class _SinkPortraitWidgetState extends State<SinkPortraitWidget> {
   }
 
   Widget _buildProgressWidget() {
-    if (!(flickManager!.flickVideoManager?.videoPlayerValue?.isInitialized ??
-        false)) {
+    if (!(flickManager!.flickVideoManager?.videoPlayerValue?.isInitialized ?? false)) {
       return Container();
     }
 
-    Duration currentPos =
-        flickManager?.flickVideoManager?.videoPlayerValue?.position ??
-            const Duration(seconds: 0);
-    Duration duration =
-        flickManager?.flickVideoManager?.videoPlayerValue?.duration ??
-            const Duration(seconds: 0);
+    Duration currentPos = flickManager?.flickVideoManager?.videoPlayerValue?.position ?? const Duration(seconds: 0);
+    Duration duration = flickManager?.flickVideoManager?.videoPlayerValue?.duration ?? const Duration(seconds: 0);
     return Positioned(
       right: 0,
       left: 0,
@@ -594,14 +590,11 @@ class _SinkPortraitWidgetState extends State<SinkPortraitWidget> {
 
   @override
   Widget build(BuildContext context) {
-    FlickVideoManager flickVideoManager =
-        Provider.of<FlickVideoManager>(context);
-    bool flag = (flickVideoManager.videoPlayerValue!.isBuffering &&
-            flickVideoManager.videoPlayerValue!.isPlaying) ||
+    FlickVideoManager flickVideoManager = Provider.of<FlickVideoManager>(context);
+    bool flag = (flickVideoManager.videoPlayerValue!.isBuffering && flickVideoManager.videoPlayerValue!.isPlaying) ||
         !flickVideoManager.videoPlayerValue!.isInitialized;
 
-    FlickControlManager controlManager =
-        Provider.of<FlickControlManager>(context);
+    FlickControlManager controlManager = Provider.of<FlickControlManager>(context);
     FlickVideoManager videoManager = Provider.of<FlickVideoManager>(context);
     return Stack(
       children: [
@@ -614,8 +607,7 @@ class _SinkPortraitWidgetState extends State<SinkPortraitWidget> {
                       width: 40,
                       child: CircularProgressIndicator(
                         backgroundColor: Colors.grey[400],
-                        valueColor:
-                            const AlwaysStoppedAnimation(MyTheme.blueColor64),
+                        valueColor: const AlwaysStoppedAnimation(MyTheme.blueColor64),
                         strokeWidth: 1.5,
                       ),
                     ),
@@ -642,9 +634,7 @@ class _SinkPortraitWidgetState extends State<SinkPortraitWidget> {
             behavior: HitTestBehavior.translucent,
             onTap: () {
               try {
-                videoManager.isVideoEnded
-                    ? controlManager.replay()
-                    : controlManager.togglePlay();
+                videoManager.isVideoEnded ? controlManager.replay() : controlManager.togglePlay();
               } catch (e) {
                 CommonUtils.log(e);
               }

@@ -101,12 +101,14 @@ class Member {
     this.vipAppPrivilege,
     this.coinsHlPrivilege,
     this.vipHlPrivilege,
+    this.coinsVlogPrivilege,
+    this.vipVlogPrivilege,
     required this.stripValue,
     required this.vipUpgrade,
     required this.bindEmail,
     required this.aiMagicValue,
-      required this.aiDrawValue,
-      required this.aiNovelValue,
+    required this.aiDrawValue,
+    required this.aiNovelValue,
     required this.aiKissValue,
     required this.aiAudioValue,
     required this.aiVideoFaceValue,
@@ -206,7 +208,7 @@ class Member {
   final int bindEmail;
   final int aiMagicValue;
   final int aiDrawValue;
-    final int aiNovelValue;
+  final int aiNovelValue;
   final int aiKissValue;
   final int aiAudioValue;
   final int aiVideoFaceValue;
@@ -216,12 +218,16 @@ class Member {
   final int? vipAppPrivilege;
   final int? coinsHlPrivilege;
   final int? vipHlPrivilege;
+  final int? coinsVlogPrivilege;
+  final int? vipVlogPrivilege;
   final String vipImg;
   final String vipIcon;
 
   factory Member.fromJson(Map<String, dynamic> json) => Member(
         editAvatar: json['edit_avatar'] ?? 0,
         editUser: json['edit_User'] ?? 0,
+        coinsVlogPrivilege: json['coins_vlog_privilege'] ?? 0,
+        vipVlogPrivilege: json['vip_vlog_privilege'] ?? 0,
         coinsAppPrivilege: json['coins_app_privilege'] ?? 0,
         vipAppPrivilege: json['vip_app_privilege'] ?? 0,
         coinsHlPrivilege: json['coins_hl_privilege'] ?? 0,
@@ -297,9 +303,7 @@ class Member {
                 ? json['free_view_cnt']
                 : int.parse(json['free_view_cnt']),
         lastactivity: json['lastactivity'],
-        thumbStr: json['thumb_str'] == null || json['thumb_str'] == ''
-            ? null
-            : json['thumb_str'],
+        thumbStr: json['thumb_str'] == null || json['thumb_str'] == '' ? null : json['thumb_str'],
         oauthStr: json['oauth_str'],
         isSetPassword: json['is_set_password'],
         level: json['level'],
@@ -323,11 +327,11 @@ class Member {
         bindEmail: json['bind_email'] ?? 0,
         aiMagicValue: json['ai_magic_value'] ?? 0,
         aiDrawValue: json['ai_draw_value'] ?? 0,
-                aiNovelValue: json['ai_novel_value'] ?? 0,
+        aiNovelValue: json['ai_novel_value'] ?? 0,
         aiKissValue: json['ai_kiss_value'] ?? 0,
         aiAudioValue: json['ai_audio_value'] ?? 0,
         aiVideoFaceValue: json['ai_video_face_value'] ?? 0,
-                vipImg: json['vip_img'] ?? '',
+        vipImg: json['vip_img'] ?? '',
         vipIcon: json['vip_icon'] ?? '',
       );
 
@@ -422,7 +426,7 @@ class Member {
         'vip_upgrade': vipUpgrade,
         'bind_email': bindEmail,
         'ai_magic_value': aiMagicValue,
-        'ai_draw_value': aiDrawValue, 
+        'ai_draw_value': aiDrawValue,
         'ai_novel_value': aiNovelValue,
         'ai_kiss_value': aiKissValue,
         'ai_audio_value': aiAudioValue,
@@ -433,6 +437,8 @@ class Member {
         'vip_app_privilege': vipAppPrivilege,
         'coins_hl_privilege': coinsHlPrivilege,
         'vip_hl_privilege': vipHlPrivilege,
+        'coins_vlog_privilege': coinsVlogPrivilege,
+        'vip_vlog_privilege': coinsVlogPrivilege,
         'vip_img': vipImg,
         'vip_icon': vipIcon,
       };
@@ -661,9 +667,7 @@ class Share {
   final String? affUrl;
 
   factory Share.fromJson(Map<String, dynamic> json) => Share(
-        affUrlCopy: json['aff_url_copy'] == null
-            ? null
-            : AffUrlCopy.fromJson(json['aff_url_copy']),
+        affUrlCopy: json['aff_url_copy'] == null ? null : AffUrlCopy.fromJson(json['aff_url_copy']),
         affCode: json['aff_code'],
         affUrl: json['aff_url'],
       );

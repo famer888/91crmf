@@ -7,6 +7,8 @@ import 'package:jycrpj/ui_layer/screens/black/widget/interval_gesture_widget.dar
 import 'package:jycrpj/ui_layer/screens/black/widget/subscript.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_list_view.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_community_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/crack_app_type.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -85,18 +87,24 @@ class _BuyChildScreenState extends State<BuyChildScreen> {
       behavior: HitTestBehavior.translucent,
       onTap: () {
         // 跳转视频详情
-        if (buyItemModel.appName == 'hjgj') {
+        if (buyItemModel.appName == CrackAppType.clsq.appName) {
           // 草榴社区
-          const ClCommunityRoute(id: 1).push(context);
-        } else if (buyItemModel.appName == 'awjq') {
+          const ClCommunityRoute(id: 1, showMoreButton: false).push(context);
+        } else if (buyItemModel.appName == CrackAppType.awjq.appName) {
           // 暗网禁区
-          const AnWangRestrictedRoute(id: 1).push(context);
-        } else if (buyItemModel.appName == '91aw') {
+          const AnWangRestrictedRoute(id: 1, showMoreButton: false).push(context);
+        } else if (buyItemModel.appName == CrackAppType.aw91.appName) {
           // 91暗网
-          const DarkWeb91Route(id: 1).push(context);
-        } else if (buyItemModel.appName == 'zpc') {
+          const DarkWeb91Route(id: 1, showMoreButton: false).push(context);
+        } else if (buyItemModel.appName == CrackAppType.zpc.appName) {
           // 91制片厂
-          const ZpcCommunityRoute(id: 1).push(context);
+          const ZpcCommunityRoute(id: 1, showMoreButton: false).push(context);
+        } else if (buyItemModel.appName == CrackAppType.hjsq.appName) {
+          // 海角社区
+          const HjsqCommunityRoute(id: 1, showMoreButton: false).push(context);
+        } else if (buyItemModel.appName == CrackAppType.tiktok51.appName) {
+          // 51Tiktok
+          const Tiktok51CommunityRoute(id: 1, showMoreButton: false).push(context);
         }
       },
       child: Column(
@@ -211,3 +219,19 @@ class _BuyChildScreenState extends State<BuyChildScreen> {
     return const SizedBox();
   }
 }
+
+// 短视频
+class DspChildScreen extends StatefulWidget {
+  const DspChildScreen({super.key});
+
+  @override
+  State<DspChildScreen> createState() => _DspChildScreenState();
+}
+
+class _DspChildScreenState extends State<DspChildScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+

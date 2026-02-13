@@ -16,12 +16,14 @@ class ClCommunityScreen extends StatefulWidget {
   final int id;
   final CrackApp? crackApp;
   final VoidCallback? openEndDrawer;
+  final bool showMoreButton;
 
   const ClCommunityScreen({
     super.key,
     required this.id,
     this.crackApp,
     this.openEndDrawer,
+    this.showMoreButton = true,
   });
 
   @override
@@ -44,10 +46,11 @@ class _ClCommunityScreenState extends State<ClCommunityScreen> {
               builder: (context, isUnlockClsq, child) {
                 return Scaffold(
                   appBar: SearchAppBar(
-                    showLeftBack: false,
                     isCrackApp: true,
+                    showLeftBack: false,
                     type: CrackAppType.clsq,
                     openEndDrawer: widget.openEndDrawer,
+                    showMoreButton: widget.showMoreButton,
                     onTap: () {
                       if (isUnlockClsq) {
                         const ClVideoSearchRoute('').push(context);

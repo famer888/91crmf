@@ -148,7 +148,7 @@ class VideoData {
   final int? enableSoundtrack;
   final int? isDelete;
   dynamic rejectReason;
-  final int? rejectAt;
+  final String? rejectAt;
   final int? isTop;
   final int? clubId;
   final int? isTester;

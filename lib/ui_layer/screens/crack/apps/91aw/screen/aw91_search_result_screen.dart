@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jycrpj/domain/domain.dart';
@@ -9,6 +8,7 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/my_app_bar.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_list_view.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/screen_background.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/91aw/widget/aw91_feed_card.dart';
+import 'package:jycrpj/ui_layer/screens/crack/widgets/scroll_top_button.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +25,9 @@ class Aw91SearchResultScreen extends StatefulWidget {
 
 class _Aw91SearchResultScreenState extends State<Aw91SearchResultScreen> {
   late final _appDomain = context.read<AppDomain>();
+  final ScrollController _scrollController = ScrollController();
+  final ValueNotifier<bool> _showToTopButtonNotifier = ValueNotifier(false);
+  double _showThreshold = 0;
 
   Future<List<FeedModel>?> _getData({
     required int page,
@@ -38,6 +41,12 @@ class _Aw91SearchResultScreenState extends State<Aw91SearchResultScreen> {
 
     if (result.status == 1) {
       final feedModelList = result.data?.map<FeedModel>((x) => FeedModel.fromJson(x)).toList();
+      if (feedModelList == null) {
+        return [];
+      }
+      if (feedModelList.isEmpty) {
+        return [];
+      }
       return feedModelList;
     } else {
       MyToast.showText(text: result.msg ?? '');
@@ -48,26 +57,62 @@ class _Aw91SearchResultScreenState extends State<Aw91SearchResultScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showThreshold = ScreenUtil().screenHeight * 0.40;
+    });
+    _scrollController.addListener(() {
+      _showToTopButtonNotifier.value = (_scrollController.offset > _showThreshold);
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _showToTopButtonNotifier.dispose();
+    super.dispose();
+  }
+
+  void _scrollToTop() {
+    if (!_scrollController.hasClients) return;
+
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return ScreenBackground(
       child: Scaffold(
-        appBar: MyAppBar(title: 'ssjg'.tr(context: context)),
-        body: MyListView.grid(
-          padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
-          childAspectRatio: MyTheme.aspectRatio,
-          crossAxisSpacing: 8.w,
-          itemBuilder: (context, item, index) => Aw91FeedCard(isList: false, feed: item).withSearchReport({
-            "event": "keyword_click",
-            "keyword": widget.word,
-            "click_item_id": item.id,
-            "click_item_type_key": "video",
-            "click_item_type_name": "视频",
-            "click_ position": index,
-          }),
-          onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: widget.type),
+        appBar: MyAppBar(title: widget.word),
+        body: Stack(
+          children: [
+            MyListView.grid(
+              scrollController: _scrollController,
+              padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
+              childAspectRatio: MyTheme.aspectRatio,
+              crossAxisSpacing: 8.w,
+              itemBuilder: (context, item, index) => Aw91FeedCard(isList: false, feed: item).withSearchReport({
+                "event": "keyword_click",
+                "keyword": widget.word,
+                "click_item_id": item.id,
+                "click_item_type_key": "video",
+                "click_item_type_name": "视频",
+                "click_ position": index,
+              }),
+              onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: widget.type),
+            ),
+            Positioned(
+              bottom: 40.w,
+              right: 20.w,
+              child: ScrollTopButton(
+                showToTopButtonNotifier: _showToTopButtonNotifier,
+                scrollTopCallback: _scrollToTop,
+              ),
+            ),
+          ],
         ),
       ),
     );

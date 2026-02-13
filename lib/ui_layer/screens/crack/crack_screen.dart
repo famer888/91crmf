@@ -321,16 +321,16 @@ class _CrackScreenState extends State<CrackScreen> {
   void _routeAppDetails(BuildContext context, CrackApp appData) {
     if (appData.appName == 'hjgj') {
       // 草榴社区
-      const ClCommunityRoute(id: 1).push(context);
+      const ClCommunityRoute(id: 1, showMoreButton: true).push(context);
     } else if (appData.appName == 'awjq') {
       // 暗网禁区
-      const AnWangRestrictedRoute(id: 1).push(context);
+      const AnWangRestrictedRoute(id: 1, showMoreButton: true).push(context);
     } else if (appData.appName == '91aw') {
       // 91暗网
-      const DarkWeb91Route(id: 1).push(context);
+      const DarkWeb91Route(id: 1, showMoreButton: true).push(context);
     } else if (appData.appName == 'zpc') {
       // 91制片厂
-      const ZpcCommunityRoute(id: 1).push(context);
+      const ZpcCommunityRoute(id: 1, showMoreButton: true).push(context);
     }
   }
 }

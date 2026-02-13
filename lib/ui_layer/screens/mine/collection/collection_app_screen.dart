@@ -85,6 +85,16 @@ class _CollectAppVideoItem extends StatelessWidget {
       return tr('awjq');
     } else if (type == CrackAppType.aw91.type) {
       return tr('aw91');
+    } else if (type == CrackAppType.hjsq.type) {
+      return tr('hjsq');
+    } else if (type == CrackAppType.pzhan.type) {
+      return tr('pzhan');
+    } else if (type == CrackAppType.tiktok51.type) {
+      return tr('tiktok51');
+    } else if (type == CrackAppType.gd.type) {
+      return tr('gdcm');
+    } else if (type == CrackAppType.xiaolan.type) {
+      return tr('xiaolan');
     }
     return '';
   }
@@ -101,9 +111,19 @@ class _CollectAppVideoItem extends StatelessWidget {
           ClVideoDetailRoute(data.id ?? 0).push(context);
         } else if (type == CrackAppType.awjq.type) {
           AnWangRestrictedDetailRoute(id: data.id ?? 0).push(context);
+        } else if (type == CrackAppType.pzhan.type) {
+          PZhanVideoDetailRoute(id: data.id ?? 0).push(context);
         } else if (type == CrackAppType.aw91.type) {
           Aw91VideoDetailRoute(id: data.id ?? 0).push(context);
-        }
+        } else if (type == CrackAppType.hjsq.type) {
+          HjsqVideoDetailRoute(data.id ?? 0).push(context);
+        } else if (type == CrackAppType.tiktok51.type) {
+          Tiktok51VideoDetailRoute(id: data.id ?? 0).push(context);
+        } /* else if (type == CrackAppType.gd.type) {
+          GdVideoDetailRoute(id: data.id ?? 0).push(context);
+        } else if (type == CrackAppType.xiaolan.type) {
+          XiaolanVideoDetailRoute(id: data.id ?? 0).push(context);
+        }  */
       },
       child: LayoutBuilder(builder: (context, cons) {
         return Column(
@@ -118,6 +138,23 @@ class _CollectAppVideoItem extends StatelessWidget {
                     fit: StackFit.expand,
                     children: [
                       MyImage.network(data.coverHorizontal ?? '', fit: BoxFit.cover, backgroundColor: MyTheme.imageBgColor, borderRadius: 5.w),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          height: 22.w,
+                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.w),
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Color.fromRGBO(16, 16, 16, 0.05),
+                                Color.fromRGBO(16, 16, 16, 0.9),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: Padding(

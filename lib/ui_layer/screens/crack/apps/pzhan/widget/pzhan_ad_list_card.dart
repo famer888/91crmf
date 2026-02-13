@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
-import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/model/pzhan_model.dart';
+import 'package:jycrpj/ui_layer/screens/crack/model/app_model.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 
@@ -12,7 +12,7 @@ import '../../../../../../report/ui_layer/report_gesture_detector.dart';
 class PZhanAdListCard extends StatelessWidget {
   const PZhanAdListCard({super.key, required this.ad});
 
-  final PZhanVideoModel ad;
+  final AppVideoModel ad;
 
   String get description => ad.description ?? ad.subTitle ?? '';
 

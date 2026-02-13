@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jycrpj/domain/domain.dart';
 import 'package:jycrpj/domain/model/banner_model.dart';
+import 'package:jycrpj/domain/model/category_topic_model.dart';
 import 'package:jycrpj/domain/model/home_data_model.dart';
 import 'package:jycrpj/domain/model/link_model.dart';
 import 'package:jycrpj/domain/model/part_nav_model.dart';
@@ -15,8 +16,9 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/event_bus/event_bus.dart'
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_list_view.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_tab_bar.dart';
-import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/model/pzhan_model.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/widget/pzhan_feed_card.dart';
+import 'package:jycrpj/ui_layer/screens/crack/model/app_model.dart';
+import 'package:jycrpj/ui_layer/screens/crack/widgets/scroll_top_button.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
@@ -47,7 +49,7 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
   late final _appDomain = context.read<AppDomain>();
   late final _homeConfig = context.read<HomeConfigNotifier>();
   final ValueNotifier<List<BannerModel>> bannersNotifier = ValueNotifier([]);
-  final ValueNotifier<List<PZhanCategoryTopicModel>> topicsNotifier = ValueNotifier([]);
+  final ValueNotifier<List<CategoryTopicModel>> topicsNotifier = ValueNotifier([]);
   final ValueNotifier<List<PartModel>> partNotifier = ValueNotifier([]);
   final ValueNotifier<bool> isListNotifier = ValueNotifier(false);
 
@@ -60,7 +62,11 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
   bool isInit = false;
   bool initSetIndex = false;
 
-  Future<List<PZhanVideoModel>?> _getData({
+  final ScrollController _nestedController = ScrollController();
+  final ValueNotifier<bool> _showToTopBtn = ValueNotifier(false);
+  double _showThreshold = 0; // 一屏高度
+
+  Future<List<AppVideoModel>?> _getData({
     required int page,
     required int pageSize,
     required String type,
@@ -82,17 +88,20 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
     }
 
     if (result.status == 1) {
-      if (result.data['banner'] case final List data when data.isNotEmpty) {
+      if (result.data['banner'] case final List data when data.isNotEmpty && bannersNotifier.value.isEmpty) {
         bannersNotifier.value = data.map((e) => BannerModel.fromJson(e)).toList();
       }
 
-      if (result.data['mid_style_category'] case final List data when data.isNotEmpty) {
-        topicsNotifier.value = data.map<PZhanCategoryTopicModel>((e) => PZhanCategoryTopicModel.fromJson(e)).toList();
+      if (result.data['mid_style_category'] case final List data when data.isNotEmpty && topicsNotifier.value.isEmpty) {
+        topicsNotifier.value = data.map<CategoryTopicModel>((e) => CategoryTopicModel.fromJson(e)).toList();
       }
 
+
       if (result.data['list'] case final List data when data.isNotEmpty) {
-        return data.map<PZhanVideoModel>((e) => PZhanVideoModel.fromJson(e)).toList();
+        return data.map<AppVideoModel>((e) => AppVideoModel.fromJson(e)).toList();
       }
+
+      return [];
     } else {
       MyToast.showText(text: result.msg ?? '');
     }
@@ -108,6 +117,9 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showThreshold = ScreenUtil().screenHeight * 0.40;
+    });
     if (!initSetIndex) {
       if (_isDiscovery) {
         final index = (_homeConfig.config.pzhanFindSortNav ?? []).indexWhere((item) => item.type == 'hot');
@@ -136,61 +148,127 @@ class _PZhanApiLinkViewState extends State<PZhanApiLinkView> {
     topicsNotifier.dispose();
     partNotifier.dispose();
     isListNotifier.dispose();
+    _nestedController.dispose();
+    _showToTopBtn.dispose();
     super.dispose();
+  }
+
+  void _scrollToTop() {
+    if (!_nestedController.hasClients) return;
+
+    _nestedController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return NestedScrollView(
-      headerSliverBuilder: (_, __) => [
-        SliverToBoxAdapter(
-          child: _Header(
-            bannersNotifier: bannersNotifier,
-            topicsNotifier: topicsNotifier,
-            partNotifier: partNotifier,
-            onLinkNavTap: widget.onLinkNavTap,
+    return Stack(
+      children: [
+        NotificationListener<ScrollNotification>(
+          onNotification: (ScrollNotification notification) {
+            return false;
+          },
+          child: NestedScrollView(
+            controller: _nestedController,
+            headerSliverBuilder: (_, __) => [
+              SliverToBoxAdapter(
+                child: _Header(
+                  bannersNotifier: bannersNotifier,
+                  topicsNotifier: topicsNotifier,
+                  partNotifier: partNotifier,
+                  onLinkNavTap: widget.onLinkNavTap,
+                  linkModel: widget.linkModel,
+                ),
+              ),
+            ],
+            body: TabBarWithView.fillColor(
+              initialIndex: initialIndex,
+              tabBarHeight: 32.w,
+              labelPadding: 5.w,
+              tabInterMargin: 6.w,
+              isScrollable: true,
+              linearColors: const [Colors.transparent, Colors.transparent],
+              tabBarPadding: EdgeInsets.symmetric(vertical: 6.w, horizontal: MyTheme.pagePadding),
+              labelStyle: TextStyle(color: MyTheme.pzhanAppPrimaryColor, fontSize: 16.sp, fontWeight: FontWeight.w500),
+              unselectedLabelStyle: TextStyle(color: const Color.fromRGBO(255, 255, 255, 0.8), fontSize: 16.sp, fontWeight: FontWeight.w400),
+              titles: isInit ? _titles.map<String>((e) => e.title).toList() : [],
+              tabBarRightWidget: widget.showRightList
+                  ? GridListSwitch(
+                      color: MyTheme.pzhanAppPrimaryColor,
+                      callback: (isList) {
+                        isListNotifier.value = isList;
+                      })
+                  : null,
+              views: [
+                for (final AppNavModel nav in _titles)
+                  ValueListenableBuilder(
+                      valueListenable: isListNotifier,
+                      builder: (context, isList, child) {
+                        return isList
+                            ? NotificationListener<ScrollNotification>(
+                                // 添加在这里
+                                onNotification: (ScrollNotification notification) {
+                                  if (notification is ScrollUpdateNotification) {
+                                    // 获取当前标签页的滚动位置
+                                    final double tabPixels = notification.metrics.pixels;
+                                    // 获取 NestedScrollView header 的滚动位置
+                                    final double headerPixels = _nestedController.hasClients ? _nestedController.offset : 0;
+                                    // 计算总滚动量
+                                    final double totalPixels = headerPixels + tabPixels;
+                                    final bool shouldShow = totalPixels > _showThreshold;
+                                    if (shouldShow != _showToTopBtn.value) {
+                                      _showToTopBtn.value = shouldShow;
+                                    }
+                                  }
+                                  return false;
+                                },
+                                child: MyListView.list(
+                                  scrollController: PrimaryScrollController.of(context),
+                                  itemBuilder: (context, item, index) => PZhanFeedCard(isList: true, feed: item),
+                                  onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
+                                ),
+                              )
+                            : NotificationListener<ScrollNotification>(
+                                // 同样的调试代码也添加在这里
+                                onNotification: (ScrollNotification notification) {
+                                  if (notification is ScrollUpdateNotification) {
+                                    final double tabPixels = notification.metrics.pixels;
+                                    final double headerPixels = _nestedController.hasClients ? _nestedController.offset : 0;
+                                    final double totalPixels = headerPixels + tabPixels;
+                                    final bool shouldShow = totalPixels > _showThreshold;
+                                    if (shouldShow != _showToTopBtn.value) {
+                                      _showToTopBtn.value = shouldShow;
+                                    }
+                                  }
+                                  return false;
+                                },
+                                child: MyListView.grid(
+                                  scrollController: PrimaryScrollController.of(context),
+                                  padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
+                                  childAspectRatio: MyTheme.aspectRatio,
+                                  crossAxisSpacing: 8.w,
+                                  mainAxisSpacing: 10.w,
+                                  itemBuilder: (context, item, index) => PZhanFeedCard(isList: false, feed: item),
+                                  onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
+                                ),
+                              );
+                      }),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          right: 20.w,
+          bottom: 42.w,
+          child: ScrollTopButton(
+            showToTopButtonNotifier: _showToTopBtn,
+            scrollTopCallback: _scrollToTop,
           ),
         ),
       ],
-      body: TabBarWithView.fillColor(
-        initialIndex: initialIndex,
-        tabBarHeight: 32.w,
-        labelPadding: 5.w,
-        tabInterMargin: 6.w,
-        isScrollable: true,
-        linearColors: const [Colors.transparent, Colors.transparent],
-        tabBarPadding: EdgeInsets.symmetric(vertical: 6.w, horizontal: MyTheme.pagePadding),
-        labelStyle: TextStyle(color: MyTheme.pzhanAppPrimaryColor, fontSize: 16.sp, fontWeight: FontWeight.w500),
-        unselectedLabelStyle: TextStyle(color: const Color.fromRGBO(255, 255, 255, 0.8), fontSize: 16.sp, fontWeight: FontWeight.w400),
-        titles: isInit ? _titles.map<String>((e) => e.title).toList() : [],
-        tabBarRightWidget: widget.showRightList
-            ? GridListSwitch(
-                color: MyTheme.pzhanAppPrimaryColor,
-                callback: (isList) {
-                  isListNotifier.value = isList;
-                })
-            : null,
-        views: [
-          for (final AppNavModel nav in _titles)
-            ValueListenableBuilder(
-                valueListenable: isListNotifier,
-                builder: (context, isList, child) {
-                  return isList
-                      ? MyListView.list(
-                          itemBuilder: (context, item, index) => PZhanFeedCard(isList: true, feed: item),
-                          onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
-                        )
-                      : MyListView.grid(
-                          padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
-                          childAspectRatio: MyTheme.aspectRatio,
-                          crossAxisSpacing: 8.w,
-                          mainAxisSpacing: 10.w,
-                          itemBuilder: (context, item, index) => PZhanFeedCard(isList: false, feed: item),
-                          onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
-                        );
-                }),
-        ],
-      ),
     );
   }
 }
@@ -201,12 +279,14 @@ class _Header extends StatefulWidget {
     required this.topicsNotifier,
     required this.partNotifier,
     required this.onLinkNavTap,
+    required this.linkModel,
   });
 
   final ValueNotifier<List<BannerModel>> bannersNotifier;
-  final ValueNotifier<List<PZhanCategoryTopicModel>> topicsNotifier;
+  final ValueNotifier<List<CategoryTopicModel>> topicsNotifier;
   final ValueNotifier<List<PartModel>> partNotifier;
   final ValueChanged<String> onLinkNavTap;
+  final LinkModel linkModel;
 
   @override
   State<_Header> createState() => _HeaderState();
@@ -214,7 +294,7 @@ class _Header extends StatefulWidget {
 
 class _HeaderState extends State<_Header> {
   late final _screenUtil = ScreenUtil();
-  List<PZhanCategoryTopicModel> contentTopics = [];
+  List<CategoryTopicModel> contentTopics = [];
   bool isShowAllTopics = false;
 
   @override
@@ -292,7 +372,6 @@ class _HeaderState extends State<_Header> {
             );
           },
         ),
-        SizedBox(height: 10.w),
         ValueListenableBuilder(
           valueListenable: widget.topicsNotifier,
           builder: (context, topics, child) {
@@ -307,7 +386,7 @@ class _HeaderState extends State<_Header> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(bottom: 3.w),
+                  padding: EdgeInsets.only(bottom: 3.w, top: 10.w),
                   child: GridView.builder(
                       shrinkWrap: true,
                       addRepaintBoundaries: false,
@@ -332,7 +411,22 @@ class _HeaderState extends State<_Header> {
                             child: ReportGestureDetector(
                               behavior: HitTestBehavior.translucent,
                               onTap: () {
-                                MoreVideoRoute(name: topic.tabName, id: topic.tabId.toString(), api: 'tabnewpzhan/list_tab_mv').push(context);
+                                if (topic.id == -1) {
+                                  // 特有
+                                  final id = widget.linkModel.id;
+                                  PZhanMoreRoute(
+                                    name: topic.tabName,
+                                    id: '$id',
+                                    api: 'tabnewpzhan/tab_list',
+                                  ).push(context);
+                                } else {
+                                  PZhanTopicRoute(
+                                    name: topic.tabName,
+                                    id: topic.tabId.toString(),
+                                    api: 'tabnewpzhan/list_tab_mv',
+                                  ).push(context);
+                                  // MoreVideoRoute(name: topic.tabName, id: topic.tabId.toString(), api: 'tabnewpzhan/list_tab_mv').push(context);
+                                }
                               },
                               child: Text(topic.tabName, style: MyTheme.white13),
                             ),

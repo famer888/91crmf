@@ -15,6 +15,8 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
+# 添加图片权限  sudo chmod -R 755 <path>
+
 # 添加 model进 lib/domain/create_export_domains.dart  dart lib/domain/create_export_domains.dart
 # 添加 image文件进 image_paths.dart  dart lib/images_to_dart.dart
 

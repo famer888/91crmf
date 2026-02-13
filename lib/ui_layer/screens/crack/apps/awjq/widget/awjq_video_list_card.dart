@@ -26,7 +26,7 @@ class AwjqVideoListCard extends StatelessWidget {
     return ReportGestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        AppVideoVisitUtil.updateVisitRecord(
+        AppVisitUtil.updateCrackAppVisitRecord(
           context,
           VideoVisitModel(
             title: data.title,
@@ -52,6 +52,23 @@ class AwjqVideoListCard extends StatelessWidget {
                 fit: StackFit.expand,
                 children: [
                   MyImage.network(imageUrl, fit: BoxFit.cover, backgroundColor: MyTheme.imageBgColor, borderRadius: 5.w),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      height: 22.w,
+                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.w),
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Color.fromRGBO(16, 16, 16, 0.05),
+                            Color.fromRGBO(16, 16, 16, 0.9),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(

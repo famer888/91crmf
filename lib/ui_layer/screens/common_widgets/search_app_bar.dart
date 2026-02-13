@@ -10,22 +10,6 @@ import '../../router/routes.dart';
 import '../image_paths.dart';
 import '../theme.dart';
 
-//请自行按需添加
-// enum SearchAppBarType {
-//   normal(appName: '', topNavApi: ''),
-//   clsq(appName: 'hjgj', topNavApi: 'elementhjgj/getElementById'),
-//   awjq(appName: 'awjq', topNavApi: 'elementawjq/getElementById'),
-//   aw91(appName: '91aw', topNavApi: 'element91aw/getElementById'),
-//   zpc(appName: 'zpc', topNavApi: 'elementzpc/getElementById'),
-//   pzhan(appName: 'pzhan', topNavApi: 'navigationpzhan/index'),
-//   ;
-//
-//   const SearchAppBarType({required this.appName, required this.topNavApi});
-//
-//   final String appName;
-//   final String topNavApi;
-// }
-
 class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? backArrowOnTap;
   final bool showLeftBack;
@@ -34,19 +18,9 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? sideColor;
   final CrackAppType? type;
   final bool isCrackApp;
+  final bool showMoreButton;
   final VoidCallback? openEndDrawer;
   final VoidCallback? onTap;
-
-  bool isCrackAppSearch() {
-    final searchAppBarTypeList = [
-      CrackAppType.clsq,
-      CrackAppType.awjq,
-      CrackAppType.aw91,
-      CrackAppType.zpc,
-      CrackAppType.pzhan,
-    ];
-    return searchAppBarTypeList.contains(type);
-  }
 
   const SearchAppBar({
     super.key,
@@ -56,6 +30,7 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.backgroundColor = Colors.transparent,
     this.type = CrackAppType.normal,
     this.isCrackApp = false,
+    this.showMoreButton = true,
     this.sideColor,
     this.onTap,
     this.openEndDrawer,
@@ -80,25 +55,26 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
                 onTap: onTap,
               ),
             ),
-            SizedBox(width: 12.w),
-            ReportGestureDetector(
-              onTap: () {
-                openEndDrawer?.call();
-              },
-              child: Container(
-                padding: EdgeInsets.only(top: 8.w, bottom: 8.w),
-                child: Column(mainAxisSize: MainAxisSize.min, children: [
-                  SizedBox.square(
-                    dimension: 22.w,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.w),
-                      child: const MyImage.asset(MyImagePaths.appMore, fit: BoxFit.cover),
+            if (showMoreButton) SizedBox(width: 12.w),
+            if (showMoreButton)
+              ReportGestureDetector(
+                onTap: () {
+                  openEndDrawer?.call();
+                },
+                child: Container(
+                  padding: EdgeInsets.only(top: 8.w, bottom: 8.w),
+                  child: Column(mainAxisSize: MainAxisSize.min, children: [
+                    SizedBox.square(
+                      dimension: 22.w,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.w),
+                        child: const MyImage.asset(MyImagePaths.appMore, fit: BoxFit.cover),
+                      ),
                     ),
-                  ),
-                  Text('gd'.tr(context: context), style: MyTheme.white255_12.s11),
-                ]),
+                    Text('gd'.tr(context: context), style: MyTheme.white255_12.s11),
+                  ]),
+                ),
               ),
-            ),
           ],
         ),
       );

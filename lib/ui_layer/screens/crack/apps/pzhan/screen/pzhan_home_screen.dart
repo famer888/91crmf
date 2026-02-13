@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jycrpj/domain/model/banner_model.dart';
+import 'package:jycrpj/domain/model/category_topic_model.dart';
 import 'package:jycrpj/domain/model/crack_model.dart';
 import 'package:jycrpj/domain/model/home_data_model.dart';
 import 'package:jycrpj/domain/model/link_model.dart';
@@ -15,11 +16,11 @@ import 'package:jycrpj/ui_layer/notifiers/home_config_notifier.dart';
 import 'package:jycrpj/ui_layer/notifiers/user_notifier.dart';
 import 'package:jycrpj/ui_layer/router/routes.dart';
 import 'package:jycrpj/ui_layer/screens/black/vip_pay_dialog.dart';
-import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/model/pzhan_model.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/widget/pzhan_banner_topics_view.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/widget/pzhan_sub_list_page.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/widget/pzhan_subpage_tab_bar.dart';
 import 'package:jycrpj/ui_layer/screens/crack/crack_app_type.dart';
+import 'package:jycrpj/ui_layer/screens/crack/model/app_model.dart';
 import 'package:jycrpj/ui_layer/screens/crack/unlock_status_notifier.dart';
 import 'package:jycrpj/ui_layer/screens/crack/widgets/app_tab_bar.dart';
 import 'package:jycrpj/ui_layer/screens/crack/widgets/sticky_header_delegate.dart';
@@ -71,13 +72,13 @@ class _PZhanHomeScreenState extends State<PZhanHomeScreen> {
   List<LinkModel> _linkModelList = [];
 
   /// 列表数据
-  final ValueNotifier<List<PZhanVideoModel>> _dataListNotifier = ValueNotifier([]);
+  final ValueNotifier<List<AppVideoModel>> _dataListNotifier = ValueNotifier([]);
 
   /// 轮播数据
   final ValueNotifier<List<BannerModel>> _bannersNotifier = ValueNotifier([]);
 
   /// 话题数据
-  final ValueNotifier<List<PZhanCategoryTopicModel>> _topicsNotifier = ValueNotifier([]);
+  final ValueNotifier<List<CategoryTopicModel>> _topicsNotifier = ValueNotifier([]);
 
   AppNavModel? _selectedAppNavModel;
   LinkModel? _currentLinkModel;
@@ -180,12 +181,12 @@ class _PZhanHomeScreenState extends State<PZhanHomeScreen> {
 
       if (data != null) {
         if (refresh) {
-          final list = List<PZhanVideoModel>.of(data);
+          final list = List<AppVideoModel>.of(data);
           CommonUtils.log('刷新的数据 :${list.hashCode}');
           _dataListNotifier.value = list;
           _currentPage = 2;
         } else {
-          final list = List<PZhanVideoModel>.of(_dataListNotifier.value)..addAll(data);
+          final list = List<AppVideoModel>.of(_dataListNotifier.value)..addAll(data);
           CommonUtils.log('加载更多的数据 :${list.hashCode}');
           _dataListNotifier.value = list;
           _currentPage++;
@@ -206,7 +207,7 @@ class _PZhanHomeScreenState extends State<PZhanHomeScreen> {
 
   Future<void> _onLoading() => _loadData();
 
-  Future<List<PZhanVideoModel>?> _getData({
+  Future<List<AppVideoModel>?> _getData({
     required int page,
     required int pageSize,
     required String type,
@@ -230,11 +231,11 @@ class _PZhanHomeScreenState extends State<PZhanHomeScreen> {
       }
 
       if (result.data['mid_style_category'] case final List data when data.isNotEmpty && refresh) {
-        _topicsNotifier.value = data.map<PZhanCategoryTopicModel>((e) => PZhanCategoryTopicModel.fromJson(e)).toList();
+        _topicsNotifier.value = data.map<CategoryTopicModel>((e) => CategoryTopicModel.fromJson(e)).toList();
       }
 
       if (result.data['list'] case final List data when data.isNotEmpty) {
-        return data.map<PZhanVideoModel>((e) => PZhanVideoModel.fromJson(e)).toList();
+        return data.map<AppVideoModel>((e) => AppVideoModel.fromJson(e)).toList();
       }
     } else {
       MyToast.showText(text: result.msg ?? '');

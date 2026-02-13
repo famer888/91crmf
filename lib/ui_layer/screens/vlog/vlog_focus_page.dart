@@ -111,7 +111,7 @@ class _VlogFocusPageState extends State<VlogFocusPage> {
                                         'limit': 15,
                                       }
                                     };
-                                    const VlogSecondRoute().push(context);
+                                    const VlogSecondRoute(userGlobalData: true).push(context);
                                   } else {
                                     //广告类型
                                     CommonUtils.openRoute(

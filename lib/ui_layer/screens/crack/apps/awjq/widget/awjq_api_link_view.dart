@@ -14,11 +14,11 @@ import 'package:jycrpj/domain/type_def.dart';
 import 'package:jycrpj/ui_layer/notifiers/home_config_notifier.dart';
 import 'package:jycrpj/ui_layer/router/routes.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/event_bus/event_bus.dart';
-import 'package:jycrpj/ui_layer/screens/common_widgets/general_banner.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_list_view.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_tab_bar.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/awjq/widget/awjq_feed_card.dart';
+import 'package:jycrpj/ui_layer/screens/crack/widgets/scroll_top_button.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
@@ -55,6 +55,10 @@ class _AwjqApiLinkViewState extends State<AwjqApiLinkView> {
   int initialIndex = 0;
   bool isInit = false;
   bool initSetIndex = false;
+
+  final ScrollController _nestedController = ScrollController();
+  final ValueNotifier<bool> _showToTopBtn = ValueNotifier(false);
+  double _showThreshold = 0; // 一屏高度
 
   Future<List<FeedModel>?> _getData({
     required int page,
@@ -105,6 +109,9 @@ class _AwjqApiLinkViewState extends State<AwjqApiLinkView> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showThreshold = ScreenUtil().screenHeight * 0.40;
+    });
     if (!initSetIndex) {
       final index = titles.indexWhere((item) => item.type == 'new');
       if (index == -1) {
@@ -123,62 +130,132 @@ class _AwjqApiLinkViewState extends State<AwjqApiLinkView> {
     topicsNotifier.dispose();
     partNotifier.dispose();
     isListNotifier.dispose();
+    _nestedController.dispose();
+    _showToTopBtn.dispose();
     super.dispose();
+  }
+
+  void _scrollToTop() {
+    if (!_nestedController.hasClients) return;
+
+    _nestedController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     CommonUtils.log('titles:$titles');
-    return NestedScrollView(
-      headerSliverBuilder: (_, __) => [
-        SliverToBoxAdapter(
-          child: _Header(
-            bannersNotifier: bannersNotifier,
-            topicsNotifier: topicsNotifier,
-            partNotifier: partNotifier,
-            onLinkNavTap: widget.onLinkNavTap,
+    return Stack(
+      children: [
+        NotificationListener<ScrollNotification>(
+          onNotification: (ScrollNotification notification) {
+            return false;
+          },
+          child: NestedScrollView(
+            controller: _nestedController,
+            headerSliverBuilder: (_, __) => [
+              SliverToBoxAdapter(
+                child: _Header(
+                  bannersNotifier: bannersNotifier,
+                  topicsNotifier: topicsNotifier,
+                  partNotifier: partNotifier,
+                  onLinkNavTap: widget.onLinkNavTap,
+                ),
+              ),
+            ],
+            body: TabBarWithView.fillColor(
+              initialIndex: initialIndex,
+              tabBarHeight: 32.w,
+              labelPadding: 5.w,
+              tabInterMargin: 6.w,
+              isScrollable: true,
+              linearColors: const [Colors.transparent, Colors.transparent],
+              tabBarPadding: EdgeInsets.symmetric(vertical: 6.w, horizontal: MyTheme.pagePadding),
+              labelStyle: TextStyle(color: MyTheme.awjqAppPrimaryColor, fontSize: 16.sp, fontWeight: FontWeight.w500),
+              unselectedLabelStyle: TextStyle(color: const Color.fromRGBO(255, 255, 255, 0.8), fontSize: 16.sp, fontWeight: FontWeight.w400),
+              titles: isInit ? [for (final title in titles) title.title] : [],
+              tabBarRightWidget: widget.showRightList
+                  ? GridListSwitch(
+                      color: MyTheme.awjqAppPrimaryColor,
+                      callback: (isList) {
+                        isListNotifier.value = isList;
+                      })
+                  : null,
+              views: [
+                for (final AppNavModel nav in titles)
+                  ValueListenableBuilder(
+                      valueListenable: isListNotifier,
+                      builder: (context, isList, child) {
+                        return isList
+                            ? NotificationListener<ScrollNotification>(
+                                // 添加在这里
+                                onNotification: (ScrollNotification notification) {
+                                  if (notification is ScrollUpdateNotification) {
+                                    // 获取当前标签页的滚动位置
+                                    final double tabPixels = notification.metrics.pixels;
+                                    // 获取 NestedScrollView header 的滚动位置
+                                    final double headerPixels = _nestedController.hasClients ? _nestedController.offset : 0;
+                                    // 计算总滚动量
+                                    final double totalPixels = headerPixels + tabPixels;
+                                    final bool shouldShow = totalPixels > _showThreshold;
+                                    if (shouldShow != _showToTopBtn.value) {
+                                      CommonUtils.log('标签页滚动: header=$headerPixels, tab=$tabPixels, total=$totalPixels');
+                                      _showToTopBtn.value = shouldShow;
+                                    }
+                                  }
+                                  return false;
+                                },
+                                child: MyListView.list(
+                                  scrollController: PrimaryScrollController.of(context),
+                                  itemBuilder: (context, item, index) => AwjqFeedCard(isList: true, feed: item),
+                                  onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
+                                ),
+                              )
+                            : NotificationListener<ScrollNotification>(
+                                // 添加在这里
+                                onNotification: (ScrollNotification notification) {
+                                  if (notification is ScrollUpdateNotification) {
+                                    // 获取当前标签页的滚动位置
+                                    final double tabPixels = notification.metrics.pixels;
+                                    // 获取 NestedScrollView header 的滚动位置
+                                    final double headerPixels = _nestedController.hasClients ? _nestedController.offset : 0;
+                                    // 计算总滚动量
+                                    final double totalPixels = headerPixels + tabPixels;
+                                    final bool shouldShow = totalPixels > _showThreshold;
+                                    if (shouldShow != _showToTopBtn.value) {
+                                      CommonUtils.log('标签页滚动: header=$headerPixels, tab=$tabPixels, total=$totalPixels');
+                                      _showToTopBtn.value = shouldShow;
+                                    }
+                                  }
+                                  return false;
+                                },
+                                child: MyListView.grid(
+                                  scrollController: PrimaryScrollController.of(context),
+                                  padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
+                                  childAspectRatio: MyTheme.aspectRatio,
+                                  crossAxisSpacing: 8.w,
+                                  mainAxisSpacing: 10.w,
+                                  itemBuilder: (context, item, index) => AwjqFeedCard(isList: false, feed: item),
+                                  onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
+                                ),
+                              );
+                      }),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          right: 20.w,
+          bottom: 42.w,
+          child: ScrollTopButton(
+            showToTopButtonNotifier: _showToTopBtn,
+            scrollTopCallback: _scrollToTop,
           ),
         ),
       ],
-      body: TabBarWithView.fillColor(
-        initialIndex: initialIndex,
-        tabBarHeight: 32.w,
-        labelPadding: 5.w,
-        tabInterMargin: 6.w,
-        isScrollable: true,
-        linearColors: const [Colors.transparent, Colors.transparent],
-        tabBarPadding: EdgeInsets.symmetric(vertical: 6.w, horizontal: MyTheme.pagePadding),
-        labelStyle: TextStyle(color: MyTheme.awjqAppPrimaryColor, fontSize: 16.sp, fontWeight: FontWeight.w500),
-        unselectedLabelStyle: TextStyle(color: const Color.fromRGBO(255, 255, 255, 0.8), fontSize: 16.sp, fontWeight: FontWeight.w400),
-        titles: isInit ? [for (final title in titles) title.title] : [],
-        tabBarRightWidget: widget.showRightList
-            ? GridListSwitch(
-                color: MyTheme.awjqAppPrimaryColor,
-                callback: (isList) {
-                  isListNotifier.value = isList;
-                })
-            : null,
-        views: [
-          for (final AppNavModel nav in titles)
-            ValueListenableBuilder(
-                valueListenable: isListNotifier,
-                builder: (context, isList, child) {
-                  return isList
-                      ? MyListView.list(
-                          itemBuilder: (context, item, index) => AwjqFeedCard(isList: true, feed: item),
-                          onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
-                        )
-                      : MyListView.grid(
-                          padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
-                          childAspectRatio: MyTheme.aspectRatio,
-                          crossAxisSpacing: 8.w,
-                          mainAxisSpacing: 10.w,
-                          itemBuilder: (context, item, index) => AwjqFeedCard(isList: false, feed: item),
-                          onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: nav.type),
-                        );
-                }),
-        ],
-      ),
     );
   }
 }
@@ -221,7 +298,6 @@ class _HeaderState extends State<_Header> {
             );
           },
         ),
-        SizedBox(height: 10.w),
         ValueListenableBuilder(
           valueListenable: widget.partNotifier,
           builder: (context, parts, child) {
@@ -229,7 +305,7 @@ class _HeaderState extends State<_Header> {
             // parts = parts.sublist(0, 3);
             // parts.add(PartModel.fromJson(parts.first.toJson()));
             return Container(
-              margin: EdgeInsets.only(top: 10.w, bottom: 5.w),
+              margin: EdgeInsets.only(top: 10.w, bottom: 3.w),
               height: 70.w,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,

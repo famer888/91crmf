@@ -18,7 +18,6 @@ import 'package:provider/provider.dart';
 import '../../../domain/model/banner_model.dart';
 import '../../notifiers/home_config_notifier.dart';
 import '../../utils/my_toast.dart';
-import '../common_widgets/general_banner.dart';
 import '../common_widgets/my_image.dart';
 import '../common_widgets/post/content/comment_count.dart';
 import '../common_widgets/post/content/like_collect_share_area.dart';

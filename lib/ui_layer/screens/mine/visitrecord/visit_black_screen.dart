@@ -7,9 +7,8 @@ import 'package:jycrpj/ui_layer/screens/crack/app_video_visit_util.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 
 class VisitBlackScreen extends StatefulWidget {
-  final int type;
 
-  const VisitBlackScreen({super.key, required this.type});
+  const VisitBlackScreen({super.key});
 
   @override
   State<VisitBlackScreen> createState() => _VisitBlackScreenState();
@@ -19,7 +18,7 @@ class _VisitBlackScreenState extends State<VisitBlackScreen> {
   late final _screenUtils = ScreenUtil();
 
   Future<List<BlackListItemModel>> _getVisitBlackData({int page = 1, int limit = 15}) async {
-    final List<BlackListItemModel>? visitBlackModels = await AppVideoVisitUtil.getBlackVisitRecord(context);
+    final List<BlackListItemModel>? visitBlackModels = await AppVisitUtil.getBlackVisitRecord(context);
     if (visitBlackModels == null) {
       return [];
     } else {

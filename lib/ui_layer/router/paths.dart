@@ -21,6 +21,9 @@ class AppRouterPaths {
   /// 黑料
   static const heiLiao = '/heiLiao';
 
+  /// 短视频
+  static const dShip = '/dship';
+
   /// 黑料详情
   static const heiLiaoDetails = '/heiLiaoDetail';
 
@@ -30,6 +33,12 @@ class AppRouterPaths {
   static const vlogTag = '/vlogTag/:tag';
 
   static const vlogSecond = '/vlogSecond';
+
+  /// 短视频搜索
+  static const vlogSearch = '/search';
+
+  /// 短视频搜索结果
+  static const vlogSearchResult = '/searchResult';
 
   /// soul 群聊列表
   static const soulGroupChatList = '/soulGroupChatList';
@@ -256,6 +265,45 @@ class AppRouterPaths {
   /// 暗网禁区 视频搜索结果页
   static const awjqVideoSearchResult = '/awjqVideoSearchResult';
 
+
+  /// 51Tiktok
+  static const tiktok51App = '/tiktok51App';
+
+  /// 51Tiktok 视频详情
+  static const tiktok51VideoDetail = '/tiktok51VideoDetail';
+
+  /// 51Tiktok 标签页面
+  static const tiktok51VideoTag = '/tiktok51VideoTag';
+
+  /// 51Tiktok 视频搜索页面
+  static const tiktok51VideoSearch = '/tiktok51VideoSearch';
+
+  /// 51Tiktok 视频搜索结果页面
+  static const tiktok51VideoSearchResult = '/tiktok51VideoSearchResult';
+
+  /// 51Tiktok 视频话题页面
+  static const tiktok51Topic = '/tiktok51Topic';
+
+  /// 51Tiktok 视频更多页面
+  static const tiktok51More = '/tiktok51More';
+
+
+  /// 海角社区
+  static const hjsqApp = '/hjsqApp';
+
+  /// Hjsq 视频搜索页面
+  static const hjsqVideoSearch = '/hjsqVideoSearch';
+
+  /// Hjsq 视频搜索结果页面
+  static const hjsqVideoSearchResult = '/hjsqVideoSearchResult';
+
+  /// Hjsq 视频详情
+  static const hjsqVideoDetail = '/hjsqVideoDetail';
+
+  /// Hjsq 标签页面
+  static const hjsqVideoTag = '/hjsqVideoTag';
+
+
   /// P站 视频搜索页面
   static const pzhanVideoSearch = '/pzhanVideoSearch';
 
@@ -267,6 +315,13 @@ class AppRouterPaths {
 
   /// P站 标签页面
   static const pzhanVideoTag = '/pzhanVideoTag';
+
+  /// P站 视频话题页面
+  static const pzhanTopic = '/pzhanTopic';
+
+  /// P站 视频更多页面
+  static const pzhanMore = '/pzhanMore';
+
 
   /// 草榴社区
   static const caoliu = '/caoliu';

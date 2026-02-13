@@ -62,6 +62,8 @@ List<RouteBase> get $appRoutes => [
       $mineIncomeDetailRoute,
       $mineCollectionRoute,
       $userCenterRoute,
+      $vlogSearchRoute,
+      $vlogSearchResultRoute,
       $chatMessageRoute,
       $mineFollowingRoute,
       $originalEnterRoute,
@@ -76,6 +78,18 @@ List<RouteBase> get $appRoutes => [
       $awjqVideoTagRoute,
       $awjqVideoSearchRoute,
       $pZhanVideoSearchRoute,
+      $hjsqCommunityRoute,
+      $hjsqVideoSearchRoute,
+      $hjsqVideoTagRoute,
+      $hjsqSearchResultRoute,
+      $hjsqVideoDetailRoute,
+      $tiktok51CommunityRoute,
+      $tiktok51VideoSearchRoute,
+      $tiktok51SearchResultRoute,
+      $tiktok51TopicRoute,
+      $tiktok51MoreRoute,
+      $tiktok51VideoDetailRoute,
+      $tiktok51TagRoute,
       $darkWeb91Route,
       $aw91VideoDetailRoute,
       $aw91TagRoute,
@@ -88,6 +102,8 @@ List<RouteBase> get $appRoutes => [
       $clVideoDetailRoute,
       $clVideoTagRoute,
       $pZhanVideoTagRoute,
+      $pZhanTopicRoute,
+      $pZhanMoreRoute,
       $clVideoSearchRoute,
       $clSearchResultRoute,
       $zpcSearchResultRoute,
@@ -164,6 +180,14 @@ RouteBase get $statefulShellRoute => StatefulShellRouteData.$route(
         StatefulShellBranchData.$branch(
           routes: [
             GoRouteData.$route(
+              path: '/vlog',
+              factory: $VlogRouteExtension._fromState,
+            ),
+          ],
+        ),
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
               path: '/aiServer',
               factory: $AIServerRouteExtension._fromState,
             ),
@@ -224,6 +248,23 @@ extension $BlackRouteExtension on BlackRoute {
 
   String get location => GoRouteData.$location(
         '/heiLiao',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $VlogRouteExtension on VlogRoute {
+  static VlogRoute _fromState(GoRouterState state) => const VlogRoute();
+
+  String get location => GoRouteData.$location(
+        '/vlog',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -333,11 +374,16 @@ RouteBase get $vlogSecondRoute => GoRouteData.$route(
     );
 
 extension $VlogSecondRouteExtension on VlogSecondRoute {
-  static VlogSecondRoute _fromState(GoRouterState state) =>
-      const VlogSecondRoute();
+  static VlogSecondRoute _fromState(GoRouterState state) => VlogSecondRoute(
+        userGlobalData:
+            _$boolConverter(state.uri.queryParameters['user-global-data']!),
+      );
 
   String get location => GoRouteData.$location(
         '/vlogSecond',
+        queryParams: {
+          'user-global-data': userGlobalData.toString(),
+        },
       );
 
   void go(BuildContext context) => context.go(location);
@@ -348,6 +394,17 @@ extension $VlogSecondRouteExtension on VlogSecondRoute {
       context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
+}
+
+bool _$boolConverter(String value) {
+  switch (value) {
+    case 'true':
+      return true;
+    case 'false':
+      return false;
+    default:
+      throw UnsupportedError('Cannot convert "$value" into a bool.');
+  }
 }
 
 RouteBase get $vlogTagRoute => GoRouteData.$route(
@@ -939,17 +996,6 @@ const _$CommunityIssueTypeEnumMap = {
   CommunityIssueType.video: 'video',
   CommunityIssueType.imageAndText: 'image-and-text',
 };
-
-bool _$boolConverter(String value) {
-  switch (value) {
-    case 'true':
-      return true;
-    case 'false':
-      return false;
-    default:
-      throw UnsupportedError('Cannot convert "$value" into a bool.');
-  }
-}
 
 extension<T extends Enum> on Map<T, String> {
   T _$fromName(String value) =>
@@ -1641,6 +1687,63 @@ extension $UserCenterRouteExtension on UserCenterRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $vlogSearchRoute => GoRouteData.$route(
+      path: '/search',
+      parentNavigatorKey: VlogSearchRoute.$parentNavigatorKey,
+      factory: $VlogSearchRouteExtension._fromState,
+    );
+
+extension $VlogSearchRouteExtension on VlogSearchRoute {
+  static VlogSearchRoute _fromState(GoRouterState state) => VlogSearchRoute(
+        word: state.uri.queryParameters['word']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/search',
+        queryParams: {
+          'word': word,
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $vlogSearchResultRoute => GoRouteData.$route(
+      path: '/searchResult',
+      parentNavigatorKey: VlogSearchResultRoute.$parentNavigatorKey,
+      factory: $VlogSearchResultRouteExtension._fromState,
+    );
+
+extension $VlogSearchResultRouteExtension on VlogSearchResultRoute {
+  static VlogSearchResultRoute _fromState(GoRouterState state) =>
+      VlogSearchResultRoute(
+        word: state.uri.queryParameters['word']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/searchResult',
+        queryParams: {
+          'word': word,
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 RouteBase get $chatMessageRoute => GoRouteData.$route(
       path: '/chatMessage/:toUuid/:nickName/:thumb',
       parentNavigatorKey: ChatMessageRoute.$parentNavigatorKey,
@@ -1856,12 +1959,15 @@ extension $AnWangRestrictedRouteExtension on AnWangRestrictedRoute {
   static AnWangRestrictedRoute _fromState(GoRouterState state) =>
       AnWangRestrictedRoute(
         id: int.parse(state.uri.queryParameters['id']!),
+        showMoreButton:
+            _$boolConverter(state.uri.queryParameters['show-more-button']!),
       );
 
   String get location => GoRouteData.$location(
         '/awjq',
         queryParams: {
           'id': id.toString(),
+          'show-more-button': showMoreButton.toString(),
         },
       );
 
@@ -2019,6 +2125,367 @@ extension $PZhanVideoSearchRouteExtension on PZhanVideoSearchRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $hjsqCommunityRoute => GoRouteData.$route(
+      path: '/hjsqApp',
+      parentNavigatorKey: HjsqCommunityRoute.$parentNavigatorKey,
+      factory: $HjsqCommunityRouteExtension._fromState,
+    );
+
+extension $HjsqCommunityRouteExtension on HjsqCommunityRoute {
+  static HjsqCommunityRoute _fromState(GoRouterState state) =>
+      HjsqCommunityRoute(
+        id: int.parse(state.uri.queryParameters['id']!),
+        showMoreButton:
+            _$boolConverter(state.uri.queryParameters['show-more-button']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/hjsqApp',
+        queryParams: {
+          'id': id.toString(),
+          'show-more-button': showMoreButton.toString(),
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $hjsqVideoSearchRoute => GoRouteData.$route(
+      path: '/hjsqVideoSearch',
+      parentNavigatorKey: HjsqVideoSearchRoute.$parentNavigatorKey,
+      factory: $HjsqVideoSearchRouteExtension._fromState,
+    );
+
+extension $HjsqVideoSearchRouteExtension on HjsqVideoSearchRoute {
+  static HjsqVideoSearchRoute _fromState(GoRouterState state) =>
+      HjsqVideoSearchRoute(
+        args: state.uri.queryParameters['args']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/hjsqVideoSearch',
+        queryParams: {
+          'args': args,
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $hjsqVideoTagRoute => GoRouteData.$route(
+      path: '/hjsqVideoTag',
+      parentNavigatorKey: HjsqVideoTagRoute.$parentNavigatorKey,
+      factory: $HjsqVideoTagRouteExtension._fromState,
+    );
+
+extension $HjsqVideoTagRouteExtension on HjsqVideoTagRoute {
+  static HjsqVideoTagRoute _fromState(GoRouterState state) => HjsqVideoTagRoute(
+        state.extra as String,
+      );
+
+  String get location => GoRouteData.$location(
+        '/hjsqVideoTag',
+      );
+
+  void go(BuildContext context) => context.go(location, extra: $extra);
+
+  Future<T?> push<T>(BuildContext context) =>
+      context.push<T>(location, extra: $extra);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location, extra: $extra);
+
+  void replace(BuildContext context) =>
+      context.replace(location, extra: $extra);
+}
+
+RouteBase get $hjsqSearchResultRoute => GoRouteData.$route(
+      path: '/hjsqVideoSearchResult',
+      parentNavigatorKey: HjsqSearchResultRoute.$parentNavigatorKey,
+      factory: $HjsqSearchResultRouteExtension._fromState,
+    );
+
+extension $HjsqSearchResultRouteExtension on HjsqSearchResultRoute {
+  static HjsqSearchResultRoute _fromState(GoRouterState state) =>
+      HjsqSearchResultRoute(
+        word: state.uri.queryParameters['word']!,
+        type: int.parse(state.uri.queryParameters['type']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/hjsqVideoSearchResult',
+        queryParams: {
+          'word': word,
+          'type': type.toString(),
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $hjsqVideoDetailRoute => GoRouteData.$route(
+      path: '/hjsqVideoDetail',
+      parentNavigatorKey: HjsqVideoDetailRoute.$parentNavigatorKey,
+      factory: $HjsqVideoDetailRouteExtension._fromState,
+    );
+
+extension $HjsqVideoDetailRouteExtension on HjsqVideoDetailRoute {
+  static HjsqVideoDetailRoute _fromState(GoRouterState state) =>
+      HjsqVideoDetailRoute(
+        state.extra as int,
+      );
+
+  String get location => GoRouteData.$location(
+        '/hjsqVideoDetail',
+      );
+
+  void go(BuildContext context) => context.go(location, extra: $extra);
+
+  Future<T?> push<T>(BuildContext context) =>
+      context.push<T>(location, extra: $extra);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location, extra: $extra);
+
+  void replace(BuildContext context) =>
+      context.replace(location, extra: $extra);
+}
+
+RouteBase get $tiktok51CommunityRoute => GoRouteData.$route(
+      path: '/tiktok51App',
+      parentNavigatorKey: Tiktok51CommunityRoute.$parentNavigatorKey,
+      factory: $Tiktok51CommunityRouteExtension._fromState,
+    );
+
+extension $Tiktok51CommunityRouteExtension on Tiktok51CommunityRoute {
+  static Tiktok51CommunityRoute _fromState(GoRouterState state) =>
+      Tiktok51CommunityRoute(
+        id: int.parse(state.uri.queryParameters['id']!),
+        showMoreButton:
+            _$boolConverter(state.uri.queryParameters['show-more-button']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/tiktok51App',
+        queryParams: {
+          'id': id.toString(),
+          'show-more-button': showMoreButton.toString(),
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $tiktok51VideoSearchRoute => GoRouteData.$route(
+      path: '/tiktok51VideoSearch',
+      parentNavigatorKey: Tiktok51VideoSearchRoute.$parentNavigatorKey,
+      factory: $Tiktok51VideoSearchRouteExtension._fromState,
+    );
+
+extension $Tiktok51VideoSearchRouteExtension on Tiktok51VideoSearchRoute {
+  static Tiktok51VideoSearchRoute _fromState(GoRouterState state) =>
+      Tiktok51VideoSearchRoute(
+        args: state.uri.queryParameters['args']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/tiktok51VideoSearch',
+        queryParams: {
+          'args': args,
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $tiktok51SearchResultRoute => GoRouteData.$route(
+      path: '/tiktok51VideoSearchResult',
+      parentNavigatorKey: Tiktok51SearchResultRoute.$parentNavigatorKey,
+      factory: $Tiktok51SearchResultRouteExtension._fromState,
+    );
+
+extension $Tiktok51SearchResultRouteExtension on Tiktok51SearchResultRoute {
+  static Tiktok51SearchResultRoute _fromState(GoRouterState state) =>
+      Tiktok51SearchResultRoute(
+        word: state.uri.queryParameters['word']!,
+        type: int.parse(state.uri.queryParameters['type']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/tiktok51VideoSearchResult',
+        queryParams: {
+          'word': word,
+          'type': type.toString(),
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $tiktok51TopicRoute => GoRouteData.$route(
+      path: '/tiktok51Topic',
+      parentNavigatorKey: Tiktok51TopicRoute.$parentNavigatorKey,
+      factory: $Tiktok51TopicRouteExtension._fromState,
+    );
+
+extension $Tiktok51TopicRouteExtension on Tiktok51TopicRoute {
+  static Tiktok51TopicRoute _fromState(GoRouterState state) =>
+      Tiktok51TopicRoute(
+        name: state.uri.queryParameters['name']!,
+        id: state.uri.queryParameters['id']!,
+        api: state.uri.queryParameters['api']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/tiktok51Topic',
+        queryParams: {
+          'name': name,
+          'id': id,
+          'api': api,
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $tiktok51MoreRoute => GoRouteData.$route(
+      path: '/tiktok51More',
+      parentNavigatorKey: Tiktok51MoreRoute.$parentNavigatorKey,
+      factory: $Tiktok51MoreRouteExtension._fromState,
+    );
+
+extension $Tiktok51MoreRouteExtension on Tiktok51MoreRoute {
+  static Tiktok51MoreRoute _fromState(GoRouterState state) => Tiktok51MoreRoute(
+        name: state.uri.queryParameters['name']!,
+        id: state.uri.queryParameters['id']!,
+        api: state.uri.queryParameters['api']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/tiktok51More',
+        queryParams: {
+          'name': name,
+          'id': id,
+          'api': api,
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $tiktok51VideoDetailRoute => GoRouteData.$route(
+      path: '/tiktok51VideoDetail',
+      parentNavigatorKey: Tiktok51VideoDetailRoute.$parentNavigatorKey,
+      factory: $Tiktok51VideoDetailRouteExtension._fromState,
+    );
+
+extension $Tiktok51VideoDetailRouteExtension on Tiktok51VideoDetailRoute {
+  static Tiktok51VideoDetailRoute _fromState(GoRouterState state) =>
+      Tiktok51VideoDetailRoute(
+        id: int.parse(state.uri.queryParameters['id']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/tiktok51VideoDetail',
+        queryParams: {
+          'id': id.toString(),
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $tiktok51TagRoute => GoRouteData.$route(
+      path: '/tiktok51VideoTag',
+      parentNavigatorKey: Tiktok51TagRoute.$parentNavigatorKey,
+      factory: $Tiktok51TagRouteExtension._fromState,
+    );
+
+extension $Tiktok51TagRouteExtension on Tiktok51TagRoute {
+  static Tiktok51TagRoute _fromState(GoRouterState state) => Tiktok51TagRoute(
+        videoTag: state.uri.queryParameters['video-tag']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/tiktok51VideoTag',
+        queryParams: {
+          'video-tag': videoTag,
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 RouteBase get $darkWeb91Route => GoRouteData.$route(
       path: '/aw91',
       parentNavigatorKey: DarkWeb91Route.$parentNavigatorKey,
@@ -2028,12 +2495,15 @@ RouteBase get $darkWeb91Route => GoRouteData.$route(
 extension $DarkWeb91RouteExtension on DarkWeb91Route {
   static DarkWeb91Route _fromState(GoRouterState state) => DarkWeb91Route(
         id: int.parse(state.uri.queryParameters['id']!),
+        showMoreButton:
+            _$boolConverter(state.uri.queryParameters['show-more-button']!),
       );
 
   String get location => GoRouteData.$location(
         '/aw91',
         queryParams: {
           'id': id.toString(),
+          'show-more-button': showMoreButton.toString(),
         },
       );
 
@@ -2142,12 +2612,15 @@ RouteBase get $zpcCommunityRoute => GoRouteData.$route(
 extension $ZpcCommunityRouteExtension on ZpcCommunityRoute {
   static ZpcCommunityRoute _fromState(GoRouterState state) => ZpcCommunityRoute(
         id: int.parse(state.uri.queryParameters['id']!),
+        showMoreButton:
+            _$boolConverter(state.uri.queryParameters['show-more-button']!),
       );
 
   String get location => GoRouteData.$location(
         '/zpcApp',
         queryParams: {
           'id': id.toString(),
+          'show-more-button': showMoreButton.toString(),
         },
       );
 
@@ -2253,12 +2726,15 @@ RouteBase get $clCommunityRoute => GoRouteData.$route(
 extension $ClCommunityRouteExtension on ClCommunityRoute {
   static ClCommunityRoute _fromState(GoRouterState state) => ClCommunityRoute(
         id: int.parse(state.uri.queryParameters['id']!),
+        showMoreButton:
+            _$boolConverter(state.uri.queryParameters['show-more-button']!),
       );
 
   String get location => GoRouteData.$location(
         '/caoliu',
         queryParams: {
           'id': id.toString(),
+          'show-more-button': showMoreButton.toString(),
         },
       );
 
@@ -2353,6 +2829,70 @@ extension $PZhanVideoTagRouteExtension on PZhanVideoTagRoute {
 
   void replace(BuildContext context) =>
       context.replace(location, extra: $extra);
+}
+
+RouteBase get $pZhanTopicRoute => GoRouteData.$route(
+      path: '/pzhanTopic',
+      parentNavigatorKey: PZhanTopicRoute.$parentNavigatorKey,
+      factory: $PZhanTopicRouteExtension._fromState,
+    );
+
+extension $PZhanTopicRouteExtension on PZhanTopicRoute {
+  static PZhanTopicRoute _fromState(GoRouterState state) => PZhanTopicRoute(
+        name: state.uri.queryParameters['name']!,
+        id: state.uri.queryParameters['id']!,
+        api: state.uri.queryParameters['api']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/pzhanTopic',
+        queryParams: {
+          'name': name,
+          'id': id,
+          'api': api,
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $pZhanMoreRoute => GoRouteData.$route(
+      path: '/pzhanMore',
+      parentNavigatorKey: PZhanMoreRoute.$parentNavigatorKey,
+      factory: $PZhanMoreRouteExtension._fromState,
+    );
+
+extension $PZhanMoreRouteExtension on PZhanMoreRoute {
+  static PZhanMoreRoute _fromState(GoRouterState state) => PZhanMoreRoute(
+        name: state.uri.queryParameters['name']!,
+        id: state.uri.queryParameters['id']!,
+        api: state.uri.queryParameters['api']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/pzhanMore',
+        queryParams: {
+          'name': name,
+          'id': id,
+          'api': api,
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
 
 RouteBase get $clVideoSearchRoute => GoRouteData.$route(

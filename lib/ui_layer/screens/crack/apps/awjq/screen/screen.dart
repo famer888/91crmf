@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 class AwRestrictedAreaScreen extends StatefulWidget {
   final int id;
   final CrackApp? crackApp;
+  final bool showMoreButton;
   final VoidCallback? openEndDrawer;
 
   const AwRestrictedAreaScreen({
@@ -21,6 +22,7 @@ class AwRestrictedAreaScreen extends StatefulWidget {
     required this.id,
     this.crackApp,
     this.openEndDrawer,
+    this.showMoreButton = true,
   });
 
   @override
@@ -47,6 +49,7 @@ class _AwRestrictedAreaScreenState extends State<AwRestrictedAreaScreen> {
                     isCrackApp: true,
                     type: CrackAppType.awjq,
                     openEndDrawer: widget.openEndDrawer,
+                    showMoreButton: widget.showMoreButton,
                     onTap: () {
                       if (isUnlockAwjq) {
                         const AwjqVideoSearchRoute(args: '').push(context);

@@ -32,8 +32,9 @@ class TabBarWithView extends StatefulWidget {
     this.initialIndex = 0,
     this.isStack = false,
     this.indexChangeCall,
-  })  : type = TabBarType.line,
-        tabBarRightWidget = null;
+    this.tabBarLeftWidget,
+    this.tabBarRightWidget,
+  })  : type = TabBarType.line;
 
   TabBarWithView.fillColor({
     super.key,
@@ -45,6 +46,7 @@ class TabBarWithView extends StatefulWidget {
     this.linearColors,
     this.isCenter = false,
     this.isScrollable = false,
+    this.tabBarLeftWidget,
     this.tabBarRightWidget,
     this.labelStyle,
     this.unselectedLabelStyle,
@@ -69,6 +71,7 @@ class TabBarWithView extends StatefulWidget {
 
   final double? tabBarHeight;
   final Widget? tabBarRightWidget;
+  final Widget? tabBarLeftWidget;
   final TextStyle? labelStyle;
   final TextStyle? unselectedLabelStyle;
   final TabController? tabController;
@@ -203,6 +206,8 @@ class _TabBarWithViewState extends State<TabBarWithView> with SingleTickerProvid
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              if (widget.tabBarLeftWidget case final view?) view,
+              if (widget.tabBarLeftWidget != null) SizedBox(width: 6.w),
               Expanded(
                 child: Theme(
                   data: Theme.of(context).copyWith(tabBarTheme: tabBarTheme),

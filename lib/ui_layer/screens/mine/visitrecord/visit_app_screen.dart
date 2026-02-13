@@ -14,9 +14,7 @@ import '../../theme.dart';
 import '../../../../report/ui_layer/report_gesture_detector.dart';
 
 class VisitAppScreen extends StatefulWidget {
-  final int type;
-
-  const VisitAppScreen({super.key, required this.type});
+  const VisitAppScreen({super.key});
 
   @override
   State<VisitAppScreen> createState() => _VisitAppScreenState();
@@ -24,7 +22,6 @@ class VisitAppScreen extends StatefulWidget {
 
 class _VisitAppScreenState extends State<VisitAppScreen> {
   final ValueNotifier<List<VideoVisitModel>> _visitFeedModelsNotifier = ValueNotifier([]);
-
 
   @override
   void initState() {
@@ -43,7 +40,7 @@ class _VisitAppScreenState extends State<VisitAppScreen> {
   }
 
   void _getVisitVideoData() async {
-    final List<VideoVisitModel>? visitFeedModels = await AppVideoVisitUtil.getAppVisitRecord(context);
+    final List<VideoVisitModel>? visitFeedModels = await AppVisitUtil.getAppVisitRecord(context);
     if (visitFeedModels == null) {
       _visitFeedModelsNotifier.value = [];
     } else {
@@ -58,26 +55,30 @@ class _VisitAppScreenState extends State<VisitAppScreen> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-        valueListenable: _visitFeedModelsNotifier,
-        builder: (context, visitFeedModels, child) {
-          return Container(
-            alignment: Alignment.topCenter,
-            child: visitFeedModels.isEmpty ? PageEmptyDataView(text: 'mysj'.tr(context: context)) : GridView.builder(
-                shrinkWrap: true,
-                padding: EdgeInsets.only(top: 8.w),
-                itemCount: visitFeedModels.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 8.w,
-                  crossAxisSpacing: 8.w,
-                  childAspectRatio: 170 / 120,
+      valueListenable: _visitFeedModelsNotifier,
+      builder: (context, visitFeedModels, child) {
+        return Container(
+          alignment: Alignment.topCenter,
+          child: visitFeedModels.isEmpty
+              ? PageEmptyDataView(text: 'mysj'.tr(context: context))
+              : GridView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.only(top: 8.w),
+                  itemCount: visitFeedModels.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 8.w,
+                    crossAxisSpacing: 8.w,
+                    childAspectRatio: 170 / 120,
+                  ),
+                  itemBuilder: (context, index) {
+                    final feedModel = visitFeedModels[index];
+                    return _VisitAppVideoItem(feedModel);
+                  },
                 ),
-                itemBuilder: (context, index) {
-                  final feedModel = visitFeedModels[index];
-                  return _VisitAppVideoItem(feedModel);
-                }),
-          );
-        });
+        );
+      },
+    );
   }
 }
 
@@ -100,13 +101,20 @@ class _VisitAppVideoItem extends StatelessWidget {
       return tr('aw91');
     } else if (type == CrackAppType.pzhan.type) {
       return tr('pzhan');
+    } else if (type == CrackAppType.hjsq.type) {
+      return tr('hjsq');
+    } else if (type == CrackAppType.tiktok51.type) {
+      return tr('tiktok51');
+    } else if (type == CrackAppType.gd.type) {
+      return tr('gdcm');
+    } else if (type == CrackAppType.xiaolan.type) {
+      return tr('xiaolan');
     }
     return '';
   }
 
   @override
   Widget build(BuildContext context) {
-    CommonUtils.log('封面:$imageUrl');
     return ReportGestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
@@ -121,7 +129,17 @@ class _VisitAppVideoItem extends StatelessWidget {
           Aw91VideoDetailRoute(id: data.id).push(context);
         } else if (type == CrackAppType.pzhan.type) {
           PZhanVideoDetailRoute(id: data.id).push(context);
-        }
+        } else if (type == CrackAppType.hjsq.type) {
+          HjsqVideoDetailRoute(data.id).push(context);
+        } else if (type == CrackAppType.tiktok51.type) {
+          Tiktok51VideoDetailRoute(id: data.id).push(context);
+        } /* else if (type == CrackAppType.gd.type) {
+          GdVideoDetailRoute(id: data.id).push(context);
+        } else if (type == CrackAppType.xiaolan.type) {
+          XiaolanVideoDetailRoute(id: data.id).push(context);
+        }*/
+
+        AppVisitUtil.updateCrackAppVisitRecord(context, data);
       },
       child: LayoutBuilder(builder: (context, cons) {
         return Column(
@@ -136,6 +154,23 @@ class _VisitAppVideoItem extends StatelessWidget {
                     fit: StackFit.expand,
                     children: [
                       MyImage.network(imageUrl, fit: BoxFit.cover, backgroundColor: MyTheme.imageBgColor, borderRadius: 5.w),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          height: 22.w,
+                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.w),
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Color.fromRGBO(16, 16, 16, 0.05),
+                                Color.fromRGBO(16, 16, 16, 0.9),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: Padding(
@@ -178,4 +213,3 @@ class _VisitAppVideoItem extends StatelessWidget {
     );
   }
 }
-

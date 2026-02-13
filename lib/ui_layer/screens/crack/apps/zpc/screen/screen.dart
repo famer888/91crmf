@@ -18,6 +18,7 @@ import '../../../../../../report/ui_layer/report_gesture_detector.dart';
 class ZpcCommunityScreen extends StatefulWidget {
   final int id;
   final CrackApp? crackApp;
+  final bool showMoreButton;
   final VoidCallback? openEndDrawer;
 
   const ZpcCommunityScreen({
@@ -25,6 +26,7 @@ class ZpcCommunityScreen extends StatefulWidget {
     required this.id,
     this.crackApp,
     this.openEndDrawer,
+    this.showMoreButton = true,
   });
 
   @override
@@ -108,28 +110,29 @@ class _ZpcCommunityScreenState extends State<ZpcCommunityScreen> {
                   ),
                 ),
               ),
-              SizedBox(width: 12.w),
-              ReportGestureDetector(
-                onTap: () {
-                  widget.openEndDrawer?.call();
-                },
-                child: Container(
-                  padding: EdgeInsets.only(top: 5.w, bottom: 5.w),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox.square(
-                        dimension: 24.w,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.w),
-                          child: const MyImage.asset(MyImagePaths.appMore, fit: BoxFit.cover, color: MyTheme.blackColor),
+              if (widget.showMoreButton) SizedBox(width: 12.w),
+              if (widget.showMoreButton)
+                ReportGestureDetector(
+                  onTap: () {
+                    widget.openEndDrawer?.call();
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(top: 5.w, bottom: 5.w),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox.square(
+                          dimension: 24.w,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.w),
+                            child: const MyImage.asset(MyImagePaths.appMore, fit: BoxFit.cover, color: MyTheme.blackColor),
+                          ),
                         ),
-                      ),
-                      Text('gd'.tr(context: context), style: MyTheme.black12.s11),
-                    ],
+                        Text('gd'.tr(context: context), style: MyTheme.black12.s11),
+                      ],
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),

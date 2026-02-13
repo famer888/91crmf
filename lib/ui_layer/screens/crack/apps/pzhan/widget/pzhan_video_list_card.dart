@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:jycrpj/ui_layer/router/routes.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
 import 'package:jycrpj/ui_layer/screens/crack/app_video_visit_util.dart';
-import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/model/pzhan_model.dart';
 import 'package:jycrpj/ui_layer/screens/crack/crack_app_type.dart';
+import 'package:jycrpj/ui_layer/screens/crack/model/app_model.dart';
 import 'package:jycrpj/ui_layer/screens/mine/visitrecord/visit_model.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
@@ -16,7 +16,7 @@ import '../../../../../../report/ui_layer/report_gesture_detector.dart';
 class PZhanVideoListCard extends StatelessWidget {
   const PZhanVideoListCard({super.key, required this.data, this.isInVideoDetail = false});
 
-  final PZhanVideoModel data;
+  final AppVideoModel data;
   final bool isInVideoDetail;
 
   String get imageUrl => CommonUtils.getThumb(data.toJson());
@@ -26,7 +26,7 @@ class PZhanVideoListCard extends StatelessWidget {
     return ReportGestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        AppVideoVisitUtil.updateVisitRecord(
+        AppVisitUtil.updateCrackAppVisitRecord(
           context,
           VideoVisitModel(
             title: data.title,
@@ -56,6 +56,23 @@ class PZhanVideoListCard extends StatelessWidget {
                     fit: StackFit.expand,
                     children: [
                       MyImage.network(imageUrl, fit: BoxFit.cover, backgroundColor: MyTheme.imageBgColor, borderRadius: 5.w),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          height: 22.w,
+                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.w),
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Color.fromRGBO(16, 16, 16, 0.05),
+                                Color.fromRGBO(16, 16, 16, 0.9),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: Padding(

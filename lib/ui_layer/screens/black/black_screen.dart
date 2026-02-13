@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jycrpj/domain/remote_domain/domains/black_domain.dart';
 import 'package:jycrpj/ui_layer/screens/black/black_tag_screen.dart';
-import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:provider/provider.dart';
 
 import '../../../domain/async_value.dart';
@@ -37,7 +36,6 @@ class _BlackIndexPageState extends State<BlackScreen> with TickerProviderStateMi
     });
 
     final result = await _blockDomain.getCategoryList();
-    CommonUtils.log('获取黑料分类列表的结果 result:$result');
     if (result.data case final data?) {
       final blockModelList = data.list;
       _initialIndex = blockModelList.indexWhere((model) => model.current);

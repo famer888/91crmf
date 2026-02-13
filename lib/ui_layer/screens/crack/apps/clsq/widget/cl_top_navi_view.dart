@@ -13,7 +13,7 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/status/loading.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/network_error.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/clsq/widget/cl_api_link_view.dart';
 import 'package:jycrpj/ui_layer/screens/crack/crack_app_type.dart';
-import 'package:jycrpj/ui_layer/screens/crack/lock_mask.dart';
+import 'package:jycrpj/ui_layer/screens/crack/widgets/lock_mask.dart';
 import 'package:jycrpj/ui_layer/screens/crack/unlock_status_notifier.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/screens/webview/screen.dart';
@@ -70,7 +70,7 @@ class _ClTopNaviViewState extends State<ClTopNaviView> with TickerProviderStateM
             linkUrl: '',
             resourceUrl: '',
             redirectType: 0,
-            name: '17岁',
+            name: '精品',
             type: 0,
             desc: '',
             api: 'mvhjgj/discover2',

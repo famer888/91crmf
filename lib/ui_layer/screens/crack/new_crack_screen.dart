@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jycrpj/domain/async_value.dart';
+import 'package:jycrpj/domain/domain.dart';
 import 'package:jycrpj/domain/model/crack_model.dart';
 import 'package:jycrpj/domain/remote_domain/domains/crack.dart';
-import 'package:jycrpj/domain/remote_domain/domains/user.dart';
 import 'package:jycrpj/report/ui_layer/report_gesture_detector.dart';
 import 'package:jycrpj/ui_layer/notifiers/home_config_notifier.dart';
 import 'package:jycrpj/ui_layer/notifiers/user_notifier.dart';
@@ -14,9 +14,11 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/screen_background.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/loading.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/network_error.dart';
 import 'package:jycrpj/ui_layer/screens/crack/app_util.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/51tiktok/screen/tiktok51_community_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/91aw/screen/screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/awjq/screen/screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/clsq/screen/screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_community_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_community_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/zpc/screen/screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/crack_app_type.dart';
@@ -39,6 +41,7 @@ class _NewCrackScreenState extends State<NewCrackScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late final _screenUtil = ScreenUtil();
   late final _crackDomain = context.read<CrackDomain>();
+  late final _appDomain = context.read<AppDomain>();
   late final _userDomain = context.read<UserDomain>();
   late final _homeConfigNotifier = context.read<HomeConfigNotifier>();
   late final _userNotifier = context.read<UserNotifier>();
@@ -56,9 +59,9 @@ class _NewCrackScreenState extends State<NewCrackScreen> {
     if (!mounted) return;
     setState(() {});
 
+    CommonUtils.log('缓存token:${_appDomain.info} - ${_appDomain.cache}');
     try {
-      final resCrackRes = await _crackDomain.getCrackList(isCrack: 1);
-      CommonUtils.log('刷新的结果: $resCrackRes');
+      final resCrackRes = await _crackDomain.getCrackList(isCrack: 1, );
       // 如果任一接口返回 status != 1 则视为错误
       if (resCrackRes.status != 1) {
         _asyncValue = const AsyncError();
@@ -202,6 +205,24 @@ class _NewCrackScreenState extends State<NewCrackScreen> {
                               } else if (crackApp_.appName == CrackAppType.pzhan.appName) {
                                 SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
                                 page = PZhanCommunityScreen(
+                                  id: 1,
+                                  crackApp: crackApp_,
+                                  openEndDrawer: () {
+                                    Scaffold.of(scaffoldContext).openEndDrawer();
+                                  },
+                                );
+                              } else if (crackApp_.appName == CrackAppType.tiktok51.appName) {
+                                SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+                                page = Tiktok51CommunityScreen(
+                                  id: 1,
+                                  crackApp: crackApp_,
+                                  openEndDrawer: () {
+                                    Scaffold.of(scaffoldContext).openEndDrawer();
+                                  },
+                                );
+                              } else if (crackApp_.appName == CrackAppType.hjsq.appName) {
+                                SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+                                page = HjsqCommunityScreen(
                                   id: 1,
                                   crackApp: crackApp_,
                                   openEndDrawer: () {

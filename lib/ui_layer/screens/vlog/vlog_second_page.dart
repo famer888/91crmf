@@ -9,7 +9,8 @@ import 'package:jycrpj/ui_layer/screens/vlog/vlog_play_screen.dart';
 import '../../../report/ui_layer/report_gesture_detector.dart';
 
 class VlogSecondPage extends StatefulWidget {
-  const VlogSecondPage({super.key});
+  final bool userGlobalData;
+  const VlogSecondPage({super.key, required this.userGlobalData});
 
   @override
   State<VlogSecondPage> createState() => _VlogSecondPageState();
@@ -27,32 +28,28 @@ class _VlogSecondPageState extends State<VlogSecondPage> {
       color: MyTheme.bgColor,
       child: Stack(
         children: [
-          Positioned.fill(
-            child: VlogPlayScreen(
-              userGlobalData: true,
-              keepBottomBlank: true,
+          Positioned.fill(child: VlogPlayScreen(userGlobalData: widget.userGlobalData, keepBottomBlank: true)),
+          Positioned(
+            left: 2.w,
+            top: MyTheme.statusHeight,
+            child: ReportGestureDetector(
+              behavior: HitTestBehavior.translucent,
+              child: Container(
+                width: MyTheme.navbarHegiht,
+                height: MyTheme.navbarHegiht,
+                alignment: Alignment.center,
+                child: MyImage.asset(
+                  MyImagePaths.appBackIcon,
+                  width: 20.w,
+                  height: 20.w,
+                  fit: BoxFit.fill,
+                ),
+              ),
+              onTap: () {
+                context.pop();
+              },
             ),
           ),
-          Positioned(
-              top: MyTheme.statusHeight,
-              left: 2.w,
-              child: ReportGestureDetector(
-                behavior: HitTestBehavior.translucent,
-                child: Container(
-                  width: MyTheme.navbarHegiht,
-                  height: MyTheme.navbarHegiht,
-                  alignment: Alignment.center,
-                  child: MyImage.asset(
-                    MyImagePaths.appBackIcon,
-                    width: 20.w,
-                    height: 20.w,
-                    fit: BoxFit.fill,
-                  ),
-                ),
-                onTap: () {
-                  context.pop();
-                },
-              )),
         ],
       ),
     );

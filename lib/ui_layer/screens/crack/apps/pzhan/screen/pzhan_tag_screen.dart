@@ -7,8 +7,8 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/my_app_bar.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/screen_background.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/loading.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/network_error.dart';
-import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/model/pzhan_model.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/widget/pzhan_feed_card.dart';
+import 'package:jycrpj/ui_layer/screens/crack/model/app_model.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +23,7 @@ class PZhanTagScreen extends StatefulWidget {
 }
 
 class _PZhanTagScreenState extends State<PZhanTagScreen> {
-  AsyncValue<List<PZhanVideoModel>> _asyncValue = const AsyncInit();
+  AsyncValue<List<AppVideoModel>> _asyncValue = const AsyncInit();
   late final _appDomain = context.read<AppDomain>();
 
   @override
@@ -42,7 +42,7 @@ class _PZhanTagScreenState extends State<PZhanTagScreen> {
     final result = await _appDomain.getConstructByApiLink(apiLink: 'searchpzhan/mv', params: {'kwy': widget.videoTag});
     if (result.status == 1) {
       if (result.data['list'] case final list when list.isNotEmpty) {
-        final feedModelList = list?.map<PZhanVideoModel>((x) => PZhanVideoModel.fromJson(x)).toList();
+        final feedModelList = list?.map<AppVideoModel>((x) => AppVideoModel.fromJson(x)).toList();
         _asyncValue = AsyncData(feedModelList);
       }
     } else {

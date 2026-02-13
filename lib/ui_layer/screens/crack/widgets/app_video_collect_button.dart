@@ -19,6 +19,7 @@ class AppVideoCollectButton extends StatefulWidget {
   final String apiUrl;
   final bool isCollected;
   final Color collectedColor;
+  final int type;
   final CollectCallback callback;
 
   const AppVideoCollectButton({
@@ -28,6 +29,7 @@ class AppVideoCollectButton extends StatefulWidget {
     required this.id,
     required this.callback,
     required this.collectedColor,
+    required this.type,
   });
 
   @override
@@ -52,11 +54,10 @@ class _AppVideoCollectButtonState extends State<AppVideoCollectButton> {
     super.initState();
   }
 
-  // 'type'      => 'required|integer',  24 表示  草榴, 25 表示 91 暗网 ,26 表示 暗网禁区  27表示  91 制片厂
   Future<void> onCollect() async {
     final result = await _appDomain.getConstructByApiLink(
       apiLink: widget.apiUrl,
-      params: {'type': '${CrackAppType.clsq.type}', 'relatedId': widget.id},
+      params: {'type': '${widget.type}', 'relatedId': widget.id},
     );
     if (result.status == 1) {
       onChangeCollected();

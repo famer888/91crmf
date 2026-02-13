@@ -12,7 +12,7 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/status/loading.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/status/network_error.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/widget/pzhan_api_link_view.dart';
 import 'package:jycrpj/ui_layer/screens/crack/crack_app_type.dart';
-import 'package:jycrpj/ui_layer/screens/crack/lock_mask.dart';
+import 'package:jycrpj/ui_layer/screens/crack/widgets/lock_mask.dart';
 import 'package:jycrpj/ui_layer/screens/crack/unlock_status_notifier.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/screens/webview/screen.dart';
@@ -89,8 +89,11 @@ class _PZhanTopNaviViewState extends State<PZhanTopNaviView> with TickerProvider
                       tabBarHeight: 40.h,
                       linearColors: const [MyTheme.pzhanAppPrimaryColor, MyTheme.pzhanAppPrimaryColor],
                       labelStyle: TextStyle(color: MyTheme.pzhanAppPrimaryColor, fontSize: 18.sp, fontWeight: FontWeight.w600),
-                      unselectedLabelStyle:
-                          TextStyle(color: const Color.fromRGBO(255, 255, 255, 1), fontSize: 16.sp, fontWeight: FontWeight.w500),
+                      unselectedLabelStyle: TextStyle(
+                        color: const Color.fromRGBO(255, 255, 255, 1),
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
                       titles: titles,
                       views: data.map((e) {
                         return KeepAliveWrapper(

@@ -6,6 +6,7 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/my_app_bar.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/screen_background.dart';
 import 'package:jycrpj/ui_layer/screens/mine/visitrecord/visit_app_screen.dart';
 import 'package:jycrpj/ui_layer/screens/mine/visitrecord/visit_black_screen.dart';
+import 'package:jycrpj/ui_layer/screens/mine/visitrecord/visit_vlog_screen.dart';
 
 import '../../common_widgets/my_tab_bar.dart';
 
@@ -30,6 +31,7 @@ class _VisitRecordScreenState extends State<VisitRecordScreen> {
   final _tabTitles = [
     VisitRecordTabModel(title: tr('app'), type: 0),
     VisitRecordTabModel(title: tr('home_hl'), type: 1),
+    VisitRecordTabModel(title: tr('home_dsp'), type: 2),
   ];
 
 
@@ -56,8 +58,9 @@ class _VisitRecordScreenState extends State<VisitRecordScreen> {
           isScrollable: true,
           titles: _tabTitles.map((e) => e.title).toList(),
           views: const [
-            KeepAliveWrapper(child: VisitAppScreen(type: 0)),
-            KeepAliveWrapper(child: VisitBlackScreen(type: 1)),
+            KeepAliveWrapper(child: VisitAppScreen()),
+            KeepAliveWrapper(child: VisitBlackScreen()),
+            KeepAliveWrapper(child: VisitVlogScreen()),
           ],
         ),
       ),

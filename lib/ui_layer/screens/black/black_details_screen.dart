@@ -67,7 +67,7 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
           final blackDetailModel = result.data;
           final curBlackDetailsModel = blackDetailModel!.cur;
           _titleNotifier.value =
-          curBlackDetailsModel != null && curBlackDetailsModel.category.isNotEmpty ? curBlackDetailsModel.category[0].name : 'hlxq'.tr();
+              curBlackDetailsModel != null && curBlackDetailsModel.category.isNotEmpty ? curBlackDetailsModel.category[0].name : 'hlxq'.tr();
 
           _asyncValue = AsyncData(blackDetailModel);
         }
@@ -102,25 +102,36 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
       MyToast.showText(text: 'qspl'.tr(context: context));
       return;
     }
-    Map<String, dynamic> tempParams = {
-      'content': inputController.text.trim(),
-    };
 
-    ///
     if (replyItemModel?.id == null) {
-      tempParams['cid'] = selectedId;
+      // 回复帖子
+      final result = await _blackDomain.publishBlackComment(
+        cid: selectedId,
+        content: inputController.text.trim(),
+      );
+      if (result.status == 1) {
+        BotToast.showText(text: result.msg ?? '');
+        onDismissFocus();
+      } else {
+        BotToast.showText(text: result.msg ?? '');
+        onDismissFocus(); // 收回键盘
+      }
     } else {
-      tempParams['comment_id'] = replyItemModel?.id;
+      // 回复评论
+      final result = await _blackDomain.publishCommentBlackComment(
+        commentId: replyItemModel!.id,
+        content: inputController.text.trim(),
+      );
+      if (result.status == 1) {
+        BotToast.showText(text: result.msg ?? '');
+        onDismissFocus();
+      } else {
+        BotToast.showText(text: result.msg ?? '');
+        onDismissFocus(); // 收回键盘
+      }
     }
 
-    final result = await _blackDomain.publishBlackComment(cid: (replyItemModel?.id == null) ? selectedId : replyItemModel?.id, content: inputController.text.trim());
-    if (result.status == 1) {
-      BotToast.showText(text: result.msg ?? '');
-      onDismissFocus();
-    } else {
-      BotToast.showText(text: result.msg ?? '');
-      onDismissFocus(); // 收回键盘
-    }
+
   }
 
   Future<bool> _changeCommentLike(int id) async {
@@ -161,6 +172,7 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
 
   /// 失去焦点
   void onDismissFocus() {
+    hintNotifier.value = 'qsrnxsdh'.tr();
     inputController.clear();
     replyItemModel = null;
     _inputFocusNode.unfocus();
@@ -171,6 +183,25 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
     selectedId = widget.id;
     _getBlockDetail();
     super.initState();
+    _inputFocusNode.addListener(() {
+      if (!_inputFocusNode.hasFocus) {
+        hintNotifier.value = 'qsrnxsdh'.tr();
+        CommonUtils.log('软键盘收起');
+      } else {
+        CommonUtils.log('软键盘弹起');
+      }
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant BlackDetailsScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (MediaQuery.of(context).viewInsets.bottom == 0) {
+        hintNotifier.value = 'qsrnxsdh'.tr();
+        _inputFocusNode.unfocus();
+      } else {}
+    });
   }
 
   @override
@@ -185,7 +216,7 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return ScreenBackground(
-      appBg: MyImage.asset(MyImagePaths.appBg, fit:BoxFit.cover, width: ScreenUtil().screenWidth, height: 148.w),
+      appBg: MyImage.asset(MyImagePaths.appBg, fit: BoxFit.cover, width: ScreenUtil().screenWidth, height: 148.w),
       child: Scaffold(
         appBar: MyAppBar(
           titleWidget: ValueListenableBuilder(
@@ -208,10 +239,12 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
                 children: [
                   Expanded(
                     child: MyListView.list(
-                      header: BlackDetailContentView(data: data, goNewBlackDetailCallback: (id) {
-                        selectedId = id;
-                        _getBlockDetail();
-                      }),
+                      header: BlackDetailContentView(
+                          data: data,
+                          goNewBlackDetailCallback: (id) {
+                            selectedId = id;
+                            _getBlockDetail();
+                          }),
                       padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: MyTheme.pagePadding),
                       itemBuilder: (context, item, index) {
                         return BlackCommentView(
@@ -219,8 +252,8 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
                           commentData: item,
                           onReply: () {
                             replyItemModel = item;
-                            hintNotifier.value = '${'hf'.tr()}@${item.user.nickname}';
-                            _inputFocusNode.requestFocus();
+                            hintNotifier.value = '${'hf'.tr()} @${item.user.nickname}';
+                            FocusScope.of(context).requestFocus(_inputFocusNode);
                           },
                           onMoreCommentTap: () => _showMoreReview(item),
                           changeLike: () => _changeCommentLike(item.id),
@@ -528,25 +561,29 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
   /// 评论
   Widget _buildBottomActionWidget(BlackDetailModel? data) {
     Widget current = Row(children: [
-      SizedBox(width: 12.w),
+      SizedBox(width: 18.w),
       Expanded(
         child: Convenience.buildContainerWidget(
           alignment: Alignment.centerLeft,
           borderRadius: BorderRadius.circular(20.w),
           color: MyTheme.white25501Color,
           height: 40.w,
-          child: Convenience.buildTextFieldContainer(
-            alignment: Alignment.centerLeft,
-            focusNode: _inputFocusNode,
-            controller: inputController,
-            height: 40.w,
-            margin: EdgeInsets.symmetric(horizontal: 12.5.w),
-            maxLines: 10,
-            padding: EdgeInsets.symmetric(vertical: 2.5.w),
-            hintText: replyItemModel != null ? '@${replyItemModel?.user.nickname}' : '善语结善缘，恶言伤人心',
-            hintStyle: MyTheme.white255_13_M.white25506.w500.s15,
-            style: MyTheme.white255_13_M.white25508.w500.s15.h1_5,
-          ),
+          child: ValueListenableBuilder(
+              valueListenable: hintNotifier,
+              builder: (_, hint, __) {
+                return Convenience.buildTextFieldContainer(
+                  alignment: Alignment.centerLeft,
+                  focusNode: _inputFocusNode,
+                  controller: inputController,
+                  height: 40.w,
+                  margin: EdgeInsets.symmetric(horizontal: 12.5.w),
+                  maxLines: 10,
+                  padding: EdgeInsets.symmetric(vertical: 2.5.w),
+                  hintText: hint,
+                  hintStyle: MyTheme.white255_13_M.white25506.w500.s15,
+                  style: MyTheme.white255_13_M.white25508.w500.s15.h1_5,
+                );
+              }),
         ),
       ),
       SizedBox(width: 5.w),
@@ -561,18 +598,25 @@ class _BlackDetailsScreenState extends State<BlackDetailsScreen> {
           data?.cur?.favoriteNum += isCollected ? 1 : -1;
         },
       ),
-      SizedBox(width: 5.w),
+      SizedBox(width: 8.w),
       _buildActionItemWidget(MyImagePaths.appCustomSend, 'fasong'.tr(context: context), onSendMessage),
-      SizedBox(width: 12.w),
+      SizedBox(width: 18.w),
     ]);
 
     return Convenience.buildChildActionWidget(
-        width: double.infinity, constraints: BoxConstraints(minHeight: 56.w), color: const Color.fromRGBO(22, 22, 34, 1), child: current);
+      padding: EdgeInsets.symmetric(vertical: 10.w),
+      width: double.infinity,
+      constraints: BoxConstraints(minHeight: 56.w),
+      color: const Color.fromRGBO(22, 22, 34, 1),
+      child: current,
+    );
   }
 
   Widget _buildActionItemWidget(iconName, title, void Function()? onTap) {
     return ReportGestureDetector(
-      onTap: onTap,
+      onTap: () {
+        onTap?.call();
+      },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[

@@ -1,26 +1,27 @@
 import 'package:jycrpj/domain/model/black_model.dart';
+import 'package:jycrpj/domain/model/vlog_model.dart';
 import 'package:jycrpj/domain/type_def.dart';
 import 'package:jycrpj/ui_layer/screens/mine/visitrecord/visit_model.dart';
 
-import 'model/feed/feed_model.dart';
-import 'remote_domain/domain.dart';
 import 'model/home_data_model.dart';
+import 'remote_domain/domain.dart';
+
 export 'remote_domain/domains/account.dart';
 export 'remote_domain/domains/community.dart';
 export 'remote_domain/domains/dynamic.dart';
 export 'remote_domain/domains/element.dart';
 export 'remote_domain/domains/home.dart';
+export 'remote_domain/domains/message.dart';
+export 'remote_domain/domains/mv.dart';
 export 'remote_domain/domains/order.dart';
+export 'remote_domain/domains/privilege.dart';
 export 'remote_domain/domains/proxy.dart';
+export 'remote_domain/domains/search.dart';
 export 'remote_domain/domains/seed.dart';
 export 'remote_domain/domains/sign.dart';
 export 'remote_domain/domains/user.dart';
-export 'remote_domain/domains/withdraw.dart';
-export 'remote_domain/domains/message.dart';
-export 'remote_domain/domains/mv.dart';
 export 'remote_domain/domains/vlog.dart';
-export 'remote_domain/domains/privilege.dart';
-export 'remote_domain/domains/search.dart';
+export 'remote_domain/domains/withdraw.dart';
 
 abstract class AppDomain implements LocaleDomain, RemoteDomain {}
 
@@ -74,6 +75,12 @@ abstract class CacheDomain
 
   /// 更新黑料帖子浏览记录
   Future<void> upsertBlackVisitList({required List<BlackListItemModel> blackVisitModels});
+
+  /// 读取短视频浏览记录
+  Future<List<VlogModel>?> readVlogVisitList();
+
+  /// 更新短视频浏览记录
+  Future<void> upsertVlogVisitList({required List<VlogModel> vlogVisitModels});
 
 }
 

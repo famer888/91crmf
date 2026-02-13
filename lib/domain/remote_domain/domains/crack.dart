@@ -5,6 +5,6 @@ import '../../type_def.dart';
 abstract class CrackDomain {
 
   /// 破解 & 未破解列表
-  AsyncResult<CrackModel> getCrackList({String token = '', required int isCrack});
+  AsyncResult<CrackModel> getCrackList({required int isCrack});
 
 }

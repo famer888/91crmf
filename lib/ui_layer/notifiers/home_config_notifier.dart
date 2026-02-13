@@ -21,8 +21,7 @@ class HomeConfigNotifier extends ChangeNotifier {
   late Config _config;
 
   List<String> getSearchHistory({required String key}) {
-    final searchHistory = _searchHistoryMap[key] ?? [];
-    return [...searchHistory];
+    return (_searchHistoryMap[key] ?? []).reversed.take(10).toList();
   }
 
   final Map<String, List<String>> _searchHistoryMap = {};
@@ -49,11 +48,17 @@ class HomeConfigNotifier extends ChangeNotifier {
     final aw91SearchHistory = await _domain.cache.readSearchHistory(key: aw91SearchHistoryKey);
     final zpcSearchHistory = await _domain.cache.readSearchHistory(key: zpcSearchHistoryKey);
     final pzhanSearchHistory = await _domain.cache.readSearchHistory(key: pzhanSearchHistoryKey);
+    final hjsqSearchHistory = await _domain.cache.readSearchHistory(key: hjsqSearchHistoryKey);
+    final tiktokSearchHistory = await _domain.cache.readSearchHistory(key: tiktok51SearchHistoryKey);
+    final dspSearchHistory = await _domain.cache.readSearchHistory(key: dspSearchHistoryKey);
     _searchHistoryMap[clSearchHistoryKey] = clSearchHistory;
     _searchHistoryMap[awjqSearchHistoryKey] = awjqSearchHistory;
     _searchHistoryMap[aw91SearchHistoryKey] = aw91SearchHistory;
     _searchHistoryMap[zpcSearchHistoryKey] = zpcSearchHistory;
     _searchHistoryMap[pzhanSearchHistoryKey] = pzhanSearchHistory;
+    _searchHistoryMap[hjsqSearchHistoryKey] = hjsqSearchHistory;
+    _searchHistoryMap[tiktok51SearchHistoryKey] = tiktokSearchHistory;
+    _searchHistoryMap[dspSearchHistoryKey] = dspSearchHistory;
   }
 
   Future<Json?> uploadImage(XFile xFile) async {
@@ -108,10 +113,37 @@ class HomeConfigNotifier extends ChangeNotifier {
   }
 
   /// 更新搜索记录
-  Future<void> upsertSearchHistory({required String key, required List<String> searchHistory}) async {
-    await _domain.cache.upsertSearchHistory(key: key, searchHistory: searchHistory);
+  // Future<void> upsertSearchHistory({required String key, required List<String> searchHistory}) async {
+  //   await _domain.cache.upsertSearchHistory(key: key, searchHistory: searchHistory);
+  //   _searchHistoryMap[key]?.clear();
+  //   _searchHistoryMap[key]?.addAll(searchHistory);
+  //   notifyListeners();
+  // }
+  Future<void> upsertSearchHistory({required String key, required String searchWord}) async {
+    final searchHistoryList = await _domain.cache.readSearchHistory(key: key);
+    // 初始化
+    final List<String> list = searchHistoryList;
+    // ⭐ 关键：先移除旧的
+    list.removeWhere((e) => e == searchWord);
+    // ⭐ 插入到最后
+    list.add(searchWord);
+    await _domain.cache.upsertSearchHistory(key: key, searchHistory: list);
+
     _searchHistoryMap[key]?.clear();
-    _searchHistoryMap[key]?.addAll(searchHistory);
+    _searchHistoryMap[key]?.addAll(list);
+    notifyListeners();
+  }
+
+  Future<void> removeSearchHistory({required String key, required String searchWord}) async {
+    final searchHistoryList = await _domain.cache.readSearchHistory(key: key);
+    // 初始化
+    final List<String> list = searchHistoryList;
+    // ⭐ 关键：先移除旧的
+    list.removeWhere((e) => e == searchWord);
+    await _domain.cache.upsertSearchHistory(key: key, searchHistory: list);
+
+    _searchHistoryMap[key]?.clear();
+    _searchHistoryMap[key]?.addAll(list);
     notifyListeners();
   }
 

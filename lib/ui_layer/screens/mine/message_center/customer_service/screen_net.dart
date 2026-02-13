@@ -1,30 +1,16 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../domain/api_validator.dart';
 import '../../../../../domain/async_value.dart';
-import '../../../../../domain/remote_domain/domains/message.dart';
 import '../../../../../domain/remote_domain/domains/user.dart';
-import '../../../../notifiers/home_config_notifier.dart';
-import '../../../../utils/common_utils.dart';
 import '../../../../utils/my_toast.dart';
 import '../../../common_widgets/my_app_bar.dart';
-import '../../../common_widgets/my_image.dart';
 import '../../../common_widgets/screen_background.dart';
 import '../../../common_widgets/status/empty_data.dart';
 import '../../../common_widgets/status/loading.dart';
 import '../../../common_widgets/status/network_error.dart';
-import '../../../image_paths.dart';
-import '../../../theme.dart';
 import '../../../webview/inapp_screen.dart';
-import '../../../webview/screen.dart';
 
 class MineCustomerServiceWebScreen extends StatefulWidget {
   const MineCustomerServiceWebScreen({super.key});

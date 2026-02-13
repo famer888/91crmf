@@ -78,15 +78,10 @@ class _VideoDetailScreenState extends State<VideoDetailScreen> {
               width: 40.w,
               decoration: BoxDecoration(
                 gradient: MyTheme.gradient_90_114,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20.w),
-                ),
+                borderRadius: BorderRadius.all(Radius.circular(20.w)),
               ),
               child: Center(
-                child: Text(
-                  'fahui'.tr(context: context),
-                  style: MyTheme.white255_13_M,
-                ),
+                child: Text('fahui'.tr(context: context), style: MyTheme.white255_13_M),
               ),
             ),
           ),
@@ -110,6 +105,7 @@ class VideoView extends StatelessWidget {
   const VideoView({super.key, required this.data});
 
   final VideoData data;
+
   @override
   Widget build(BuildContext context) {
     return AspectRatio(

@@ -57,4 +57,48 @@ class UnlockStatusNotifier extends ChangeNotifier {
     }
   }
 
+  // 51tiktok
+  bool get isUnlockTiktok51 => _isUnlockTiktok51;
+  bool _isUnlockTiktok51 = false;
+
+  void changeTiktok51UnlockStatus(bool status) async {
+    if (_isUnlockTiktok51 != status) {
+      _isUnlockTiktok51 = status;
+      notifyListeners();
+    }
+  }
+
+  // hjsq
+  bool get isUnlockHjsq => _isUnlockHjsq;
+  bool _isUnlockHjsq = false;
+
+  void changeHjsqUnlockStatus(bool status) async {
+    if (_isUnlockHjsq != status) {
+      _isUnlockHjsq = status;
+      notifyListeners();
+    }
+  }
+
+  // Gdcm
+  bool get isUnlockGdcm => _isUnlockGdcm;
+  bool _isUnlockGdcm = false;
+
+  void changeGdcmUnlockStatus(bool status) async {
+    if (_isUnlockGdcm != status) {
+      _isUnlockGdcm = status;
+      notifyListeners();
+    }
+  }
+
+  // xiaolan
+  bool get isUnlockXiaolan => _isUnlockXiaolan;
+  bool _isUnlockXiaolan = false;
+
+  void changeXiaolanUnlockStatus(bool status) async {
+    if (_isUnlockXiaolan != status) {
+      _isUnlockXiaolan = status;
+      notifyListeners();
+    }
+  }
+
 }

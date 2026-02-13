@@ -237,6 +237,12 @@ class Config {
     this.awjqSortNav,
     this.pzhanSortNav,
     this.pzhanFindSortNav,
+    this.hjsqSortNav,
+    this.hjsqForumNav,
+    this.tikok51SortNav,
+    this.tikok51FindSortNav,
+    this.gdSortNav,
+    this.gdForumNav,
     required this.aiNav,
     required this.payAiAudio,
     required this.payAiNovel,
@@ -378,6 +384,17 @@ class Config {
   // P站发现页面的tab
   final List<AppNavModel>? pzhanFindSortNav;
 
+  // 海角
+  final List<AppNavModel>? hjsqSortNav;
+  final List<AppNavModel>? hjsqForumNav;
+  // 51Tiktok
+  final List<AppNavModel>? tikok51SortNav;
+  final List<AppNavModel>? tikok51FindSortNav;
+
+  // 果冻
+  final List<AppNavModel>? gdSortNav;
+  final List<AppNavModel>? gdForumNav;
+
   final int payAiMagic;
   final int payAiDraw;
 
@@ -400,6 +417,12 @@ class Config {
         awjqSortNav: List<AppNavModel>.from(json['awjq_sort_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
         pzhanSortNav: List<AppNavModel>.from(json['pzhan_sort_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
         pzhanFindSortNav: List<AppNavModel>.from(json['pzhan_find_sort_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
+        hjsqSortNav: List<AppNavModel>.from(json['hjsq_sort_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
+        hjsqForumNav: List<AppNavModel>.from(json['hjsq_forum_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
+        tikok51SortNav: List<AppNavModel>.from(json['51tikok_sort_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
+        tikok51FindSortNav: List<AppNavModel>.from(json['51tikok_find_sort_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
+        gdSortNav: List<AppNavModel>.from(json['gd_sort_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
+        gdForumNav: List<AppNavModel>.from(json['gd_forum_nav']?.map((x) => AppNavModel.fromJson(x)) ?? []),
         dayPrice: json['day_price'],
         personAds: json['person_ads'],
         imgUploadUrl: json['img_upload_url'],
@@ -512,6 +535,12 @@ class Config {
         'awjq_sort_nav': awjqSortNav?.map((e) => e).toList() ?? [],
         'pzhan_sort_nav': pzhanSortNav?.map((e) => e).toList() ?? [],
         'pzhan_find_sort_nav': pzhanFindSortNav?.map((e) => e).toList() ?? [],
+        '51tikok_sort_nav': pzhanSortNav?.map((e) => e).toList() ?? [],
+        '51tikok_find_sort_nav': pzhanFindSortNav?.map((e) => e).toList() ?? [],
+        'hjsq_sort_nav': hjsqSortNav?.map((e) => e).toList() ?? [],
+        'hjsq_forum_nav': hjsqForumNav?.map((e) => e).toList() ?? [],
+        'gd_sort_nav': gdSortNav?.map((e) => e).toList() ?? [],
+        'gd_forum_nav': gdForumNav?.map((e) => e).toList() ?? [],
         'day_price': dayPrice,
         'person_ads': personAds,
         'img_upload_url': imgUploadUrl,
