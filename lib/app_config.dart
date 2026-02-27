@@ -13,16 +13,14 @@ class BuildConfig {
       'P/D/+MulHay6Jzah0AnECON76PVOS4idWjlv/W9FmBnsXsGE+wXTI/uP4UpmvvPD';
 
   static final apiLines = kIsWeb
-      ? [
-          'https://wapi.iiutweon.xyz/api.php',
-        ]
+      ? ['https://wapi.gfqbdkq.cc/api.php']
       : [
-          'https://api1.iiutweon.xyz/api.php',
-          'https://api2.iiutweon.xyz/api.php',
-          'https://api3.iiutweon.xyz/api.php',
-          'https://api4.iiutweon.xyz/api.php',
-          'https://api5.iiutweon.xyz/api.php',
-          'https://api6.iiutweon.xyz/api.php',
+          'https://api1.gfqbdkq.cc/api.php',
+          'https://api2.gfqbdkq.cc/api.php',
+          'https://api3.gfqbdkq.cc/api.php',
+          'https://api4.gfqbdkq.cc/api.php',
+          'https://api5.gfqbdkq.cc/api.php',
+          'https://api6.gfqbdkq.cc/api.php'
         ];
 
   /// 备用线路
