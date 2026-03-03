@@ -51,7 +51,7 @@ class _ReportGeneralAppListSwiperState extends State<ReportGeneralAppListSwiper>
   void initState() {
     super.initState();
     _ColumNumber = widget.columnNumber;
-    threshold = _ColumNumber * 2;
+    threshold = _ColumNumber * 4;
   }
 
   void _showBanner(BannerModel banner) {
