@@ -20,7 +20,7 @@ class ReportGeneralAppListSwiper extends StatefulWidget {
     this.radius = 5,
     this.aspectRatio = 7 / 3,
     this.maxWidth = 375,
-    this.columnNumber = 5,
+    this.columnNumber = 6,
     this.useMargin = false,
     this.titleColor,
   });
@@ -39,9 +39,9 @@ class ReportGeneralAppListSwiper extends StatefulWidget {
 }
 
 class _ReportGeneralAppListSwiperState extends State<ReportGeneralAppListSwiper> {
-  final double _childAspectRatio = 57 / 76;
-  int threshold = 10;
-  int _ColumNumber = 5;
+  final double _childAspectRatio = 57 / 82;
+  int threshold = 24;
+  int _ColumNumber = 6;
 
   Map<String, bool> adIdMap = {}; // 已经显示true 未显示null
   List<String> get adIds => List<String>.from(adIdMap.keys);
@@ -125,28 +125,77 @@ class _ReportGeneralAppListSwiperState extends State<ReportGeneralAppListSwiper>
   @override
   Widget build(BuildContext context) {
     if (widget.data.length > threshold) {
-      // 取前 _ColumNumber 个（不足 _ColumNumber 个则全取）
-      final firstPart = widget.data.sublist(0, min(_ColumNumber, widget.data.length));
-      // 取第 _ColumNumber+1 个之后的部分（如果不够 _ColumNumber 个就为空）
-      final secondPart = widget.data.length > _ColumNumber ? widget.data.sublist(_ColumNumber) : [];
+      final subsIndex = _ColumNumber * 3;
+      final firstPart = widget.data.sublist(0, min(subsIndex, widget.data.length));
+      final secondPart = widget.data.length > subsIndex ? widget.data.sublist(subsIndex) : [];
       final itemWidth = (ScreenUtil().screenWidth - (_ColumNumber + 1) * 6.w - MyTheme.pagePadding * 2) / _ColumNumber;
 
-      return Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List.generate(firstPart.length, (index) {
-                final item = firstPart[index];
+      return Builder(builder: (context) {
+        return Column(
+          children: [
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 2),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: List.generate(firstPart.length, (index) {
+            //       final item = firstPart[index];
+            //
+            //       _showBanner(item);
+            //       return ReportGestureDetector(
+            //         onTap: () {
+            //           postClickReport(widget.data[index]);
+            //           CommonUtils.openRoute(context, item.toJson());
+            //         },
+            //         child: SizedBox(
+            //             width: itemWidth,
+            //             child: Column(
+            //               mainAxisAlignment: MainAxisAlignment.center,
+            //               mainAxisSize: MainAxisSize.min,
+            //               children: [
+            //                 SizedBox(
+            //                   width: itemWidth,
+            //                   height: itemWidth,
+            //                   child: AspectRatio(
+            //                     aspectRatio: 1,
+            //                     child: MyImage.network(CommonUtils.getThumb(item.toJson()), fit: BoxFit.cover, borderRadius: 8.w),
+            //                   ),
+            //                 ),
+            //                 SizedBox(height: 8.w),
+            //                 Text(
+            //                   item.name ?? item.title ?? "",
+            //                   style: TextStyle(
+            //                       color: widget.titleColor ?? Colors.white,
+            //                       overflow: TextOverflow.ellipsis,
+            //                       decoration: TextDecoration.none,
+            //                       height: 1,
+            //                       fontWeight: FontWeight.w600,
+            //                       fontSize: 11.sp),
+            //                 ),
+            //               ],
+            //             )),
+            //       );
+            //     }),
+            //   ),
+            // ),
+            if (firstPart.isNotEmpty)
+              GridView.count(
+                shrinkWrap: true,
+                mainAxisSpacing: 6.w,
+                crossAxisSpacing: 6.w,
+                padding: EdgeInsets.only(bottom: 0.w),
+                crossAxisCount: _ColumNumber,
+                childAspectRatio: _childAspectRatio,
+                physics: const NeverScrollableScrollPhysics(),
+                children: List.generate(firstPart.length, (index) {
+                  final item = firstPart[index];
 
-                _showBanner(item);
-                return ReportGestureDetector(
-                  onTap: () {
-                    postClickReport(widget.data[index]);
-                    CommonUtils.openRoute(context, item.toJson());
-                  },
-                  child: SizedBox(
+                  _showBanner(item);
+                  return ReportGestureDetector(
+                    onTap: () {
+                      postClickReport(firstPart[index]);
+                      CommonUtils.openRoute(context, item.toJson());
+                    },
+                    child: SizedBox(
                       width: itemWidth,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -157,194 +206,252 @@ class _ReportGeneralAppListSwiperState extends State<ReportGeneralAppListSwiper>
                             height: itemWidth,
                             child: AspectRatio(
                               aspectRatio: 1,
-                              child: MyImage.network(CommonUtils.getThumb(item.toJson()), fit: BoxFit.cover, borderRadius: 8.w),
+                              child: MyImage.network(
+                                fit: BoxFit.cover,
+                                borderRadius: 8.w,
+                                CommonUtils.getThumb(item.toJson()),
+                              ),
                             ),
                           ),
                           SizedBox(height: 8.w),
                           Text(
                             item.name ?? item.title ?? "",
                             style: TextStyle(
-                                color: widget.titleColor ?? Colors.white,
-                                overflow: TextOverflow.ellipsis,
-                                decoration: TextDecoration.none,
-                                height: 1,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 11.sp),
+                              color: Colors.white,
+                              overflow: TextOverflow.ellipsis,
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 11.sp,
+                            ),
                           ),
                         ],
-                      )),
-                );
-              }),
-            ),
-          ),
-          if (secondPart.isNotEmpty && secondPart is List<BannerModel>) SizedBox(height: 10.w),
-          if (secondPart.isNotEmpty && secondPart is List<BannerModel>)
-            ReportInfiniteBannerList(
-              banners: secondPart,
-              columNumber: _ColumNumber,
-              titleColor: widget.titleColor,
-              showFunc: (item) {
-                _showBanner(item);
-              },
-              tapFunc: (item) {
-                postClickReport(item);
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            if (secondPart.isNotEmpty && secondPart is List<BannerModel>) SizedBox(height: 8.w),
+            if (secondPart.isNotEmpty && secondPart is List<BannerModel>)
+              ReportInfiniteBannerList(
+                banners: secondPart,
+                columNumber: _ColumNumber,
+                titleColor: widget.titleColor,
+                showFunc: (item) {
+                  _showBanner(item);
+                },
+                tapFunc: (item) {
+                  postClickReport(item);
+                  CommonUtils.openRoute(context, item.toJson());
+                },
+              ),
+          ],
+        );
+      });
+    } else {
+      final itemWidth = (ScreenUtil().screenWidth - (_ColumNumber + 1) * 6.w - MyTheme.pagePadding * 2) / _ColumNumber;
+      return Builder(builder: (context) {
+        return GridView.count(
+          shrinkWrap: true,
+          mainAxisSpacing: 8.w,
+          crossAxisSpacing: 8.w,
+          padding: EdgeInsets.only(bottom: 8.w),
+          crossAxisCount: _ColumNumber,
+          childAspectRatio: _childAspectRatio,
+          physics: const NeverScrollableScrollPhysics(),
+          children: List.generate(widget.data.length, (index) {
+            final item = widget.data[index];
+
+            _showBanner(item);
+            return ReportGestureDetector(
+              onTap: () {
+                postClickReport(widget.data[index]);
                 CommonUtils.openRoute(context, item.toJson());
               },
-            ),
-        ],
-      );
-    } else {
-      List<List<BannerModel>> pages = [];
-      List<BannerModel> page = [];
-      for (var element in widget.data) {
-        if (page.length >= _ColumNumber * 2) {
-          pages.add(page);
-          page = [];
-        }
-        page.add(element);
-      }
+              child: SizedBox(
+                width: itemWidth,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: itemWidth,
+                      height: itemWidth,
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: MyImage.network(CommonUtils.getThumb(item.toJson()), fit: BoxFit.cover, borderRadius: 8.w),
+                      ),
+                    ),
+                    SizedBox(height: 8.w),
+                    Text(
+                      item.name ?? item.title ?? "",
+                      style: TextStyle(
+                        color: Colors.white,
+                        overflow: TextOverflow.ellipsis,
+                        decoration: TextDecoration.none,
+                        height: 1,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 11.sp,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
+        );
+      });
 
-      if (page.isNotEmpty) {
-        pages.add(page);
-      }
-
-      return Container(
-        child: widget.data.isEmpty
-            ? Container()
-            : LayoutBuilder(builder: (context, constrains) {
-                double width = constrains.maxWidth;
-                double itemWidth = (width - (_ColumNumber - 1) * 10.w) / _ColumNumber;
-                double itemHeight = itemWidth / _childAspectRatio;
-                // double bannerHeight = widget.data.length >= 10 ? itemHeight + (pages.first.length > _ColumeNumber ? 10.w : 7.w) :
-                // (itemHeight * (pages.first.length <= _ColumeNumber ? 1 : 2)) + (pages.first.length > _ColumeNumber ? 15.w : 0);
-                double bannerHeight =
-                    (itemHeight * (pages.first.length <= _ColumNumber ? 1 : 2)) + (pages.first.length > _ColumNumber ? 15.w : 0);
-
-                return SizedBox(
-                  width: width,
-                  height: bannerHeight,
-                  child: widget.data.isEmpty
-                      ? Container()
-                      : Swiper(
-                          autoplay: pages.length > 1,
-                          loop: pages.length > 1,
-                          itemBuilder: (BuildContext context, int index) {
-                            double w = itemWidth;
-                            return VisibilityDetector(
-                              key: Key("swiper_item_$index"),
-                              onVisibilityChanged: (info) {
-                                if (didReport) {
-                                  return;
-                                }
-                                if (info.visibleFraction > 0.8 && adIds.length < widget.data.length) {
-                                  for (var bannerModel in pages[index]) {
-                                    _showBanner(bannerModel);
-                                    // adIds.add(bannerModel.reportId);
-                                  }
-                                }
-                              },
-                              child: SizedBox(
-                                width: width,
-                                child: Builder(builder: (context) {
-                                  return GridView.count(
-                                      padding: EdgeInsets.only(bottom: 10.w),
-                                      crossAxisCount: _ColumNumber,
-                                      mainAxisSpacing: 10.w,
-                                      crossAxisSpacing: 10.w,
-                                      physics: const NeverScrollableScrollPhysics(),
-                                      childAspectRatio: _childAspectRatio,
-                                      shrinkWrap: true,
-                                      children: pages[index].map((e) {
-                                        // return Container();
-
-                                        return ReportGestureDetector(
-                                            behavior: HitTestBehavior.translucent,
-                                            onTap: () {
-                                              FocusManager.instance.primaryFocus?.unfocus();
-                                              postClickReport(widget.data[index]);
-                                              CommonUtils.openRoute(context, e.toJson());
-                                            },
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                SizedBox(
-                                                  width: w,
-                                                  height: w,
-                                                  child: AspectRatio(
-                                                    aspectRatio: 1,
-                                                    child: MyImage.network(
-                                                      CommonUtils.getThumb(e.toJson()),
-                                                      fit: BoxFit.cover,
-                                                      borderRadius: 8.w,
-                                                    ),
-                                                  ),
-                                                ),
-                                                // SizedBox(height: 8.w),
-                                                Expanded(
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    // color: Colors.blue,
-                                                    child: Text(
-                                                      e.name ?? e.title ?? "",
-                                                      style: TextStyle(
-                                                          color: widget.titleColor ?? Colors.white,
-                                                          overflow: TextOverflow.ellipsis,
-                                                          decoration: TextDecoration.none,
-                                                          height: 1,
-                                                          fontWeight: FontWeight.w600,
-                                                          fontSize: 11.sp),
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            ));
-                                      }).toList()
-
-                                      // pages[index].map((e) {
-                                      //   return Container();
-                                      // }).toList(),
-                                      );
-                                }),
-                              ),
-                            );
-                          },
-                          itemCount: pages.length,
-                          pagination: pages.length > 1 || true
-                              ? SwiperPagination(
-                                  margin: EdgeInsets.zero,
-                                  builder: SwiperCustomPagination(builder: (context, config) {
-                                    int count = pages.length;
-                                    return Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: List.generate(count, (index) {
-                                        return config.activeIndex == index
-                                            ? Container(
-                                                width: 10.w,
-                                                height: 4.w,
-                                                margin: EdgeInsets.only(right: 4.w),
-                                                decoration: BoxDecoration(
-                                                  // color: StyleTheme.white255Color,
-                                                  gradient: MyTheme.gradient_90_114,
-                                                  borderRadius: BorderRadius.all(Radius.circular(2.w)),
-                                                ),
-                                              )
-                                            : Container(
-                                                width: 4.w,
-                                                height: 4.w,
-                                                margin: EdgeInsets.only(right: 4.w),
-                                                decoration: BoxDecoration(
-                                                  color: MyTheme.white08Color,
-                                                  borderRadius: BorderRadius.all(Radius.circular(2.w)),
-                                                ),
-                                              );
-                                      }),
-                                    );
-                                  }))
-                              : null,
-                        ),
-                );
-              }),
-      );
+      // List<List<BannerModel>> pages = [];
+      // List<BannerModel> page = [];
+      // for (var element in widget.data) {
+      //   if (page.length >= _ColumNumber * 2) {
+      //     pages.add(page);
+      //     page = [];
+      //   }
+      //   page.add(element);
+      // }
+      //
+      // if (page.isNotEmpty) {
+      //   pages.add(page);
+      // }
+      //
+      // return Container(
+      //   child: widget.data.isEmpty
+      //       ? Container()
+      //       : LayoutBuilder(builder: (context, constrains) {
+      //           double width = constrains.maxWidth;
+      //           double itemWidth = (width - (_ColumNumber - 1) * 10.w) / _ColumNumber;
+      //           double itemHeight = itemWidth / _childAspectRatio;
+      //           // double bannerHeight = widget.data.length >= 10 ? itemHeight + (pages.first.length > _ColumeNumber ? 10.w : 7.w) :
+      //           // (itemHeight * (pages.first.length <= _ColumeNumber ? 1 : 2)) + (pages.first.length > _ColumeNumber ? 15.w : 0);
+      //           double bannerHeight =
+      //               (itemHeight * (pages.first.length <= _ColumNumber ? 1 : 2)) + (pages.first.length > _ColumNumber ? 15.w : 0);
+      //
+      //           return SizedBox(
+      //             width: width,
+      //             height: bannerHeight,
+      //             child: widget.data.isEmpty
+      //                 ? Container()
+      //                 : Swiper(
+      //                     autoplay: pages.length > 1,
+      //                     loop: pages.length > 1,
+      //                     itemBuilder: (BuildContext context, int index) {
+      //                       double w = itemWidth;
+      //                       return VisibilityDetector(
+      //                         key: Key("swiper_item_$index"),
+      //                         onVisibilityChanged: (info) {
+      //                           if (didReport) {
+      //                             return;
+      //                           }
+      //                           if (info.visibleFraction > 0.8 && adIds.length < widget.data.length) {
+      //                             for (var bannerModel in pages[index]) {
+      //                               _showBanner(bannerModel);
+      //                               // adIds.add(bannerModel.reportId);
+      //                             }
+      //                           }
+      //                         },
+      //                         child: SizedBox(
+      //                           width: width,
+      //                           child: Builder(builder: (context) {
+      //                             return GridView.count(
+      //                                 padding: EdgeInsets.only(bottom: 10.w),
+      //                                 crossAxisCount: _ColumNumber,
+      //                                 mainAxisSpacing: 10.w,
+      //                                 crossAxisSpacing: 10.w,
+      //                                 physics: const NeverScrollableScrollPhysics(),
+      //                                 childAspectRatio: _childAspectRatio,
+      //                                 shrinkWrap: true,
+      //                                 children: pages[index].map((e) {
+      //                                   // return Container();
+      //
+      //                                   return ReportGestureDetector(
+      //                                       behavior: HitTestBehavior.translucent,
+      //                                       onTap: () {
+      //                                         FocusManager.instance.primaryFocus?.unfocus();
+      //                                         postClickReport(widget.data[index]);
+      //                                         CommonUtils.openRoute(context, e.toJson());
+      //                                       },
+      //                                       child: Column(
+      //                                         mainAxisAlignment: MainAxisAlignment.center,
+      //                                         children: [
+      //                                           SizedBox(
+      //                                             width: w,
+      //                                             height: w,
+      //                                             child: AspectRatio(
+      //                                               aspectRatio: 1,
+      //                                               child: MyImage.network(
+      //                                                 CommonUtils.getThumb(e.toJson()),
+      //                                                 fit: BoxFit.cover,
+      //                                                 borderRadius: 8.w,
+      //                                               ),
+      //                                             ),
+      //                                           ),
+      //                                           // SizedBox(height: 8.w),
+      //                                           Expanded(
+      //                                             child: Container(
+      //                                               alignment: Alignment.center,
+      //                                               // color: Colors.blue,
+      //                                               child: Text(
+      //                                                 e.name ?? e.title ?? "",
+      //                                                 style: TextStyle(
+      //                                                     color: widget.titleColor ?? Colors.white,
+      //                                                     overflow: TextOverflow.ellipsis,
+      //                                                     decoration: TextDecoration.none,
+      //                                                     height: 1,
+      //                                                     fontWeight: FontWeight.w600,
+      //                                                     fontSize: 11.sp),
+      //                                               ),
+      //                                             ),
+      //                                           )
+      //                                         ],
+      //                                       ));
+      //                                 }).toList()
+      //
+      //                                 // pages[index].map((e) {
+      //                                 //   return Container();
+      //                                 // }).toList(),
+      //                                 );
+      //                           }),
+      //                         ),
+      //                       );
+      //                     },
+      //                     itemCount: pages.length,
+      //                     pagination: pages.length > 1 || true
+      //                         ? SwiperPagination(
+      //                             margin: EdgeInsets.zero,
+      //                             builder: SwiperCustomPagination(builder: (context, config) {
+      //                               int count = pages.length;
+      //                               return Row(
+      //                                 mainAxisAlignment: MainAxisAlignment.center,
+      //                                 children: List.generate(count, (index) {
+      //                                   return config.activeIndex == index
+      //                                       ? Container(
+      //                                           width: 10.w,
+      //                                           height: 4.w,
+      //                                           margin: EdgeInsets.only(right: 4.w),
+      //                                           decoration: BoxDecoration(
+      //                                             // color: StyleTheme.white255Color,
+      //                                             gradient: MyTheme.gradient_90_114,
+      //                                             borderRadius: BorderRadius.all(Radius.circular(2.w)),
+      //                                           ),
+      //                                         )
+      //                                       : Container(
+      //                                           width: 4.w,
+      //                                           height: 4.w,
+      //                                           margin: EdgeInsets.only(right: 4.w),
+      //                                           decoration: BoxDecoration(
+      //                                             color: MyTheme.white08Color,
+      //                                             borderRadius: BorderRadius.all(Radius.circular(2.w)),
+      //                                           ),
+      //                                         );
+      //                                 }),
+      //                               );
+      //                             }))
+      //                         : null,
+      //                   ),
+      //           );
+      //         }),
+      // );
     }
   }
 }
