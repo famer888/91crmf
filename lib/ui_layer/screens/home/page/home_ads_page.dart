@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:jycrpj/report/event_tracking.dart';
+import 'package:jycrpj/report/ui_layer/report_timing_observer.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../domain/async_value.dart';
@@ -26,6 +28,73 @@ class HomeAdsPage extends StatefulWidget {
 class _HomeAdsPageState extends State<HomeAdsPage> {
   late final homeDomain = context.read<HomeDomain>();
   AsyncValue<HomeAdsModel> _asyncValue = const AsyncInit();
+
+
+  Map<String, bool> adIdMap = {}; // 已经显示true 未显示null
+  List<String> get adIds => List<String>.from(adIdMap.keys);
+  bool didReport = false; //本生命周期内 只上报一次
+
+  void _showAppAd(TopAdsModel tp) {
+    // 没存进Map 就是没上传过show 上传&记录
+    if (adIdMap[tp.advertiseCode] == null) {
+      postActionReport(tp, "show");
+      adIdMap[tp.advertiseCode ?? ''] = true;
+    }
+
+
+    if (adIds.length == _asyncValue.data!.top.length + _asyncValue.data!.bottom.length) {
+      postShowReport();
+    }
+  }
+
+  //展示广告上报 展示完或页面消失上报
+  void postShowReport() {
+    if (didReport) return;
+
+    TopAdsModel tp =_asyncValue.data!.bottom.first;
+    EventTracking().reportSingle({
+      "event": "ad_impression",
+      "page_key": RouteStore.currentPageKey,
+      "page_name": RouteStore.currentPageName,
+      "ad_slot_key": tp.advertiseLocationCode,
+      "ad_slot_name": tp.adSlotName,
+      "ad_id": adIds.join(","),
+      "creative_id": "",
+      "ad_type": tp.adType,
+    }).then((onValue) {
+      didReport = true;
+    });
+  }
+
+  //上传广告行为
+  void postActionReport(TopAdsModel tp, String action) {
+    EventTracking().reportSingle({
+      "event": "advertising",
+      "event_type": action,
+      "advertising_key": tp.advertiseLocationCode,
+      "advertising_name": tp.adSlotName,
+      "advertising_id": tp.advertiseCode,
+    });
+  }
+
+
+  //点击广告上报
+  void postClickReport(TopAdsModel tp) {
+    postActionReport(tp, "click");
+
+    EventTracking().reportSingle({
+      "event": "ad_click",
+      "page_key": RouteStore.currentPageKey,
+      "page_name": RouteStore.currentPageName,
+      "ad_slot_key": tp.advertiseLocationCode,
+      "ad_slot_name": tp.adSlotName,
+      "ad_id": tp.advertiseCode,
+      "creative_id": "",
+      "ad_type": tp.adType,
+    }).then((value) {
+      // CommonUtils.log(value);
+    });
+  }
 
   _init() async {
     if (_asyncValue.isLoading) return;
@@ -73,10 +142,12 @@ class _HomeAdsPageState extends State<HomeAdsPage> {
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 final e = data.top[index];
+                _showAppAd(e);
                 return ReportGestureDetector(
                   onTap: () {
                     homeDomain.reqAdClickCount(id: e.reportId, type: e.reportType);
                     CommonUtils.launchUrl(e.linkUrl);
+                    postClickReport(e);
                   },
                   child: Column(
                     children: [
@@ -95,6 +166,7 @@ class _HomeAdsPageState extends State<HomeAdsPage> {
             itemCount: data.bottom.length,
             itemBuilder: (context, index) {
               final e = data.bottom[index];
+              _showAppAd(e);
               return Padding(
                 padding: EdgeInsets.only(bottom: 15.w),
                 child: Row(
@@ -115,6 +187,7 @@ class _HomeAdsPageState extends State<HomeAdsPage> {
                       onTap: () {
                         homeDomain.reqAdClickCount(id: e.reportId, type: e.reportType);
                         CommonUtils.launchUrl(e.linkUrl);
+                        postClickReport(e);
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 20),
