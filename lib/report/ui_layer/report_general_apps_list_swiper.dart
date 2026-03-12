@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper_null_safety_flutter3/flutter_swiper_null_safety_flutter3.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -51,7 +52,7 @@ class _ReportGeneralAppListSwiperState extends State<ReportGeneralAppListSwiper>
   void initState() {
     super.initState();
     _ColumNumber = widget.columnNumber;
-    threshold = _ColumNumber * 4;
+    threshold = _ColumNumber * 3;
   }
 
   void _showBanner(BannerModel banner) {
@@ -125,9 +126,8 @@ class _ReportGeneralAppListSwiperState extends State<ReportGeneralAppListSwiper>
   @override
   Widget build(BuildContext context) {
     if (widget.data.length > threshold) {
-      final subsIndex = _ColumNumber * 3;
-      final firstPart = widget.data.sublist(0, min(subsIndex, widget.data.length));
-      final secondPart = widget.data.length > subsIndex ? widget.data.sublist(subsIndex) : [];
+      final firstPart = widget.data.sublist(0, min(threshold, widget.data.length));
+      final secondPart = widget.data.length > threshold ? widget.data.sublist(threshold) : [];
       final itemWidth = (ScreenUtil().screenWidth - (_ColumNumber + 1) * 6.w - MyTheme.pagePadding * 2) / _ColumNumber;
 
       return Builder(builder: (context) {
@@ -481,14 +481,21 @@ class _ReportInfiniteBannerListState extends State<ReportInfiniteBannerList> {
   bool _isUserTouching = false;
   bool _autoScrollRunning = false;
   bool _isVisible = true; // 当前是否在屏幕可见范围内
+  bool _hasInitPosition = false;
+  double _itemExtent = 0;
 
   @override
   void initState() {
     super.initState();
+    _controller.addListener(_handleLoopPosition);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _startAutoScroll();
+      if (_shouldLoop) {
+        _startAutoScroll();
+      }
     });
   }
+
+  bool get _shouldLoop => widget.banners.length > widget.columNumber;
 
   void _startAutoScroll() {
     if (_autoScrollRunning) return;
@@ -505,18 +512,24 @@ class _ReportInfiniteBannerListState extends State<ReportInfiniteBannerList> {
       if (!_isVisible || _isUserTouching) return true;
 
       if (_controller.hasClients) {
-        final max = _controller.position.maxScrollExtent;
         final pos = _controller.position.pixels;
-
-        if (pos >= max - 1) {
-          final middle = max / 2;
-          _controller.jumpTo(middle);
-        } else {
-          _controller.jumpTo(pos + scrollSpeed);
-        }
+        _controller.jumpTo(pos + scrollSpeed);
       }
       return true;
     });
+  }
+
+  void _handleLoopPosition() {
+    if (!_shouldLoop || !_controller.hasClients || _itemExtent <= 0) return;
+    final max = _controller.position.maxScrollExtent;
+    final pos = _controller.position.pixels;
+    final threshold = _itemExtent * widget.banners.length;
+
+    if (pos <= threshold) {
+      _controller.jumpTo(pos + threshold);
+    } else if (pos >= max - threshold) {
+      _controller.jumpTo(pos - threshold);
+    }
   }
 
   @override
@@ -530,6 +543,19 @@ class _ReportInfiniteBannerListState extends State<ReportInfiniteBannerList> {
   @override
   Widget build(BuildContext context) {
     final itemWidth = (ScreenUtil().screenWidth - (widget.columNumber + 1) * 7 - MyTheme.pagePadding * 2) / widget.columNumber;
+    final shouldLoop = _shouldLoop;
+    final itemCount = shouldLoop ? widget.banners.length * 1000 : widget.banners.length;
+    final itemExtent = itemWidth + 8;
+    _itemExtent = itemExtent;
+
+    if (shouldLoop && !_hasInitPosition) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || !_controller.hasClients) return;
+        final middleIndex = itemCount ~/ 2;
+        _controller.jumpTo(middleIndex * itemExtent);
+        _hasInitPosition = true;
+      });
+    }
 
     return VisibilityDetector(
       key: ValueKey('ReportInfiniteBannerList_${widget.hashCode}'),
@@ -549,52 +575,58 @@ class _ReportInfiniteBannerListState extends State<ReportInfiniteBannerList> {
           height: itemWidth + 28,
           child: ScrollConfiguration(
             behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-            child: ListView.builder(
-              controller: _controller,
-              scrollDirection: Axis.horizontal,
-              physics: const BouncingScrollPhysics(),
-              itemCount: widget.banners.length * 2,
-              itemBuilder: (context, index) {
-                final banner = widget.banners[index % widget.banners.length];
-                widget.showFunc?.call(banner);
-                return ReportGestureDetector(
-                  onTap: () {
-                    FocusManager.instance.primaryFocus?.unfocus();
-                    widget.tapFunc?.call(banner);
-                    // CommonUtils.openRoute(context, banner.toJson());
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox.square(
-                          dimension: itemWidth,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: MyImage.network(
-                              CommonUtils.getThumb(banner.toJson()),
-                              fit: BoxFit.cover,
+            child: NotificationListener<UserScrollNotification>(
+              onNotification: (notification) {
+                _isUserTouching = notification.direction != ScrollDirection.idle;
+                return false;
+              },
+              child: ListView.builder(
+                controller: _controller,
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                itemExtent: itemExtent,
+                itemCount: itemCount,
+                itemBuilder: (context, index) {
+                  final banner = widget.banners[index % widget.banners.length];
+                  widget.showFunc?.call(banner);
+                  return ReportGestureDetector(
+                    onTap: () {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      widget.tapFunc?.call(banner);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox.square(
+                            dimension: itemWidth,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: MyImage.network(
+                                CommonUtils.getThumb(banner.toJson()),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          banner.name ?? banner.title ?? "",
-                          style: TextStyle(
-                            color: widget.titleColor ?? Colors.white,
-                            overflow: TextOverflow.ellipsis,
-                            decoration: TextDecoration.none,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 11,
+                          const SizedBox(height: 8),
+                          Text(
+                            banner.name ?? banner.title ?? "",
+                            style: TextStyle(
+                              color: widget.titleColor ?? Colors.white,
+                              overflow: TextOverflow.ellipsis,
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 11,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
         ),
