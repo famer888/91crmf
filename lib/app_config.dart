@@ -3,7 +3,9 @@ import 'package:flutter/foundation.dart';
 class BuildConfig {
   static const key = kIsWeb ? '2acf7e91e9864673' : 'b82b97395366e9ce';
   static const iv = kIsWeb ? '1c29882d3ddfcfd6' : 'fcc60c3f632a15d7';
-  static const appKey = kIsWeb ? '5589d41f92a597d016b037ac37db243d' : 'da86568be9c6208a644870e12d6a5ef4';
+  static const appKey = kIsWeb
+      ? '5589d41f92a597d016b037ac37db243d'
+      : 'da86568be9c6208a644870e12d6a5ef4';
   static const ver = kIsWeb ? 'v0' : 'v1';
   static const mediaKey = 'f5d965df75336270';
   static const mediaIv = '97b60394abc2fbe1';
@@ -12,17 +14,19 @@ class BuildConfig {
   static const defaultFdsKey =
       'P/D/+MulHay6Jzah0AnECON76PVOS4idWjlv/W9FmBnsXsGE+wXTI/uP4UpmvvPD';
 
+  static const linesUrlKey = 'lines_url_v1'; // 每次换线路都要v+1！！！！
+
   static final apiLines = kIsWeb
       ? [
-          'https://wapi.iiutweon.xyz/api.php',
+          'https://wapi.hhkbiqgx.cc/api.php',
         ]
       : [
-          'https://api1.iiutweon.xyz/api.php',
-          'https://api2.iiutweon.xyz/api.php',
-          'https://api3.iiutweon.xyz/api.php',
-          'https://api4.iiutweon.xyz/api.php',
-          'https://api5.iiutweon.xyz/api.php',
-          'https://api6.iiutweon.xyz/api.php',
+          'https://api1.hhkbiqgx.cc/api.php',
+          'https://api2.hhkbiqgx.cc/api.php',
+          'https://api3.hhkbiqgx.cc/api.php',
+          'https://api4.hhkbiqgx.cc/api.php',
+          'https://api5.hhkbiqgx.cc/api.php',
+          'https://api6.hhkbiqgx.cc/api.php'
         ];
 
   /// 备用线路

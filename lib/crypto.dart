@@ -52,7 +52,7 @@ class PlatformAwareCrypto {
     final sign = getReportSign(
         {'client': 'pwa', 'data': data, 'timestamp': timestamp},
         signKey: signKey);
-    return 'client=pwa&timestamp=$timestamp&data=$data&sign=$sign&_ver=v2';
+    return 'client=pwa&timestamp=$timestamp&data=$data&sign=$sign';
   }
 
   static dynamic encryptReqParams(Object value, {bool isWeb = true}) {

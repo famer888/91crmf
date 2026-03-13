@@ -552,7 +552,7 @@ abstract class _BaseAppRepo implements AppDomain {
             .then((value) => value.status ?? 0)
             .timeout(const Duration(milliseconds: 5 * 1000));
       } else {
-        code = await _apiDio.post('$xt/api/callback/checkLine').then((value) => value.statusCode ?? 0);
+        code = await _dio.post('$xt/api/callback/checkLine').then((value) => value.statusCode ?? 0);
       }
     } catch (_) {
       code = 0;
@@ -581,7 +581,9 @@ abstract class _BaseAppRepo implements AppDomain {
   /// 上报线路
   void _reportLine(List<Map<String, Object>> lines) {
     if (lines.isEmpty) return;
-    _apiDio.post('/api/home/domainCheckReport2', data: {'list': lines});
+    Future.delayed(const Duration(seconds: 5), (){
+      _apiDio.post('/api/home/domainCheckReport2', data: {'list': lines});
+    });
   }
 
   @override

@@ -93,7 +93,10 @@ class _ClApiLinkViewState extends State<ClApiLinkView> {
         final nav = data.map((x) => NavModel.fromJson(x)).toList();
         topicsNotifier.value = nav;
       }
-      final list = result.data['list']?.map<FeedModel>((x) => FeedModel.fromJson(x)).toList();
+      final list = (result.data['list'] as List<dynamic>?)
+    ?.whereType<Map<String, dynamic>>()
+    .map((e) => FeedModel.fromJson(e))
+    .toList();
       return list;
     } else {
       MyToast.showText(text: result.msg ?? '');

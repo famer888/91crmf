@@ -40,6 +40,11 @@ class TopAdsModel {
   final int reportId;
   final int reportType;
 
+  final int adType;
+  final String adSlotName;
+  final String advertiseCode;
+  final String advertiseLocationCode;
+
   const TopAdsModel({
     this.id = 0,
     this.description = '',
@@ -67,6 +72,10 @@ class TopAdsModel {
     this.redirectType = 0,
     this.reportId = 0,
     this.reportType = 0,
+    this.adType = 0,
+    this.adSlotName = '',
+    this.advertiseCode = '',
+    this.advertiseLocationCode = '',
   });
 
   factory TopAdsModel.fromJson(Map<String, dynamic> json) {
@@ -97,6 +106,11 @@ class TopAdsModel {
       redirectType: json['redirect_type'] ?? 0,
       reportId: json['report_id'] ?? 0,
       reportType: json['report_type'] ?? 0,
+
+        adType: json['ad_type'] ?? 0,
+        adSlotName: json['ad_slot_name'] ?? '',
+        advertiseCode: json['advertise_code'] ?? '',
+        advertiseLocationCode: json['advertise_location_code'] ?? '',
     );
   }
 }
