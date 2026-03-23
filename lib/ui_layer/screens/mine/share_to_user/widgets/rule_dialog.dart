@@ -27,7 +27,6 @@ class RuleDialog extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  height: 298.w,
                   padding: EdgeInsets.symmetric(vertical: 20.w, horizontal: 16.w),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(8.w)),
@@ -41,7 +40,7 @@ class RuleDialog extends StatelessWidget {
                       Text(
                         'gzsmc'.tr(context: context),
                         style: TextStyle(
-                          color: const Color.fromRGBO(255, 255, 255, 1),
+                          color: Colors.white.withValues(alpha: .7),
                           letterSpacing: 0.5,
                           height: 1.8,
                           fontSize: 14.sp,
@@ -50,6 +49,8 @@ class RuleDialog extends StatelessWidget {
                         ),
                         softWrap: true,
                       ),
+                      SizedBox(height: 20.w),
+
                     ],
                   ),
                 ),
