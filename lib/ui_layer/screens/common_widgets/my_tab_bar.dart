@@ -14,48 +14,56 @@ enum TabBarType {
   fillColor
 }
 
-class TabBarWithView extends StatefulWidget {
-  TabBarWithView.line({
-    super.key,
-    required this.titles,
-    required this.views,
-    this.tabBarPadding,
-    this.tabInterMargin = 10,
-    this.tabBarHeight,
-    this.isCenter = false,
-    this.isScrollable = true,
-    this.labelStyle,
-    this.linearColors,
-    this.unselectedLabelStyle,
-    this.tabController,
-    this.labelPadding = 8.0,
-    this.initialIndex = 0,
-    this.isStack = false,
-    this.indexChangeCall,
-    this.tabBarLeftWidget,
-    this.tabBarRightWidget,
-  })  : type = TabBarType.line;
+typedef TabItemBuilder = Widget Function(BuildContext context, int index, bool selected, Widget widget);
 
-  TabBarWithView.fillColor({
-    super.key,
-    required this.titles,
-    required this.views,
-    this.tabBarPadding,
-    this.tabInterMargin = 10,
-    this.tabBarHeight,
-    this.linearColors,
-    this.isCenter = false,
-    this.isScrollable = false,
-    this.tabBarLeftWidget,
-    this.tabBarRightWidget,
-    this.labelStyle,
-    this.unselectedLabelStyle,
-    this.tabController,
-    this.labelPadding = 8.0,
-    this.initialIndex = 0,
-    this.isStack = false,
-    this.indexChangeCall,
-  }) : type = TabBarType.fillColor;
+
+class TabBarWithView extends StatefulWidget {
+  TabBarWithView.line(
+      {super.key,
+      required this.titles,
+      required this.views,
+      this.tabBarPadding,
+      this.tabInterMargin = 10,
+      this.tabBarHeight,
+      this.isCenter = false,
+      this.isScrollable = true,
+      this.labelStyle,
+      this.linearColors,
+      this.unselectedLabelStyle,
+      this.tabController,
+      this.labelPadding = 8.0,
+      this.initialIndex = 0,
+      this.isStack = false,
+      this.indexChangeCall,
+      this.tabBarLeftWidget,
+      this.tabBarRightWidget,
+      this.tabItemBuilder})
+      : type = TabBarType.line;
+
+  TabBarWithView.fillColor(
+      {super.key,
+      required this.titles,
+      required this.views,
+      this.tabBarPadding,
+      this.tabInterMargin = 10,
+      this.tabBarHeight,
+      this.linearColors,
+      this.isCenter = false,
+      this.isScrollable = false,
+      this.tabBarLeftWidget,
+      this.tabBarRightWidget,
+      this.labelStyle,
+      this.unselectedLabelStyle,
+      this.tabController,
+      this.labelPadding = 8.0,
+      this.initialIndex = 0,
+      this.isStack = false,
+      this.indexChangeCall,
+      this.tabItemBuilder})
+      : type = TabBarType.fillColor;
+
+  // 自定义active title 装饰
+  final TabItemBuilder? tabItemBuilder;
 
   final TabBarType type;
   int initialIndex;
@@ -85,8 +93,8 @@ class TabBarWithView extends StatefulWidget {
 }
 
 class _TabBarWithViewState extends State<TabBarWithView> with SingleTickerProviderStateMixin {
-  late final TabController _tabController =
-      widget.tabController ?? TabController(length: widget.views.length, vsync: this, initialIndex: widget.initialIndex);
+  late final TabController _tabController = widget.tabController ??
+      TabController(length: widget.views.length, vsync: this, initialIndex: widget.initialIndex);
 
   late LinkPageController _pageController;
 
@@ -217,12 +225,21 @@ class _TabBarWithViewState extends State<TabBarWithView> with SingleTickerProvid
                         child: ValueListenableBuilder(
                             valueListenable: indexChangeNotifier,
                             builder: (context, selectedIndex, child) {
+                              List<Widget> _tabs = tabs;
+                              if (widget.tabItemBuilder != null) {
+                                _tabs = tabs.asMap().entries.map((e) {
+                                  return widget.tabItemBuilder!(context, e.key, e.key == selectedIndex, e.value);
+                                }).toList();
+                              }
                               return TabBar(
                                 physics: const BouncingScrollPhysics(),
                                 isScrollable: widget.isScrollable,
                                 padding: EdgeInsets.symmetric(vertical: 2.w),
+                                onTap: (index) {
+                                  indexChangeNotifier.value = index;
+                                },
                                 controller: _tabController,
-                                tabs: tabs,
+                                tabs: _tabs,
                                 indicatorColor: Colors.transparent,
                                 dividerColor: Colors.transparent,
                                 overlayColor: WidgetStateProperty.all(Colors.transparent),

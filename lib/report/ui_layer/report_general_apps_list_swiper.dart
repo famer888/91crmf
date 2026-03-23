@@ -217,7 +217,7 @@ class _ReportGeneralAppListSwiperState extends State<ReportGeneralAppListSwiper>
                           Text(
                             item.name ?? item.title ?? "",
                             style: TextStyle(
-                              color: Colors.white,
+                              color: widget.titleColor?? Colors.white,
                               overflow: TextOverflow.ellipsis,
                               decoration: TextDecoration.none,
                               fontWeight: FontWeight.w600,

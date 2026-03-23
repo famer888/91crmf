@@ -16,32 +16,43 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showRightRank;
   final Color backgroundColor;
   final Color? sideColor;
+  final Color? appBarBackGroundColor;
   final CrackAppType? type;
   final bool isCrackApp;
   final bool showMoreButton;
   final VoidCallback? openEndDrawer;
   final VoidCallback? onTap;
+  final bool? marginChangeToPadding;
 
-  const SearchAppBar({
-    super.key,
-    this.backArrowOnTap,
-    this.showLeftBack = false,
-    this.showRightRank = false,
-    this.backgroundColor = Colors.transparent,
-    this.type = CrackAppType.normal,
-    this.isCrackApp = false,
-    this.showMoreButton = true,
-    this.sideColor,
-    this.onTap,
-    this.openEndDrawer,
-  });
+  const SearchAppBar(
+      {super.key,
+      this.backArrowOnTap,
+      this.showLeftBack = false,
+      this.showRightRank = false,
+      this.backgroundColor = Colors.transparent,
+      this.type = CrackAppType.normal,
+      this.isCrackApp = false,
+      this.showMoreButton = true,
+      this.sideColor,
+      this.onTap,
+      this.openEndDrawer,
+      this.appBarBackGroundColor,
+      this.marginChangeToPadding});
 
   @override
   Widget build(BuildContext context) {
     if (isCrackApp) {
+      EdgeInsets margin = EdgeInsets.only(
+        left: MyTheme.pagePadding,
+        right: MyTheme.pagePadding,
+        top: MyTheme.statusHeight,
+        bottom: 0.w,
+      );
       return Container(
+        color: appBarBackGroundColor,
         alignment: Alignment.center,
-        margin: EdgeInsets.only(left: MyTheme.pagePadding, right: MyTheme.pagePadding, top: MyTheme.statusHeight, bottom: 0.w),
+        margin: marginChangeToPadding == true ? null : margin,
+        padding: marginChangeToPadding == true ? margin : null,
         child: Row(
           children: [
             Expanded(
