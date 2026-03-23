@@ -84,7 +84,7 @@ class AnnouncementDialog extends StatelessWidget {
                                     decoration:
                                         BoxDecoration(gradient: MyTheme.gradient_90_114, borderRadius: BorderRadius.all(Radius.circular(16.w))),
                                     child: Center(
-                                        child: RichText(text: TextSpan(children: [TextSpan(text: tr('wygq'), style: MyTheme.white255_14_M)]))),
+                                        child: RichText(text: TextSpan(children: [TextSpan(text: tr('qyq'), style: MyTheme.white255_14_M)]))),
                                   ),
                                 )
                               ],

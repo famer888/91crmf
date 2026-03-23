@@ -296,7 +296,8 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
               },
               confirm: () {
                 cancelFunc();
-                const MineAgentRoute().push(context);
+                const ShareInviteRoute().push(context);
+
               },
               text: homeConfigNotifier.homeData.versionMsg?.message ?? '',
             ));
