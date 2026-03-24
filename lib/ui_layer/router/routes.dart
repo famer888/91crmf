@@ -226,6 +226,7 @@ class StatefulShellRoute extends StatefulShellRouteData {
   }
 }
 
+
 class HomeRoute extends GoRouteData {
   const HomeRoute();
 

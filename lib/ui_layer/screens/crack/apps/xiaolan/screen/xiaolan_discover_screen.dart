@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:jycrpj/domain/async_value.dart';
-import 'package:jycrpj/domain/domain.dart';
-import 'package:jycrpj/domain/model/feed/feed_model.dart';
-import 'package:jycrpj/domain/type_def.dart';
-import 'package:jycrpj/ui_layer/screens/common_widgets/my_app_bar.dart';
-import 'package:jycrpj/ui_layer/screens/common_widgets/screen_background.dart';
-import 'package:jycrpj/ui_layer/screens/common_widgets/status/loading.dart';
-import 'package:jycrpj/ui_layer/screens/common_widgets/status/network_error.dart';
-import 'package:jycrpj/ui_layer/screens/crack/apps/clsq/widget/cl_feed_card.dart';
-import 'package:jycrpj/ui_layer/screens/crack/apps/xiaolan/widget/xiaolan_list_build.dart';
-import 'package:jycrpj/ui_layer/screens/theme.dart';
-import 'package:jycrpj/ui_layer/utils/my_toast.dart';
+
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class XiaoLanBlockScreen extends StatefulWidget {
-  final String videoTag;
+import '../../../../../../domain/async_value.dart';
+import '../../../../../../domain/domain.dart';
+import '../../../../../../domain/model/feed/feed_model.dart';
+import '../../../../common_widgets/my_app_bar.dart';
+import '../../../../common_widgets/screen_background.dart';
+import '../../../../common_widgets/status/loading.dart';
+import '../../../../common_widgets/status/network_error.dart';
+import '../widget/xiaolan_list_build.dart';
 
-  const XiaoLanBlockScreen({super.key, required this.videoTag});
 
+class XiaolanDiscoverScreen extends StatefulWidget {
+  const XiaolanDiscoverScreen(
+      {super.key});
   @override
-  State<XiaoLanBlockScreen> createState() => _XiaoLanBlockScreenState();
+  State<XiaolanDiscoverScreen> createState() => _XiaolanDiscoverScreenState();
 }
 
-class _XiaoLanBlockScreenState extends State<XiaoLanBlockScreen> {
+
+
+class _XiaolanDiscoverScreenState extends State<XiaolanDiscoverScreen> {
   AsyncValue<List<FeedModel>> _asyncValue = const AsyncInit();
   late final _appDomain = context.read<AppDomain>();
 
@@ -76,7 +75,7 @@ class _XiaoLanBlockScreenState extends State<XiaoLanBlockScreen> {
           Scaffold(
             backgroundColor: Colors.transparent,
             appBar: MyAppBar(
-                title: widget.videoTag,
+                title: "发现精彩",
                 backIconColor: Color(0xFF151515),
                 titleColor: Color(0xFF151515),
                 backgroundColor: Colors.transparent),
@@ -84,7 +83,7 @@ class _XiaoLanBlockScreenState extends State<XiaoLanBlockScreen> {
                 orElse: () => const LoadingView(),
                 error: (_, __) => NetworkErrorView(onTap: _initTagList),
                 data: (data) {
-                  return XiaoLanListBuild(type: XiaoLanListBuildType.fourGrid, showHandle: false, showHead: false);
+                  return XiaoLanListBuild(type: XiaoLanListBuildType.classify, showHandle: false, showHead: false);
                 }),
           )
         ],
@@ -92,3 +91,4 @@ class _XiaoLanBlockScreenState extends State<XiaoLanBlockScreen> {
     );
   }
 }
+

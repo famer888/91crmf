@@ -39,6 +39,7 @@ mixin _$GameSectionModel {
   }) =>
       throw _privateConstructorUsedError;
 
+  /// Serializes this GameSectionModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 }
 

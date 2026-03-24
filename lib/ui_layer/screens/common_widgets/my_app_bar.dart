@@ -17,6 +17,8 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       this.flexibleSpaceColor,
       this.leftWidget,
       this.titleWidget,
+      this.backIconColor,
+      this.titleColor,
       this.showDiver = false})
       : preferredSize = const Size.fromHeight(44);
   final String? title;
@@ -27,6 +29,8 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leftWidget;
   final bool showDiver;
   final Widget? titleWidget;
+  final Color? backIconColor;
+  final Color? titleColor;
 
   @override
   final Size preferredSize;
@@ -40,10 +44,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         decoration: BoxDecoration(
             color: backgroundColor,
             border: showDiver
-                ? Border(
-                    bottom: BorderSide(
-                        color: const Color.fromRGBO(255, 255, 255, 0.04),
-                        width: 0.5.w))
+                ? Border(bottom: BorderSide(color: const Color.fromRGBO(255, 255, 255, 0.04), width: 0.5.w))
                 : null),
         child: ColoredBox(
           color: backgroundColor ?? Colors.transparent,
@@ -60,6 +61,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                               MyImagePaths.appBackIcon,
                               width: 20.w,
                               height: 20.w,
+                              color: backIconColor,
                             ),
                             onTap: () {
                               if (backArrowOnTap != null) {
@@ -70,19 +72,17 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                             },
                           ),
                         )
-                      : Align(
-                          alignment: Alignment.centerLeft, child: leftWidget!),
+                      : Align(alignment: Alignment.centerLeft, child: leftWidget!),
                   rightWidget == null ? const SizedBox.shrink() : rightWidget!
                 ],
               ),
               titleWidget ??
                   (title != null
                       ? Container(
-                    alignment: Alignment.center,
-                    padding:
-                    EdgeInsets.symmetric(horizontal: 2 * MyTheme.pagePadding),
-                    child: Text(title!, style: MyTheme.white255_18_B),
-                  )
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(horizontal: 2 * MyTheme.pagePadding),
+                          child: Text(title!, style: MyTheme.white255_18_B.copyWith(color: titleColor)),
+                        )
                       : const SizedBox.shrink())
             ],
           ),

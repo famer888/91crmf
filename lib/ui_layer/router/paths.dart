@@ -233,7 +233,6 @@ class AppRouterPaths {
   /// 破解详情页
   static const crackDetail = '/crackDetail';
 
-
   /// 91暗网
   static const aw91 = '/aw91';
 
@@ -249,7 +248,6 @@ class AppRouterPaths {
   /// 91暗网 视频搜索结果页
   static const aw91VideoSearchResult = '/aw91VideoSearchResult';
 
-
   /// 暗网禁区
   static const awjq = '/awjq';
 
@@ -264,7 +262,6 @@ class AppRouterPaths {
 
   /// 暗网禁区 视频搜索结果页
   static const awjqVideoSearchResult = '/awjqVideoSearchResult';
-
 
   /// 51Tiktok
   static const tiktok51App = '/tiktok51App';
@@ -287,7 +284,6 @@ class AppRouterPaths {
   /// 51Tiktok 视频更多页面
   static const tiktok51More = '/tiktok51More';
 
-
   /// 海角社区
   static const hjsqApp = '/hjsqApp';
 
@@ -302,7 +298,6 @@ class AppRouterPaths {
 
   /// Hjsq 标签页面
   static const hjsqVideoTag = '/hjsqVideoTag';
-
 
   /// P站 视频搜索页面
   static const pzhanVideoSearch = '/pzhanVideoSearch';
@@ -322,7 +317,6 @@ class AppRouterPaths {
   /// P站 视频更多页面
   static const pzhanMore = '/pzhanMore';
 
-
   /// 草榴社区
   static const caoliu = '/caoliu';
 
@@ -338,7 +332,6 @@ class AppRouterPaths {
   /// 草榴 视频搜索结果页
   static const clVideoSearchResult = '/clVideoSearchResult';
 
-
   /// 制片厂
   static const zpcApp = '/zpcApp';
 
@@ -353,7 +346,6 @@ class AppRouterPaths {
 
   /// 制片厂 视频搜索结果页
   static const zpcVideoSearchResult = '/zpcVideoSearchResult';
-
 
   /// 直播详情页
   static const livesDetail = '/livesDetail';
@@ -405,6 +397,24 @@ class AppRouterPaths {
   static const localVideo = '/localVideo';
 
   static const localVoice = '/localVoice';
+
+  // 小蓝 板块详情
+  static const xiaolanBlockDetail = '/xiaolanBlockDetail/:id/:title';
+
+  // 小蓝 创作达人
+  static const xiaolanCreator = '/xiaolanCreator';
+
+  // 小蓝 用户作品列表
+  static const xiaolanUserWorks = '/xiaolanUserWorks';
+
+  // 小蓝 发现精彩
+  static const xiaolanDiscover = '/xiaolanDiscover';
+
+  // 小蓝 分类详情
+  static const xiaolanCategoryDetail = '/xiaolanCategoryDetail/:id/:title';
+
+  // 小蓝 搜索
+  static const xiaolanSearch = '/xiaolanSearch';
 
   static const webView = '/${BuildConfig.webViewPathName}/:url';
 }

@@ -17,7 +17,7 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/event_bus/event_bus.dart'
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_list_view.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_tab_bar.dart';
-import 'package:jycrpj/ui_layer/screens/crack/apps/xiaolan/widget/xiaolan_block.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/xiaolan/widget/xiaolan_list_build.dart';
 import 'package:jycrpj/ui_layer/screens/crack/widgets/scroll_top_button.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
@@ -185,29 +185,32 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> {
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  XiaoLanBlock(
-                    type: XiaolanBlockType.classify,
+                  XiaoLanListBuild(
+                    type: XiaoLanListBuildType.classifyScroll,
                   ),
-                  XiaoLanBlock(
-                    type: XiaolanBlockType.creator,
+                  XiaoLanListBuild(
+                    type: XiaoLanListBuildType.classify,
                   ),
-                  XiaoLanBlock(
-                    type: XiaolanBlockType.userScroll,
+                  XiaoLanListBuild(
+                    type: XiaoLanListBuildType.creator,
                   ),
-                  XiaoLanBlock(
-                    type: XiaolanBlockType.oneBigSecondScroll,
+                  XiaoLanListBuild(
+                    type: XiaoLanListBuildType.userScroll,
                   ),
-                  XiaoLanBlock(
-                    type: XiaolanBlockType.sixGrid,
+                  XiaoLanListBuild(
+                    type: XiaoLanListBuildType.oneBigSecondScroll,
                   ),
-                  XiaoLanBlock(
-                    type: XiaolanBlockType.oneLineScroll,
+                  XiaoLanListBuild(
+                    type: XiaoLanListBuildType.sixGrid,
                   ),
-                  XiaoLanBlock(
-                    type: XiaolanBlockType.fourGrid,
+                  XiaoLanListBuild(
+                    type: XiaoLanListBuildType.oneLineScroll,
                   ),
-                  XiaoLanBlock(
-                    type: XiaolanBlockType.oneBigFourGrid,
+                  XiaoLanListBuild(
+                    type: XiaoLanListBuildType.fourGrid,
+                  ),
+                  XiaoLanListBuild(
+                    type: XiaoLanListBuildType.oneBigFourGrid,
                   ),
                   SizedBox(height: 10,)
                 ],

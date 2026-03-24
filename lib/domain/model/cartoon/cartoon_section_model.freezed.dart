@@ -42,6 +42,7 @@ mixin _$CartoonSectionModel {
   }) =>
       throw _privateConstructorUsedError;
 
+  /// Serializes this CartoonSectionModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 }
 

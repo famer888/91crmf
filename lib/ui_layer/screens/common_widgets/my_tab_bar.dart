@@ -16,6 +16,7 @@ enum TabBarType {
 
 typedef TabItemBuilder = Widget Function(BuildContext context, int index, bool selected, Widget widget);
 
+typedef TabBuilder = Widget Function(BuildContext context, TabBar tab);
 
 class TabBarWithView extends StatefulWidget {
   TabBarWithView.line(
@@ -37,6 +38,8 @@ class TabBarWithView extends StatefulWidget {
       this.indexChangeCall,
       this.tabBarLeftWidget,
       this.tabBarRightWidget,
+      this.tabBuilder,
+      this.tabPadding,
       this.tabItemBuilder})
       : type = TabBarType.line;
 
@@ -59,6 +62,8 @@ class TabBarWithView extends StatefulWidget {
       this.initialIndex = 0,
       this.isStack = false,
       this.indexChangeCall,
+      this.tabBuilder,
+      this.tabPadding,
       this.tabItemBuilder})
       : type = TabBarType.fillColor;
 
@@ -83,6 +88,8 @@ class TabBarWithView extends StatefulWidget {
   final TextStyle? labelStyle;
   final TextStyle? unselectedLabelStyle;
   final TabController? tabController;
+  final TabBuilder? tabBuilder;
+  final EdgeInsets? tabPadding;
 
   final double labelPadding;
   final bool isStack; // 是colume上下分布 还是stack那样把标题重叠在上面
@@ -231,10 +238,10 @@ class _TabBarWithViewState extends State<TabBarWithView> with SingleTickerProvid
                                   return widget.tabItemBuilder!(context, e.key, e.key == selectedIndex, e.value);
                                 }).toList();
                               }
-                              return TabBar(
+                              TabBar tab = TabBar(
                                 physics: const BouncingScrollPhysics(),
                                 isScrollable: widget.isScrollable,
-                                padding: EdgeInsets.symmetric(vertical: 2.w),
+                                padding: widget.tabPadding ?? EdgeInsets.symmetric(vertical: 2.w),
                                 onTap: (index) {
                                   indexChangeNotifier.value = index;
                                 },
@@ -243,6 +250,7 @@ class _TabBarWithViewState extends State<TabBarWithView> with SingleTickerProvid
                                 indicatorColor: Colors.transparent,
                                 dividerColor: Colors.transparent,
                                 overlayColor: WidgetStateProperty.all(Colors.transparent),
+                                labelPadding: EdgeInsets.symmetric(horizontal: widget.labelPadding),
                                 tabAlignment: widget.isScrollable
                                     ? (widget.isCenter ? TabAlignment.center : TabAlignment.start)
                                     : (widget.isCenter ? TabAlignment.center : TabAlignment.fill),
@@ -255,6 +263,10 @@ class _TabBarWithViewState extends State<TabBarWithView> with SingleTickerProvid
                                 //     ? TabAlignment.center
                                 //     : TabAlignment.start,
                               );
+                              if (widget.tabBuilder != null) {
+                                return widget.tabBuilder!(context, tab);
+                              }
+                              return tab;
                             })),
                   ),
                 ),

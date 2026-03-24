@@ -2,12 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../domain/model/crack_model.dart';
 import '../../../../../../domain/remote_domain/domains/user.dart';
 import '../../../../../notifiers/user_notifier.dart';
-import '../../../../../router/routes.dart';
+import '../../../../../router/paths.dart';
 import '../../../../common_widgets/screen_background.dart';
 import '../../../../common_widgets/search_app_bar.dart';
 import '../../../app_util.dart';
@@ -56,13 +57,15 @@ class _XiaoLanCommunityScreenState extends State<XiaoLanCommunityScreen> {
                           left: 0,
                           right: 0,
                           top: 0,
-                          child: Image.asset('assets/images/xiaolan_top_navi_bg.png',
-                              width: double.infinity, fit: BoxFit.cover)),
+                          child: Image.asset(
+                              'assets/images/xiaolan_top_navi_bg.png',
+                              width: double.infinity,
+                              fit: BoxFit.cover)),
                       Scaffold(
                         backgroundColor: Colors.transparent,
                         appBar: SearchAppBar(
-                          appBarBackGroundColor:Color(0xFF130108),
-                          marginChangeToPadding:true,
+                          appBarBackGroundColor: Color(0xFF130108),
+                          marginChangeToPadding: true,
                           isCrackApp: true,
                           showLeftBack: false,
                           type: CrackAppType.xiaolan,
@@ -70,7 +73,7 @@ class _XiaoLanCommunityScreenState extends State<XiaoLanCommunityScreen> {
                           showMoreButton: widget.showMoreButton,
                           onTap: () {
                             if (isUnlockClsq) {
-                              const ClVideoSearchRoute('').push(context);
+                              context.push(AppRouterPaths.xiaolanSearch);
                             } else {
                               if (widget.crackApp == null) return;
                               // 解锁弹窗
@@ -84,7 +87,8 @@ class _XiaoLanCommunityScreenState extends State<XiaoLanCommunityScreen> {
                             }
                           },
                         ),
-                        body: XiaoLanTopNaviView(id: widget.id, crackApp: widget.crackApp),
+                        body: XiaoLanTopNaviView(
+                            id: widget.id, crackApp: widget.crackApp),
                       )
                     ],
                   ),

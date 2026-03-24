@@ -1,9 +1,14 @@
 //类型枚举
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:jycrpj/ui_layer/router/paths.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/xiaolan/screen/xiaolan_category_detail_screen.dart';
 
-enum XiaolanBlockType {
+enum XiaoLanListBuildType {
 //  一行大 第二行滚动
   oneBigSecondScroll,
 //   六宫格
@@ -20,18 +25,42 @@ enum XiaolanBlockType {
   userScroll,
 //   分类
   classify,
+//   分类滚动
+  classifyScroll,
 }
 
-class XiaoLanBlock extends StatefulWidget {
-  const XiaoLanBlock({super.key, required this.type});
+class XiaoLanListBuild extends StatefulWidget {
+  const XiaoLanListBuild({super.key, required this.type, this.showHandle = true, this.showHead = true});
 
-  final XiaolanBlockType type;
+  final XiaoLanListBuildType type;
+  final bool? showHandle;
+  final bool? showHead;
 
   @override
-  State<XiaoLanBlock> createState() => _XiaoLanBlockState();
+  State<XiaoLanListBuild> createState() => _XiaoLanListBuildState();
 }
 
-class _XiaoLanBlockState extends State<XiaoLanBlock> {
+class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
+  void _openBlockDetail() {
+    context.push('/xiaolanBlockDetail/0/${Uri.encodeComponent('板块名称')}');
+  }
+
+  void _openCreator() {
+    context.push(AppRouterPaths.xiaolanCreator);
+  }
+
+  void _openUserWorks() {
+    context.push('${AppRouterPaths.xiaolanUserWorks}?userName=${Uri.encodeComponent('东方商厦')}');
+  }
+
+  void _openDiscover() {
+    context.push(AppRouterPaths.xiaolanDiscover);
+  }
+
+  void _openCategoryDetail(int id, String title) {
+    context.push('/xiaolanCategoryDetail/$id/${Uri.encodeComponent(title)}');
+  }
+
   Widget _buildItem({required String label, double? spacing}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,7 +142,68 @@ class _XiaoLanBlockState extends State<XiaoLanBlock> {
 
   Widget _buildTypeLayout() {
     switch (widget.type) {
-      case XiaolanBlockType.classify:
+      case XiaoLanListBuildType.classifyScroll:
+        return SizedBox(
+          height: 103.w,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) => GestureDetector(
+              onTap: (){
+                _openCategoryDetail(index + 1, '同城越爱');
+              },
+              child: SizedBox(
+                  height: 103.w,
+                  width: 103.w,
+                  child: Stack(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: .5),
+                          borderRadius: BorderRadius.circular(7.r),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(7.r),
+                            bottomRight: Radius.circular(7.r),
+                          ),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(
+                              sigmaX: 9.9,
+                              sigmaY: 9.9,
+                            ),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 3.h),
+                              decoration: BoxDecoration(
+                                color: Color(0x66555555), // 半透明叠加色（关键，不然模糊会很弱）
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                "同城越爱",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )),
+            ),
+            separatorBuilder: (context, index) => SizedBox(width: 8.w),
+            itemCount: 8,
+          ),
+        );
+      case XiaoLanListBuildType.classify:
         return GridView.builder(
           itemCount: 6,
           shrinkWrap: true,
@@ -122,31 +212,38 @@ class _XiaoLanBlockState extends State<XiaoLanBlock> {
             crossAxisCount: 3,
             mainAxisSpacing: 7.h,
             crossAxisSpacing: 7.w,
-            childAspectRatio: 225/224,
+            childAspectRatio: 225 / 224,
           ),
-          itemBuilder: (context, index) => Container(
-            decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: .5),
-              borderRadius: BorderRadius.circular(7.5.r),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "同城越爱",
-                  style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.w500),
-                ),
-                SizedBox(height: 4.5.h,),
-                Text(
-                  "1222W",
-                  style: TextStyle(color: Color(0xFFCBCBCB), fontSize: 10.sp, fontWeight: FontWeight.w400),
-                ),
-              ],
+          itemBuilder: (context, index) => GestureDetector(
+            onTap: () {
+              _openCategoryDetail(index + 1, '同城越爱');
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(alpha: .5),
+                borderRadius: BorderRadius.circular(7.5.r),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "同城越爱",
+                    style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(
+                    height: 4.5.h,
+                  ),
+                  Text(
+                    "1222W",
+                    style: TextStyle(color: Color(0xFFCBCBCB), fontSize: 10.sp, fontWeight: FontWeight.w400),
+                  ),
+                ],
+              ),
             ),
           ),
         );
-      case XiaolanBlockType.oneBigSecondScroll:
+      case XiaoLanListBuildType.oneBigSecondScroll:
         return Column(
           children: [
             SizedBox(
@@ -175,7 +272,7 @@ class _XiaoLanBlockState extends State<XiaoLanBlock> {
             ),
           ],
         );
-      case XiaolanBlockType.sixGrid:
+      case XiaoLanListBuildType.sixGrid:
         return Column(
           children: [
             GridView.builder(
@@ -190,13 +287,15 @@ class _XiaoLanBlockState extends State<XiaoLanBlock> {
               ),
               itemBuilder: (context, index) => _buildItem(label: "九宫格${index + 1}", spacing: 4.h),
             ),
-            SizedBox(
-              height: 14.h,
-            ),
-            _buildHandle()
+            if (widget.showHandle == true) ...[
+              SizedBox(
+                height: 14.h,
+              ),
+              _buildHandle()
+            ],
           ],
         );
-      case XiaolanBlockType.oneLineScroll:
+      case XiaoLanListBuildType.oneLineScroll:
         return SizedBox(
           height: 208.5.h,
           child: ListView.separated(
@@ -211,7 +310,7 @@ class _XiaoLanBlockState extends State<XiaoLanBlock> {
             itemCount: 8,
           ),
         );
-      case XiaolanBlockType.fourGrid:
+      case XiaoLanListBuildType.fourGrid:
         return Column(
           children: [
             GridView.builder(
@@ -226,13 +325,15 @@ class _XiaoLanBlockState extends State<XiaoLanBlock> {
               ),
               itemBuilder: (context, index) => _buildItem(label: "四宫格${index + 1}"),
             ),
-            SizedBox(
-              height: 14.h,
-            ),
-            _buildHandle()
+            if (widget.showHandle == true) ...[
+              SizedBox(
+                height: 14.h,
+              ),
+              _buildHandle()
+            ],
           ],
         );
-      case XiaolanBlockType.oneBigFourGrid:
+      case XiaoLanListBuildType.oneBigFourGrid:
         return Column(
           children: [
             SizedBox(
@@ -254,13 +355,15 @@ class _XiaoLanBlockState extends State<XiaoLanBlock> {
               ),
               itemBuilder: (context, index) => _buildItem(label: "四宫格${index + 1}"),
             ),
-            SizedBox(
-              height: 14.h,
-            ),
-            _buildHandle()
+            if (widget.showHandle == true) ...[
+              SizedBox(
+                height: 14.h,
+              ),
+              _buildHandle()
+            ],
           ],
         );
-      case XiaolanBlockType.creator:
+      case XiaoLanListBuildType.creator:
         return Column(
           children: [
             Row(
@@ -272,6 +375,9 @@ class _XiaoLanBlockState extends State<XiaoLanBlock> {
                 ),
                 Spacer(),
                 GestureDetector(
+                  onTap: () {
+                    _openCreator();
+                  },
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -294,6 +400,9 @@ class _XiaoLanBlockState extends State<XiaoLanBlock> {
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) => GestureDetector(
+                  onTap: () {
+                    _openUserWorks();
+                  },
                   child: Column(
                     children: [
                       Container(
@@ -318,7 +427,7 @@ class _XiaoLanBlockState extends State<XiaoLanBlock> {
             )
           ],
         );
-      case XiaolanBlockType.userScroll:
+      case XiaoLanListBuildType.userScroll:
         return Column(
           children: [
             Row(
@@ -341,6 +450,9 @@ class _XiaoLanBlockState extends State<XiaoLanBlock> {
                 ),
                 Spacer(),
                 GestureDetector(
+                  onTap: () {
+                    _openUserWorks();
+                  },
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -382,6 +494,9 @@ class _XiaoLanBlockState extends State<XiaoLanBlock> {
       children: [
         Expanded(
             child: GestureDetector(
+          onTap: () {
+            _openBlockDetail();
+          },
           child: Container(
             height: 39.h,
             decoration: BoxDecoration(
@@ -409,6 +524,9 @@ class _XiaoLanBlockState extends State<XiaoLanBlock> {
         ),
         Expanded(
             child: GestureDetector(
+          onTap: () {
+            _openDiscover();
+          },
           child: Container(
             height: 39.h,
             decoration: BoxDecoration(
@@ -444,78 +562,86 @@ class _XiaoLanBlockState extends State<XiaoLanBlock> {
           SizedBox(
             height: 15.h,
           ),
-          if (widget.type != XiaolanBlockType.creator && widget.type != XiaolanBlockType.userScroll) ...[
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Positioned(
-                    top: -11.w,
-                    left: 0,
-                    child: Opacity(
-                      opacity: .1,
-                      child: ShaderMask(
-                        shaderCallback: (bounds) {
-                          return const LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Color(0xFF103265),
-                              Color(0x00103265),
-                            ],
-                          ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height));
-                        },
-                        child: Text(
-                          "RECOM MEND",
-                          style: TextStyle(
-                            fontSize: 24.sp,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.white,
+          if (widget.showHandle == true)
+            if (widget.type != XiaoLanListBuildType.creator && widget.type != XiaoLanListBuildType.userScroll) ...[
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Positioned(
+                      top: -11.w,
+                      left: 0,
+                      child: Opacity(
+                        opacity: .1,
+                        child: ShaderMask(
+                          shaderCallback: (bounds) {
+                            return const LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Color(0xFF103265),
+                                Color(0x00103265),
+                              ],
+                            ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height));
+                          },
+                          child: Text(
+                            "RECOM MEND",
+                            style: TextStyle(
+                              fontSize: 24.sp,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
+                      )),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "板块名称",
+                        style: TextStyle(color: Color(0xFF333333), fontSize: 20.sp, fontWeight: FontWeight.w600),
                       ),
-                    )),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      "板块名称",
-                      style: TextStyle(color: Color(0xFF333333), fontSize: 20.sp, fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(
-                      width: 16.w,
-                    ),
-                    Text(
-                      "副文案说明",
-                      style: TextStyle(color: Color(0xFF666666), fontSize: 12.sp, fontWeight: FontWeight.w400),
-                    ),
-                    Spacer(),
-                    GestureDetector(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            "查看更多",
-                            style: TextStyle(color: Color(0xFF666666), fontSize: 12.sp, fontWeight: FontWeight.w400),
-                          ),
-                          SizedBox(
-                            width: 4.w,
-                          ),
-                          Image.asset(
-                            "assets/images/app_issue_arrow.png",
-                            color: Color(0xFF666666),
-                            width: 5.w,
-                          ),
-                        ],
+                      SizedBox(
+                        width: 16.w,
                       ),
-                    )
-                  ],
-                )
-              ],
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-          ],
+                      Text(
+                        "副文案说明",
+                        style: TextStyle(color: Color(0xFF666666), fontSize: 12.sp, fontWeight: FontWeight.w400),
+                      ),
+                      Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          if (widget.type == XiaoLanListBuildType.classify) {
+                            _openDiscover();
+                            return;
+                          }
+                          _openBlockDetail();
+                        },
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "查看更多",
+                              style: TextStyle(color: Color(0xFF666666), fontSize: 12.sp, fontWeight: FontWeight.w400),
+                            ),
+                            SizedBox(
+                              width: 4.w,
+                            ),
+                            Image.asset(
+                              "assets/images/app_issue_arrow.png",
+                              color: Color(0xFF666666),
+                              width: 5.w,
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+            ],
           _buildTypeLayout(),
         ],
       ),
