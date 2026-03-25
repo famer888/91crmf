@@ -15,14 +15,14 @@ class MyTheme {
   // 栏目顶部导航高度
   static double get navbarHegiht => 44.w;
 
-  static double get statusHeight =>
-      kIsWeb ? 5.w : MediaQuery.of(AppGlobal.context!).padding.top;
+  static double get statusHeight => kIsWeb ? 5.w : MediaQuery.of(AppGlobal.context!).padding.top;
 
-  static bool ipx =
-      kIsWeb && (ScreenUtil().screenHeight / ScreenUtil().screenWidth >= 1.26);
+  static bool ipx = kIsWeb && (ScreenUtil().screenHeight / ScreenUtil().screenWidth >= 1.26);
   static double bottom = ipx ? 15.w : 0;
+
   /*底部导航条高度*/
   static double get botHegiht => 55.w;
+
   static double get pxBotHegiht => ipx ? (botHegiht + bottom) : botHegiht;
 
   static const LinearGradient dhButtonGradient = LinearGradient(
@@ -89,10 +89,8 @@ class MyTheme {
       fontWeight: FontWeight.w500,
       overflow: TextOverflow.visible,
       decoration: TextDecoration.none);
-  static final TextStyle whiteOpacity612w500 = TextStyle(
-      color: Colors.white.withOpacity(0.6),
-      fontSize: 12.sp,
-      fontWeight: FontWeight.w500);
+  static final TextStyle whiteOpacity612w500 =
+      TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 12.sp, fontWeight: FontWeight.w500);
 
   static final TextStyle color51_12 = TextStyle(
       color: const Color.fromRGBO(51, 51, 51, 1),
@@ -100,11 +98,8 @@ class MyTheme {
       overflow: TextOverflow.ellipsis,
       decoration: TextDecoration.none);
 
-  static final TextStyle white08_12 = TextStyle(
-      color: white08Color,
-      fontSize: 12.sp,
-      overflow: TextOverflow.ellipsis,
-      decoration: TextDecoration.none);
+  static final TextStyle white08_12 =
+      TextStyle(color: white08Color, fontSize: 12.sp, overflow: TextOverflow.ellipsis, decoration: TextDecoration.none);
 
   static final TextStyle gray203_16 = TextStyle(
       color: const Color.fromRGBO(190, 189, 194, 1),
@@ -113,10 +108,7 @@ class MyTheme {
       decoration: TextDecoration.none);
 
   static final TextStyle orange247_13 = TextStyle(
-      color: orange24718713,
-      fontSize: 13.sp,
-      overflow: TextOverflow.ellipsis,
-      decoration: TextDecoration.none);
+      color: orange24718713, fontSize: 13.sp, overflow: TextOverflow.ellipsis, decoration: TextDecoration.none);
 
   static final TextStyle orange247_15M = TextStyle(
       color: orange24718713,
@@ -138,31 +130,20 @@ class MyTheme {
       overflow: TextOverflow.ellipsis,
       decoration: TextDecoration.none);
 
-  static final TextStyle whiteOpacity614w500 = TextStyle(
-      color: Colors.white.withOpacity(0.6),
-      fontSize: 14.sp,
-      fontWeight: FontWeight.w500);
+  static final TextStyle whiteOpacity614w500 =
+      TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 14.sp, fontWeight: FontWeight.w500);
 
-      static final TextStyle white06_16 = TextStyle(
-      color: white06Color,
-      fontSize: 16.sp,
-      overflow: TextOverflow.ellipsis,
-      decoration: TextDecoration.none);
+  static final TextStyle white06_16 =
+      TextStyle(color: white06Color, fontSize: 16.sp, overflow: TextOverflow.ellipsis, decoration: TextDecoration.none);
 
-  static final TextStyle white06_18 = TextStyle(
-      color: white06Color,
-      fontSize: 18.sp,
-      overflow: TextOverflow.ellipsis,
-      decoration: TextDecoration.none);
+  static final TextStyle white06_18 =
+      TextStyle(color: white06Color, fontSize: 18.sp, overflow: TextOverflow.ellipsis, decoration: TextDecoration.none);
 
-  static final TextStyle white07_14 =
-      TextStyle(color: white07Color, fontSize: 14.sp);
+  static final TextStyle white07_14 = TextStyle(color: white07Color, fontSize: 14.sp);
 
-  static final TextStyle white07_14_M = TextStyle(
-      color: white07Color, fontSize: 14.sp, fontWeight: FontWeight.w500);
+  static final TextStyle white07_14_M = TextStyle(color: white07Color, fontSize: 14.sp, fontWeight: FontWeight.w500);
 
-  static final TextStyle white07_13 =
-      TextStyle(color: white07Color, fontSize: 13.sp);
+  static final TextStyle white07_13 = TextStyle(color: white07Color, fontSize: 13.sp);
 
   static final TextStyle white07_12 = TextStyle(
     color: white07Color,
@@ -174,8 +155,7 @@ class MyTheme {
     fontSize: 11.sp,
   );
 
-  static final TextStyle white07_10 =
-      TextStyle(color: white07Color, fontSize: 10.sp);
+  static final TextStyle white07_10 = TextStyle(color: white07Color, fontSize: 10.sp);
 
   static final TextStyle white25508_16_M = TextStyle(
       color: const Color.fromRGBO(255, 255, 255, 0.8),
@@ -184,23 +164,14 @@ class MyTheme {
       overflow: TextOverflow.ellipsis,
       decoration: TextDecoration.none);
 
-      static final TextStyle white06_10 = TextStyle(
-      color: white06Color,
-      fontSize: 10.sp,
-      overflow: TextOverflow.ellipsis,
-      decoration: TextDecoration.none);
+  static final TextStyle white06_10 =
+      TextStyle(color: white06Color, fontSize: 10.sp, overflow: TextOverflow.ellipsis, decoration: TextDecoration.none);
 
-  static final TextStyle white06_12 = TextStyle(
-      color: white06Color,
-      fontSize: 12.sp,
-      overflow: TextOverflow.ellipsis,
-      decoration: TextDecoration.none);
+  static final TextStyle white06_12 =
+      TextStyle(color: white06Color, fontSize: 12.sp, overflow: TextOverflow.ellipsis, decoration: TextDecoration.none);
 
-       static final TextStyle white06_15 = TextStyle(
-      color: white06Color,
-      fontSize: 15.sp,
-      overflow: TextOverflow.ellipsis,
-      decoration: TextDecoration.none);
+  static final TextStyle white06_15 =
+      TextStyle(color: white06Color, fontSize: 15.sp, overflow: TextOverflow.ellipsis, decoration: TextDecoration.none);
 
   static final InputBorder inputBorder = OutlineInputBorder(
     borderRadius: BorderRadius.circular(0.0),
@@ -266,10 +237,7 @@ class MyTheme {
   static const Color imageBgColor = Color.fromRGBO(255, 255, 255, 0.03);
 
   static final TextStyle jellyCyan_18 = TextStyle(
-      color: jellyCyanColor103224185,
-      fontSize: 18.sp,
-      overflow: TextOverflow.visible,
-      decoration: TextDecoration.none);
+      color: jellyCyanColor103224185, fontSize: 18.sp, overflow: TextOverflow.visible, decoration: TextDecoration.none);
 
   /// ----------------------
 
@@ -281,19 +249,13 @@ class MyTheme {
 
   static LinearGradient gradient_228_246 = const LinearGradient(
     // colors: [Color(0xff00edfd), Color(0xffbbe954)],
-    colors: [
-      Color.fromRGBO(228, 177, 145, 1),
-      Color.fromRGBO(246, 222, 199, 1)
-    ],
+    colors: [Color.fromRGBO(228, 177, 145, 1), Color.fromRGBO(246, 222, 199, 1)],
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
   );
 
   static LinearGradient vip_gradient_228_246 = const LinearGradient(
-    colors: [
-      Color.fromRGBO(228, 177, 145, 0.9),
-      Color.fromRGBO(246, 222, 199, 0.9)
-    ],
+    colors: [Color.fromRGBO(228, 177, 145, 0.9), Color.fromRGBO(246, 222, 199, 0.9)],
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
   );
@@ -389,6 +351,7 @@ class MyTheme {
   static const bloodOrange255702 = Color.fromRGBO(253, 70, 2, 1);
   static const brownColor = Color.fromRGBO(114, 47, 7, 1);
   static const brownColor91_60_44 = Color.fromRGBO(118, 75, 51, 1);
+
   //TODO 这个颜色不对劲 后面改
   static const brownColor38_21_13 = Color.fromRGBO(38, 21, 13, 1);
   static const grayColor180 = Color.fromRGBO(180, 180, 180, 1);
@@ -1505,7 +1468,7 @@ class MyTheme {
       overflow: TextOverflow.ellipsis,
       decoration: TextDecoration.none);
 
-       static final blue80_16 = TextStyle(
+  static final blue80_16 = TextStyle(
       fontFamily: hanyi,
       color: const Color.fromRGBO(55, 110, 246, 1),
       fontSize: 16.sp,
@@ -1520,10 +1483,7 @@ class MyTheme {
       decoration: TextDecoration.none);
 
   static final TextStyle orange247_15 = TextStyle(
-      color: orange24718713,
-      fontSize: 15.sp,
-      overflow: TextOverflow.ellipsis,
-      decoration: TextDecoration.none);
+      color: orange24718713, fontSize: 15.sp, overflow: TextOverflow.ellipsis, decoration: TextDecoration.none);
   static final gray143_15 = TextStyle(
       fontFamily: hanyi,
       color: const Color.fromRGBO(255, 255, 255, 1),
@@ -2112,10 +2072,8 @@ class MyTheme {
       overflow: TextOverflow.ellipsis,
       decoration: TextDecoration.none);
 
-  static final yellow255_15 = TextStyle(
-      color: const Color(0xFFFF4D0B),
-      fontSize: 15.sp,
-      decoration: TextDecoration.underline);
+  static final yellow255_15 =
+      TextStyle(color: const Color(0xFFFF4D0B), fontSize: 15.sp, decoration: TextDecoration.underline);
 
   static final yellow255_16_B = TextStyle(
       fontFamily: hanyi,
@@ -2134,10 +2092,7 @@ class MyTheme {
       decoration: TextDecoration.none);
 
   static final gray30_14 = TextStyle(
-      fontFamily: hanyi,
-      color: const Color.fromRGBO(30, 30, 30, 1),
-      fontSize: 14.sp,
-      decoration: TextDecoration.none);
+      fontFamily: hanyi, color: const Color.fromRGBO(30, 30, 30, 1), fontSize: 14.sp, decoration: TextDecoration.none);
 
   static final gray169_14 = TextStyle(
       fontFamily: hanyi,
@@ -2283,7 +2238,7 @@ class MyTheme {
       overflow: TextOverflow.ellipsis,
       decoration: TextDecoration.none);
 
-      static final white244_20 = TextStyle(
+  static final white244_20 = TextStyle(
       fontFamily: hanyi,
       color: const Color.fromRGBO(244, 244, 244, 1),
       fontSize: 18.sp,
@@ -2297,17 +2252,11 @@ class MyTheme {
       fontWeight: FontWeight.w500,
       decoration: TextDecoration.none);
 
-  static final hex003dfd_13 = TextStyle(
-      fontFamily: hanyi,
-      color: const Color(0xff00edfd),
-      fontSize: 13.sp,
-      decoration: TextDecoration.none);
+  static final hex003dfd_13 =
+      TextStyle(fontFamily: hanyi, color: const Color(0xff00edfd), fontSize: 13.sp, decoration: TextDecoration.none);
 
   static final black51_14 = TextStyle(
-      fontFamily: hanyi,
-      color: const Color.fromRGBO(51, 51, 51, 1),
-      fontSize: 14.sp,
-      decoration: TextDecoration.none);
+      fontFamily: hanyi, color: const Color.fromRGBO(51, 51, 51, 1), fontSize: 14.sp, decoration: TextDecoration.none);
 
   static final white233_14 = TextStyle(
       fontFamily: hanyi,
@@ -2342,10 +2291,7 @@ class MyTheme {
       decoration: TextDecoration.none);
 
   static final gray30_15 = TextStyle(
-      fontFamily: hanyi,
-      color: const Color.fromRGBO(30, 30, 30, 1),
-      fontSize: 15.sp,
-      decoration: TextDecoration.none);
+      fontFamily: hanyi, color: const Color.fromRGBO(30, 30, 30, 1), fontSize: 15.sp, decoration: TextDecoration.none);
 
   static final black13_11 = TextStyle(
       fontFamily: hanyi,
@@ -2655,16 +2601,10 @@ class MyTheme {
       decoration: TextDecoration.none);
 
   static final black788187_12 = TextStyle(
-      fontFamily: hanyi,
-      color: const Color.fromRGBO(78, 81, 87, 1),
-      fontSize: 12.sp,
-      decoration: TextDecoration.none);
+      fontFamily: hanyi, color: const Color.fromRGBO(78, 81, 87, 1), fontSize: 12.sp, decoration: TextDecoration.none);
 
   static final black12 = TextStyle(
-      fontFamily: hanyi,
-      color: const Color.fromRGBO(51, 51, 51, 1),
-      fontSize: 12.sp,
-      decoration: TextDecoration.none);
+      fontFamily: hanyi, color: const Color.fromRGBO(51, 51, 51, 1), fontSize: 12.sp, decoration: TextDecoration.none);
 
   static final black12_M = TextStyle(
       fontFamily: hanyi,
@@ -2736,10 +2676,7 @@ class MyTheme {
       decoration: TextDecoration.none);
 
   static final black16 = TextStyle(
-      fontFamily: hanyi,
-      color: const Color.fromRGBO(51, 51, 51, 1),
-      fontSize: 16.sp,
-      decoration: TextDecoration.none);
+      fontFamily: hanyi, color: const Color.fromRGBO(51, 51, 51, 1), fontSize: 16.sp, decoration: TextDecoration.none);
 
   static final black16bold = TextStyle(
       fontFamily: hanyi,
@@ -3226,28 +3163,43 @@ class MyTheme {
 
 extension MyHeightEx on TextStyle {
   TextStyle get h1 => copyWith(height: 1);
+
   TextStyle get h1_5 => copyWith(height: 1.5);
 }
 
 extension MySizeEx on TextStyle {
   TextStyle get s9 => copyWith(fontSize: 9.sp);
+
   TextStyle get s10 => copyWith(fontSize: 10.sp);
+
   TextStyle get s11 => copyWith(fontSize: 11.sp);
+
   TextStyle get s12 => copyWith(fontSize: 12.sp);
+
   TextStyle get s13 => copyWith(fontSize: 13.sp);
+
   TextStyle get s14 => copyWith(fontSize: 14.sp);
+
   TextStyle get s15 => copyWith(fontSize: 15.sp);
+
   TextStyle get s16 => copyWith(fontSize: 16.sp);
+
   TextStyle get s17 => copyWith(fontSize: 17.sp);
+
   TextStyle get s18 => copyWith(fontSize: 18.sp);
+
   TextStyle get s20 => copyWith(fontSize: 20.sp);
+
   TextStyle get s25 => copyWith(fontSize: 25.sp);
 }
 
 extension MyWeightEx on TextStyle {
   TextStyle get w400 => copyWith(fontWeight: FontWeight.w400);
+
   TextStyle get w500 => copyWith(fontWeight: FontWeight.w500);
+
   TextStyle get w600 => copyWith(fontWeight: FontWeight.w600);
+
   TextStyle get w700 => copyWith(fontWeight: FontWeight.w700);
 }
 
@@ -3258,18 +3210,31 @@ extension MyTextColorEx on TextStyle {
   TextStyle get error => copyWith(color: const Color(0xFFFF1D00));
 
   TextStyle get white25502 => copyWith(color: MyTheme.white25502Color);
+
   TextStyle get white25503 => copyWith(color: MyTheme.white25503Color);
+
   TextStyle get white25504 => copyWith(color: MyTheme.white25504Color);
+
   TextStyle get white25505 => copyWith(color: MyTheme.white25505Color);
+
   TextStyle get white25506 => copyWith(color: MyTheme.white25506Color);
+
   TextStyle get color247_93_96 => copyWith(color: MyTheme.color247_93_96);
+
   TextStyle get white25507 => copyWith(color: MyTheme.white25507Color);
+
   TextStyle get clAppPrimaryColor => copyWith(color: MyTheme.clAppPrimaryColor);
+
   TextStyle get white25508 => copyWith(color: MyTheme.white25508Color);
+
   TextStyle get white25509 => copyWith(color: MyTheme.white25509Color);
+
   TextStyle get white => copyWith(color: MyTheme.white255Color);
+
   TextStyle get color250_255_115 => copyWith(color: MyTheme.color250_255_115);
+
   TextStyle get white25506Color => copyWith(color: MyTheme.white25506Color);
+
   TextStyle get blueColor63 => copyWith(color: MyTheme.blueColor63);
 
   TextStyle get yellow255 => copyWith(color: MyTheme.yellow255Color);

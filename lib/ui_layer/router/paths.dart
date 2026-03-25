@@ -410,10 +410,14 @@ class AppRouterPaths {
   // 小蓝 发现精彩
   static const xiaolanDiscover = '/xiaolanDiscover';
 
-  // 小蓝 分类详情
-  static const xiaolanCategoryDetail = '/xiaolanCategoryDetail/:id/:title';
+  // 小蓝 分类/标签 详情
+  static const xiaolanCategoryOrTagDetail = '/xiaolanCategoryOrTagDetail/:id/:type/:has_sort/:title';
 
+
+  // 小蓝 标签
+  static const xiaolanTag = '/xiaolanTag/:tag';
   // 小蓝 搜索
+
   static const xiaolanSearch = '/xiaolanSearch';
 
   static const webView = '/${BuildConfig.webViewPathName}/:url';

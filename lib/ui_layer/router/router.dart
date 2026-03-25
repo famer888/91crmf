@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jycrpj/report/ui_layer/report_timing_observer.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/xiaolan/screen/xiaolan_block_screen.dart';
-import 'package:jycrpj/ui_layer/screens/crack/apps/xiaolan/screen/xiaolan_category_detail_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/xiaolan/screen/xiaolan_category_or_tag_detail_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/xiaolan/screen/xiaolan_creator_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/xiaolan/screen/xiaolan_discover_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/xiaolan/screen/xiaolan_search_screen.dart';
@@ -39,14 +39,28 @@ class AppRouter {
       ),
       GoRoute(
         path: AppRouterPaths.xiaolanDiscover,
-        builder: (context, state) => const XiaolanDiscoverScreen(),
+        builder: (context, state) {
+          final type = state.uri.queryParameters['type'] ?? '';
+          final nagId = state.uri.queryParameters['nagId'] ?? '';
+          return XiaolanDiscoverScreen(
+            type: type,
+            nagId: nagId,
+          );
+        },
       ),
       GoRoute(
-        path: AppRouterPaths.xiaolanCategoryDetail,
+        path: AppRouterPaths.xiaolanCategoryOrTagDetail,
         builder: (context, state) {
           final id = int.tryParse(state.pathParameters['id'] ?? '') ?? 0;
           final title = state.pathParameters['title'] ?? '';
-          return XiaolanCategoryDetailScreen(categoryId: id, title: title);
+          final type = state.pathParameters['type'] ?? '';
+          final hasSort = state.pathParameters['has_sort'];
+          return XiaolanCategoryOrTagDetailScreen(
+            id: id,
+            title: title,
+            type: type,
+            hasSort: hasSort == '1',
+          );
         },
       ),
       GoRoute(

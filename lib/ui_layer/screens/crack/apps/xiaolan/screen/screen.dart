@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../../app_global.dart';
 import '../../../../../../domain/model/crack_model.dart';
 import '../../../../../../domain/remote_domain/domains/user.dart';
 import '../../../../../notifiers/user_notifier.dart';
@@ -42,6 +43,9 @@ class _XiaoLanCommunityScreenState extends State<XiaoLanCommunityScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if(AppGlobal.context==null){
+      AppGlobal.context = context;
+    }
     return Stack(
       fit: StackFit.expand,
       children: [

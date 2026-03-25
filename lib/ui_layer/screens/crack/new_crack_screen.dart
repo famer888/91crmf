@@ -20,6 +20,7 @@ import 'package:jycrpj/ui_layer/screens/crack/apps/awjq/screen/screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/clsq/screen/screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_community_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_community_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/xiaolan/screen/screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/zpc/screen/screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/crack_app_type.dart';
 import 'package:jycrpj/ui_layer/screens/crack/unlock_status_notifier.dart';
@@ -61,7 +62,9 @@ class _NewCrackScreenState extends State<NewCrackScreen> {
 
     CommonUtils.log('缓存token:${_appDomain.info} - ${_appDomain.cache}');
     try {
-      final resCrackRes = await _crackDomain.getCrackList(isCrack: 1, );
+      final resCrackRes = await _crackDomain.getCrackList(
+        isCrack: 1,
+      );
       // 如果任一接口返回 status != 1 则视为错误
       if (resCrackRes.status != 1) {
         _asyncValue = const AsyncError();
@@ -166,6 +169,14 @@ class _NewCrackScreenState extends State<NewCrackScreen> {
                             (index) => (BuildContext _) {
                               final crackApp_ = data[index];
                               // 根据类型动态返回对应页面
+                              return XiaoLanCommunityScreen(
+                                id: 1,
+                                crackApp: crackApp_,
+                                openEndDrawer: () {
+                                  Scaffold.of(scaffoldContext).openEndDrawer();
+                                },
+                              );
+
                               Widget page;
                               if (crackApp_.appName == CrackAppType.clsq.appName) {
                                 page = ClCommunityScreen(
@@ -259,7 +270,8 @@ class _NewCrackScreenState extends State<NewCrackScreen> {
                                     });
                                     _scaffoldKey.currentState?.openEndDrawer();
                                   },
-                                  child: MyImage.asset(MyImagePaths.appMoreBorder, fit: BoxFit.cover, width: 35.w, height: 49.w),
+                                  child: MyImage.asset(MyImagePaths.appMoreBorder,
+                                      fit: BoxFit.cover, width: 35.w, height: 49.w),
                                 ),
                               ],
                             ),
@@ -289,7 +301,8 @@ class _NewCrackScreenState extends State<NewCrackScreen> {
                                       _showGuide_ = false;
                                     });
                                   },
-                                  child: MyImage.asset(MyImagePaths.appMoreButton, fit: BoxFit.cover, width: 78.w, height: 25.w),
+                                  child: MyImage.asset(MyImagePaths.appMoreButton,
+                                      fit: BoxFit.cover, width: 78.w, height: 25.w),
                                 ),
                                 SizedBox(width: 94.w),
                               ],

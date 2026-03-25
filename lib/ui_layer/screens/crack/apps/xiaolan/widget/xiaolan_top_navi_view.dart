@@ -36,14 +36,10 @@ class XiaoLanTopNaviView extends StatefulWidget {
 
 class _XiaoLanTopNaviViewState extends State<XiaoLanTopNaviView> with TickerProviderStateMixin {
   late final _appDomain = context.read<DynamicDomain>();
-  late final _homeConfig = context.read<HomeConfigNotifier>();
   AsyncValue<List<LinkModel>> _asyncValue = const AsyncInit();
 
   late final TabController _tabController;
-  int _initialIndex = 1;
-
-  // 17岁
-  late List<AppNavModel> hjgjDiscoverSortNav = _homeConfig.config.hjgjDiscoverSortNav ?? [];
+  int _initialIndex = 0;
 
   @override
   void initState() {
@@ -59,195 +55,13 @@ class _XiaoLanTopNaviViewState extends State<XiaoLanTopNaviView> with TickerProv
     });
 
     final result =
-        await _appDomain.getConstructByApiLink(apiLink: CrackAppType.clsq.topNavApi, params: {'id': widget.id});
+        await _appDomain.getConstructByApiLink(apiLink: CrackAppType.xiaolan.topNavApi, params: {'id': widget.id});
 
-    // MOCK数据
-    // await Future.delayed(const Duration(seconds: 1));
-    // Map<String, dynamic> result = {
-    //   'status': 1,
-    //   'data': {
-    //     'value': [
-    //       {
-    //         "current": false,
-    //         "id": -1,
-    //         "name": "关注",
-    //         "type": 1,
-    //         "mid_style": 0,
-    //         "bot_style": 0,
-    //         "api": "/api/mv/listOfFollow",
-    //         "params": {"id": 0}
-    //       },
-    //       {
-    //         "current": true,
-    //         "id": 9,
-    //         "name": "推荐",
-    //         "type": 0,
-    //         "h5_url": "",
-    //         "api": "/api/tabnew/list_construct",
-    //         "params": {"nag_id": 9},
-    //         "mid_style": 1,
-    //         "bot_style": 1
-    //       },
-    //       {
-    //         "current": false,
-    //         "id": 13,
-    //         "name": "独家",
-    //         "type": 3,
-    //         "h5_url":
-    //             "https://28b.nmngoxp.cc/act/zt.html?token=0888996996D83AD9942D32B2BCD5F19EC69319A25D6A0D1730A7063289924469",
-    //         "api": "/api/tabnew/list_construct",
-    //         "params": {"nag_id": 13},
-    //         "mid_style": 0,
-    //         "bot_style": 0
-    //       },
-    //       {
-    //         "current": false,
-    //         "id": 11,
-    //         "name": "原创",
-    //         "type": 4,
-    //         "h5_url": "",
-    //         "api": "/api/tabnew/hotRank",
-    //         "params": {"nag_id": 11},
-    //         "mid_style": 2,
-    //         "bot_style": 2
-    //       },
-    //       {
-    //         "current": false,
-    //         "id": 10,
-    //         "name": "发现",
-    //         "type": 2,
-    //         "h5_url": "",
-    //         "api": "/api/tabnew/discovery",
-    //         "params": {"nag_id": 10},
-    //         "mid_style": 0,
-    //         "bot_style": 0
-    //       },
-    //       {
-    //         "current": false,
-    //         "id": 1,
-    //         "name": "角色",
-    //         "type": 0,
-    //         "h5_url": "",
-    //         "api": "/api/tabnew/list_construct",
-    //         "params": {"nag_id": 1},
-    //         "mid_style": 2,
-    //         "bot_style": 2
-    //       },
-    //       {
-    //         "current": false,
-    //         "id": 2,
-    //         "name": "体型",
-    //         "type": 0,
-    //         "h5_url": "",
-    //         "api": "/api/tabnew/list_construct",
-    //         "params": {"nag_id": 2},
-    //         "mid_style": 2,
-    //         "bot_style": 2
-    //       },
-    //       {
-    //         "current": false,
-    //         "id": 3,
-    //         "name": "玩法",
-    //         "type": 0,
-    //         "h5_url": "",
-    //         "api": "/api/tabnew/list_construct",
-    //         "params": {"nag_id": 3},
-    //         "mid_style": 2,
-    //         "bot_style": 2
-    //       },
-    //       {
-    //         "current": false,
-    //         "id": 4,
-    //         "name": "网红泄露",
-    //         "type": 0,
-    //         "h5_url": "",
-    //         "api": "/api/tabnew/list_construct",
-    //         "params": {"nag_id": 4},
-    //         "mid_style": 2,
-    //         "bot_style": 2
-    //       },
-    //       {
-    //         "current": false,
-    //         "id": 5,
-    //         "name": "其他",
-    //         "type": 0,
-    //         "h5_url": "",
-    //         "api": "/api/tabnew/list_construct",
-    //         "params": {"nag_id": 5},
-    //         "mid_style": 2,
-    //         "bot_style": 2
-    //       },
-    //       {
-    //         "current": false,
-    //         "id": 8,
-    //         "name": "经典日本GV",
-    //         "type": 0,
-    //         "h5_url": "",
-    //         "api": "/api/tabnew/list_construct",
-    //         "params": {"nag_id": 8},
-    //         "mid_style": 2,
-    //         "bot_style": 2
-    //       },
-    //       {
-    //         "current": false,
-    //         "id": 7,
-    //         "name": "二次元CG",
-    //         "type": 0,
-    //         "h5_url": "",
-    //         "api": "/api/tabnew/list_construct",
-    //         "params": {"nag_id": 7},
-    //         "mid_style": 2,
-    //         "bot_style": 2
-    //       },
-    //       {
-    //         "current": false,
-    //         "id": 6,
-    //         "name": "精品专区",
-    //         "type": 0,
-    //         "h5_url": "",
-    //         "api": "/api/tabnew/list_construct",
-    //         "params": {"nag_id": 6},
-    //         "mid_style": 2,
-    //         "bot_style": 2
-    //       },
-    //       {
-    //         "current": false,
-    //         "id": 12,
-    //         "name": "综艺",
-    //         "type": 0,
-    //         "h5_url": "",
-    //         "api": "/api/tabnew/list_construct",
-    //         "params": {"nag_id": 12},
-    //         "mid_style": 2,
-    //         "bot_style": 2
-    //       }
-    //     ],
-    //   },
-    // };
     if (result.status == 1) {
-      final data = result['data']['value'];
+      final data = result['data'];
       if (data case final List data when data.isNotEmpty) {
         final linkModelList = data.map((x) => LinkModel.fromJson(x)).toList();
-        if (hjgjDiscoverSortNav.isNotEmpty) {
-          LinkModel item = LinkModel(
-            isNavPrepend: true,
-            id: 0,
-            linkUrl: '',
-            resourceUrl: '',
-            redirectType: 0,
-            name: '精品',
-            type: 0,
-            desc: '',
-            api: 'mvhjgj/discover2',
-            params: {},
-          );
-          linkModelList.insert(0, item); //插入到对应位置
-        }
-
-        _initialIndex = (_homeConfig.config.navDefault ?? 0);
-
         _tabController = TabController(length: linkModelList.length, vsync: this, initialIndex: _initialIndex);
-
         _asyncValue = AsyncData(linkModelList);
       }
     } else {

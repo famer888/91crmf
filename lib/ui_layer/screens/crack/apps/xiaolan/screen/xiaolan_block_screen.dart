@@ -84,7 +84,7 @@ class _XiaoLanBlockScreenState extends State<XiaoLanBlockScreen> {
                 orElse: () => const LoadingView(),
                 error: (_, __) => NetworkErrorView(onTap: _initTagList),
                 data: (data) {
-                  return XiaoLanListBuild(type: XiaoLanListBuildType.fourGrid, showHandle: false, showHead: false);
+                  return XiaoLanListBuild(type: XiaoLanListBuildType.fourGrid,);
                 }),
           )
         ],

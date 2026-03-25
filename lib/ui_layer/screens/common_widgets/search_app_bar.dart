@@ -1,10 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
 import 'package:jycrpj/ui_layer/screens/crack/crack_app_type.dart';
 
+import '../../../app_global.dart';
 import '../../../report/ui_layer/report_gesture_detector.dart';
 import '../../router/routes.dart';
 import '../image_paths.dart';
