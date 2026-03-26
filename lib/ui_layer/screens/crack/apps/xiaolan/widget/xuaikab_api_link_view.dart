@@ -238,33 +238,27 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
                             child: XiaoLanListBuild(
                                 type: XiaoLanListBuildType.tag, linkModel: widget.linkModel, model: tags_mv),
                           ),
-                        // if(bot_style_one != null && bot_style_one!.isNotEmpty)
-                        //   for(var item in bot_style_one!)
-                        //     SliverToBoxAdapter(
-                        //       child: XiaoLanListBuild(
-                        //           type: XiaoLanListBuildType.fourGrid, linkModel: widget.linkModel, model: item),
-                        //     ),
-                        // if(bot_style_two != null && bot_style_two!.isNotEmpty)
-                        //   SliverToBoxAdapter(
-                        //     child: XiaoLanListBuild(
-                        //         type: XiaoLanListBuildType.oneBigFourGrid, linkModel: widget.linkModel, model: bot_style_one),
-                        //   )
                       ],
                       body: bot_style_one != null || bot_style_two != null
                           ? (MyListView.list(
                               padding: EdgeInsets.zero,
                               itemBuilder: (context, item, index) {
-                                return XiaoLanListBuild(
-                                    type: [
-                                      XiaoLanListBuildType.fourGrid,
-                                      XiaoLanListBuildType.oneBigSecondScroll,
-                                      XiaoLanListBuildType.oneBigFourGrid,
-                                      XiaoLanListBuildType.sixGrid,
-                                      XiaoLanListBuildType.oneLineScroll,
-                                      XiaoLanListBuildType.fourGrid,
-                                    ][item['show_style']],
-                                    linkModel: widget.linkModel,
-                                    model: item);
+                                return Column(
+                                  children: [
+                                    XiaoLanListBuild(
+                                        type: [
+                                          XiaoLanListBuildType.fourGrid,
+                                          XiaoLanListBuildType.oneBigSecondScroll,
+                                          XiaoLanListBuildType.oneBigFourGrid,
+                                          XiaoLanListBuildType.sixGrid,
+                                          XiaoLanListBuildType.oneLineScroll,
+                                          XiaoLanListBuildType.fourGrid,
+                                        ][item['show_style']],
+                                        linkModel: widget.linkModel,
+                                        model: item),
+                                    SizedBox(height: 10.w,)
+                                  ],
+                                );
                               },
                               onFetchingMore: (currentPage, pageSize) async {
                                 return _getData(page: currentPage, pageSize: pageSize);
