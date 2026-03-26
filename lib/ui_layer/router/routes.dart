@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jycrpj/domain/model/ai/ai_magic_model.dart';
 import 'package:jycrpj/domain/model/soul_group_model.dart';
@@ -97,6 +97,12 @@ import '../screens/community/issue/screen.dart';
 import '../screens/community/original_screen/original_screen.dart';
 import '../screens/community/community_screen/screen.dart';
 import '../screens/community/tag_detail/screen.dart';
+import '../screens/crack/apps/xiaolan/screen/xiaolan_category_or_tag_detail_screen.dart';
+import '../screens/crack/apps/xiaolan/screen/xiaolan_creator_screen.dart';
+import '../screens/crack/apps/xiaolan/screen/xiaolan_discover_screen.dart';
+import '../screens/crack/apps/xiaolan/screen/xiaolan_search_result_screen.dart';
+import '../screens/crack/apps/xiaolan/screen/xiaolan_search_screen.dart';
+import '../screens/crack/apps/xiaolan/screen/xiaolan_user_works_screen.dart';
 import '../screens/home/new_home_screen.dart';
 import '../screens/local_video/screen.dart';
 import '../screens/login/screen.dart';
@@ -331,6 +337,7 @@ class VlogSecondRoute extends GoRouteData {
       AppRouter.rootNavigatorKey;
 
   const VlogSecondRoute({required this.userGlobalData});
+
   final bool userGlobalData;
 
   @override
@@ -916,7 +923,7 @@ class MineCustomerServiceRoute extends GoRouteData {
     return CommonUtils.buildSlideTransitionPage(
         state: state,
         child:
-            const MineCustomerServiceWebScreen() /*const MineCustomerServiceScreen()*/);
+        const MineCustomerServiceWebScreen() /*const MineCustomerServiceScreen()*/);
   }
 }
 
@@ -1208,8 +1215,7 @@ class ChatMessageRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey =
       AppRouter.rootNavigatorKey;
 
-  const ChatMessageRoute(
-      {required this.nickName, required this.toUuid, required this.thumb});
+  const ChatMessageRoute({required this.nickName, required this.toUuid, required this.thumb});
 
   final String nickName;
   final String toUuid;
@@ -1523,8 +1529,7 @@ class Tiktok51CommunityRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey =
       AppRouter.rootNavigatorKey;
 
-  const Tiktok51CommunityRoute(
-      {required this.id, required this.showMoreButton});
+  const Tiktok51CommunityRoute({required this.id, required this.showMoreButton});
 
   final int id;
   final bool showMoreButton;
@@ -1600,8 +1605,7 @@ class Tiktok51MoreRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey =
       AppRouter.rootNavigatorKey;
 
-  const Tiktok51MoreRoute(
-      {required this.name, required this.id, required this.api});
+  const Tiktok51MoreRoute({required this.name, required this.id, required this.api});
 
   final String name;
   final String id;
@@ -1872,8 +1876,7 @@ class PZhanMoreRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey =
       AppRouter.rootNavigatorKey;
 
-  const PZhanMoreRoute(
-      {required this.name, required this.id, required this.api});
+  const PZhanMoreRoute({required this.name, required this.id, required this.api});
 
   final String name;
   final String id;
@@ -2254,10 +2257,10 @@ class AIMagicDetailRoute extends GoRouteData {
   }
 }
 
-
 @TypedGoRoute<XiaolanVideoDetailRoute>(path: AppRouterPaths.xiaolanVideoDetail)
 class XiaolanVideoDetailRoute extends GoRouteData {
-  static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppRouter.rootNavigatorKey;
 
   const XiaolanVideoDetailRoute({required this.id});
 
@@ -2265,6 +2268,96 @@ class XiaolanVideoDetailRoute extends GoRouteData {
 
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
-    return CommonUtils.buildSlideTransitionPage(state: state, child: XiaolanVideoDetailScreen(id: id));
+    return CommonUtils.buildSlideTransitionPage(
+        state: state, child: XiaolanVideoDetailScreen(id: id));
+  }
+}
+
+
+@TypedGoRoute<XiaolanSearchResultRoute>(path: AppRouterPaths.xiaoLanSearchResult)
+class XiaolanSearchResultRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
+
+  const XiaolanSearchResultRoute({required this.kwy});
+
+  final String kwy;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(state: state, child: XiaoLanSearchResultScreen(kwy: kwy));
+  }
+}
+
+@TypedGoRoute<XiaolanCreatorRoute>(path: AppRouterPaths.xiaolanCreator)
+class XiaolanCreatorRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
+
+  const XiaolanCreatorRoute();
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(state: state, child: const XiaolanCreatorScreen());
+  }
+}
+
+@TypedGoRoute<XiaolanUserWorksRoute>(path: AppRouterPaths.xiaolanUserWorks)
+class XiaolanUserWorksRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
+
+  const XiaolanUserWorksRoute({required this.id, required this.userName});
+
+  final String id;
+  final String userName;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(
+        state: state, child: XiaolanUserWorksScreen(userId: id, userName: userName));
+  }
+}
+
+@TypedGoRoute<XiaolanCategoryOrTagDetailRoute>(path: AppRouterPaths.xiaolanCategoryOrTagDetail)
+class XiaolanCategoryOrTagDetailRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
+
+  const XiaolanCategoryOrTagDetailRoute(
+      {required this.id, required this.type, required this.has_sort, required this.title});
+
+  final int id;
+  final String type;
+  final String has_sort;
+  final String title;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(state: state,
+        child: XiaolanCategoryOrTagDetailScreen(id: id, title: title, type: type, hasSort: has_sort == '1'));
+  }
+}
+
+@TypedGoRoute<XiaolanDiscoverRoute>(path: AppRouterPaths.xiaolanDiscover)
+class XiaolanDiscoverRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
+
+  const XiaolanDiscoverRoute({required this.type, this.nagId = ''});
+
+  final String type;
+  final String nagId;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(state: state, child: XiaolanDiscoverScreen(type: type, nagId: nagId));
+  }
+}
+
+@TypedGoRoute<XiaolanSearchRoute>(path: AppRouterPaths.xiaolanSearch)
+class XiaolanSearchRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
+
+  const XiaolanSearchRoute();
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(state: state, child: const XiaolanSearchScreen());
   }
 }

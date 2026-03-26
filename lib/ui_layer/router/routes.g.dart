@@ -127,6 +127,12 @@ List<RouteBase> get $appRoutes => [
       $localVoiceRoute,
       $aIMagicDetailRoute,
       $xiaolanVideoDetailRoute,
+      $xiaolanSearchResultRoute,
+      $xiaolanCreatorRoute,
+      $xiaolanUserWorksRoute,
+      $xiaolanCategoryOrTagDetailRoute,
+      $xiaolanDiscoverRoute,
+      $xiaolanSearchRoute,
     ];
 
 RouteBase get $welcomeRoute => GoRouteData.$route(
@@ -3503,6 +3509,168 @@ extension $XiaolanVideoDetailRouteExtension on XiaolanVideoDetailRoute {
 
   String get location => GoRouteData.$location(
         '/xiaolanVideoDetail/${Uri.encodeComponent(id.toString())}',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $xiaolanSearchResultRoute => GoRouteData.$route(
+      path: '/xiaoLanSearchResult/:kwy',
+      parentNavigatorKey: XiaolanSearchResultRoute.$parentNavigatorKey,
+      factory: $XiaolanSearchResultRouteExtension._fromState,
+    );
+
+extension $XiaolanSearchResultRouteExtension on XiaolanSearchResultRoute {
+  static XiaolanSearchResultRoute _fromState(GoRouterState state) =>
+      XiaolanSearchResultRoute(
+        kwy: state.pathParameters['kwy']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/xiaoLanSearchResult/${Uri.encodeComponent(kwy)}',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $xiaolanCreatorRoute => GoRouteData.$route(
+      path: '/xiaolanCreator',
+      parentNavigatorKey: XiaolanCreatorRoute.$parentNavigatorKey,
+      factory: $XiaolanCreatorRouteExtension._fromState,
+    );
+
+extension $XiaolanCreatorRouteExtension on XiaolanCreatorRoute {
+  static XiaolanCreatorRoute _fromState(GoRouterState state) =>
+      const XiaolanCreatorRoute();
+
+  String get location => GoRouteData.$location(
+        '/xiaolanCreator',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $xiaolanUserWorksRoute => GoRouteData.$route(
+      path: '/xiaolanUserWorks/:id/:userName',
+      parentNavigatorKey: XiaolanUserWorksRoute.$parentNavigatorKey,
+      factory: $XiaolanUserWorksRouteExtension._fromState,
+    );
+
+extension $XiaolanUserWorksRouteExtension on XiaolanUserWorksRoute {
+  static XiaolanUserWorksRoute _fromState(GoRouterState state) =>
+      XiaolanUserWorksRoute(
+        id: state.pathParameters['id']!,
+        userName: state.pathParameters['userName']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/xiaolanUserWorks/${Uri.encodeComponent(id)}/${Uri.encodeComponent(userName)}',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $xiaolanCategoryOrTagDetailRoute => GoRouteData.$route(
+      path: '/xiaolanCategoryOrTagDetail/:id/:type/:has_sort/:title',
+      parentNavigatorKey: XiaolanCategoryOrTagDetailRoute.$parentNavigatorKey,
+      factory: $XiaolanCategoryOrTagDetailRouteExtension._fromState,
+    );
+
+extension $XiaolanCategoryOrTagDetailRouteExtension
+    on XiaolanCategoryOrTagDetailRoute {
+  static XiaolanCategoryOrTagDetailRoute _fromState(GoRouterState state) =>
+      XiaolanCategoryOrTagDetailRoute(
+        id: int.parse(state.pathParameters['id']!),
+        type: state.pathParameters['type']!,
+        has_sort: state.pathParameters['has_sort']!,
+        title: state.pathParameters['title']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/xiaolanCategoryOrTagDetail/${Uri.encodeComponent(id.toString())}/${Uri.encodeComponent(type)}/${Uri.encodeComponent(has_sort)}/${Uri.encodeComponent(title)}',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $xiaolanDiscoverRoute => GoRouteData.$route(
+      path: '/xiaolanDiscover',
+      parentNavigatorKey: XiaolanDiscoverRoute.$parentNavigatorKey,
+      factory: $XiaolanDiscoverRouteExtension._fromState,
+    );
+
+extension $XiaolanDiscoverRouteExtension on XiaolanDiscoverRoute {
+  static XiaolanDiscoverRoute _fromState(GoRouterState state) =>
+      XiaolanDiscoverRoute(
+        type: state.uri.queryParameters['type']!,
+        nagId: state.uri.queryParameters['nag-id'] ?? '',
+      );
+
+  String get location => GoRouteData.$location(
+        '/xiaolanDiscover',
+        queryParams: {
+          'type': type,
+          if (nagId != '') 'nag-id': nagId,
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $xiaolanSearchRoute => GoRouteData.$route(
+      path: '/xiaolanSearch',
+      parentNavigatorKey: XiaolanSearchRoute.$parentNavigatorKey,
+      factory: $XiaolanSearchRouteExtension._fromState,
+    );
+
+extension $XiaolanSearchRouteExtension on XiaolanSearchRoute {
+  static XiaolanSearchRoute _fromState(GoRouterState state) =>
+      const XiaolanSearchRoute();
+
+  String get location => GoRouteData.$location(
+        '/xiaolanSearch',
       );
 
   void go(BuildContext context) => context.go(location);

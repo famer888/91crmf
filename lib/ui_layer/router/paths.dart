@@ -413,10 +413,6 @@ class AppRouterPaths {
   // 小蓝 分类/标签 详情
   static const xiaolanCategoryOrTagDetail = '/xiaolanCategoryOrTagDetail/:id/:type/:has_sort/:title';
 
-
-  // 小蓝 标签
-  static const xiaolanTag = '/xiaolanTag/:tag';
-
   // 小蓝 视频详情
   static const xiaolanVideoDetail = '/xiaolanVideoDetail/:id';
 

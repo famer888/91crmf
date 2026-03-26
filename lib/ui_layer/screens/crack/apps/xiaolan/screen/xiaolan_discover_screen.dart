@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jycrpj/domain/type_def.dart';
+import 'package:jycrpj/ui_layer/router/routes.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_list_view.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +30,6 @@ class XiaolanDiscoverScreen extends StatefulWidget {
 }
 
 class _XiaolanDiscoverScreenState extends State<XiaolanDiscoverScreen> {
-
   late final _appDomain = context.read<AppDomain>();
 
   @override
@@ -47,7 +47,7 @@ class _XiaolanDiscoverScreenState extends State<XiaolanDiscoverScreen> {
 
     final result = await _appDomain.getConstructByApiLink(
         apiLink:
-        "${{"tag": "/api/tabnewxiaolan/list_tags", "category": "/api/tabnewxiaolan/construct_list"}[widget.type]}",
+            "${{"tag": "/api/tabnewxiaolan/list_tags", "category": "/api/tabnewxiaolan/construct_list"}[widget.type]}",
         params: {
           "nag_id": widget.nagId,
           "page": page,
@@ -92,19 +92,17 @@ class _XiaolanDiscoverScreenState extends State<XiaolanDiscoverScreen> {
                 mainAxisSpacing: 7.h,
                 crossAxisSpacing: 7.w,
                 childAspectRatio: 225 / 224,
-                itemBuilder: (context, item, index) =>
-                    XiaoLanItem.build(
-                        widget.type == "tag" ? XiaoLanItemType.tag : XiaoLanItemType.category, item,
-                        onTap: () {
-                          context.push('/xiaolanCategoryOrTagDetail/${item['id']}/${widget.type}/${Uri.encodeComponent(
-                              item['name'] ?? item['title'] ?? '')}');
-                        }),
+                itemBuilder: (context, item, index) => XiaoLanItem.build(
+                    widget.type == "tag" ? XiaoLanItemType.tag : XiaoLanItemType.category, item, onTap: () {
+                  XiaolanCategoryOrTagDetailRoute(
+                          id: item['id'], type: widget.type, title: item['name'] ?? item['title'] ?? '', has_sort: item['has_sort'])
+                      .push(context);
+                }),
                 onFetchingMore: (currentPage, pageSize) {
                   final res = _getData(page: currentPage, pageSize: pageSize);
                   return res;
                 },
-              )
-          )
+              ))
         ],
       ),
     );

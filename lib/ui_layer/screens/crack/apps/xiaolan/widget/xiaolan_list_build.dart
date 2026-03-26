@@ -45,24 +45,23 @@ class XiaoLanListBuild extends StatefulWidget {
 }
 
 class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
-  void _openBlockDetail() {
-    context.push('/xiaolanBlockDetail/0/${Uri.encodeComponent('板块名称')}');
-  }
 
   void _openCreator() {
-    context.push(AppRouterPaths.xiaolanCreator);
+    XiaolanCreatorRoute().push(context);
   }
 
   void _openUserWorks() {
-    context.push('${AppRouterPaths.xiaolanUserWorks}?userName=${Uri.encodeComponent('东方商厦')}');
+    XiaolanUserWorksRoute(userName: '东方商厦',id:"").push(context);
   }
 
   void _openDiscover(String type, {String nagId = ""}) {
-    context.push("${AppRouterPaths.xiaolanDiscover}?type=${type}&nagId=${nagId}");
+    XiaolanDiscoverRoute(type: type, nagId: nagId).push(context);
   }
 
-  void _openCategoryDetail(int id, String title, String type, {bool hasSort = true}) {
-    context.push('/xiaolanCategoryOrTagDetail/$id/${type}/${hasSort ? "1" : "0"}/${Uri.encodeComponent(title)}');
+  void _openCategoryDetail(int id, String title, String type,
+      {bool hasSort = true}) {
+    XiaolanCategoryOrTagDetailRoute(id: id, title: title, type: type, has_sort: hasSort == true ? "1" : "0")
+        .push(context);
   }
 
   Widget _buildTypeLayout() {
@@ -93,9 +92,11 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
                   return SizedBox(
                     height: 103.w,
                     width: 103.w,
-                    child: XiaoLanItem.build(XiaoLanItemType.category, item, onTap: () {
-                      _openCategoryDetail(item['id'], item['title'], 'category');
-                    }),
+                    child: XiaoLanItem.build(XiaoLanItemType.category, item,
+                        onTap: () {
+                          _openCategoryDetail(
+                              item['id'], item['title'], 'category');
+                        }),
                   );
                 },
                 separatorBuilder: (context, index) => SizedBox(width: 8.w),
@@ -129,7 +130,8 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
                 subName: widget.model["sub_title"],
                 onTap: () {
                   // _openDiscover('tag');
-                  _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
+                  _openCategoryDetail(
+                      widget.model['id'], widget.model['title'], 'category',
                       hasSort: "${widget.model['has_tab']}" == "1");
                 }),
             SizedBox(
@@ -140,8 +142,8 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
               child: (items.length > 0)
                   ? XiaoLanItem.build(XiaoLanItemType.video, items[0])
                   : Container(
-                      color: Colors.black.withValues(alpha: .5),
-                    ),
+                color: Colors.black.withValues(alpha: .5),
+              ),
             ),
             SizedBox(height: 14.5.h),
             SizedBox(
@@ -160,8 +162,10 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
                   return SizedBox(
                     width: 145.w,
                     height: 99.5.h,
-                    child: XiaoLanItem.build(XiaoLanItemType.video, items[index + 1], onTap: () {
-                      XiaolanVideoDetailRoute(id: items[index + 1]['id']).push(context);
+                    child: XiaoLanItem.build(
+                        XiaoLanItemType.video, items[index + 1], onTap: () {
+                      XiaolanVideoDetailRoute(id: items[index + 1]['id'])
+                          .push(context);
                     }),
                   );
                 },
@@ -174,7 +178,8 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
             ),
             _buildHandle(
                 onMoreTap: () {
-                  _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
+                  _openCategoryDetail(
+                      widget.model['id'], widget.model['title'], 'category',
                       hasSort: "${widget.model['has_tab']}" == "1");
                 },
                 onRefreshTap: () {})
@@ -189,7 +194,8 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
                 subName: widget.model["sub_title"],
                 onTap: () {
                   // _openDiscover('tag');
-                  _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
+                  _openCategoryDetail(
+                      widget.model['id'], widget.model['title'], 'category',
                       hasSort: "${widget.model['has_tab']}" == "1");
                 }),
             SizedBox(
@@ -199,12 +205,15 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
               height: 208.5.h,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => SizedBox(
-                    height: 208.5.h,
-                    width: 318.w,
-                    child: XiaoLanItem.build(XiaoLanItemType.video, items[index], onTap: () {
-                      XiaolanVideoDetailRoute(id: items[index]['id']).push(context);
-                    })),
+                itemBuilder: (context, index) =>
+                    SizedBox(
+                        height: 208.5.h,
+                        width: 318.w,
+                        child: XiaoLanItem.build(
+                            XiaoLanItemType.video, items[index], onTap: () {
+                          XiaolanVideoDetailRoute(id: items[index]['id'])
+                              .push(context);
+                        })),
                 separatorBuilder: (context, index) => SizedBox(width: 8.w),
                 itemCount: items.length,
               ),
@@ -214,7 +223,8 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
             ),
             _buildHandle(
                 onMoreTap: () {
-                  _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
+                  _openCategoryDetail(
+                      widget.model['id'], widget.model['title'], 'category',
                       hasSort: "${widget.model['has_tab']}" == "1");
                 },
                 onRefreshTap: () {})
@@ -229,7 +239,8 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
                 subName: widget.model["sub_title"],
                 onTap: () {
                   // _openDiscover('tag');
-                  _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
+                  _openCategoryDetail(
+                      widget.model['id'], widget.model['title'], 'category',
                       hasSort: "${widget.model['has_tab']}" == "1");
                 }),
             SizedBox(
@@ -246,11 +257,13 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
                 childAspectRatio: 344 / 240,
               ),
               itemBuilder: (context, index) {
-                if (widget.model['list'] is List && index < widget.model['list'].length) {
+                if (widget.model['list'] is List &&
+                    index < widget.model['list'].length) {
                   dynamic item = widget.model['list'][index];
-                  return XiaoLanItem.build(XiaoLanItemType.video, item, onTap: () {
-                    XiaolanVideoDetailRoute(id: item['id']).push(context);
-                  });
+                  return XiaoLanItem.build(XiaoLanItemType.video, item,
+                      onTap: () {
+                        XiaolanVideoDetailRoute(id: item['id']).push(context);
+                      });
                 }
                 return Container(
                   color: Colors.black.withValues(alpha: .5),
@@ -262,7 +275,8 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
             ),
             _buildHandle(
                 onMoreTap: () {
-                  _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
+                  _openCategoryDetail(
+                      widget.model['id'], widget.model['title'], 'category',
                       hasSort: "${widget.model['has_tab']}" == "1");
                 },
                 onRefreshTap: () {})
@@ -277,7 +291,8 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
                 subName: widget.model["sub_title"],
                 onTap: () {
                   // _openDiscover('tag');
-                  _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
+                  _openCategoryDetail(
+                      widget.model['id'], widget.model['title'], 'category',
                       hasSort: "${widget.model['has_tab']}" == "1");
                 }),
             SizedBox(
@@ -286,12 +301,13 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
             SizedBox(
               height: 218.h,
               child: (items.length > 0)
-                  ? XiaoLanItem.build(XiaoLanItemType.video, items[0], onTap: () {
-                      XiaolanVideoDetailRoute(id: items[0]['id']).push(context);
-                    })
+                  ? XiaoLanItem.build(XiaoLanItemType.video, items[0],
+                  onTap: () {
+                    XiaolanVideoDetailRoute(id: items[0]['id']).push(context);
+                  })
                   : Container(
-                      color: Colors.black.withValues(alpha: .5),
-                    ),
+                color: Colors.black.withValues(alpha: .5),
+              ),
             ),
             SizedBox(height: 8.h),
             GridView.builder(
@@ -306,11 +322,13 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
               ),
               itemBuilder: (context, _index) {
                 int index = _index + 1;
-                if (widget.model['list'] is List && index < widget.model['list'].length) {
+                if (widget.model['list'] is List &&
+                    index < widget.model['list'].length) {
                   dynamic item = widget.model['list'][index];
-                  return XiaoLanItem.build(XiaoLanItemType.video, item, onTap: () {
-                    XiaolanVideoDetailRoute(id: item['id']).push(context);
-                  });
+                  return XiaoLanItem.build(XiaoLanItemType.video, item,
+                      onTap: () {
+                        XiaolanVideoDetailRoute(id: item['id']).push(context);
+                      });
                 }
                 return Container(
                   color: Colors.black.withValues(alpha: .5),
@@ -319,7 +337,8 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
             ),
             _buildHandle(
                 onMoreTap: () {
-                  _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
+                  _openCategoryDetail(
+                      widget.model['id'], widget.model['title'], 'category',
                       hasSort: "${widget.model['has_tab']}" == "1");
                 },
                 onRefreshTap: () {})
@@ -333,7 +352,10 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
               children: [
                 Text(
                   "🏆 创作达人",
-                  style: TextStyle(color: Color(0xFF333333), fontSize: 20.sp, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                      color: Color(0xFF333333),
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w600),
                 ),
                 Spacer(),
                 GestureDetector(
@@ -361,28 +383,31 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
               height: 56.h,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => GestureDetector(
-                  onTap: () {
-                    _openUserWorks();
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 38.w,
-                        height: 38.h,
-                        decoration: BoxDecoration(
-                          color: Color(0xFFD9D9D9),
-                          shape: BoxShape.circle,
-                        ),
+                itemBuilder: (context, index) =>
+                    GestureDetector(
+                      onTap: () {
+                        _openUserWorks();
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 38.w,
+                            height: 38.h,
+                            decoration: BoxDecoration(
+                              color: Color(0xFFD9D9D9),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          Spacer(),
+                          Text(
+                            "东方商厦",
+                            style: TextStyle(
+                                color: Colors.black.withValues(alpha: .7),
+                                fontSize: 12.sp),
+                          )
+                        ],
                       ),
-                      Spacer(),
-                      Text(
-                        "东方商厦",
-                        style: TextStyle(color: Colors.black.withValues(alpha: .7), fontSize: 12.sp),
-                      )
-                    ],
-                  ),
-                ),
+                    ),
                 separatorBuilder: (context, index) => SizedBox(width: 8.w),
                 itemCount: 8,
               ),
@@ -437,7 +462,10 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) =>
-                    SizedBox(height: 208.5.h, width: 318.w, child: XiaoLanItem.build(XiaoLanItemType.video, {})),
+                    SizedBox(
+                        height: 208.5.h,
+                        width: 318.w,
+                        child: XiaoLanItem.build(XiaoLanItemType.video, {})),
                 separatorBuilder: (context, index) => SizedBox(width: 8.w),
                 itemCount: 8,
               ),
@@ -492,61 +520,63 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
       children: [
         Expanded(
             child: GestureDetector(
-          onTap: () {
-            onRefreshTap?.call();
-          },
-          child: Container(
-            height: 39.h,
-            decoration: BoxDecoration(
-              color: Color(0xFFF3F8FF),
-              borderRadius: BorderRadius.circular(20.5.w),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset("assets/images/xiaolan_icon_refresh.png", width: 16.w),
-                SizedBox(
-                  width: 5.w,
+              onTap: () {
+                onRefreshTap?.call();
+              },
+              child: Container(
+                height: 39.h,
+                decoration: BoxDecoration(
+                  color: Color(0xFFF3F8FF),
+                  borderRadius: BorderRadius.circular(20.5.w),
                 ),
-                Text(
-                  "换一换",
-                  style: TextStyle(color: Color(0xFF333333), fontSize: 14.sp),
-                )
-              ],
-            ),
-          ),
-        )),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset("assets/images/xiaolan_icon_refresh.png",
+                        width: 16.w),
+                    SizedBox(
+                      width: 5.w,
+                    ),
+                    Text(
+                      "换一换",
+                      style: TextStyle(color: Color(0xFF333333), fontSize: 14.sp),
+                    )
+                  ],
+                ),
+              ),
+            )),
         SizedBox(
           width: 8.w,
         ),
         Expanded(
             child: GestureDetector(
-          onTap: () {
-            onMoreTap?.call();
-          },
-          child: Container(
-            height: 39.h,
-            decoration: BoxDecoration(
-              color: Color(0xFFF3F8FF),
-              borderRadius: BorderRadius.circular(20.5.w),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset("assets/images/xiaolan_icon_more_list.png", width: 16.w),
-                SizedBox(
-                  width: 5.w,
+              onTap: () {
+                onMoreTap?.call();
+              },
+              child: Container(
+                height: 39.h,
+                decoration: BoxDecoration(
+                  color: Color(0xFFF3F8FF),
+                  borderRadius: BorderRadius.circular(20.5.w),
                 ),
-                Text(
-                  "查看更多",
-                  style: TextStyle(color: Color(0xFF333333), fontSize: 14.sp),
-                )
-              ],
-            ),
-          ),
-        )),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset("assets/images/xiaolan_icon_more_list.png",
+                        width: 16.w),
+                    SizedBox(
+                      width: 5.w,
+                    ),
+                    Text(
+                      "查看更多",
+                      style: TextStyle(color: Color(0xFF333333), fontSize: 14.sp),
+                    )
+                  ],
+                ),
+              ),
+            )),
       ],
     );
   }
@@ -573,7 +603,8 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
                         Color(0xFF103265),
                         Color(0x00103265),
                       ],
-                    ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height));
+                    ).createShader(
+                        Rect.fromLTWH(0, 0, bounds.width, bounds.height));
                   },
                   child: Text(
                     "RECOM MEND",
@@ -590,14 +621,20 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
             children: [
               Text(
                 "${name}",
-                style: TextStyle(color: Color(0xFF333333), fontSize: 20.sp, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                    color: Color(0xFF333333),
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w600),
               ),
               SizedBox(
                 width: 16.w,
               ),
               Text(
                 "${subName}",
-                style: TextStyle(color: Color(0xFF666666), fontSize: 12.sp, fontWeight: FontWeight.w400),
+                style: TextStyle(
+                    color: Color(0xFF666666),
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w400),
               ),
               Spacer(),
               Row(
@@ -605,7 +642,10 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
                 children: [
                   Text(
                     "查看更多",
-                    style: TextStyle(color: Color(0xFF666666), fontSize: 12.sp, fontWeight: FontWeight.w400),
+                    style: TextStyle(
+                        color: Color(0xFF666666),
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400),
                   ),
                   SizedBox(
                     width: 4.w,
@@ -653,65 +693,72 @@ class XiaoLanItem {
               children: [
                 Expanded(
                     child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: .2),
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Stack(
-                    children: [
-                      Positioned(
-                          child: MyImage.network("${item['cover_thumb_url']}", fit: BoxFit.cover, borderRadius: 8.r)),
-                      // cover_thumb_url
-                      Positioned(
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 6.w,
-                            ).copyWith(top: 2.5.h, bottom: 4.h),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                                colors: [
-                                  Colors.black.withValues(alpha: .5),
-                                  Colors.black.withValues(alpha: 0),
-                                ],
-                              ),
-                              borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(8.r), bottomRight: Radius.circular(8.r)),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: .2),
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                              child: MyImage.network("${item['cover_thumb_url']}",
+                                  fit: BoxFit.cover, borderRadius: 8.r)),
+                          // cover_thumb_url
+                          Positioned(
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 6.w,
+                                ).copyWith(top: 2.5.h, bottom: 4.h),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.bottomCenter,
+                                    end: Alignment.topCenter,
+                                    colors: [
+                                      Colors.black.withValues(alpha: .5),
+                                      Colors.black.withValues(alpha: 0),
+                                    ],
+                                  ),
+                                  borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(8.r),
+                                      bottomRight: Radius.circular(8.r)),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Image.asset(
-                                      "assets/images/xiaolan_icon_play.png",
-                                      width: 10.5.w,
-                                    ),
-                                    SizedBox(
-                                      width: 4.5.w,
+                                    Row(
+                                      children: [
+                                        Image.asset(
+                                          "assets/images/xiaolan_icon_play.png",
+                                          width: 10.5.w,
+                                        ),
+                                        SizedBox(
+                                          width: 4.5.w,
+                                        ),
+                                        Text(
+                                          "${CommonUtils.formatNumber(item['rating'])}",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12.sp,
+                                              fontWeight: FontWeight.w400),
+                                        )
+                                      ],
                                     ),
                                     Text(
-                                      "${CommonUtils.formatNumber(item['rating'])}",
-                                      style:
-                                          TextStyle(color: Colors.white, fontSize: 12.sp, fontWeight: FontWeight.w400),
+                                      "${item['duration_str']}",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12.sp,
+                                          fontWeight: FontWeight.w400),
                                     )
                                   ],
                                 ),
-                                Text(
-                                  "${item['duration_str']}",
-                                  style: TextStyle(color: Colors.white, fontSize: 12.sp, fontWeight: FontWeight.w400),
-                                )
-                              ],
-                            ),
-                          ))
-                    ],
-                  ),
-                )),
+                              ))
+                        ],
+                      ),
+                    )),
                 SizedBox(
                   height: 6.5.h,
                 ),
@@ -739,7 +786,8 @@ class XiaoLanItem {
             ),
             child: Stack(
               children: [
-                MyImage.network("${item['img_url_full']}", fit: BoxFit.cover, borderRadius: 7.5.r),
+                MyImage.network("${item['img_url_full']}",
+                    fit: BoxFit.cover, borderRadius: 7.5.r),
                 Positioned.fill(
                   child: Container(
                     decoration: BoxDecoration(
@@ -750,23 +798,29 @@ class XiaoLanItem {
                 ),
                 Positioned.fill(
                     child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text(
-                      "${item["name"]}",
-                      style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.w500),
-                    ),
-                    SizedBox(
-                      height: 4.5.h,
-                    ),
-                    Text(
-                      "${CommonUtils.formatNumber(item["works_num"] ?? 0)}",
-                      style: TextStyle(color: Color(0xFFCBCBCB), fontSize: 10.sp, fontWeight: FontWeight.w400),
-                    ),
-                  ],
-                ))
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                          "${item["name"]}",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: 4.5.h,
+                        ),
+                        Text(
+                          "${CommonUtils.formatNumber(item["works_num"] ?? 0)}",
+                          style: TextStyle(
+                              color: Color(0xFFCBCBCB),
+                              fontSize: 10.sp,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ],
+                    ))
               ],
             ),
           ),
@@ -783,7 +837,8 @@ class XiaoLanItem {
                     color: Colors.black.withValues(alpha: .5),
                     borderRadius: BorderRadius.circular(7.r),
                   ),
-                  child: MyImage.network(item["bg_thumb"], fit: BoxFit.cover, borderRadius: 7.r),
+                  child: MyImage.network(item["bg_thumb"],
+                      fit: BoxFit.cover, borderRadius: 7.r),
                 ),
                 Positioned(
                   bottom: 0,
@@ -800,7 +855,8 @@ class XiaoLanItem {
                         sigmaY: 9.9,
                       ),
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 3.h),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 2.w, vertical: 3.h),
                         decoration: BoxDecoration(
                           color: Color(0x66555555), // 半透明叠加色（关键，不然模糊会很弱）
                         ),

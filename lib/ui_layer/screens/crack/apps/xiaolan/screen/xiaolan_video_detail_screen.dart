@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jycrpj/domain/type_def.dart';
@@ -23,7 +23,8 @@ class XiaolanVideoDetailScreen extends StatefulWidget {
   const XiaolanVideoDetailScreen({super.key, required this.id});
 
   @override
-  State<XiaolanVideoDetailScreen> createState() => _XiaolanVideoDetailScreenState();
+  State<XiaolanVideoDetailScreen> createState() =>
+      _XiaolanVideoDetailScreenState();
 }
 
 enum _LoadState { init, loading, success, error }
@@ -33,6 +34,28 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
   _LoadState _loadState = _LoadState.init;
   Map<String, dynamic>? _detail;
   List _recommendList = [];
+  bool _isLiked = false;
+  int _likeCount = 0;
+  bool _isLiking = false;
+
+  Future<void> _toggleLike() async {
+    if (_isLiking) return;
+    _isLiking = true;
+    final result = await _appDomain.getConstructByApiLink(
+      apiLink: '/api/mvxiaolan/liking',
+      params: {'id': widget.id},
+    );
+    _isLiking = false;
+    if (result.status == 1) {
+      setState(() {
+        _isLiked = !_isLiked;
+        _likeCount += _isLiked ? 1 : -1;
+      });
+      MyToast.showText(text: result.data['data']?['msg'] ?? '操作成功');
+    } else {
+      MyToast.showText(text: result.msg ?? '操作失败');
+    }
+  }
 
   @override
   void initState() {
@@ -54,6 +77,8 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
       _detail = data['detail'] as Map<String, dynamic>;
       final recommend = data['recommend'];
       _recommendList = (recommend is List) ? recommend : [];
+      _likeCount = (_detail!['like'] ?? 0) as int;
+      _isLiked = (_detail!['is_like'] ?? 0) == 1;
       if (mounted) setState(() => _loadState = _LoadState.success);
     } else {
       if (result.msg case final msg? when msg.isNotEmpty) {
@@ -88,7 +113,8 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
     final playUrl = detail['play_url'] as String? ?? '';
     final title = detail['title'] as String? ?? '';
     final tagsList = detail['tags_list'];
-    final List<String> tags = tagsList is List ? List<String>.from(tagsList) : [];
+    final List<String> tags =
+        tagsList is List ? List<String>.from(tagsList) : [];
     final durationStr = detail['duration_str'] as String? ?? '';
     final rating = detail['rating'] ?? 0;
     final like = detail['like'] ?? 0;
@@ -120,26 +146,40 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
               Container(
                 color: Colors.white,
                 padding: EdgeInsets.symmetric(horizontal: 15.w),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 50.w,
-                      height: 50.w,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25.w),
+                child: GestureDetector(
+                  onTap: (){
+
+                    XiaolanUserWorksRoute(
+                      id: "${detail['user']['uid']}",
+                      userName: detail['user']['nickname'],
+                    ).push(context);
+
+                  },
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 50.w,
+                        height: 50.w,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25.w),
+                        ),
+                        child: MyImage.network(detail['user']['thumb'],
+                            fit: BoxFit.cover,
+                            backgroundColor: const Color(0xFFE6E6E6)),
                       ),
-                      child: MyImage.network(detail['user']['thumb'],
-                          fit: BoxFit.cover, backgroundColor: const Color(0xFFE6E6E6)),
-                    ),
-                    SizedBox(
-                      width: 11.w,
-                    ),
-                    Expanded(
-                        child: Text(
-                      "${detail['user']['nickname']}",
-                      style: TextStyle(color: Color(0xFF151515), fontSize: 15.sp, fontWeight: FontWeight.w500),
-                    ))
-                  ],
+                      SizedBox(
+                        width: 11.w,
+                      ),
+                      Expanded(
+                          child: Text(
+                            "${detail['user']['nickname']}",
+                            style: TextStyle(
+                                color: Color(0xFF151515),
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.w500),
+                          ))
+                    ],
+                  ),
                 ),
               ),
               SizedBox(
@@ -179,14 +219,17 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
                           // context.push('/xiaolanCategoryOrTagDetail/$id/${type}/${hasSort ? "1" : "0"}/${Uri.encodeComponent(title)}');
                         },
                         child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 1.w),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 6.w, vertical: 1.w),
                           decoration: BoxDecoration(
                             color: const Color(0xFFF2F2F2),
                             borderRadius: BorderRadius.circular(5.w),
                           ),
                           child: Text(
                             '#$tag',
-                            style: TextStyle(fontSize: 12.sp, color: const Color(0xFF666666)),
+                            style: TextStyle(
+                                fontSize: 12.sp,
+                                color: const Color(0xFF666666)),
                           ),
                         ),
                       );
@@ -203,24 +246,27 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 15.w),
                 child: Row(
                   children: [
-                    Text("${CommonUtils.formatNumber(rating)}播放   ${detail['created_at']}",
-                        style: TextStyle(fontSize: 12.sp, color: const Color(0xFF666666))),
+                    Text(
+                        "${CommonUtils.formatNumber(rating)}播放   ${detail['created_at']}",
+                        style: TextStyle(
+                            fontSize: 12.sp, color: const Color(0xFF666666))),
                     const Spacer(),
                     GestureDetector(
-                      onTap: () {
-                        // XiaolanVideoCommentRoute(videoId: widget.id).push(context);
-                      },
+                      onTap: _toggleLike,
                       child: Row(
                         children: [
                           Image.asset(
                             "assets/images/xiaolan_icon_like.png",
                             width: 16.w,
+                            color: _isLiked ?Colors.red:null,
                           ),
                           SizedBox(
                             width: 5.w,
                           ),
-                          Text('${CommonUtils.formatNumber(detail['like'])}',
-                              style: TextStyle(fontSize: 12.sp, color: const Color(0xFF666666))),
+                          Text('${CommonUtils.formatNumber(_likeCount)}',
+                              style: TextStyle(
+                                  fontSize: 12.sp,
+                                  color: const Color(0xFF666666))),
                         ],
                       ),
                     ),
@@ -238,7 +284,10 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
                           SizedBox(
                             width: 5.w,
                           ),
-                          Text('分享', style: TextStyle(fontSize: 12.sp, color: const Color(0xFF666666))),
+                          Text('分享',
+                              style: TextStyle(
+                                  fontSize: 12.sp,
+                                  color: const Color(0xFF666666))),
                         ],
                       ),
                     )
@@ -270,12 +319,15 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
                         child: Center(
                           child: Text(
                             '暂无推荐',
-                            style: TextStyle(fontSize: 14.sp, color: const Color(0xFF999999)),
+                            style: TextStyle(
+                                fontSize: 14.sp,
+                                color: const Color(0xFF999999)),
                           ),
                         ),
                       )
                     : GridView.builder(
-                        padding: EdgeInsets.symmetric(horizontal: 12.5.w, vertical: 8.w),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 12.5.w, vertical: 8.w),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           mainAxisSpacing: 10.h,
@@ -289,7 +341,8 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
                             XiaoLanItemType.video,
                             item,
                             onTap: () {
-                              XiaolanVideoDetailRoute(id: item['id']).push(context);
+                              XiaolanVideoDetailRoute(id: item['id'])
+                                  .push(context);
                             },
                           );
                         },
@@ -308,7 +361,8 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
       children: [
         Icon(icon, size: 15.sp, color: const Color(0xFF999999)),
         SizedBox(width: 3.w),
-        Text(text, style: TextStyle(fontSize: 12.sp, color: const Color(0xFF999999))),
+        Text(text,
+            style: TextStyle(fontSize: 12.sp, color: const Color(0xFF999999))),
       ],
     );
   }
@@ -333,7 +387,8 @@ class _VideoPlayerView extends StatelessWidget {
               ),
             )
           : Center(
-              child: Icon(Icons.play_circle_outline, color: Colors.white, size: 48.sp),
+              child: Icon(Icons.play_circle_outline,
+                  color: Colors.white, size: 48.sp),
             ),
     );
   }

@@ -46,7 +46,7 @@ class _XiaolanUserWorksScreenState extends State<XiaolanUserWorksScreen> {
   }) async {
     bool isInit = false;
 
-    final result = await _appDomain.getConstructByApiLink(apiLink: "/api/searchxiaolan/mv", params: {
+    final result = await _appDomain.getConstructByApiLink(apiLink: "/api/usersxiaolan/videos", params: {
       "user_id": widget.userId,
       "page": page,
       "limit": pageSize,
@@ -59,7 +59,7 @@ class _XiaolanUserWorksScreenState extends State<XiaolanUserWorksScreen> {
     }
 
     if (result.status == 1) {
-      return result.data['list'];
+      return result.data;
     } else {
       MyToast.showText(text: result.msg ?? '');
     }

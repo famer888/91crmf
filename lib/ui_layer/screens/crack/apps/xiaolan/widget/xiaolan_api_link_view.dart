@@ -256,7 +256,9 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
                                         ][item['show_style']],
                                         linkModel: widget.linkModel,
                                         model: item),
-                                    SizedBox(height: 10.w,)
+                                    SizedBox(
+                                      height: 10.w,
+                                    )
                                   ],
                                 );
                               },

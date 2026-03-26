@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jycrpj/domain/type_def.dart';
+import 'package:jycrpj/ui_layer/router/routes.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../domain/async_value.dart';
@@ -118,7 +119,11 @@ class _XiaolanCategoryOrTagDetailScreenState extends State<XiaolanCategoryOrTagD
                             crossAxisSpacing: 8.w,
                             childAspectRatio: 344 / 240,
                             itemBuilder: (context, item, index) =>
-                                XiaoLanItem.build(XiaoLanItemType.video, item, onTap: () {}),
+                                XiaoLanItem.build(XiaoLanItemType.video, item, onTap: () {
+                              XiaolanVideoDetailRoute(
+                                id: item['id'],
+                              ).push(context);
+                            }),
                             onFetchingMore: (currentPage, pageSize) {
                               final res = _getVideoData(
                                   page: currentPage, pageSize: pageSize, sort: titlesSort[titles.indexOf(e)]);
@@ -134,7 +139,11 @@ class _XiaolanCategoryOrTagDetailScreenState extends State<XiaolanCategoryOrTagD
                         crossAxisSpacing: 8.w,
                         childAspectRatio: 344 / 240,
                         itemBuilder: (context, item, index) =>
-                            XiaoLanItem.build(XiaoLanItemType.video, item, onTap: () {}),
+                            XiaoLanItem.build(XiaoLanItemType.video, item, onTap: () {
+                          XiaolanVideoDetailRoute(
+                            id: item['id'],
+                          ).push(context);
+                        }),
                         onFetchingMore: (currentPage, pageSize) {
                           final res = _getVideoData(page: currentPage, pageSize: pageSize, sort: titlesSort[0]);
                           return res;
