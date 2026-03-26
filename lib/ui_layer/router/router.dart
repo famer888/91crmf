@@ -34,7 +34,8 @@ class AppRouter {
         path: AppRouterPaths.xiaolanUserWorks,
         builder: (context, state) {
           final userName = state.uri.queryParameters['userName'] ?? '';
-          return XiaolanUserWorksScreen(userName: userName);
+          final id = state.uri.queryParameters['id'] ?? '';
+          return XiaolanUserWorksScreen(userName: userName,userId: id);
         },
       ),
       GoRoute(

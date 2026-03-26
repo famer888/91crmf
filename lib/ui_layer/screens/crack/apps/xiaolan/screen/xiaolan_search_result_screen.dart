@@ -124,10 +124,10 @@ class _XiaoLanSearchResultScreenState extends State<XiaoLanSearchResultScreen> {
                   backgroundColor: Colors.transparent),
               body: MyListView.grid(
                 padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
-                crossAxisCount: 3,
-                mainAxisSpacing: 7.h,
-                crossAxisSpacing: 7.w,
-                childAspectRatio: 225 / 224,
+                crossAxisCount: 2,
+                mainAxisSpacing: 10.h,
+                crossAxisSpacing: 8.w,
+                childAspectRatio: 344 / 240,
                 itemBuilder: (context, item, index) => XiaoLanItem.build(XiaoLanItemType.video, item, onTap: () {}),
                 onFetchingMore: (currentPage, pageSize) {
                   final res = _getData(page: currentPage, pageSize: pageSize);

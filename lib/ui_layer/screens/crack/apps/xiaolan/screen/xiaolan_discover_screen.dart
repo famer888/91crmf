@@ -29,43 +29,6 @@ class XiaolanDiscoverScreen extends StatefulWidget {
 }
 
 class _XiaolanDiscoverScreenState extends State<XiaolanDiscoverScreen> {
-  // AsyncValue<List> _asyncValue = const AsyncInit();
-  // late final _appDomain = context.read<AppDomain>();
-  //
-  // @override
-  // void initState() {
-  //   // _initTagList();
-  //   super.initState();
-  // }
-  //
-  // // sort hot/new
-  // Future<List> _getData(int pageIndex,int pageSize) async {
-  //   if (_asyncValue.isLoading) return;
-  //   setState(() {
-  //     _asyncValue = const AsyncLoading();
-  //   });
-  //   final result = await _appDomain.getConstructByApiLink(
-  //       apiLink:
-  //           "${{"tag": "/api/tabnewxiaolan/list_tags", "category": "/api/tabnewxiaolan/construct_list"}[widget.type]}",
-  //       params: {
-  //         "nag_id": widget.nagId,
-  //       });
-  //   if (result.status == 1) {
-  //     if (result.data['list'] case final list when list.isNotEmpty) {
-  //       List list = result.data['list'];
-  //       _asyncValue = AsyncData(list);
-  //     } else {
-  //       _asyncValue = AsyncData([]);
-  //     }
-  //   } else {
-  //     MyToast.showText(text: result.msg ?? '');
-  //     _asyncValue = const AsyncError();
-  //   }
-  //
-  //   if (mounted) {
-  //     setState(() {});
-  //   }
-  // }
 
   late final _appDomain = context.read<AppDomain>();
 

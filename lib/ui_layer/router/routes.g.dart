@@ -126,6 +126,7 @@ List<RouteBase> get $appRoutes => [
       $localVideoRoute,
       $localVoiceRoute,
       $aIMagicDetailRoute,
+      $xiaolanVideoDetailRoute,
     ];
 
 RouteBase get $welcomeRoute => GoRouteData.$route(
@@ -3486,4 +3487,30 @@ extension $AIMagicDetailRouteExtension on AIMagicDetailRoute {
 
   void replace(BuildContext context) =>
       context.replace(location, extra: $extra);
+}
+
+RouteBase get $xiaolanVideoDetailRoute => GoRouteData.$route(
+      path: '/xiaolanVideoDetail/:id',
+      parentNavigatorKey: XiaolanVideoDetailRoute.$parentNavigatorKey,
+      factory: $XiaolanVideoDetailRouteExtension._fromState,
+    );
+
+extension $XiaolanVideoDetailRouteExtension on XiaolanVideoDetailRoute {
+  static XiaolanVideoDetailRoute _fromState(GoRouterState state) =>
+      XiaolanVideoDetailRoute(
+        id: int.parse(state.pathParameters['id']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/xiaolanVideoDetail/${Uri.encodeComponent(id.toString())}',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }

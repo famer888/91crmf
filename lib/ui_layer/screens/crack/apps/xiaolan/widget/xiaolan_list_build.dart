@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jycrpj/ui_layer/router/paths.dart';
+import 'package:jycrpj/ui_layer/router/routes.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 
 import '../../../../../../domain/model/link_model.dart';
@@ -159,7 +160,9 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
                   return SizedBox(
                     width: 145.w,
                     height: 99.5.h,
-                    child: XiaoLanItem.build(XiaoLanItemType.video, items[index + 1]),
+                    child: XiaoLanItem.build(XiaoLanItemType.video, items[index + 1], onTap: () {
+                      XiaolanVideoDetailRoute(id: items[index + 1]['id']).push(context);
+                    }),
                   );
                 },
                 separatorBuilder: (context, index) => SizedBox(width: 8.w),
@@ -196,8 +199,12 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
               height: 208.5.h,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) =>
-                    SizedBox(height: 208.5.h, width: 318.w, child: XiaoLanItem.build(XiaoLanItemType.video, items[index])),
+                itemBuilder: (context, index) => SizedBox(
+                    height: 208.5.h,
+                    width: 318.w,
+                    child: XiaoLanItem.build(XiaoLanItemType.video, items[index], onTap: () {
+                      XiaolanVideoDetailRoute(id: items[index]['id']).push(context);
+                    })),
                 separatorBuilder: (context, index) => SizedBox(width: 8.w),
                 itemCount: items.length,
               ),
@@ -241,7 +248,9 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
               itemBuilder: (context, index) {
                 if (widget.model['list'] is List && index < widget.model['list'].length) {
                   dynamic item = widget.model['list'][index];
-                  return XiaoLanItem.build(XiaoLanItemType.video, item);
+                  return XiaoLanItem.build(XiaoLanItemType.video, item, onTap: () {
+                    XiaolanVideoDetailRoute(id: item['id']).push(context);
+                  });
                 }
                 return Container(
                   color: Colors.black.withValues(alpha: .5),
@@ -277,7 +286,9 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
             SizedBox(
               height: 218.h,
               child: (items.length > 0)
-                  ? XiaoLanItem.build(XiaoLanItemType.video, items[0])
+                  ? XiaoLanItem.build(XiaoLanItemType.video, items[0], onTap: () {
+                      XiaolanVideoDetailRoute(id: items[0]['id']).push(context);
+                    })
                   : Container(
                       color: Colors.black.withValues(alpha: .5),
                     ),
@@ -297,7 +308,9 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
                 int index = _index + 1;
                 if (widget.model['list'] is List && index < widget.model['list'].length) {
                   dynamic item = widget.model['list'][index];
-                  return XiaoLanItem.build(XiaoLanItemType.video, item);
+                  return XiaoLanItem.build(XiaoLanItemType.video, item, onTap: () {
+                    XiaolanVideoDetailRoute(id: item['id']).push(context);
+                  });
                 }
                 return Container(
                   color: Colors.black.withValues(alpha: .5),

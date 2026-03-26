@@ -163,11 +163,6 @@ class _XiaolanCreatorScreenState extends State<XiaolanCreatorScreen> with Ticker
           isCenter: true,
           linearColors: [Colors.transparent, Colors.transparent],
           labelPadding: 0,
-          // tabDecoration: BoxDecoration(
-          //   color: Color(0x33D9D9D9),
-          //   borderRadius: BorderRadius.circular(32.w),
-          // ),
-
           tabPadding: EdgeInsets.zero,
           tabBuilder: (context, tab) {
             return Row(

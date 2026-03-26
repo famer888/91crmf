@@ -239,7 +239,7 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
                                 type: XiaoLanListBuildType.tag, linkModel: widget.linkModel, model: tags_mv),
                           ),
                       ],
-                      body: bot_style_one != null || bot_style_two != null
+                      body: ((bot_style_one != null || bot_style_two != null))
                           ? (MyListView.list(
                               padding: EdgeInsets.zero,
                               itemBuilder: (context, item, index) {

@@ -405,7 +405,7 @@ class AppRouterPaths {
   static const xiaolanCreator = '/xiaolanCreator';
 
   // 小蓝 用户作品列表
-  static const xiaolanUserWorks = '/xiaolanUserWorks';
+  static const xiaolanUserWorks = '/xiaolanUserWorks/:id/:userName';
 
   // 小蓝 发现精彩
   static const xiaolanDiscover = '/xiaolanDiscover';
@@ -416,6 +416,10 @@ class AppRouterPaths {
 
   // 小蓝 标签
   static const xiaolanTag = '/xiaolanTag/:tag';
+
+  // 小蓝 视频详情
+  static const xiaolanVideoDetail = '/xiaolanVideoDetail/:id';
+
   // 小蓝 搜索
 
   static const xiaolanSearch = '/xiaolanSearch';

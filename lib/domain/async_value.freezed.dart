@@ -59,9 +59,6 @@ class _$AsyncValueCopyWithImpl<T, $Res, $Val extends AsyncValue<T>>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of AsyncValue
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -78,9 +75,6 @@ class __$$AsyncInitImplCopyWithImpl<T, $Res>
   __$$AsyncInitImplCopyWithImpl(
       _$AsyncInitImpl<T> _value, $Res Function(_$AsyncInitImpl<T>) _then)
       : super(_value, _then);
-
-  /// Create a copy of AsyncValue
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -161,8 +155,6 @@ class __$$AsyncDataImplCopyWithImpl<T, $Res>
       _$AsyncDataImpl<T> _value, $Res Function(_$AsyncDataImpl<T>) _then)
       : super(_value, _then);
 
-  /// Create a copy of AsyncValue
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -202,9 +194,7 @@ class _$AsyncDataImpl<T> implements AsyncData<T> {
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(value));
 
-  /// Create a copy of AsyncValue
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AsyncDataImplCopyWith<T, _$AsyncDataImpl<T>> get copyWith =>
@@ -252,10 +242,7 @@ abstract class AsyncData<T> implements AsyncValue<T> {
   const factory AsyncData(final T value) = _$AsyncDataImpl<T>;
 
   T get value;
-
-  /// Create a copy of AsyncValue
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AsyncDataImplCopyWith<T, _$AsyncDataImpl<T>> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -277,8 +264,6 @@ class __$$AsyncLoadingImplCopyWithImpl<T, $Res>
       _$AsyncLoadingImpl<T> _value, $Res Function(_$AsyncLoadingImpl<T>) _then)
       : super(_value, _then);
 
-  /// Create a copy of AsyncValue
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -318,9 +303,7 @@ class _$AsyncLoadingImpl<T> implements AsyncLoading<T> {
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(value));
 
-  /// Create a copy of AsyncValue
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AsyncLoadingImplCopyWith<T, _$AsyncLoadingImpl<T>> get copyWith =>
@@ -369,10 +352,7 @@ abstract class AsyncLoading<T> implements AsyncValue<T> {
   const factory AsyncLoading({final T? value}) = _$AsyncLoadingImpl<T>;
 
   T? get value;
-
-  /// Create a copy of AsyncValue
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AsyncLoadingImplCopyWith<T, _$AsyncLoadingImpl<T>> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -394,8 +374,6 @@ class __$$AsyncErrorImplCopyWithImpl<T, $Res>
       _$AsyncErrorImpl<T> _value, $Res Function(_$AsyncErrorImpl<T>) _then)
       : super(_value, _then);
 
-  /// Create a copy of AsyncValue
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -441,9 +419,7 @@ class _$AsyncErrorImpl<T> implements AsyncError<T> {
   int get hashCode => Object.hash(
       runtimeType, const DeepCollectionEquality().hash(error), stackTrace);
 
-  /// Create a copy of AsyncValue
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AsyncErrorImplCopyWith<T, _$AsyncErrorImpl<T>> get copyWith =>
@@ -494,10 +470,7 @@ abstract class AsyncError<T> implements AsyncValue<T> {
 
   Object? get error;
   StackTrace? get stackTrace;
-
-  /// Create a copy of AsyncValue
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AsyncErrorImplCopyWith<T, _$AsyncErrorImpl<T>> get copyWith =>
       throw _privateConstructorUsedError;
 }

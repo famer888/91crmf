@@ -41,12 +41,8 @@ mixin _$FeedModel {
   }) =>
       throw _privateConstructorUsedError;
 
-  /// Serializes this FeedModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of FeedModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $FeedModelCopyWith<FeedModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -69,8 +65,6 @@ class _$FeedModelCopyWithImpl<$Res, $Val extends FeedModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of FeedModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -140,8 +134,6 @@ class __$$FeedVideoModelImplCopyWithImpl<$Res>
       _$FeedVideoModelImpl _value, $Res Function(_$FeedVideoModelImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of FeedModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -346,9 +338,7 @@ class _$FeedVideoModelImpl implements FeedVideoModel {
     return 'FeedModel.video(id: $id, aff: $aff, title: $title, tags: $tags, isfree: $isfree, countPlay: $countPlay, countPlayFake: $countPlayFake, duration: $duration, createdAt: $createdAt, countComment: $countComment, coins: $coins, playCt: $playCt, refreshAt: $refreshAt, coverHorizontal: $coverHorizontal, sourceOriginStr: $sourceOriginStr, tagList: $tagList, isPay: $isPay, discount: $discount, crackAppType: $crackAppType, discountCoins: $discountCoins, isPackage: $isPackage)';
   }
 
-  /// Create a copy of FeedModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$FeedVideoModelImplCopyWith<_$FeedVideoModelImpl> get copyWith =>
@@ -424,11 +414,8 @@ abstract class FeedVideoModel implements FeedModel {
   int? get crackAppType;
   int get discountCoins;
   bool get isPackage;
-
-  /// Create a copy of FeedModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$FeedVideoModelImplCopyWith<_$FeedVideoModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -484,8 +471,6 @@ class __$$FeedAdModelImplCopyWithImpl<$Res>
       _$FeedAdModelImpl _value, $Res Function(_$FeedAdModelImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of FeedModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -771,9 +756,7 @@ class _$FeedAdModelImpl implements FeedAdModel {
     return 'FeedModel.ad(id: $id, title: $title, description: $description, imgUrl: $imgUrl, urlConfig: $urlConfig, position: $position, androidDownUrl: $androidDownUrl, iosDownUrl: $iosDownUrl, type: $type, status: $status, oauthType: $oauthType, mvM3U8: $mvM3U8, channel: $channel, createdAt: $createdAt, router: $router, startAt: $startAt, endAt: $endAt, clicked: $clicked, sort: $sort, urlStr: $urlStr, linkUrl: $linkUrl, url: $url, resourceUrl: $resourceUrl, redirectType: $redirectType, reportId: $reportId, reportType: $reportType, crackAppType: $crackAppType, subTitle: $subTitle, adType: $adType, adSlotName: $adSlotName, advertiseCode: $advertiseCode, advertiseLocationCode: $advertiseLocationCode)';
   }
 
-  /// Create a copy of FeedModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$FeedAdModelImplCopyWith<_$FeedAdModelImpl> get copyWith =>
@@ -870,11 +853,8 @@ abstract class FeedAdModel implements FeedModel {
   String? get adSlotName;
   String? get advertiseCode;
   String? get advertiseLocationCode;
-
-  /// Create a copy of FeedModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$FeedAdModelImplCopyWith<_$FeedAdModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

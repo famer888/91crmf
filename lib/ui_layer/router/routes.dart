@@ -54,6 +54,7 @@ import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_search_resul
 import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_tag_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_video_detail_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_video_search_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/xiaolan/screen/xiaolan_video_detail_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_more_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_search_result_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_tag_screen.dart';
@@ -2250,5 +2251,20 @@ class AIMagicDetailRoute extends GoRouteData {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return CommonUtils.buildSlideTransitionPage(
         state: state, child: AIMagicDetail(data: $extra));
+  }
+}
+
+
+@TypedGoRoute<XiaolanVideoDetailRoute>(path: AppRouterPaths.xiaolanVideoDetail)
+class XiaolanVideoDetailRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
+
+  const XiaolanVideoDetailRoute({required this.id});
+
+  final int id;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(state: state, child: XiaolanVideoDetailScreen(id: id));
   }
 }
