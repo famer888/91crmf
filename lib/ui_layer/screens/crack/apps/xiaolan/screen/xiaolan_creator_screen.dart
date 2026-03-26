@@ -40,6 +40,12 @@ class _XiaolanCreatorScreenState extends State<XiaolanCreatorScreen> with Ticker
     super.initState();
   }
 
+  @override
+  void dispose() {
+    bannersNotifier.dispose();
+    super.dispose();
+  }
+
   // sort hot/new
   Future<void> _getData() async {
     if (_asyncValue.isLoading) return;

@@ -14,8 +14,10 @@ import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../domain/domain.dart';
+import '../../../../../../domain/model/banner_model.dart';
 import '../../../../../../domain/model/video_detail_model.dart';
 import '../../../../../../report/ui_layer/report_gesture_detector.dart';
+import '../widget/Xiaolan_ads_header.dart';
 
 class XiaolanVideoDetailScreen extends StatefulWidget {
   final int id;
@@ -37,6 +39,11 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
   bool _isLiked = false;
   int _likeCount = 0;
   bool _isLiking = false;
+
+  final ValueNotifier<List<BannerModel>> bannersNotifier = ValueNotifier([]);
+  final ScrollController _nestedController = ScrollController();
+  final ValueNotifier<bool> _showToTopBtn = ValueNotifier(false);
+
 
   Future<void> _toggleLike() async {
     if (_isLiking) return;
@@ -73,6 +80,11 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
     );
 
     if (result.status == 1) {
+      if (result.data['ads'] case final List data when data.isNotEmpty && bannersNotifier.value.isEmpty) {
+        final banner = data.map((x) => BannerModel.fromJson(x)).toList();
+        bannersNotifier.value = banner;
+      }
+
       final data = result.data as Map<String, dynamic>;
       _detail = data['detail'] as Map<String, dynamic>;
       final recommend = data['recommend'];
@@ -86,6 +98,14 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
       }
       if (mounted) setState(() => _loadState = _LoadState.error);
     }
+  }
+
+  @override
+  void dispose() {
+    bannersNotifier.dispose();
+    _nestedController.dispose();
+    _showToTopBtn.dispose();
+    super.dispose();
   }
 
   @override
@@ -293,6 +313,12 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
                     )
                   ],
                 ),
+              ),
+              SizedBox(
+                height: 15.w,
+              ),
+              XiaoLanAdsHeader(
+                bannersNotifier: bannersNotifier,
               ),
               SizedBox(
                 height: 15.w,
