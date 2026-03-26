@@ -51,6 +51,7 @@ class HomeConfigNotifier extends ChangeNotifier {
     final hjsqSearchHistory = await _domain.cache.readSearchHistory(key: hjsqSearchHistoryKey);
     final tiktokSearchHistory = await _domain.cache.readSearchHistory(key: tiktok51SearchHistoryKey);
     final dspSearchHistory = await _domain.cache.readSearchHistory(key: dspSearchHistoryKey);
+    final xiaolanSearchHistory = await _domain.cache.readSearchHistory(key: xiaolanSearchHistoryKey);
     _searchHistoryMap[clSearchHistoryKey] = clSearchHistory;
     _searchHistoryMap[awjqSearchHistoryKey] = awjqSearchHistory;
     _searchHistoryMap[aw91SearchHistoryKey] = aw91SearchHistory;
@@ -59,6 +60,7 @@ class HomeConfigNotifier extends ChangeNotifier {
     _searchHistoryMap[hjsqSearchHistoryKey] = hjsqSearchHistory;
     _searchHistoryMap[tiktok51SearchHistoryKey] = tiktokSearchHistory;
     _searchHistoryMap[dspSearchHistoryKey] = dspSearchHistory;
+    _searchHistoryMap[xiaolanSearchHistoryKey] = xiaolanSearchHistory;
   }
 
   Future<Json?> uploadImage(XFile xFile) async {

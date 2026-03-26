@@ -2,7 +2,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jycrpj/report/ui_layer/report_timing_observer.dart';
-import 'package:jycrpj/ui_layer/screens/crack/apps/xiaolan/screen/xiaolan_block_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/xiaolan/screen/xiaolan_search_result_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/xiaolan/screen/xiaolan_category_or_tag_detail_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/xiaolan/screen/xiaolan_creator_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/xiaolan/screen/xiaolan_discover_screen.dart';
@@ -20,10 +20,10 @@ class AppRouter {
     routes: [
       ...$appRoutes,
       GoRoute(
-        path: AppRouterPaths.xiaolanBlockDetail,
+        path: AppRouterPaths.xiaoLanSearchResult,
         builder: (context, state) {
-          final title = state.pathParameters['title'] ?? '';
-          return XiaoLanBlockScreen(videoTag: title);
+          final kwy = state.pathParameters['kwy'] ?? '';
+          return XiaoLanSearchResultScreen(kwy: kwy);
         },
       ),
       GoRoute(

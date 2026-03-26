@@ -398,8 +398,8 @@ class AppRouterPaths {
 
   static const localVoice = '/localVoice';
 
-  // 小蓝 板块详情
-  static const xiaolanBlockDetail = '/xiaolanBlockDetail/:id/:title';
+  // 小蓝 搜索结果
+  static const xiaoLanSearchResult = '/xiaoLanSearchResult/:kwy';
 
   // 小蓝 创作达人
   static const xiaolanCreator = '/xiaolanCreator';

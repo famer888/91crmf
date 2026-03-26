@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:jycrpj/data_layer/repo/repo.dart';
+import 'package:jycrpj/domain/type_def.dart';
+import 'package:jycrpj/ui_layer/notifiers/home_config_notifier.dart';
+import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../domain/async_value.dart';
 import '../../../../../../domain/domain.dart';
 import '../../../../../../domain/model/feed/feed_model.dart';
+import '../../../../../utils/my_toast.dart';
 import '../../../../common_widgets/my_app_bar.dart';
 import '../../../../common_widgets/screen_background.dart';
 import '../../../../common_widgets/status/loading.dart';
@@ -21,11 +27,52 @@ class XiaolanSearchScreen extends StatefulWidget {
 }
 
 class _XiaolanSearchScreenState extends State<XiaolanSearchScreen> {
-  AsyncValue<List<FeedModel>> _asyncValue = const AsyncInit();
+  AsyncValue<dynamic> _asyncValue = const AsyncInit();
   late final _appDomain = context.read<AppDomain>();
+  late final _homeConfigNotifier = context.read<HomeConfigNotifier>();
+  final TextEditingController _searchController = TextEditingController();
+
+  Future<dynamic?> _getData() async {
+    if (_asyncValue.isLoading) return;
+
+    if(!mounted){
+      setState(() {
+        _asyncValue = const AsyncLoading();
+      });
+    }
+
+    final param = Map.from({});
+
+    final result = await _appDomain.getConstructByApiLink(
+      apiLink: "/api/searchxiaolan/index",
+      params: param,
+    );
+
+    if (result.status == 1) {
+      dynamic data = result.data;
+      setState(() {
+        _asyncValue = AsyncData(data);
+      });
+      return data;
+    } else {
+      setState(() {
+        _asyncValue = const AsyncError();
+      });
+      MyToast.showText(text: result.msg ?? '');
+    }
+    return [];
+  }
+
+  void _onSearch(String keyword) {
+    final k = keyword.trim();
+    if (k.isEmpty) return;
+    _homeConfigNotifier.upsertSearchHistory(key: xiaolanSearchHistoryKey, searchWord: k);
+    context.push('/xiaoLanSearchResult/${Uri.encodeComponent(k)}');
+  }
 
   @override
   void initState() {
+    _getData();
     super.initState();
   }
 
@@ -74,6 +121,7 @@ class _XiaolanSearchScreenState extends State<XiaolanSearchScreen> {
                             ),
                             Expanded(
                                 child: TextField(
+                                  controller: _searchController,
                                     style: TextStyle(
                                         fontSize: 14.sp, color: const Color(0xFF151515), fontWeight: FontWeight.w500),
                                     decoration: InputDecoration(
@@ -87,7 +135,13 @@ class _XiaolanSearchScreenState extends State<XiaolanSearchScreen> {
                       )),
                       const SizedBox(width: 8),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          // 获取输入框内容
+                          String keyword = _searchController.text.trim();
+                          if (keyword.isNotEmpty) {
+                            _onSearch(keyword);
+                          }
+                        },
                         child: Text(
                           '搜索',
                           style: TextStyle(color: Colors.black, fontSize: 15.sp, fontWeight: FontWeight.w500),
@@ -99,20 +153,33 @@ class _XiaolanSearchScreenState extends State<XiaolanSearchScreen> {
                 backIconColor: Color(0xFF151515),
                 titleColor: Color(0xFF151515),
                 backgroundColor: Colors.transparent),
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  _buildSearchHistory(),
-                  SizedBox(
-                    height: 7.w,
+            body: _asyncValue.maybeWhen(
+              data: (data) {
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      _buildSearchHistory(),
+                      SizedBox(
+                        height: 7.w,
+                      ),
+                      if (data['rank_list'] != null &&
+                          data['rank_list'] is List &&
+                          (data['rank_list'] as List).isNotEmpty) ...[
+                        _buildHotSearch(data['rank_list'] as List),
+                        SizedBox(
+                          height: 7.w,
+                        ),
+                      ],
+                      if (data['hotSearch'] != null &&
+                          data['hotSearch'] is List &&
+                          (data['hotSearch'] as List).isNotEmpty)
+                        _buildHotTag(data['hotSearch'] as List? ?? [])
+                    ],
                   ),
-                  _buildHotSearch(),
-                  SizedBox(
-                    height: 7.w,
-                  ),
-                  _buildHotTag()
-                ],
-              ),
+                );
+              },
+              error: (_, __) => NetworkErrorView(onTap: _getData),
+              orElse: () => const LoadingView(),
             ),
           )
         ],
@@ -121,80 +188,82 @@ class _XiaolanSearchScreenState extends State<XiaolanSearchScreen> {
   }
 
   Widget _buildSearchHistory() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.5.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Selector<HomeConfigNotifier, List<String>>(
+      selector: (_, n) => n.getSearchHistory(key: xiaolanSearchHistoryKey),
+      builder: (context, history, _) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 12.5.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '搜索历史',
-                style: TextStyle(fontSize: 16.sp, color: const Color(0xFF151515), fontWeight: FontWeight.w500),
-              ),
-              GestureDetector(
-                onTap: () {},
-                child: Image.asset(
-                  "assets/images/app_asmr_del.png",
-                  width: 14.w,
-                  color: Color(0xFFD5D5D5),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 10.w,
-          ),
-          Wrap(
-            alignment: WrapAlignment.start,
-            crossAxisAlignment: WrapCrossAlignment.start,
-            children: [
-              _buildHistoryItem('吃瓜'),
-              _buildHistoryItem('男同'),
-              _buildHistoryItem('猎奇'),
-              _buildHistoryItem('吃瓜'),
-              _buildHistoryItem('男同'),
-              _buildHistoryItem('猎奇'),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Image.asset(
-                    "assets/images/xiaolan_search_empty.png",
-                    width: 105.w,
-                  ),
                   Text(
-                    "您还没有搜索过哟~",
-                    style: TextStyle(color: Color(0xFF727272), fontSize: 14.sp),
-                  )
+                    '搜索历史',
+                    style: TextStyle(fontSize: 16.sp, color: const Color(0xFF151515), fontWeight: FontWeight.w500),
+                  ),
+                  if (history.isNotEmpty)
+                    GestureDetector(
+                      onTap: () {
+                        _homeConfigNotifier.clearSearchHistory(key: xiaolanSearchHistoryKey);
+                      },
+                      child: Image.asset(
+                        "assets/images/app_asmr_del.png",
+                        width: 14.w,
+                        color: const Color(0xFFD5D5D5),
+                      ),
+                    ),
                 ],
-              )
+              ),
+              SizedBox(height: 10.w),
+              if (history.isNotEmpty)
+                Wrap(
+                  alignment: WrapAlignment.start,
+                  crossAxisAlignment: WrapCrossAlignment.start,
+                  children: history.map((text) => _buildHistoryItem(
+                    text,
+                    onTap: () { _searchController.text = text; _onSearch(text); },
+                  )).toList(),
+                )
+              else
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset("assets/images/xiaolan_search_empty.png", width: 105.w),
+                        Text("您还没有搜索过哟~", style: TextStyle(color: const Color(0xFF727272), fontSize: 14.sp))
+                      ],
+                    )
+                  ],
+                ),
             ],
-          )
-        ],
-      ),
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildHistoryItem(String text) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 3.w),
-      margin: EdgeInsets.only(right: 5.w, bottom: 7.5.w),
-      decoration: BoxDecoration(color: const Color(0xFFE6F4FF), borderRadius: BorderRadius.circular(20.w)),
-      child: Text(
-        text,
-        style: TextStyle(fontSize: 12.sp, color: const Color(0xFF3DA7FD)),
+  Widget _buildHistoryItem(String text, {required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 3.w),
+        margin: EdgeInsets.only(right: 5.w, bottom: 7.5.w),
+        decoration: BoxDecoration(color: const Color(0xFFE6F4FF), borderRadius: BorderRadius.circular(20.w)),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(text, style: TextStyle(fontSize: 12.sp, color: const Color(0xFF3DA7FD))),
+            SizedBox(width: 4.w),
+          ],
+        ),
       ),
     );
-  }
-
-  Widget _buildHotSearch() {
+  }  Widget _buildHotSearch(List data) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 12.5.w),
@@ -209,52 +278,57 @@ class _XiaolanSearchScreenState extends State<XiaolanSearchScreen> {
             height: 10.w,
           ),
           Column(
-            children: List.generate(20, (int index) => _buildHotSearchItem('吃瓜${index + 1}', index)),
+            children: List.generate(data.length, (int index) => _buildHotSearchItem(data[index], index)),
           )
         ],
       ),
     );
   }
 
-  Widget _buildHotSearchItem(String text, int index) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 2.5.w),
-      child: Row(
-        children: [
-          Container(
-            width: 20.w,
-            height: 20.w,
-            alignment: Alignment.center,
-            child: index <= 2
-                ? Image.asset("assets/images/xiaolan_hotsearch${index}.png", width: 20.w)
-                : Text(
-                    "${index}",
-                    style: TextStyle(color: Color(0xFF005DAE), fontSize: 12.sp, fontWeight: FontWeight.w600),
-                  ),
-          ),
-          SizedBox(
-            width: 4.w,
-          ),
-          Expanded(
-              child: Text(
-            text,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 13.sp, color: const Color(0xFF2C2C2C)),
-          )),
-          SizedBox(
-            width: 14.w,
-          ),
-          Text(
-            "91.00w",
-            style: TextStyle(color: Color(0xFFFFAA00), fontSize: 12.sp, fontWeight: FontWeight.w600),
-          )
-        ],
+  Widget _buildHotSearchItem(dynamic item, int index) {
+    return GestureDetector(
+      onTap: (){
+        _onSearch("${item['work'] ?? ""}");
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 2.5.w),
+        child: Row(
+          children: [
+            Container(
+              width: 20.w,
+              height: 20.w,
+              alignment: Alignment.center,
+              child: index <= 2
+                  ? Image.asset("assets/images/xiaolan_hotsearch${index}.png", width: 20.w)
+                  : Text(
+                "${index}",
+                style: TextStyle(color: Color(0xFF005DAE), fontSize: 12.sp, fontWeight: FontWeight.w600),
+              ),
+            ),
+            SizedBox(
+              width: 4.w,
+            ),
+            Expanded(
+                child: Text(
+                  "${item['work'] ?? ""}",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 13.sp, color: const Color(0xFF2C2C2C)),
+                )),
+            SizedBox(
+              width: 14.w,
+            ),
+            Text(
+              "${CommonUtils.renderEnFixedNumber(item['num'] ?? 0)}次",
+              style: TextStyle(color: Color(0xFFFFAA00), fontSize: 12.sp, fontWeight: FontWeight.w600),
+            )
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildHotTag() {
+  Widget _buildHotTag(List data) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.5.w),
       child: Column(
@@ -268,7 +342,9 @@ class _XiaolanSearchScreenState extends State<XiaolanSearchScreen> {
                 style: TextStyle(fontSize: 16.sp, color: const Color(0xFF151515), fontWeight: FontWeight.w500),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  _getData();
+                },
                 child: Image.asset(
                   "assets/images/xiaolan_search_refresh.png",
                   width: 14.w,
@@ -280,18 +356,15 @@ class _XiaolanSearchScreenState extends State<XiaolanSearchScreen> {
           SizedBox(
             height: 10.w,
           ),
-          Wrap(
-            alignment: WrapAlignment.start,
-            crossAxisAlignment: WrapCrossAlignment.start,
-            children: [
-              _buildHistoryItem('吃瓜'),
-              _buildHistoryItem('男同'),
-              _buildHistoryItem('猎奇'),
-              _buildHistoryItem('吃瓜'),
-              _buildHistoryItem('男同'),
-              _buildHistoryItem('猎奇'),
-            ],
-          ),
+          if (data.isNotEmpty)
+            Wrap(
+              alignment: WrapAlignment.start,
+              crossAxisAlignment: WrapCrossAlignment.start,
+              children: [
+                for (var item in data)
+                  if ("${item}".isNotEmpty) _buildHistoryItem("${item ?? ""}", onTap: () => _onSearch("${item ?? ""}")),
+              ],
+            ),
         ],
       ),
     );

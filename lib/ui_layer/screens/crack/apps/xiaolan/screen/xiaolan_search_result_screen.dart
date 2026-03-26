@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jycrpj/domain/type_def.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_list_view.dart';
+import 'package:jycrpj/data_layer/repo/repo.dart';
+import 'package:jycrpj/ui_layer/notifiers/home_config_notifier.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../domain/async_value.dart';
@@ -18,17 +20,16 @@ import '../../../../common_widgets/status/network_error.dart';
 import '../../../../theme.dart';
 import '../widget/xiaolan_list_build.dart';
 
-class XiaolanDiscoverScreen extends StatefulWidget {
-  const XiaolanDiscoverScreen({super.key, required this.type, required this.nagId});
+class XiaoLanSearchResultScreen extends StatefulWidget {
+  const XiaoLanSearchResultScreen({super.key, required this.kwy});
 
-  final String type;
-  final String nagId;
+  final String kwy;
 
   @override
-  State<XiaolanDiscoverScreen> createState() => _XiaolanDiscoverScreenState();
+  State<XiaoLanSearchResultScreen> createState() => _XiaoLanSearchResultScreenState();
 }
 
-class _XiaolanDiscoverScreenState extends State<XiaolanDiscoverScreen> {
+class _XiaoLanSearchResultScreenState extends State<XiaoLanSearchResultScreen> {
   // AsyncValue<List> _asyncValue = const AsyncInit();
   // late final _appDomain = context.read<AppDomain>();
   //
@@ -68,10 +69,11 @@ class _XiaolanDiscoverScreenState extends State<XiaolanDiscoverScreen> {
   // }
 
   late final _appDomain = context.read<AppDomain>();
+  late final _homeConfigNotifier = context.read<HomeConfigNotifier>();
 
   @override
   void initState() {
-    // _initTagList();
+    _homeConfigNotifier.upsertSearchHistory(key: xiaolanSearchHistoryKey, searchWord: widget.kwy);
     super.initState();
   }
 
@@ -82,14 +84,11 @@ class _XiaolanDiscoverScreenState extends State<XiaolanDiscoverScreen> {
   }) async {
     bool isInit = false;
 
-    final result = await _appDomain.getConstructByApiLink(
-        apiLink:
-        "${{"tag": "/api/tabnewxiaolan/list_tags", "category": "/api/tabnewxiaolan/construct_list"}[widget.type]}",
-        params: {
-          "nag_id": widget.nagId,
-          "page": page,
-          "limit": pageSize,
-        });
+    final result = await _appDomain.getConstructByApiLink(apiLink: "/api/searchxiaolan/mv", params: {
+      "kwy": widget.kwy,
+      "page": page,
+      "limit": pageSize,
+    });
 
     if (!isInit) {
       setState(() {
@@ -119,7 +118,7 @@ class _XiaolanDiscoverScreenState extends State<XiaolanDiscoverScreen> {
           Scaffold(
               backgroundColor: Colors.transparent,
               appBar: MyAppBar(
-                  title: "发现精彩",
+                  title: "${widget.kwy}",
                   backIconColor: Color(0xFF151515),
                   titleColor: Color(0xFF151515),
                   backgroundColor: Colors.transparent),
@@ -129,19 +128,12 @@ class _XiaolanDiscoverScreenState extends State<XiaolanDiscoverScreen> {
                 mainAxisSpacing: 7.h,
                 crossAxisSpacing: 7.w,
                 childAspectRatio: 225 / 224,
-                itemBuilder: (context, item, index) =>
-                    XiaoLanItem.build(
-                        widget.type == "tag" ? XiaoLanItemType.tag : XiaoLanItemType.category, item,
-                        onTap: () {
-                          context.push('/xiaolanCategoryOrTagDetail/${item['id']}/${widget.type}/${Uri.encodeComponent(
-                              item['name'] ?? item['title'] ?? '')}');
-                        }),
+                itemBuilder: (context, item, index) => XiaoLanItem.build(XiaoLanItemType.video, item, onTap: () {}),
                 onFetchingMore: (currentPage, pageSize) {
                   final res = _getData(page: currentPage, pageSize: pageSize);
                   return res;
                 },
-              )
-          )
+              ))
         ],
       ),
     );
