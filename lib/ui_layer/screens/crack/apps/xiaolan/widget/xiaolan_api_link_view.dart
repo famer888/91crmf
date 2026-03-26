@@ -19,7 +19,6 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/my_list_view.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_tab_bar.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/xiaolan/widget/xiaolan_list_build.dart';
 import 'package:jycrpj/ui_layer/screens/crack/widgets/scroll_top_button.dart';
-import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
@@ -31,8 +30,7 @@ import '../../../../../../report/ui_layer/report_gesture_detector.dart';
 import '../../../../common_widgets/keep_alive_wrapper.dart';
 import '../../../../common_widgets/status/loading.dart';
 import '../../../../common_widgets/status/network_error.dart';
-import '../../../widgets/grid_list_switch.dart';
-import '../../clsq/widget/cl_feed_card.dart';
+import 'Xiaolan_ads_header.dart';
 
 class XiaoLanApiLinkView extends StatefulWidget {
   const XiaoLanApiLinkView(
@@ -48,11 +46,7 @@ class XiaoLanApiLinkView extends StatefulWidget {
 
 class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProviderStateMixin {
   late final _appDomain = context.read<AppDomain>();
-  late final _homeConfig = context.read<HomeConfigNotifier>();
   final ValueNotifier<List<BannerModel>> bannersNotifier = ValueNotifier([]);
-  final ValueNotifier<List<NavModel>> topicsNotifier = ValueNotifier([]);
-  final ValueNotifier<List<PartModel>> partNotifier = ValueNotifier([]);
-  final ValueNotifier<bool> isListNotifier = ValueNotifier(false);
 
   // 当前tab选中的位置
   int initialIndex = 0;
@@ -108,10 +102,7 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
         final banner = data.map((x) => BannerModel.fromJson(x)).toList();
         bannersNotifier.value = banner;
       }
-      if (result.data['nav'] case final List data when data.isNotEmpty && topicsNotifier.value.isEmpty) {
-        final nav = data.map((x) => NavModel.fromJson(x)).toList();
-        topicsNotifier.value = nav;
-      }
+
       mid_style_category = result.data['mid_style_category'];
       if (result.data['body'] != null && result.data['body'] is Map && result.data['body']['type'] == "tags-mv") {
         tags_mv = result.data['body'];
@@ -167,7 +158,6 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
   @override
   void initState() {
     _getData(page: 1, pageSize: 20);
-    isListNotifier.value = false;
     _tabController = TabController(length: titles.length, vsync: this, initialIndex: initialIndex);
 
     super.initState();
@@ -184,9 +174,6 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
   @override
   void dispose() {
     bannersNotifier.dispose();
-    topicsNotifier.dispose();
-    partNotifier.dispose();
-    isListNotifier.dispose();
     _nestedController.dispose();
     _showToTopBtn.dispose();
     super.dispose();
@@ -219,11 +206,8 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
                       controller: _nestedController,
                       headerSliverBuilder: (_, __) => [
                         SliverToBoxAdapter(
-                          child: _Header(
+                          child: XiaoLanAdsHeader(
                             bannersNotifier: bannersNotifier,
-                            topicsNotifier: topicsNotifier,
-                            partNotifier: partNotifier,
-                            onLinkNavTap: widget.onLinkNavTap,
                           ),
                         ),
                         if (mid_style_category != null && mid_style_category!.isNotEmpty)
@@ -313,155 +297,6 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
           ),
         ),
       ],
-    );
-  }
-}
-
-class _Header extends StatefulWidget {
-  const _Header({
-    required this.bannersNotifier,
-    required this.topicsNotifier,
-    required this.partNotifier,
-    required this.onLinkNavTap,
-  });
-
-  final ValueNotifier<List<BannerModel>> bannersNotifier;
-  final ValueNotifier<List<NavModel>> topicsNotifier;
-  final ValueNotifier<List<PartModel>> partNotifier;
-  final ValueChanged<String> onLinkNavTap;
-
-  @override
-  State<_Header> createState() => _HeaderState();
-}
-
-class _HeaderState extends State<_Header> {
-  List<NavModel> contentTopics = [];
-  bool isShowAllTopics = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ValueListenableBuilder(
-          valueListenable: widget.bannersNotifier,
-          builder: (context, banners, child) {
-            if (banners.isEmpty) return const SizedBox.shrink();
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-              child: ReportGeneralAppsListVidget(data: banners, titleColor: Colors.black.withValues(alpha: .7)),
-            );
-          },
-        ),
-        ValueListenableBuilder(
-          valueListenable: widget.partNotifier,
-          builder: (context, parts, child) {
-            if (parts.isEmpty) return const SizedBox.shrink();
-            // parts = parts.sublist(0, 3);
-            // parts.add(PartModel.fromJson(parts.first.toJson()));
-            return Container(
-              margin: EdgeInsets.only(top: 10.w, bottom: 3.w),
-              height: 70.w,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: parts.length,
-                itemBuilder: (context, index) {
-                  final partsItem = parts[index];
-                  return ReportGestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () {
-                      final linkUrl = partsItem.urlStr;
-                      final redirectType = partsItem.redirectType;
-                      if (linkUrl.isEmpty) {
-                        return;
-                      }
-                      if (redirectType < 3) {
-                        if (partsItem.router == 'asmr' || partsItem.router == 'torrentDownload') {
-                          eventBus.fire(MyEvent(partsItem.router));
-                          return;
-                        } else if (partsItem.router == 'rankList') {
-                          const RankRoute().push(context);
-                          return;
-                        }
-                        CommonUtils.openRoute(context, partsItem.toJson());
-                      } else {
-                        if (partsItem.type == '0') {
-                          widget.onLinkNavTap(linkUrl);
-                        } else if (partsItem.type == '1') {
-                          MoreVideoRoute(name: partsItem.title, id: linkUrl, api: 'mvhjgj/list_construct')
-                              .push(context);
-                        }
-                      }
-                    },
-                    child: SizedBox(
-                      width: ScreenUtil().screenWidth / (parts.length > 5 ? 5.5 : max(3, min(parts.length, 5))),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 45.w,
-                            child: MyImage.network(partsItem.icon, fit: BoxFit.contain),
-                          ),
-                          Center(
-                              child: Text(partsItem.title,
-                                  style: MyTheme.white13.copyWith(color: Colors.black.withValues(alpha: .7)))),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            );
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget girdTopicView(List<NavModel> contentTopics) {
-    return SizedBox(
-      height: 75.w,
-      child: GridView.builder(
-          shrinkWrap: true,
-          scrollDirection: Axis.horizontal,
-          physics: const BouncingScrollPhysics(),
-          itemCount: contentTopics.length,
-          padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 1,
-            childAspectRatio: 1 / 0.7,
-            mainAxisSpacing: 10.w,
-            crossAxisSpacing: 10.w,
-          ),
-          itemBuilder: (context, index) {
-            final topic = contentTopics[index];
-            return ReportGestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () {
-                final linkUrl = topic.linkUrl;
-                final redirectType = topic.redirectType;
-                if (linkUrl.isEmpty) {
-                  return;
-                }
-
-                if (redirectType < 3) {
-                  CommonUtils.openRoute(context, topic.toJson());
-                } else {
-                  if (topic.openType == 0) {
-                    widget.onLinkNavTap(topic.linkUrl);
-                  } else if (topic.openType == 1) {
-                    MoreVideoRoute(name: topic.name, id: topic.linkUrl, api: 'mvhjgj/list_construct').push(context);
-                  }
-                }
-              },
-              child: Column(
-                children: [
-                  MyImage.network(topic.resourceUrl, width: 50.w, height: 50.w, borderRadius: 5.w),
-                  SizedBox(height: 3.w),
-                  Text(topic.name, style: MyTheme.white11),
-                ],
-              ),
-            );
-          }),
     );
   }
 }
