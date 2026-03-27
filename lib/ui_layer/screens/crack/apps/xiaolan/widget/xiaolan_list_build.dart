@@ -28,7 +28,6 @@ enum XiaoLanListBuildType {
   userScroll,
 //   tag
   tag,
-  category,
 //   分类滚动
   categoryScroll,
 }
@@ -66,8 +65,6 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
 
   Widget _buildTypeLayout() {
     switch (widget.type) {
-      case XiaoLanListBuildType.category:
-        return _buildCategoryGrid(widget.model);
       case XiaoLanListBuildType.categoryScroll:
         List items = widget.model ?? [];
         return Column(
@@ -473,26 +470,6 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> {
           ],
         );
     }
-  }
-
-  Widget _buildCategoryGrid(List items) {
-    return GridView.builder(
-      itemCount: items.length,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        mainAxisSpacing: 7.h,
-        crossAxisSpacing: 7.w,
-        childAspectRatio: 1,
-      ),
-      itemBuilder: (context, index) {
-        dynamic item = items[index];
-        return XiaoLanItem.build(XiaoLanItemType.category, item, onTap: () {
-          _openCategoryDetail(1, '同城越爱', 'category');
-        });
-      },
-    );
   }
 
   Widget _buildTagGrid(List items) {

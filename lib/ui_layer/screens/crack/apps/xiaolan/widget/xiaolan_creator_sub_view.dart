@@ -23,7 +23,7 @@ import 'package:jycrpj/ui_layer/screens/webview/screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../domain/model/banner_model.dart';
-import 'Xiaolan_ads_header.dart';
+import 'xiaolan_ads_header.dart';
 
 class XiaolanCreatorSubView extends StatefulWidget {
   const XiaolanCreatorSubView({

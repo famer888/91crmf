@@ -17,7 +17,7 @@ import '../../../../../../domain/domain.dart';
 import '../../../../../../domain/model/banner_model.dart';
 import '../../../../../../domain/model/video_detail_model.dart';
 import '../../../../../../report/ui_layer/report_gesture_detector.dart';
-import '../widget/Xiaolan_ads_header.dart';
+import '../widget/xiaolan_ads_header.dart';
 
 class XiaolanVideoDetailScreen extends StatefulWidget {
   final int id;

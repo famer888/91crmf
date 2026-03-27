@@ -30,7 +30,7 @@ import '../../../../../../report/ui_layer/report_gesture_detector.dart';
 import '../../../../common_widgets/keep_alive_wrapper.dart';
 import '../../../../common_widgets/status/loading.dart';
 import '../../../../common_widgets/status/network_error.dart';
-import 'Xiaolan_ads_header.dart';
+import 'xiaolan_ads_header.dart';
 
 class XiaoLanApiLinkView extends StatefulWidget {
   const XiaoLanApiLinkView(
@@ -69,10 +69,10 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
   dynamic? tags_mv;
 
   // 今日热点
-  List? bot_style_one;
+  // List? bot_style_one;
 
   // 普通列表数据
-  List? bot_style_two;
+  // List? bot_style_two;
 
   Future<List<dynamic>?> _getData({
     required int page,
@@ -107,14 +107,14 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
       if (result.data['body'] != null && result.data['body'] is Map && result.data['body']['type'] == "tags-mv") {
         tags_mv = result.data['body'];
       }
-      bot_style_one = result.data['bot_style_one'];
-      bot_style_two = result.data['bot_style_two'];
+      // bot_style_one = result.data['bot_style_one'];
+      // bot_style_two = result.data['bot_style_two'];
 
       _asyncValue = AsyncData([]);
       if (mounted) {
         setState(() {});
       }
-      return bot_style_one;
+      return widget.linkModel.name == "推荐" ? result.data['bot_style_one'] : result.data['bot_style_two'];
     } else {
       MyToast.showText(text: result.msg ?? '');
     }
@@ -157,7 +157,7 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
 
   @override
   void initState() {
-    _getData(page: 1, pageSize: 20);
+    if (widget.linkModel.name != "推荐") _getData(page: 1, pageSize: 20);
     _tabController = TabController(length: titles.length, vsync: this, initialIndex: initialIndex);
 
     super.initState();
@@ -194,100 +194,103 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
     return Stack(
       children: [
         _asyncValue.maybeWhen(
-          data: (data) {
-            return LayoutBuilder(builder: (context, constraints) {
-              return SizedBox(
-                  height: constraints.maxHeight, // 使用父级约束的高度
-                  child: NotificationListener<ScrollNotification>(
-                    onNotification: (ScrollNotification notification) {
-                      return false;
-                    },
-                    child: NestedScrollView(
-                      controller: _nestedController,
-                      headerSliverBuilder: (_, __) => [
-                        SliverToBoxAdapter(
-                          child: XiaoLanAdsHeader(
-                            bannersNotifier: bannersNotifier,
-                          ),
-                        ),
-                        if (mid_style_category != null && mid_style_category!.isNotEmpty)
+            error: (_, __) => NetworkErrorView(onTap: () {
+                  _getData(page: 1, pageSize: 20);
+                }),
+            orElse: () => const LoadingView(),
+            data: (data) {
+              return LayoutBuilder(builder: (context, constraints) {
+                return SizedBox(
+                    height: constraints.maxHeight, // 使用父级约束的高度
+                    child: NotificationListener<ScrollNotification>(
+                      onNotification: (ScrollNotification notification) {
+                        return false;
+                      },
+                      child: NestedScrollView(
+                        controller: _nestedController,
+                        headerSliverBuilder: (_, __) => [
                           SliverToBoxAdapter(
-                            child: XiaoLanListBuild(
-                                type: XiaoLanListBuildType.categoryScroll,
-                                linkModel: widget.linkModel,
-                                model: mid_style_category),
+                            child: XiaoLanAdsHeader(
+                              bannersNotifier: bannersNotifier,
+                            ),
                           ),
-                        if (tags_mv != null)
-                          SliverToBoxAdapter(
-                            child: XiaoLanListBuild(
-                                type: XiaoLanListBuildType.tag, linkModel: widget.linkModel, model: tags_mv),
-                          ),
-                      ],
-                      body: ((bot_style_one != null || bot_style_two != null))
-                          ? (MyListView.list(
-                              padding: EdgeInsets.zero,
-                              itemBuilder: (context, item, index) {
-                                return Column(
-                                  children: [
-                                    XiaoLanListBuild(
-                                        type: [
-                                          XiaoLanListBuildType.fourGrid,
-                                          XiaoLanListBuildType.oneBigSecondScroll,
-                                          XiaoLanListBuildType.oneBigFourGrid,
-                                          XiaoLanListBuildType.sixGrid,
-                                          XiaoLanListBuildType.oneLineScroll,
-                                          XiaoLanListBuildType.fourGrid,
-                                        ][item['show_style']],
-                                        linkModel: widget.linkModel,
-                                        model: item),
-                                    SizedBox(
-                                      height: 10.w,
-                                    )
-                                  ],
-                                );
-                              },
-                              onFetchingMore: (currentPage, pageSize) async {
-                                return _getData(page: currentPage, pageSize: pageSize);
-                              }))
-                          : TabBarWithView.line(
-                              tabController: _tabController,
-                              initialIndex: initialIndex,
-                              tabBarHeight: 27.h,
-                              tabBarPadding: EdgeInsets.only(top: 11.w),
-                              linearColors: [Colors.transparent, Colors.transparent],
-                              labelStyle: TextStyle(
-                                  color: const Color(0xFF333333), fontSize: 16.sp, fontWeight: FontWeight.w600),
-                              unselectedLabelStyle: TextStyle(
-                                color: const Color(0xFF646C85),
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              titles: titles,
-                              views: titles.map((e) {
-                                return KeepAliveWrapper(
-                                    child: MyListView.grid(
-                                  padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
-                                  crossAxisCount: 2,
-                                  mainAxisSpacing: 10.h,
-                                  crossAxisSpacing: 8.w,
-                                  childAspectRatio: 344 / 240,
-                                  itemBuilder: (context, item, index) => XiaoLanItem.build(XiaoLanItemType.video, item),
-                                  onFetchingMore: (currentPage, pageSize) {
-                                    final res = _getVideoData(
-                                        page: currentPage, pageSize: pageSize, sort: titlesSort[titles.indexOf(e)]);
-                                    return res;
-                                  },
-                                ));
-                              }).toList()),
-                    ),
-                  ));
-            });
-          },
-          error: (_, __) => NetworkErrorView(onTap: () {
-            _getData(page: 1, pageSize: 20);
-          }),
-          orElse: () => const LoadingView(),
-        ),
+                          if (mid_style_category != null && mid_style_category!.isNotEmpty)
+                            SliverToBoxAdapter(
+                              child: XiaoLanListBuild(
+                                  type: XiaoLanListBuildType.categoryScroll,
+                                  linkModel: widget.linkModel,
+                                  model: mid_style_category),
+                            ),
+                          if (tags_mv != null)
+                            SliverToBoxAdapter(
+                              child: XiaoLanListBuild(
+                                  type: XiaoLanListBuildType.tag, linkModel: widget.linkModel, model: tags_mv),
+                            ),
+                        ],
+                        body: widget.linkModel.name == "推荐"
+                            ? (MyListView.list(
+                                padding: EdgeInsets.zero,
+                                itemBuilder: (context, item, index) {
+                                  return Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      XiaoLanListBuild(
+                                          type: [
+                                            XiaoLanListBuildType.fourGrid,
+                                            XiaoLanListBuildType.oneBigSecondScroll,
+                                            XiaoLanListBuildType.oneBigFourGrid,
+                                            XiaoLanListBuildType.sixGrid,
+                                            XiaoLanListBuildType.oneLineScroll,
+                                            XiaoLanListBuildType.fourGrid,
+                                          ][item['show_style']],
+                                          linkModel: widget.linkModel,
+                                          model: item),
+                                      SizedBox(
+                                        height: 10.w,
+                                      )
+                                    ],
+                                  );
+                                },
+                                onFetchingMore: (currentPage, pageSize) async {
+                                  return _getData(page: currentPage, pageSize: pageSize);
+                                }))
+                            : TabBarWithView.line(
+                                tabController: _tabController,
+                                initialIndex: initialIndex,
+                                tabBarHeight: 27.h,
+                                tabBarPadding: EdgeInsets.only(top: 11.w),
+                                linearColors: [Colors.transparent, Colors.transparent],
+                                labelStyle: TextStyle(
+                                    color: const Color(0xFF333333), fontSize: 16.sp, fontWeight: FontWeight.w600),
+                                unselectedLabelStyle: TextStyle(
+                                  color: const Color(0xFF646C85),
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                titles: titles,
+                                views: titles.map((e) {
+                                  return KeepAliveWrapper(
+                                      child: MyListView.grid(
+                                    padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 10.h,
+                                    crossAxisSpacing: 8.w,
+                                    childAspectRatio: 344 / 240,
+                                    itemBuilder: (context, item, index) =>
+                                        XiaoLanItem.build(XiaoLanItemType.video, item),
+                                    onFetchingMore: (currentPage, pageSize) {
+                                      final res = _getVideoData(
+                                          page: currentPage, pageSize: pageSize, sort: titlesSort[titles.indexOf(e)]);
+                                      return res;
+                                    },
+                                  ));
+                                }).toList()),
+                      ),
+                    ));
+              });
+            }),
         Positioned(
           right: 20.w,
           bottom: 42.w,
