@@ -133,6 +133,7 @@ List<RouteBase> get $appRoutes => [
       $xiaolanCategoryOrTagDetailRoute,
       $xiaolanDiscoverRoute,
       $xiaolanSearchRoute,
+      $xiaolanDailyRoute,
     ];
 
 RouteBase get $welcomeRoute => GoRouteData.$route(
@@ -3671,6 +3672,30 @@ extension $XiaolanSearchRouteExtension on XiaolanSearchRoute {
 
   String get location => GoRouteData.$location(
         '/xiaolanSearch',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $xiaolanDailyRoute => GoRouteData.$route(
+      path: '/xiaolanDaily',
+      parentNavigatorKey: XiaolanDailyRoute.$parentNavigatorKey,
+      factory: $XiaolanDailyRouteExtension._fromState,
+    );
+
+extension $XiaolanDailyRouteExtension on XiaolanDailyRoute {
+  static XiaolanDailyRoute _fromState(GoRouterState state) =>
+      const XiaolanDailyRoute();
+
+  String get location => GoRouteData.$location(
+        '/xiaolanDaily',
       );
 
   void go(BuildContext context) => context.go(location);

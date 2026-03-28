@@ -53,7 +53,6 @@ class _XiaoLanTopNaviViewState extends State<XiaoLanTopNaviView> with TickerProv
     setState(() {
       _asyncValue = const AsyncLoading();
     });
-
     final result =
         await _appDomain.getConstructByApiLink(apiLink: CrackAppType.xiaolan.topNavApi, params: {'id': widget.id});
 
@@ -114,16 +113,6 @@ class _XiaoLanTopNaviViewState extends State<XiaoLanTopNaviView> with TickerProv
                         ),
                         titles: titles,
                         views: data.map((e) {
-                          return XiaoLanApiLinkView(
-                            linkModel: e,
-                            showRightList: true,
-                            onLinkNavTap: (value) {
-                              if (data.indexWhere((element) => element.linkUrl == value) case final index
-                              when index != -1) {
-                                _tabController.index = index;
-                              }
-                            },
-                          );
                           return KeepAliveWrapper(
                             child: XiaoLanApiLinkView(
                               linkModel: e,
@@ -136,6 +125,7 @@ class _XiaoLanTopNaviViewState extends State<XiaoLanTopNaviView> with TickerProv
                               },
                             ),
                           );
+
                         }).toList(),
                       ),
                     );

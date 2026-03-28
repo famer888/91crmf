@@ -55,7 +55,6 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
 
   final ScrollController _nestedController = ScrollController();
   final ValueNotifier<bool> _showToTopBtn = ValueNotifier(false);
-  double _showThreshold = 0; // 一屏高度
 
   late final TabController _tabController;
   List<String> titles = ['正在看', '最热', '推荐', '最新', '畅销', '随机'];
@@ -64,6 +63,8 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
 
   // 普通列表中间类被
   List? mid_style_category;
+
+  dynamic? rank;
 
   // 普通列表中间标签
   dynamic? tags_mv;
@@ -93,7 +94,7 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
 
     CommonUtils.log('getData: ${widget.linkModel.api}  param:$param');
     final result = await _appDomain.getConstructByApiLink(
-      apiLink: widget.linkModel.api,
+      apiLink: widget.linkModel.type == 4 ? "/api/tabnewxiaolan/hotRank" : widget.linkModel.api,
       params: param,
     );
 
@@ -103,10 +104,14 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
         bannersNotifier.value = banner;
       }
 
-      mid_style_category = result.data['mid_style_category'];
-      if (result.data['body'] != null && result.data['body'] is Map && result.data['body']['type'] == "tags-mv") {
-        tags_mv = result.data['body'];
-      }
+      setState(() {
+        if (page == 1) rank = result.data['rank'];
+
+        mid_style_category = result.data['mid_style_category'];
+        if (result.data['body'] != null && result.data['body'] is Map && result.data['body']['type'] == "tags-mv") {
+          tags_mv = result.data['body'];
+        }
+      });
       // bot_style_one = result.data['bot_style_one'];
       // bot_style_two = result.data['bot_style_two'];
 
@@ -114,7 +119,11 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
       if (mounted) {
         setState(() {});
       }
-      return widget.linkModel.name == "推荐" ? result.data['bot_style_one'] : result.data['bot_style_two'];
+      return widget.linkModel.type == 4
+          ? result.data['list'] as List
+          : widget.linkModel.name == "推荐"
+              ? result.data['bot_style_one']
+              : result.data['bot_style_two'];
     } else {
       MyToast.showText(text: result.msg ?? '');
     }
@@ -157,7 +166,11 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
 
   @override
   void initState() {
-    if (widget.linkModel.name != "推荐") _getData(page: 1, pageSize: 20);
+    if (widget.linkModel.name != "推荐" && widget.linkModel.type != 4)
+      _getData(page: 1, pageSize: 20);
+    else
+      _asyncValue = const AsyncData([]);
+
     _tabController = TabController(length: titles.length, vsync: this, initialIndex: initialIndex);
 
     super.initState();
@@ -166,9 +179,6 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _showThreshold = ScreenUtil().screenHeight * 0.40;
-    });
   }
 
   @override
@@ -182,11 +192,33 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
   void _scrollToTop() {
     if (!_nestedController.hasClients) return;
 
+    _showToTopBtn.value = false;
     _nestedController.animateTo(
       0,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOut,
     );
+  }
+
+  Future<String> onRefresh(dynamic model) async {
+    // _getData(page: 1, pageSize: 20);
+    final result = await _appDomain.getConstructByApiLink(
+      apiLink: "/api/tabnewxiaolan/list_tab_mv",
+      params: {
+        'page': 1,
+        'limit': 20,
+        'sort': 'rand',
+        'construct_id': model['id'],
+      },
+    );
+    if (result.status == 1) {
+      setState(() {
+        model['list'] = result.data['list'] ?? [];
+      });
+    } else {
+      MyToast.showText(text: result.msg ?? '');
+    }
+    return "";
   }
 
   @override
@@ -204,6 +236,13 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
                     height: constraints.maxHeight, // 使用父级约束的高度
                     child: NotificationListener<ScrollNotification>(
                       onNotification: (ScrollNotification notification) {
+                        if (!_nestedController.hasClients) return false;
+                        final pos = _nestedController.position;
+                        final viewportHeight = pos.viewportDimension * 0.4; // NestedScrollView可视高度
+                        final offset = pos.pixels;
+
+                        final overOnePage = offset >= viewportHeight;
+                        _showToTopBtn.value = overOnePage;
                         return false;
                       },
                       child: NestedScrollView(
@@ -214,41 +253,68 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
                               bannersNotifier: bannersNotifier,
                             ),
                           ),
-                          if (mid_style_category != null && mid_style_category!.isNotEmpty)
+                          SliverToBoxAdapter(
+                            child: SizedBox(
+                              height: 10,
+                            ),
+                          ),
+                          if (mid_style_category != null && mid_style_category!.isNotEmpty) ...[
                             SliverToBoxAdapter(
                               child: XiaoLanListBuild(
                                   type: XiaoLanListBuildType.categoryScroll,
                                   linkModel: widget.linkModel,
                                   model: mid_style_category),
                             ),
+                            SliverToBoxAdapter(
+                              child: SizedBox(
+                                height: 10,
+                              ),
+                            ),
+                          ],
                           if (tags_mv != null)
                             SliverToBoxAdapter(
                               child: XiaoLanListBuild(
                                   type: XiaoLanListBuildType.tag, linkModel: widget.linkModel, model: tags_mv),
                             ),
                         ],
-                        body: widget.linkModel.name == "推荐"
+                        body: widget.linkModel.name == "推荐" || widget.linkModel.type == 4
                             ? (MyListView.list(
                                 padding: EdgeInsets.zero,
                                 itemBuilder: (context, item, index) {
                                   return Column(
                                     children: [
                                       SizedBox(
-                                        height: 10,
-                                      ),
-                                      XiaoLanListBuild(
-                                          type: [
-                                            XiaoLanListBuildType.fourGrid,
-                                            XiaoLanListBuildType.oneBigSecondScroll,
-                                            XiaoLanListBuildType.oneBigFourGrid,
-                                            XiaoLanListBuildType.sixGrid,
-                                            XiaoLanListBuildType.oneLineScroll,
-                                            XiaoLanListBuildType.fourGrid,
-                                          ][item['show_style']],
-                                          linkModel: widget.linkModel,
-                                          model: item),
-                                      SizedBox(
                                         height: 10.w,
+                                      ),
+                                      if (widget.linkModel.type == 4 && index == 0) ...[
+                                        XiaoLanListBuild(
+                                            type: XiaoLanListBuildType.creator,
+                                            linkModel: widget.linkModel,
+                                            model: rank),
+                                        SizedBox(
+                                          height: 10.w,
+                                        )
+                                      ],
+                                      XiaoLanListBuild(
+                                        type: widget.linkModel.type == 4
+                                            ? XiaoLanListBuildType.userScroll
+                                            : [
+                                                XiaoLanListBuildType.fourGrid,
+                                                XiaoLanListBuildType.oneBigSecondScroll,
+                                                XiaoLanListBuildType.oneBigFourGrid,
+                                                XiaoLanListBuildType.sixGrid,
+                                                XiaoLanListBuildType.oneLineScroll,
+                                                XiaoLanListBuildType.fourGrid,
+                                              ][item['show_style']],
+                                        linkModel: widget.linkModel,
+                                        model: item,
+                                        onRefresh: () async {
+                                          final res = await onRefresh(item);
+                                          return res;
+                                        },
+                                      ),
+                                      SizedBox(
+                                        height: 20.w,
                                       )
                                     ],
                                   );
@@ -260,7 +326,6 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
                                 tabController: _tabController,
                                 initialIndex: initialIndex,
                                 tabBarHeight: 27.h,
-                                tabBarPadding: EdgeInsets.only(top: 11.w),
                                 linearColors: [Colors.transparent, Colors.transparent],
                                 labelStyle: TextStyle(
                                     color: const Color(0xFF333333), fontSize: 16.sp, fontWeight: FontWeight.w600),

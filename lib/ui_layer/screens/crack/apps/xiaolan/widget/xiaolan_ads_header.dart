@@ -9,8 +9,10 @@ import '../../../../theme.dart';
 class XiaoLanAdsHeader extends StatefulWidget {
   const XiaoLanAdsHeader({
     required this.bannersNotifier,
+    this.color,
   });
 
+  final Color? color;
   final ValueNotifier<List<BannerModel>> bannersNotifier;
 
   @override
@@ -18,7 +20,6 @@ class XiaoLanAdsHeader extends StatefulWidget {
 }
 
 class _XiaoLanAdsHeaderState extends State<XiaoLanAdsHeader> {
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -30,7 +31,8 @@ class _XiaoLanAdsHeaderState extends State<XiaoLanAdsHeader> {
             if (banners.isEmpty) return const SizedBox.shrink();
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
-              child: ReportGeneralAppsListVidget(data: banners, titleColor: Colors.black.withValues(alpha: .7)),
+              child: ReportGeneralAppsListVidget(
+                  data: banners, titleColor: widget.color ?? Colors.black.withValues(alpha: .7)),
             );
           },
         ),

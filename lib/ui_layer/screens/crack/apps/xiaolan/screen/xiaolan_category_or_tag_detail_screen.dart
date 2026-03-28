@@ -42,11 +42,13 @@ class _XiaolanCategoryOrTagDetailScreenState extends State<XiaolanCategoryOrTagD
   List<String> titles = ['正在看', '最热', '推荐', '最新', '畅销', '随机'];
   List<String> titlesSort = ['see', 'hot', 'recommend', 'new', 'sale', 'rand'];
 
+
   @override
   void initState() {
     _tabController = TabController(length: titles.length, vsync: this, initialIndex: _initialIndex);
     super.initState();
   }
+
 
   Future<List> _getVideoData({
     required int page,

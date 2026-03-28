@@ -99,6 +99,7 @@ import '../screens/community/community_screen/screen.dart';
 import '../screens/community/tag_detail/screen.dart';
 import '../screens/crack/apps/xiaolan/screen/xiaolan_category_or_tag_detail_screen.dart';
 import '../screens/crack/apps/xiaolan/screen/xiaolan_creator_screen.dart';
+import '../screens/crack/apps/xiaolan/screen/xiaolan_daily_screen.dart';
 import '../screens/crack/apps/xiaolan/screen/xiaolan_discover_screen.dart';
 import '../screens/crack/apps/xiaolan/screen/xiaolan_search_result_screen.dart';
 import '../screens/crack/apps/xiaolan/screen/xiaolan_search_screen.dart';
@@ -2359,5 +2360,17 @@ class XiaolanSearchRoute extends GoRouteData {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return CommonUtils.buildSlideTransitionPage(state: state, child: const XiaolanSearchScreen());
+  }
+}
+
+@TypedGoRoute<XiaolanDailyRoute>(path: AppRouterPaths.xiaolanDaily)
+class XiaolanDailyRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
+
+  const XiaolanDailyRoute();
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(state: state, child: const XiaolanDailyScreen());
   }
 }

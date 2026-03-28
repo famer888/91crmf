@@ -417,8 +417,10 @@ class AppRouterPaths {
   static const xiaolanVideoDetail = '/xiaolanVideoDetail/:id';
 
   // 小蓝 搜索
-
   static const xiaolanSearch = '/xiaolanSearch';
+
+  // 小蓝 每日推荐
+  static const xiaolanDaily= '/xiaolanDaily';
 
   static const webView = '/${BuildConfig.webViewPathName}/:url';
 }

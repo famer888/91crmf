@@ -17,6 +17,7 @@ import '../../../../common_widgets/screen_background.dart';
 import '../../../../common_widgets/status/loading.dart';
 import '../../../../common_widgets/status/network_error.dart';
 import '../../../../theme.dart';
+import '../../../widgets/scroll_top_button.dart';
 import '../widget/xiaolan_list_build.dart';
 
 class XiaolanDiscoverScreen extends StatefulWidget {
@@ -32,10 +33,31 @@ class XiaolanDiscoverScreen extends StatefulWidget {
 class _XiaolanDiscoverScreenState extends State<XiaolanDiscoverScreen> {
   late final _appDomain = context.read<AppDomain>();
 
+  final ScrollController _nestedController = ScrollController();
+  final ValueNotifier<bool> _showToTopBtn = ValueNotifier(false);
+
   @override
   void initState() {
     // _initTagList();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _nestedController.dispose();
+    _showToTopBtn.dispose();
+    super.dispose();
+  }
+
+  void _scrollToTop() {
+    if (!_nestedController.hasClients) return;
+
+    _showToTopBtn.value = false;
+    _nestedController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
   }
 
   // sort hot/new
@@ -86,23 +108,47 @@ class _XiaolanDiscoverScreenState extends State<XiaolanDiscoverScreen> {
                   backIconColor: Color(0xFF151515),
                   titleColor: Color(0xFF151515),
                   backgroundColor: Colors.transparent),
-              body: MyListView.grid(
-                padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
-                crossAxisCount: 3,
-                mainAxisSpacing: 7.h,
-                crossAxisSpacing: 7.w,
-                childAspectRatio: 225 / 224,
-                itemBuilder: (context, item, index) => XiaoLanItem.build(
-                    widget.type == "tag" ? XiaoLanItemType.tag : XiaoLanItemType.category, item, onTap: () {
-                  XiaolanCategoryOrTagDetailRoute(
-                          id: item['id'], type: widget.type, title: item['name'] ?? item['title'] ?? '', has_sort: item['has_sort'])
-                      .push(context);
-                }),
-                onFetchingMore: (currentPage, pageSize) {
-                  final res = _getData(page: currentPage, pageSize: pageSize);
-                  return res;
-                },
-              ))
+              body: NotificationListener<ScrollNotification>(
+                  onNotification: (ScrollNotification notification) {
+                    if (!_nestedController.hasClients) return false;
+                    final pos = _nestedController.position;
+                    final viewportHeight = pos.viewportDimension * 0.4; // NestedScrollView可视高度
+                    final offset = pos.pixels;
+
+                    final overOnePage = offset >= viewportHeight;
+                    _showToTopBtn.value = overOnePage;
+                    return false;
+                  },
+                  child: MyListView.grid(
+                    scrollController: _nestedController,
+                    padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 7.h,
+                    crossAxisSpacing: 7.w,
+                    childAspectRatio: 225 / 224,
+                    itemBuilder: (context, item, index) => XiaoLanItem.build(
+                        widget.type == "tag" ? XiaoLanItemType.tag : XiaoLanItemType.category, item, onTap: () {
+                      XiaolanCategoryOrTagDetailRoute(
+                              id: item['id'],
+                              type: widget.type,
+                              title: item['name'] ?? item['title'] ?? '',
+                              has_sort: item['has_sort'])
+                          .push(context);
+                    }),
+                    onFetchingMore: (currentPage, pageSize) {
+                      final res = _getData(page: currentPage, pageSize: pageSize);
+                      return res;
+                    },
+                  ))),
+
+          Positioned(
+            right: 20.w,
+            bottom: 42.w,
+            child: ScrollTopButton(
+              showToTopButtonNotifier: _showToTopBtn,
+              scrollTopCallback: _scrollToTop,
+            ),
+          ),
         ],
       ),
     );

@@ -77,14 +77,6 @@ class _XiaolanCreatorSubViewState extends State<XiaolanCreatorSubView> with Tick
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: NestedScrollView(
-      headerSliverBuilder: (_, __) => [
-        SliverToBoxAdapter(
-          child: XiaoLanAdsHeader(
-            bannersNotifier: widget.bannersNotifier,
-          ),
-        ),
-      ],
       body: _asyncValue.maybeWhen(
         data: (data) {
           if (data.isEmpty)
@@ -154,7 +146,7 @@ class _XiaolanCreatorSubViewState extends State<XiaolanCreatorSubView> with Tick
         error: (_, __) => NetworkErrorView(onTap: _init),
         orElse: () => const LoadingView(),
       ),
-    ));
+    );
   }
 
   Widget _buildTop3Item(dynamic item, int index) {

@@ -185,6 +185,7 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
                         ),
                         child: MyImage.network(detail['user']['thumb'],
                             fit: BoxFit.cover,
+                            borderRadius: 25.w,
                             backgroundColor: const Color(0xFFE6E6E6)),
                       ),
                       SizedBox(
