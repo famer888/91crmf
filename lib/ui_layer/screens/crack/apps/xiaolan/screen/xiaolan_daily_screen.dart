@@ -68,7 +68,7 @@ class _XiaolanDailyScreenState extends State<XiaolanDailyScreen> {
     setState(() {
       _selectedDate = pickedDate;
       _asyncValue = const AsyncLoading();
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(const Duration(milliseconds: 300), () {
         _asyncValue = AsyncData([]);
       });
     });
@@ -85,10 +85,11 @@ class _XiaolanDailyScreenState extends State<XiaolanDailyScreen> {
     required int pageSize,
   }) async {
     bool isInit = false;
-
-    final result = await _appDomain
-        .getConstructByApiLink(apiLink: "/api/searchxiaolan/mv", params: {
-      "kwy": "123",
+    final year = _selectedDate.year.toString();
+    final month = _selectedDate.month.toString().padLeft(2, '0');
+    final day = _selectedDate.day.toString().padLeft(2, '0');
+    final result = await _appDomain.getConstructByApiLink(apiLink: "/api/dailyvideoxiaolan/list", params: {
+      "date": "$year-$month-$day",
       "page": page,
       "limit": pageSize,
     });
@@ -117,26 +118,20 @@ class _XiaolanDailyScreenState extends State<XiaolanDailyScreen> {
               left: 0,
               right: 0,
               top: 0,
-              child: Image.asset('assets/images/xiaolan_top_navi_bg.png',
-                  width: double.infinity, fit: BoxFit.cover)),
+              child: Image.asset('assets/images/xiaolan_top_navi_bg.png', width: double.infinity, fit: BoxFit.cover)),
           Scaffold(
               backgroundColor: Colors.transparent,
               appBar: MyAppBar(
                   // title: "今日推荐",
                   titleWidget: Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 2 * MyTheme.pagePadding),
+                    padding: EdgeInsets.symmetric(horizontal: 2 * MyTheme.pagePadding),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("今日推荐",
-                            style: MyTheme.white255_18_B
-                                .copyWith(color: Color(0xFF151515))),
-                        Text(_recommendDateLabel,
-                            style: TextStyle(
-                                fontSize: 12.sp, color: Color(0xFF9C9C9C))),
+                        Text("今日推荐", style: MyTheme.white255_18_B.copyWith(color: Color(0xFF151515))),
+                        Text(_recommendDateLabel, style: TextStyle(fontSize: 12.sp, color: Color(0xFF9C9C9C))),
                       ],
                     ),
                   ),
@@ -145,10 +140,7 @@ class _XiaolanDailyScreenState extends State<XiaolanDailyScreen> {
                   backgroundColor: Colors.transparent,
                   rightWidget: GestureDetector(
                     onTap: _openCalendarDialog,
-                    child: Image.asset(
-                        'assets/images/xiaolan_icon_calendar.png',
-                        width: 21.w,
-                        height: 21.w),
+                    child: Image.asset('assets/images/xiaolan_icon_calendar.png', width: 21.w, height: 21.w),
                   )),
               body: _asyncValue.maybeWhen(
                   error: (_, __) => NetworkErrorView(onTap: () {
@@ -157,18 +149,15 @@ class _XiaolanDailyScreenState extends State<XiaolanDailyScreen> {
                   orElse: () => const LoadingView(),
                   data: (data) {
                     return MyListView.grid(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: MyTheme.pagePadding, vertical: 8.w),
+                      padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
                       crossAxisCount: 2,
                       mainAxisSpacing: 10.h,
                       crossAxisSpacing: 8.w,
                       childAspectRatio: 344 / 240,
-                      itemBuilder: (context, item, index) => XiaoLanItem.build(
-                          XiaoLanItemType.video, item,
-                          onTap: () {}),
+                      itemBuilder: (context, item, index) =>
+                          XiaoLanItem.build(XiaoLanItemType.video, item, onTap: () {}),
                       onFetchingMore: (currentPage, pageSize) {
-                        final res =
-                            _getData(page: currentPage, pageSize: pageSize);
+                        final res = _getData(page: currentPage, pageSize: pageSize);
                         return res;
                       },
                     );
@@ -180,8 +169,7 @@ class _XiaolanDailyScreenState extends State<XiaolanDailyScreen> {
 }
 
 class _XiaolanCalendarDialog extends StatefulWidget {
-  const _XiaolanCalendarDialog(
-      {required this.initialDate, required this.monthLabels});
+  const _XiaolanCalendarDialog({required this.initialDate, required this.monthLabels});
 
   final DateTime initialDate;
   final List<String> monthLabels;
@@ -198,8 +186,7 @@ class _XiaolanCalendarDialogState extends State<_XiaolanCalendarDialog> {
   @override
   void initState() {
     super.initState();
-    _focusedMonth =
-        DateTime(widget.initialDate.year, widget.initialDate.month, 1);
+    _focusedMonth = DateTime(widget.initialDate.year, widget.initialDate.month, 1);
   }
 
   bool _isSameDate(DateTime a, DateTime b) {
@@ -208,20 +195,15 @@ class _XiaolanCalendarDialogState extends State<_XiaolanCalendarDialog> {
 
   void _changeMonth(int offset) {
     setState(() {
-      _focusedMonth =
-          DateTime(_focusedMonth.year, _focusedMonth.month + offset, 1);
+      _focusedMonth = DateTime(_focusedMonth.year, _focusedMonth.month + offset, 1);
     });
   }
 
   List<DateTime> _buildCalendarDays() {
-    final firstDayOfMonth =
-        DateTime(_focusedMonth.year, _focusedMonth.month, 1);
+    final firstDayOfMonth = DateTime(_focusedMonth.year, _focusedMonth.month, 1);
     final leadingDays = firstDayOfMonth.weekday % 7;
     final startDay = firstDayOfMonth.subtract(Duration(days: leadingDays));
-    return List.generate(
-        42,
-        (index) =>
-            DateTime(startDay.year, startDay.month, startDay.day + index));
+    return List.generate(42, (index) => DateTime(startDay.year, startDay.month, startDay.day + index));
   }
 
   @override
@@ -229,8 +211,7 @@ class _XiaolanCalendarDialogState extends State<_XiaolanCalendarDialog> {
     final days = _buildCalendarDays();
     final today = DateTime.now();
     final todayDate = DateTime(today.year, today.month, today.day);
-    final monthTitle =
-        '${_focusedMonth.year}年 ${widget.monthLabels[_focusedMonth.month - 1]}';
+    final monthTitle = '${_focusedMonth.year}年 ${widget.monthLabels[_focusedMonth.month - 1]}';
 
     return Dialog(
       insetPadding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -240,10 +221,7 @@ class _XiaolanCalendarDialogState extends State<_XiaolanCalendarDialog> {
         decoration: BoxDecoration(
           color: Color(0xFFF7F8FA),
           boxShadow: [
-            BoxShadow(
-                color: Colors.black.withValues(alpha: 0.08),
-                blurRadius: 16.r,
-                offset: Offset(0, 4.h)),
+            BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 16.r, offset: Offset(0, 4.h)),
           ],
         ),
         child: Column(
@@ -254,27 +232,19 @@ class _XiaolanCalendarDialogState extends State<_XiaolanCalendarDialog> {
                 color: Color(0xFFFBFBFB),
                 border: Border(bottom: BorderSide(color: Color(0xFFF2F3F5))),
               ),
-              padding: EdgeInsets.only(
-                  top: 24.w, bottom: 12.w, left: 24.w, right: 24.w),
+              padding: EdgeInsets.only(top: 24.w, bottom: 12.w, left: 24.w, right: 24.w),
               child: Row(
                 children: [
-                  _MonthSwitchButton(
-                      icon: Icons.arrow_back_ios_new_rounded,
-                      onTap: () => _changeMonth(-1)),
+                  _MonthSwitchButton(icon: Icons.arrow_back_ios_new_rounded, onTap: () => _changeMonth(-1)),
                   Expanded(
                     child: Center(
                       child: Text(
                         monthTitle,
-                        style: TextStyle(
-                            fontSize: 15.sp,
-                            color: Color(0xFF2A2A2A),
-                            fontWeight: FontWeight.w500),
+                        style: TextStyle(fontSize: 15.sp, color: Color(0xFF2A2A2A), fontWeight: FontWeight.w500),
                       ),
                     ),
                   ),
-                  _MonthSwitchButton(
-                      icon: Icons.arrow_forward_ios_rounded,
-                      onTap: () => _changeMonth(1)),
+                  _MonthSwitchButton(icon: Icons.arrow_forward_ios_rounded, onTap: () => _changeMonth(1)),
                 ],
               ),
             ),
@@ -290,10 +260,7 @@ class _XiaolanCalendarDialogState extends State<_XiaolanCalendarDialog> {
                         child: Center(
                           child: Text(
                             label,
-                            style: TextStyle(
-                                fontSize: 14.sp,
-                                color: Color(0xFF1D2129),
-                                fontWeight: FontWeight.w400),
+                            style: TextStyle(fontSize: 14.sp, color: Color(0xFF1D2129), fontWeight: FontWeight.w400),
                           ),
                         ),
                       ),
@@ -318,30 +285,20 @@ class _XiaolanCalendarDialogState extends State<_XiaolanCalendarDialog> {
                 final isSelected = _isSameDate(day, widget.initialDate);
                 final isFutureDate = day.isAfter(todayDate);
                 return GestureDetector(
-                  onTap: isFutureDate
-                      ? null
-                      : () => Navigator.of(context).pop(day),
+                  onTap: isFutureDate ? null : () => Navigator.of(context).pop(day),
                   child: Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: isFutureDate
-                          ? Color(0xFFF3F4F6)
-                          : (isSelected
-                              ? Color(0xFFE8F3FF)
-                              : Color(0xFFF6F7F8)),
+                      color: isFutureDate ? Color(0xFFF3F4F6) : (isSelected ? Color(0xFFE8F3FF) : Color(0xFFF6F7F8)),
                       borderRadius: BorderRadius.circular(4.r),
                     ),
                     child: Text(
                       '${day.day}',
                       style: TextStyle(
                         fontSize: 12.sp,
-                        color: isFutureDate
-                            ? Color(0xFFC7CBD1)
-                            : (isCurrentMonth
-                                ? Color(0xFF2D2D2D)
-                                : Color(0xFFAEB2B8)),
-                        fontWeight:
-                            isSelected ? FontWeight.w600 : FontWeight.w400,
+                        color:
+                            isFutureDate ? Color(0xFFC7CBD1) : (isCurrentMonth ? Color(0xFF2D2D2D) : Color(0xFFAEB2B8)),
+                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                       ),
                     ),
                   ),
@@ -369,10 +326,8 @@ class _MonthSwitchButton extends StatelessWidget {
         width: 24.w,
         height: 24.w,
         alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-            border: Border.all(color: Color(0xFFF2F3F5))),
+        decoration:
+            BoxDecoration(color: Colors.white, shape: BoxShape.circle, border: Border.all(color: Color(0xFFF2F3F5))),
         child: Icon(icon, size: 12.w, color: Color(0xFF1D2129)),
       ),
     );

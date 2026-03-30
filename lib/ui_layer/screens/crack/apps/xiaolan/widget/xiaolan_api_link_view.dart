@@ -202,9 +202,15 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
 
   Future<String> onRefresh(dynamic model) async {
     // _getData(page: 1, pageSize: 20);
+    DateTime now = DateTime.now();
+    final year = now.year.toString();
+    final month = now.month.toString().padLeft(2, '0');
+    final day = now.day.toString().padLeft(2, '0');
+
     final result = await _appDomain.getConstructByApiLink(
-      apiLink: "/api/tabnewxiaolan/list_tab_mv",
+      apiLink: model['type'] == 5 ? "/api/dailyvideoxiaolan/list" : "/api/tabnewxiaolan/list_tab_mv",
       params: {
+        "date": "$year-$month-$day",
         'page': 1,
         'limit': 20,
         'sort': 'rand',
