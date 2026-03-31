@@ -398,9 +398,9 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
         if (!(widget.linkModel.name == "推荐" || widget.linkModel.type == 4))
           Positioned.fill(
             child: _asyncValue.maybeWhen(
-                error: (_, __) => NetworkErrorView(onTap: () {
-                      _getData(page: 1, pageSize: 20);
-                    }),
+                error: (_, __) => Container(color: Colors.white,child: NetworkErrorView(onTap: () {
+                  _getData(page: 1, pageSize: 20);
+                }),),
                 orElse: () => Container(color: Colors.white, child: const LoadingView()),
                 data: (data) {
                   return SizedBox.shrink();
