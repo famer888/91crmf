@@ -25,8 +25,7 @@ class XiaolanVideoDetailScreen extends StatefulWidget {
   const XiaolanVideoDetailScreen({super.key, required this.id});
 
   @override
-  State<XiaolanVideoDetailScreen> createState() =>
-      _XiaolanVideoDetailScreenState();
+  State<XiaolanVideoDetailScreen> createState() => _XiaolanVideoDetailScreenState();
 }
 
 enum _LoadState { init, loading, success, error }
@@ -44,7 +43,6 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
   final ScrollController _nestedController = ScrollController();
   final ValueNotifier<bool> _showToTopBtn = ValueNotifier(false);
 
-
   Future<void> _toggleLike() async {
     if (_isLiking) return;
     _isLiking = true;
@@ -59,6 +57,23 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
         _likeCount += _isLiked ? 1 : -1;
       });
       MyToast.showText(text: result.data['data']?['msg'] ?? '操作成功');
+    } else {
+      MyToast.showText(text: result.msg ?? '操作失败');
+    }
+  }
+
+  Future<void> _onFollow(dynamic user) async {
+    MyToast.showLoading();
+    final result = await _appDomain.getConstructByApiLink(
+      apiLink: '/api/user/toggle_follow',
+      params: {'is_follow': user['is_follow'] == 1 ? 0 : 1, "aff": user['aff']},
+    );
+    MyToast.closeAllLoading();
+    if (result.status == 1) {
+      MyToast.showText(text: result.data['data']?['msg'] ?? '操作成功');
+      setState(() {
+        user['is_follow'] = user['is_follow'] == 1 ? 0 : 1;
+      });
     } else {
       MyToast.showText(text: result.msg ?? '操作失败');
     }
@@ -133,8 +148,7 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
     final playUrl = detail['play_url'] as String? ?? '';
     final title = detail['title'] as String? ?? '';
     final tagsList = detail['tags_list'];
-    final List<String> tags =
-        tagsList is List ? List<String>.from(tagsList) : [];
+    final List<String> tags = tagsList is List ? List<String>.from(tagsList) : [];
     final durationStr = detail['duration_str'] as String? ?? '';
     final rating = detail['rating'] ?? 0;
     final like = detail['like'] ?? 0;
@@ -159,50 +173,65 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
         Expanded(
             child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SizedBox(
                 height: 15.w,
               ),
               Container(
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                child: GestureDetector(
-                  onTap: (){
-
-                    XiaolanUserWorksRoute(
-                      id: "${detail['user']['uid']}",
-                      userName: detail['user']['nickname'],
-                    ).push(context);
-
-                  },
+                  color: Colors.white,
+                  padding: EdgeInsets.symmetric(horizontal: 15.w),
                   child: Row(
                     children: [
-                      Container(
-                        width: 50.w,
-                        height: 50.w,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25.w),
-                        ),
-                        child: MyImage.network(detail['user']['thumb'],
-                            fit: BoxFit.cover,
-                            borderRadius: 25.w,
-                            backgroundColor: const Color(0xFFE6E6E6)),
-                      ),
-                      SizedBox(
-                        width: 11.w,
-                      ),
                       Expanded(
-                          child: Text(
-                            "${detail['user']['nickname']}",
-                            style: TextStyle(
-                                color: Color(0xFF151515),
-                                fontSize: 15.sp,
-                                fontWeight: FontWeight.w500),
-                          ))
+                          child: GestureDetector(
+                        onTap: () {
+                          XiaolanUserWorksRoute(
+                            id: "${detail['user']['uid']}",
+                            userName: detail['user']['nickname'],
+                          ).push(context);
+                        },
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 50.w,
+                              height: 50.w,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25.w),
+                              ),
+                              child: MyImage.network(detail['user']['thumb'],
+                                  fit: BoxFit.cover, borderRadius: 25.w, backgroundColor: const Color(0xFFE6E6E6)),
+                            ),
+                            SizedBox(
+                              width: 11.w,
+                            ),
+                            Expanded(
+                                child: Text(
+                              "${detail['user']['nickname']}",
+                              style: TextStyle(color: Color(0xFF151515), fontSize: 15.sp, fontWeight: FontWeight.w500),
+                            ))
+                          ],
+                        ),
+                      )),
+                      Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          _onFollow(detail['user']);
+                        },
+                        child: Container(
+                            height: 32.w,
+                            width: 69.w,
+                            decoration: BoxDecoration(
+                              color: Color(0xFF558AEF),
+                              borderRadius: BorderRadius.circular(32.w),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(detail['user']['is_follow'] == 1 ? "已关注" : "关注",
+                                style: TextStyle(fontSize: 14.sp, color: Colors.white))),
+                      )
                     ],
-                  ),
-                ),
-              ),
+                  )),
               SizedBox(
                 height: 15.w,
               ),
@@ -210,8 +239,10 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
               Container(
                 color: Colors.white,
                 padding: EdgeInsets.symmetric(horizontal: 15.w),
+                alignment: Alignment.centerLeft,
                 child: Text(
                   title,
+                  textAlign: TextAlign.start,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -240,17 +271,14 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
                           // context.push('/xiaolanCategoryOrTagDetail/$id/${type}/${hasSort ? "1" : "0"}/${Uri.encodeComponent(title)}');
                         },
                         child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 6.w, vertical: 1.w),
+                          padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 1.w),
                           decoration: BoxDecoration(
                             color: const Color(0xFFF2F2F2),
                             borderRadius: BorderRadius.circular(5.w),
                           ),
                           child: Text(
                             '#$tag',
-                            style: TextStyle(
-                                fontSize: 12.sp,
-                                color: const Color(0xFF666666)),
+                            style: TextStyle(fontSize: 12.sp, color: const Color(0xFF666666)),
                           ),
                         ),
                       );
@@ -267,33 +295,29 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 15.w),
                 child: Row(
                   children: [
-                    Text(
-                        "${CommonUtils.formatNumber(rating)}播放   ${detail['created_at']}",
-                        style: TextStyle(
-                            fontSize: 12.sp, color: const Color(0xFF666666))),
+                    Text("${CommonUtils.formatNumber(rating)}播放   ${detail['created_at']}",
+                        style: TextStyle(fontSize: 12.sp, color: const Color(0xFF666666))),
                     const Spacer(),
                     GestureDetector(
                       onTap: _toggleLike,
                       child: Row(
                         children: [
                           Image.asset(
-                            "assets/images/xiaolan_icon_like.png",
+                            _isLiked ? "assets/images/app_short_like_h.png" : "assets/images/xiaolan_icon_like.png",
                             width: 16.w,
-                            color: _isLiked ?Colors.red:null,
                           ),
                           SizedBox(
                             width: 5.w,
                           ),
                           Text('${CommonUtils.formatNumber(_likeCount)}',
-                              style: TextStyle(
-                                  fontSize: 12.sp,
-                                  color: const Color(0xFF666666))),
+                              style: TextStyle(fontSize: 12.sp, color: const Color(0xFF666666))),
                         ],
                       ),
                     ),
                     SizedBox(width: 16.w),
                     GestureDetector(
                       onTap: () {
+                        ShareInviteRoute().push(context);
                         // XiaolanVideoCommentRoute(videoId: widget.id).push(context);
                       },
                       child: Row(
@@ -305,10 +329,10 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
                           SizedBox(
                             width: 5.w,
                           ),
-                          Text('分享',
-                              style: TextStyle(
-                                  fontSize: 12.sp,
-                                  color: const Color(0xFF666666))),
+                          Text(
+                            '分享',
+                            style: TextStyle(fontSize: 12.sp, color: const Color(0xFF666666)),
+                          ),
                         ],
                       ),
                     )
@@ -346,15 +370,12 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
                         child: Center(
                           child: Text(
                             '暂无推荐',
-                            style: TextStyle(
-                                fontSize: 14.sp,
-                                color: const Color(0xFF999999)),
+                            style: TextStyle(fontSize: 14.sp, color: const Color(0xFF999999)),
                           ),
                         ),
                       )
                     : GridView.builder(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 12.5.w, vertical: 8.w),
+                        padding: EdgeInsets.symmetric(horizontal: 12.5.w, vertical: 8.w),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           mainAxisSpacing: 10.h,
@@ -368,8 +389,7 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
                             XiaoLanItemType.video,
                             item,
                             onTap: () {
-                              XiaolanVideoDetailRoute(id: item['id'])
-                                  .push(context);
+                              XiaolanVideoDetailRoute(id: item['id']).push(context);
                             },
                           );
                         },
@@ -388,8 +408,7 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
       children: [
         Icon(icon, size: 15.sp, color: const Color(0xFF999999)),
         SizedBox(width: 3.w),
-        Text(text,
-            style: TextStyle(fontSize: 12.sp, color: const Color(0xFF999999))),
+        Text(text, style: TextStyle(fontSize: 12.sp, color: const Color(0xFF999999))),
       ],
     );
   }
@@ -414,8 +433,7 @@ class _VideoPlayerView extends StatelessWidget {
               ),
             )
           : Center(
-              child: Icon(Icons.play_circle_outline,
-                  color: Colors.white, size: 48.sp),
+              child: Icon(Icons.play_circle_outline, color: Colors.white, size: 48.sp),
             ),
     );
   }

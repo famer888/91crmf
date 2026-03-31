@@ -20,6 +20,7 @@ import 'package:jycrpj/ui_layer/screens/crack/widgets/lock_mask.dart';
 import 'package:jycrpj/ui_layer/screens/crack/unlock_status_notifier.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/screens/webview/screen.dart';
+import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../domain/model/banner_model.dart';
@@ -31,8 +32,10 @@ class XiaolanCreatorSubView extends StatefulWidget {
     required this.type,
     required this.filter,
     required this.bannersNotifier,
+    required this.typeIndex,
   });
 
+  final int typeIndex;
   final ValueNotifier<List<BannerModel>> bannersNotifier;
   final dynamic type;
   final dynamic filter;
@@ -59,7 +62,7 @@ class _XiaolanCreatorSubViewState extends State<XiaolanCreatorSubView> with Tick
     });
 
     final result = await _appDomain
-        .getConstructByApiLink(apiLink: widget.type['api'], params: {'type': widget.type['param'] ?? ""});
+        .getConstructByApiLink(apiLink: widget.type['api'], params: widget.filter);
 
     if (result.status == 1) {
       List data = result.data as List;
@@ -167,7 +170,7 @@ class _XiaolanCreatorSubViewState extends State<XiaolanCreatorSubView> with Tick
     );
   }
 
-  Widget _buildUser(dynamic user, {bool vertical = true}) {
+  Widget _buildUser(dynamic user,{bool vertical = true}) {
     double avatarSize = vertical ? 65.w : 44.w;
     List<Widget> widgets = [
       Container(
@@ -188,13 +191,20 @@ class _XiaolanCreatorSubViewState extends State<XiaolanCreatorSubView> with Tick
         height: 3.5.w,
       ),
       Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(
-            "${user["nickname"] ?? "测试数据"}",
+            "${user["nickname"] ?? ""}",
             style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.w400),
           ),
           Text(
-            "作品数：342",
+            "${["作品数","点赞数","作品数","收益数"][widget.typeIndex]}：${[
+              CommonUtils.renderEnFixedNumber(user['videos_count']??0),
+              CommonUtils.renderEnFixedNumber(user['likes_count']??0),
+              CommonUtils.renderEnFixedNumber(user['videos_count']??0),
+              CommonUtils.renderEnFixedNumber(user['votes']??0),
+            ][widget.typeIndex]}",
             style: TextStyle(color: Color(0x66E4E4E4), fontSize: 12.sp, fontWeight: FontWeight.w400),
           ),
         ],

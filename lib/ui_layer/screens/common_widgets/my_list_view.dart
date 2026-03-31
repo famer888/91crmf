@@ -1,10 +1,8 @@
-
 import 'dart:async';
 import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart'
-    show CupertinoSliverRefreshControl, RefreshIndicatorMode;
+import 'package:flutter/cupertino.dart' show CupertinoSliverRefreshControl, RefreshIndicatorMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -15,8 +13,9 @@ import 'status/network_error.dart';
 
 import '../../../report/ui_layer/report_gesture_detector.dart';
 
-typedef FetchMoreCallback<T> = Future<T> Function(
-    int currentPage, int pageSize);
+typedef FetchMoreCallback<T> = Future<T> Function(int currentPage, int pageSize);
+
+typedef PagingControllerInitCallback = void Function(MyPagingController controller);
 
 enum MyListViewType { list, grid, masonryGird }
 
@@ -37,6 +36,7 @@ class MyListView<T> extends StatefulWidget {
     this.scrollController,
     this.noMoreItemsIndicator,
     this.isNeedMore = true,
+    this.persistentHeader,
   }) : type = MyListViewType.grid;
 
   const MyListView.list({
@@ -44,6 +44,7 @@ class MyListView<T> extends StatefulWidget {
     required this.itemBuilder,
     required this.onFetchingMore,
     this.header,
+    this.persistentHeader,
     this.headerBackgroundColor,
     this.contentPadding,
     this.padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -61,6 +62,8 @@ class MyListView<T> extends StatefulWidget {
     super.key,
     required this.itemBuilder,
     required this.onFetchingMore,
+    this.header,
+    this.persistentHeader,
     this.headerBackgroundColor,
     this.crossAxisSpacing = 8,
     this.mainAxisSpacing = 8,
@@ -72,13 +75,13 @@ class MyListView<T> extends StatefulWidget {
     this.noMoreItemsIndicator,
     this.isNeedMore = true,
   })  : type = MyListViewType.masonryGird,
-        childAspectRatio = 0.0,
-        header = null;
+        childAspectRatio = 0.0;
 
   final ItemWidgetBuilder<T> itemBuilder;
   final FetchMoreCallback<List<T>?> onFetchingMore;
   final MyListViewType type;
   final Widget? header;
+  final StickyHeaderDelegate? persistentHeader;
   final Color? headerBackgroundColor;
   final double childAspectRatio;
   final double crossAxisSpacing;
@@ -100,7 +103,7 @@ class MyListView<T> extends StatefulWidget {
 class MyListViewState<T> extends State<MyListView<T>> {
   late final _pageSize = widget.pageSize;
   static const _firstPageKey = 1;
-  late final MyPagingController<T> pagingController = MyPagingController(
+  late MyPagingController<T> pagingController = MyPagingController(
     firstPageKey: _firstPageKey,
     pageSize: _pageSize,
     firstFetchCallBack: widget.onFetchingMore,
@@ -181,6 +184,11 @@ class MyListViewState<T> extends State<MyListView<T>> {
             child: widget.header,
           ),
         ),
+      if (widget.persistentHeader != null)
+        SliverPersistentHeader(
+          pinned: true, // 关键
+          delegate: widget.persistentHeader!,
+        ),
       SliverPadding(
         padding: widget.padding,
         sliver: switch (widget.type) {
@@ -196,25 +204,20 @@ class MyListViewState<T> extends State<MyListView<T>> {
                 childAspectRatio: widget.childAspectRatio,
               ),
               builderDelegate: PagedChildBuilderDelegate<T>(
-                noItemsFoundIndicatorBuilder: (context) =>
-                    const PageEmptyDataView(),
+                noItemsFoundIndicatorBuilder: (context) => const PageEmptyDataView(),
                 noMoreItemsIndicatorBuilder: (context) =>
                     widget.noMoreItemsIndicator ??
                     DataStatusText(
                       text: 'wydx'.tr(context: context),
                     ),
-                firstPageProgressIndicatorBuilder: (context) =>
-                    const LoadingView(),
-                firstPageErrorIndicatorBuilder: (context) =>
-                    NetworkErrorView(onTap: _onRefresh),
+                firstPageProgressIndicatorBuilder: (context) => const LoadingView(),
+                firstPageErrorIndicatorBuilder: (context) => NetworkErrorView(onTap: _onRefresh),
                 newPageErrorIndicatorBuilder: (context) => DataStatusText(
                   text: 'djjz'.tr(context: context),
                   onTap: pagingController.retryLastFailedRequest,
                 ),
                 newPageProgressIndicatorBuilder: (context) =>
-                    (widget.isNeedMore ?? false)
-                        ? const MoreLoading()
-                        : Container(),
+                    (widget.isNeedMore ?? false) ? const MoreLoading() : Container(),
                 itemBuilder: widget.itemBuilder,
               ),
             ),
@@ -226,20 +229,15 @@ class MyListViewState<T> extends State<MyListView<T>> {
                     DataStatusText(
                       text: 'wydx'.tr(context: context),
                     ),
-                noItemsFoundIndicatorBuilder: (context) =>
-                    const PageEmptyDataView(),
-                firstPageProgressIndicatorBuilder: (context) =>
-                    const LoadingView(),
-                firstPageErrorIndicatorBuilder: (context) =>
-                    NetworkErrorView(onTap: _onRefresh),
+                noItemsFoundIndicatorBuilder: (context) => const PageEmptyDataView(),
+                firstPageProgressIndicatorBuilder: (context) => const LoadingView(),
+                firstPageErrorIndicatorBuilder: (context) => NetworkErrorView(onTap: _onRefresh),
                 newPageErrorIndicatorBuilder: (context) => DataStatusText(
                   text: 'djjz'.tr(context: context),
                   onTap: pagingController.retryLastFailedRequest,
                 ),
                 newPageProgressIndicatorBuilder: (context) =>
-                    (widget.isNeedMore ?? false)
-                        ? const MoreLoading()
-                        : Container(),
+                    (widget.isNeedMore ?? false) ? const MoreLoading() : Container(),
                 itemBuilder: widget.itemBuilder,
               ),
               separatorBuilder: (context, index) => SizedBox(
@@ -252,25 +250,20 @@ class MyListViewState<T> extends State<MyListView<T>> {
               crossAxisSpacing: widget.crossAxisSpacing.w,
               mainAxisSpacing: widget.mainAxisSpacing.w,
               builderDelegate: PagedChildBuilderDelegate<T>(
-                noItemsFoundIndicatorBuilder: (context) =>
-                    const PageEmptyDataView(),
+                noItemsFoundIndicatorBuilder: (context) => const PageEmptyDataView(),
                 noMoreItemsIndicatorBuilder: (context) =>
                     widget.noMoreItemsIndicator ??
                     DataStatusText(
                       text: 'wydx'.tr(context: context),
                     ),
-                firstPageProgressIndicatorBuilder: (context) =>
-                    const LoadingView(),
-                firstPageErrorIndicatorBuilder: (context) =>
-                    NetworkErrorView(onTap: _onRefresh),
+                firstPageProgressIndicatorBuilder: (context) => const LoadingView(),
+                firstPageErrorIndicatorBuilder: (context) => NetworkErrorView(onTap: _onRefresh),
                 newPageErrorIndicatorBuilder: (context) => DataStatusText(
                   text: 'djjz'.tr(context: context),
                   onTap: pagingController.retryLastFailedRequest,
                 ),
                 newPageProgressIndicatorBuilder: (context) =>
-                    (widget.isNeedMore ?? false)
-                        ? const MoreLoading()
-                        : Container(),
+                    (widget.isNeedMore ?? false) ? const MoreLoading() : Container(),
                 itemBuilder: widget.itemBuilder,
               ),
             ),
@@ -293,25 +286,20 @@ class MyListViewState<T> extends State<MyListView<T>> {
             mainAxisSpacing: widget.mainAxisSpacing.w,
             shrinkWrap: true,
             builderDelegate: PagedChildBuilderDelegate<T>(
-              noItemsFoundIndicatorBuilder: (context) =>
-                  const PageEmptyDataView(),
+              noItemsFoundIndicatorBuilder: (context) => const PageEmptyDataView(),
               noMoreItemsIndicatorBuilder: (context) =>
                   widget.noMoreItemsIndicator ??
                   DataStatusText(
                     text: 'wydx'.tr(context: context),
                   ),
-              firstPageProgressIndicatorBuilder: (context) =>
-                  const LoadingView(),
-              firstPageErrorIndicatorBuilder: (context) =>
-                  NetworkErrorView(onTap: _onRefresh),
+              firstPageProgressIndicatorBuilder: (context) => const LoadingView(),
+              firstPageErrorIndicatorBuilder: (context) => NetworkErrorView(onTap: _onRefresh),
               newPageErrorIndicatorBuilder: (context) => DataStatusText(
                 text: 'djjz'.tr(context: context),
                 onTap: pagingController.retryLastFailedRequest,
               ),
               newPageProgressIndicatorBuilder: (context) =>
-                  (widget.isNeedMore ?? false)
-                      ? const MoreLoading()
-                      : Container(),
+                  (widget.isNeedMore ?? false) ? const MoreLoading() : Container(),
               itemBuilder: widget.itemBuilder,
             ),
           ));
@@ -370,8 +358,7 @@ class MyIndicator extends StatefulWidget {
 }
 
 class _MyIndicatorState extends State<MyIndicator> {
-  Widget _buildIndicatorForRefreshState(
-      RefreshIndicatorMode refreshState, double percentageComplete) {
+  Widget _buildIndicatorForRefreshState(RefreshIndicatorMode refreshState, double percentageComplete) {
     final scale = percentageComplete * 0.6;
     switch (refreshState) {
       case RefreshIndicatorMode.drag:
@@ -412,8 +399,7 @@ class _MyIndicatorState extends State<MyIndicator> {
         double refreshTriggerPullDistance,
         double refreshIndicatorExtent,
       ) {
-        final double percentageComplete =
-            clampDouble(pulledExtent / refreshTriggerPullDistance, 0.0, 1.0);
+        final double percentageComplete = clampDouble(pulledExtent / refreshTriggerPullDistance, 0.0, 1.0);
 
         return Padding(
           padding: const EdgeInsets.only(top: 10),
@@ -474,5 +460,31 @@ class MoreLoading extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final Widget child;
+  final double height;
+
+  StickyHeaderDelegate({
+    required this.child,
+    this.height = 50,
+  });
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return child;
+  }
+
+  @override
+  double get maxExtent => height;
+
+  @override
+  double get minExtent => height;
+
+  @override
+  bool shouldRebuild(covariant StickyHeaderDelegate oldDelegate) {
+    return oldDelegate.child != child || oldDelegate.height != height;
   }
 }

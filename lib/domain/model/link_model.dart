@@ -59,6 +59,7 @@ class LinkModel {
         redirectType: json['redirect_type'] ?? 0,
         name: json['name'] ?? '',
         type: json['type'] ?? 0,
+        // type: json['name'] == '原创' ? 4 : json['type'] ?? 0,
         desc: json['desc'] ?? '',
         sort: json['sort'] ?? 0,
         createdAt: json['created_at'] ?? '',

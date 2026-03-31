@@ -55,7 +55,6 @@ class _XiaoLanTopNaviViewState extends State<XiaoLanTopNaviView> with TickerProv
     });
     final result =
         await _appDomain.getConstructByApiLink(apiLink: CrackAppType.xiaolan.topNavApi, params: {'id': widget.id});
-
     if (result.status == 1) {
       final data = result['data'];
       if (data case final List data when data.isNotEmpty) {
@@ -88,15 +87,16 @@ class _XiaoLanTopNaviViewState extends State<XiaoLanTopNaviView> with TickerProv
                       child: TabBarWithView.line(
                         tabController: _tabController,
                         initialIndex: _initialIndex,
-                        tabBarHeight: 27.h,
-                        tabBarPadding: EdgeInsets.only(top: 11.w),
+                        tabBarHeight: 54.w,
+                        tabBarPadding: EdgeInsets.only(top: 0.w),
                         tabItemBuilder: (context, index, isSelected, child) {
                           return Stack(
+                            clipBehavior: Clip.none,
                             children: [
                               if (isSelected)
                                 Positioned(
-                                    top: 0,
-                                    right: 0,
+                                    top: 10.w,
+                                    right: -5.w,
                                     child: Image.asset('assets/images/xiaolan_tab_icon.png',
                                         width: 18.w, fit: BoxFit.cover)),
                               child
@@ -125,7 +125,6 @@ class _XiaoLanTopNaviViewState extends State<XiaoLanTopNaviView> with TickerProv
                               },
                             ),
                           );
-
                         }).toList(),
                       ),
                     );

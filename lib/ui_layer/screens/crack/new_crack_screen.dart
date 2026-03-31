@@ -169,13 +169,13 @@ class _NewCrackScreenState extends State<NewCrackScreen> {
                             (index) => (BuildContext _) {
                               final crackApp_ = data[index];
                               // 根据类型动态返回对应页面
-                              return XiaoLanCommunityScreen(
-                                id: 1,
-                                crackApp: crackApp_,
-                                openEndDrawer: () {
-                                  Scaffold.of(scaffoldContext).openEndDrawer();
-                                },
-                              );
+                              // return XiaoLanCommunityScreen(
+                              //   id: 1,
+                              //   crackApp: crackApp_,
+                              //   openEndDrawer: () {
+                              //     Scaffold.of(scaffoldContext).openEndDrawer();
+                              //   },
+                              // );
 
                               Widget page;
                               if (crackApp_.appName == CrackAppType.clsq.appName) {

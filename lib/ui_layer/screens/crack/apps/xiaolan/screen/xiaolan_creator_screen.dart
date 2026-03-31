@@ -168,7 +168,7 @@ class _XiaolanCreatorScreenState extends State<XiaolanCreatorScreen> with Ticker
                             ),
                             titles: ((data['list'] ?? []) as List).map((e) => "${e['name']}").toList(),
                             views: ((data['list'] ?? []) as List).asMap().entries.map((e) {
-                              return _buildFilterView(data, e.value);
+                              return _buildFilterView(data, e.value, e.key);
                               // if (e.key > 0) return _buildFilterView();
                               // return Padding(padding: EdgeInsets.symmetric(horizontal: 12.5.w), child: _buildView());
                             }).toList(),
@@ -190,7 +190,7 @@ class _XiaolanCreatorScreenState extends State<XiaolanCreatorScreen> with Ticker
     );
   }
 
-  Widget _buildFilterView(dynamic data, dynamic type) {
+  Widget _buildFilterView(dynamic data, dynamic type, int typeIndex) {
     return NotificationListener<ScrollNotification>(
         onNotification: (ScrollNotification notification) {
           if (!_nestedController.hasClients) return false;
@@ -223,67 +223,77 @@ class _XiaolanCreatorScreenState extends State<XiaolanCreatorScreen> with Ticker
             body: LayoutBuilder(builder: (context, constraints) {
               return SizedBox(
                 height: constraints.maxHeight, // 使用父级约束的高度
-                child: TabBarWithView.line(
-                  isCenter: true,
-                  linearColors: [Colors.transparent, Colors.transparent],
-                  labelPadding: 0,
-                  tabPadding: EdgeInsets.zero,
-                  tabBuilder: (context, tab) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Color(0x33D9D9D9),
-                            borderRadius: BorderRadius.circular(32.w),
-                          ),
-                          child: tab,
-                        )
-                      ],
-                    );
-                  },
-                  tabItemBuilder: (context, index, isSelected, child) {
-                    return Container(
-                      width: 80.w,
-                      height: 32.w,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          colors: isSelected == true
-                              ? [
-                                  Color(0xFFCB4AED),
-                                  Color(0xFF5D3EF9),
-                                ]
-                              : [Colors.transparent, Colors.transparent],
-                        ),
-                        borderRadius: BorderRadius.circular(
-                          !isSelected && index == 1 ? 0 : 32.w,
-                        ),
+                child: typeIndex == 0
+                    ? _buildView(type, type['params'], typeIndex)
+                    : TabBarWithView.line(
+                        isCenter: true,
+                        linearColors: [Colors.transparent, Colors.transparent],
+                        labelPadding: 0,
+                        tabPadding: EdgeInsets.zero,
+                        tabBuilder: (context, tab) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Color(0x33D9D9D9),
+                                  borderRadius: BorderRadius.circular(32.w),
+                                ),
+                                child: tab,
+                              )
+                            ],
+                          );
+                        },
+                        tabItemBuilder: (context, index, isSelected, child) {
+                          return Container(
+                            width: 80.w,
+                            height: 32.w,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: isSelected == true
+                                    ? [
+                                        Color(0xFFCB4AED),
+                                        Color(0xFF5D3EF9),
+                                      ]
+                                    : [Colors.transparent, Colors.transparent],
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                !isSelected && index == 1 ? 0 : 32.w,
+                              ),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              subTitles[index],
+                              style: TextStyle(color: Colors.white, fontSize: 15.sp),
+                            ),
+                          );
+                        },
+                        titles: ((data['time_conf'] ?? []) as List).map((e) => "${e['name']}").toList(),
+                        views: ((data['time_conf'] ?? []) as List).asMap().entries.map((e) {
+                          return _buildView(type,{
+                            'type':e.value["param"]
+                          }, typeIndex);
+                          // return Padding(padding: EdgeInsets.symmetric(horizontal: 12.5.w), child: _buildView());
+                        }).toList(),
                       ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        subTitles[index],
-                        style: TextStyle(color: Colors.white, fontSize: 15.sp),
-                      ),
-                    );
-                  },
-                  titles: ((data['time_conf'] ?? []) as List).map((e) => "${e['name']}").toList(),
-                  views: ((data['time_conf'] ?? []) as List).map((e) {
-                    return LayoutBuilder(builder: (context, constraints) {
-                      return SizedBox(
-                          height: constraints.maxHeight, // 使用父级约束的高度
-                          child: XiaolanCreatorSubView(
-                            type: type,
-                            filter: e,
-                            bannersNotifier: bannersNotifier,
-                          ));
-                    });
-                    // return Padding(padding: EdgeInsets.symmetric(horizontal: 12.5.w), child: _buildView());
-                  }).toList(),
-                ),
               );
             })));
+  }
+
+  Widget _buildView(dynamic type, dynamic filter, int typeIndex) {
+    return LayoutBuilder(builder: (context, constraints) {
+      return SizedBox(
+          height: constraints.maxHeight, // 使用父级约束的高度
+          child: XiaolanCreatorSubView(
+            type: type,
+            filter: filter,
+            typeIndex: typeIndex,
+            bannersNotifier: bannersNotifier,
+          ));
+    });
+    ;
   }
 }
