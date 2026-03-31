@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../../../../../../domain/async_value.dart';
 import '../../../../../../domain/domain.dart';
 import '../../../../../../domain/model/feed/feed_model.dart';
+import '../../../../../router/routes.dart';
 import '../../../../../utils/my_toast.dart';
 import '../../../../common_widgets/my_app_bar.dart';
 import '../../../../common_widgets/screen_background.dart';
@@ -155,7 +156,9 @@ class _XiaolanDailyScreenState extends State<XiaolanDailyScreen> {
                       crossAxisSpacing: 8.w,
                       childAspectRatio: 344 / 240,
                       itemBuilder: (context, item, index) =>
-                          XiaoLanItem.build(XiaoLanItemType.video, item, onTap: () {}),
+                          XiaoLanItem.build(XiaoLanItemType.video, item, onTap: () {
+                            XiaolanVideoDetailRoute(id: item['id']).push(context);
+                          }),
                       onFetchingMore: (currentPage, pageSize) {
                         final res = _getData(page: currentPage, pageSize: pageSize);
                         return res;

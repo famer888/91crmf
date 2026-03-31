@@ -7,7 +7,7 @@ enum CrackAppType {
   zpc(type: 27, appName: 'zpc', topNavApi: 'elementzpc/getElementById'),
   pzhan(type: 29, appName: 'pzhan', topNavApi: 'navigationpzhan/index'),
   gd(type: 30, appName: 'gd', topNavApi: 'elementgd/getElementById'),
-  xiaolan(type: 31, appName: 'xiaolan', topNavApi: 'tabnewxiaolan/index'),
+  xiaolan(type: 31, appName: 'bluemv', topNavApi: 'tabnewxiaolan/index'),
   hjsq(type: 32, appName: 'hjsq', topNavApi: 'elementhjsq/getElementById'),
   tiktok51(type: 33, appName: '51tikok', topNavApi: 'navigation51tikok/index'),
   ;
