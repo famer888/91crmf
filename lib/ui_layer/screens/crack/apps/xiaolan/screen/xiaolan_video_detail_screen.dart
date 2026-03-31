@@ -267,6 +267,8 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
                     children: tags.map((tag) {
                       return ReportGestureDetector(
                         onTap: () {
+                          XiaolanCategoryOrTagDetailRoute(id: 0, title: tag, type: 'tag', has_sort: "1")
+                              .push(context);
                           // XiaolanTagRoute(tag: tag).push(context)
                           // context.push('/xiaolanCategoryOrTagDetail/$id/${type}/${hasSort ? "1" : "0"}/${Uri.encodeComponent(title)}');
                         },

@@ -132,7 +132,7 @@ class _XiaolanDiscoverScreenState extends State<XiaolanDiscoverScreen> {
                               id: item['id'],
                               type: widget.type,
                               title: item['name'] ?? item['title'] ?? '',
-                              has_sort: item['has_sort'])
+                              has_sort: item['has_sort']??'1')
                           .push(context);
                     }),
                     onFetchingMore: (currentPage, pageSize) {

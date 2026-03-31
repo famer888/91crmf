@@ -359,23 +359,26 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
                     ),
                     persistentHeader: StickyHeaderDelegate(
                       height: 30.w,
-                      child: TabBarWithView.line(
-                        tabBarPadding: EdgeInsets.symmetric(horizontal: 5.w),
-                        tabController: _tabController,
-                        initialIndex: initialIndex,
-                        tabBarHeight: 30.w,
-                        linearColors: [Colors.transparent, Colors.transparent],
-                        labelStyle:
-                            TextStyle(color: const Color(0xFF333333), fontSize: 16.sp, fontWeight: FontWeight.w600),
-                        unselectedLabelStyle: TextStyle(
-                          color: const Color(0xFF646C85),
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w400,
+                      child: Container(
+                        color: Colors.white,
+                        child: TabBarWithView.line(
+                          tabBarPadding: EdgeInsets.symmetric(horizontal: 5.w),
+                          tabController: _tabController,
+                          initialIndex: initialIndex,
+                          tabBarHeight: 30.w,
+                          linearColors: [Colors.transparent, Colors.transparent],
+                          labelStyle:
+                              TextStyle(color: const Color(0xFF333333), fontSize: 16.sp, fontWeight: FontWeight.w600),
+                          unselectedLabelStyle: TextStyle(
+                            color: const Color(0xFF646C85),
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          titles: titles,
+                          views: titles.map((e) {
+                            return SizedBox.shrink();
+                          }).toList(),
                         ),
-                        titles: titles,
-                        views: titles.map((e) {
-                          return SizedBox.shrink();
-                        }).toList(),
                       ),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),

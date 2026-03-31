@@ -58,10 +58,16 @@ class _XiaolanCategoryOrTagDetailScreenState extends State<XiaolanCategoryOrTagD
     final param = Map.from({
       'page': page,
       'limit': pageSize,
-      'sort': sort,
-      'construct_id': widget.id,
-      'tag': widget.id,
+
     });
+    if(widget.hasSort) {
+      param['sort'] = sort;
+    }
+    if(widget.type=='tag') {
+      param['tag'] = widget.title;
+    } else {
+      param['construct_id'] = widget.id;
+    }
 
     final result = await _appDomain.getConstructByApiLink(
       apiLink: widget.type == 'tag' ? "/api/tabnewxiaolan/listOfTag" : "/api/tabnewxiaolan/list_tab_mv",

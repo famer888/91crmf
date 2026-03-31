@@ -77,7 +77,7 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
   }
 
   void _openCategoryDetail(int id, String title, String type, {bool hasSort = true}) {
-    if (widget.model['type'] == 5) {
+    if (!(widget.model is List) && widget.model['type'] == 5) {
       _openDaily();
       return;
     }
@@ -155,7 +155,11 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
             ),
             SizedBox(
               height: 218.h,
-              child: (items.length > 0) ? XiaoLanItem.build(XiaoLanItemType.video, items[0]) : null,
+              child: (items.length > 0)
+                  ? XiaoLanItem.build(XiaoLanItemType.video, items[0], onTap: () {
+                      XiaolanVideoDetailRoute(id: items[0]['id']).push(context);
+                    })
+                  : null,
             ),
             SizedBox(height: 14.5.h),
             SizedBox(
