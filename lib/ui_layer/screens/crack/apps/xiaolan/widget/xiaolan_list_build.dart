@@ -150,43 +150,44 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
                   _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
                       hasSort: "${widget.model['has_tab']}" == "1");
                 }),
-            SizedBox(
-              height: 10.w,
-            ),
-            SizedBox(
-              height: 218.h,
-              child: (items.length > 0)
-                  ? XiaoLanItem.build(XiaoLanItemType.video, items[0], onTap: () {
-                      XiaolanVideoDetailRoute(id: items[0]['id']).push(context);
-                    })
-                  : null,
-            ),
-            SizedBox(height: 14.5.h),
-            SizedBox(
-              height: 84.h,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, _index) {
-                  int index = _index;
-                  if (index >= items.length - 1) {
-                    return Container(
+            if ((widget.model['list'] as List).length > 0) ...[
+              SizedBox(
+                height: 10.w,
+              ),
+              (items.length > 0)
+                  ? SizedBox(
+                      height: 218.h,
+                      child: XiaoLanItem.build(XiaoLanItemType.video, items[0], onTap: () {
+                        XiaolanVideoDetailRoute(id: items[0]['id']).push(context);
+                      }))
+                  : SizedBox.shrink(),
+              SizedBox(height: 14.5.h),
+              SizedBox(
+                height: 84.h,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, _index) {
+                    int index = _index;
+                    if (index >= items.length - 1) {
+                      return Container(
+                        width: 145.w,
+                        height: 99.5.h,
+                        color: Colors.black.withValues(alpha: .5),
+                      );
+                    }
+                    return SizedBox(
                       width: 145.w,
                       height: 99.5.h,
-                      color: Colors.black.withValues(alpha: .5),
+                      child: XiaoLanItem.build(XiaoLanItemType.video, items[index + 1], onTap: () {
+                        XiaolanVideoDetailRoute(id: items[index + 1]['id']).push(context);
+                      }),
                     );
-                  }
-                  return SizedBox(
-                    width: 145.w,
-                    height: 99.5.h,
-                    child: XiaoLanItem.build(XiaoLanItemType.video, items[index + 1], onTap: () {
-                      XiaolanVideoDetailRoute(id: items[index + 1]['id']).push(context);
-                    }),
-                  );
-                },
-                separatorBuilder: (context, index) => SizedBox(width: 8.w),
-                itemCount: items.length - 1 < 0 ? 0 : items.length - 1,
+                  },
+                  separatorBuilder: (context, index) => SizedBox(width: 8.w),
+                  itemCount: items.length - 1 < 0 ? 0 : items.length - 1,
+                ),
               ),
-            ),
+            ],
             SizedBox(
               height: 14.h,
             ),
@@ -208,23 +209,25 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
                   _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
                       hasSort: "${widget.model['has_tab']}" == "1");
                 }),
-            SizedBox(
-              height: 10.w,
-            ),
-            SizedBox(
-              height: 208.5.h,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => SizedBox(
-                    height: 208.5.h,
-                    width: 318.w,
-                    child: XiaoLanItem.build(XiaoLanItemType.video, items[index], onTap: () {
-                      XiaolanVideoDetailRoute(id: items[index]['id']).push(context);
-                    })),
-                separatorBuilder: (context, index) => SizedBox(width: 8.w),
-                itemCount: items.length,
+            if ((widget.model['list'] as List).length > 0) ...[
+              SizedBox(
+                height: 10.w,
               ),
-            ),
+              SizedBox(
+                height: 208.5.h,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) => SizedBox(
+                      height: 208.5.h,
+                      width: 318.w,
+                      child: XiaoLanItem.build(XiaoLanItemType.video, items[index], onTap: () {
+                        XiaolanVideoDetailRoute(id: items[index]['id']).push(context);
+                      })),
+                  separatorBuilder: (context, index) => SizedBox(width: 8.w),
+                  itemCount: items.length,
+                ),
+              ),
+            ],
             SizedBox(
               height: 14.h,
             ),
@@ -242,7 +245,6 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
                 name: widget.model["title"],
                 subName: widget.model["sub_title"],
                 onTap: () {
-                  // _openDiscover('tag');
                   _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
                       hasSort: "${widget.model['has_tab']}" == "1");
                 }),
@@ -283,6 +285,7 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
         );
       case XiaoLanListBuildType.oneBigFourGrid:
         List items = widget.model['list'] ?? [];
+
         return Column(
           children: [
             _buildHead(
@@ -293,92 +296,93 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
                   _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
                       hasSort: "${widget.model['has_tab']}" == "1");
                 }),
-            SizedBox(
-              height: 10.w,
-            ),
-            SizedBox(
-              height: 218.h,
-              child: (items.length > 0)
-                  ? XiaoLanItem.build(XiaoLanItemType.video, items[0], onTap: () {
-                      XiaolanVideoDetailRoute(id: items[0]['id']).push(context);
-                    })
-                  : null,
-            ),
-            SizedBox(height: 8.h),
-            GridView.builder(
-              itemCount: min(4, (widget.model['list'] as List).length - 1),
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 8.h,
-                crossAxisSpacing: 8.w,
-                childAspectRatio: 1.6,
+            if ((widget.model['list'] as List).length > 0) ...[
+              SizedBox(
+                height: 10.w,
               ),
-              itemBuilder: (context, _index) {
-                int index = _index + 1;
-                if (widget.model['list'] is List && index < widget.model['list'].length) {
-                  dynamic item = widget.model['list'][index];
-                  return XiaoLanItem.build(XiaoLanItemType.video, item, onTap: () {
-                    XiaolanVideoDetailRoute(id: item['id']).push(context);
-                  });
-                }
-                return Container(
-                  color: Colors.black.withValues(alpha: .5),
-                );
-              },
-            ),
-            _buildHandle(onMoreTap: () {
-              _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
-                  hasSort: "${widget.model['has_tab']}" == "1");
-            })
+              (items.length > 0)
+                  ? SizedBox(
+                      height: 218.h,
+                      child: XiaoLanItem.build(XiaoLanItemType.video, items[0], onTap: () {
+                        XiaolanVideoDetailRoute(id: items[0]['id']).push(context);
+                      }))
+                  : SizedBox.shrink(),
+              SizedBox(height: 8.h),
+              if ((widget.model['list'] as List).length > 4)
+                GridView.builder(
+                  itemCount: min(4, (widget.model['list'] as List).length - 1),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 8.h,
+                    crossAxisSpacing: 8.w,
+                    childAspectRatio: 1.6,
+                  ),
+                  itemBuilder: (context, _index) {
+                    int index = _index + 1;
+                    if (widget.model['list'] is List && index < widget.model['list'].length) {
+                      dynamic item = widget.model['list'][index];
+                      return XiaoLanItem.build(XiaoLanItemType.video, item, onTap: () {
+                        XiaolanVideoDetailRoute(id: item['id']).push(context);
+                      });
+                    }
+                    return Container(
+                      color: Colors.black.withValues(alpha: .5),
+                    );
+                  },
+                ),
+              _buildHandle(onMoreTap: () {
+                _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
+                    hasSort: "${widget.model['has_tab']}" == "1");
+              })
+            ]
           ],
         );
       case XiaoLanListBuildType.creator:
         return Column(
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
+            GestureDetector(
+                onTap: () {
+                  _openCreator();
+                },
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      height: 15.w,
-                      width: 15.w,
-                      child: MyImage.network(
-                        widget.model['icon'],
-                        width: 15.w,
-                        height: 15.w,
-                        fit: BoxFit.cover,
-                      ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 15.w,
+                          width: 15.w,
+                          child: MyImage.network(
+                            widget.model['icon'],
+                            width: 15.w,
+                            height: 15.w,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        Text(
+                          "${widget.model['name']}",
+                          style: TextStyle(color: Color(0xFF333333), fontSize: 20.sp, fontWeight: FontWeight.w600),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      width: 5.w,
-                    ),
-                    Text(
-                      "${widget.model['name']}",
-                      style: TextStyle(color: Color(0xFF333333), fontSize: 20.sp, fontWeight: FontWeight.w600),
+                    Spacer(),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "assets/images/app_issue_arrow.png",
+                          color: Color(0xFF666666),
+                          width: 5.w,
+                        ),
+                      ],
                     ),
                   ],
-                ),
-                Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    _openCreator();
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        "assets/images/app_issue_arrow.png",
-                        color: Color(0xFF666666),
-                        width: 5.w,
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+                )),
             SizedBox(
               height: 12.h,
             ),
@@ -391,7 +395,7 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
                   dynamic user = widget.model['item'][index];
                   return GestureDetector(
                     onTap: () {
-                      XiaolanUserWorksRoute(userName: user['nickname'], id: "${user['id']}").push(context);
+                      XiaolanUserWorksRoute(userName: user['nickname'], id: "${user['uid']}").push(context);
                     },
                     child: Column(
                       children: [
@@ -421,31 +425,30 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
       case XiaoLanListBuildType.userScroll:
         return Column(
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 38.w,
-                  height: 38.h,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFD9D9D9),
-                    shape: BoxShape.circle,
+            GestureDetector(
+              onTap: () {
+                XiaolanUserWorksRoute(userName: widget.model['nickname'], id: "${widget.model['aff']}").push(context);
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 38.w,
+                    height: 38.h,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFD9D9D9),
+                      shape: BoxShape.circle,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 9.5.w,
-                ),
-                Text(
-                  "${widget.model['nickname']}",
-                  style: TextStyle(color: Color(0xFF333333), fontSize: 20.sp),
-                ),
-                Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    XiaolanUserWorksRoute(userName: widget.model['nickname'], id: "${widget.model['id']}")
-                        .push(context);
-                  },
-                  child: Row(
+                  SizedBox(
+                    width: 9.5.w,
+                  ),
+                  Text(
+                    "${widget.model['nickname']}",
+                    style: TextStyle(color: Color(0xFF333333), fontSize: 20.sp),
+                  ),
+                  Spacer(),
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.asset(
@@ -454,9 +457,9 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
                         width: 5.w,
                       ),
                     ],
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
             SizedBox(
               height: 12.h,

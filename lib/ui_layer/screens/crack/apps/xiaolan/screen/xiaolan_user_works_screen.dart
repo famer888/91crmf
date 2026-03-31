@@ -48,7 +48,7 @@ class _XiaolanUserWorksScreenState extends State<XiaolanUserWorksScreen> {
     bool isInit = false;
 
     final result = await _appDomain.getConstructByApiLink(apiLink: "/api/usersxiaolan/videos", params: {
-      "user_id": widget.userId,
+      "uid": widget.userId,
       "page": page,
       "limit": pageSize,
     });

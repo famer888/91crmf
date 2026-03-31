@@ -61,12 +61,11 @@ class _XiaolanCreatorSubViewState extends State<XiaolanCreatorSubView> with Tick
       _asyncValue = const AsyncLoading();
     });
 
-    final result = await _appDomain
-        .getConstructByApiLink(apiLink: widget.type['api'], params: widget.filter);
+    final result = await _appDomain.getConstructByApiLink(apiLink: widget.type['api'], params: widget.filter);
 
     if (result.status == 1) {
       List data = result.data as List;
-      if (data.isEmpty) data = [{}, {}, {}];
+      if (data.isEmpty) data = [];
       _asyncValue = AsyncData(data);
     } else {
       _asyncValue = const AsyncError();
@@ -82,13 +81,14 @@ class _XiaolanCreatorSubViewState extends State<XiaolanCreatorSubView> with Tick
     return Scaffold(
       body: _asyncValue.maybeWhen(
         data: (data) {
-          if (data.isEmpty)
+          if (data.isEmpty) {
             return Center(
               child: Text(
                 "暂无数据",
-                style: TextStyle(color: Colors.white, fontSize: 15.sp),
+                style: TextStyle(color: Colors.white.withValues(alpha: .6), fontSize: 15.sp),
               ),
             );
+          }
           return SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 12.5.w),
             child: Column(
@@ -98,16 +98,17 @@ class _XiaolanCreatorSubViewState extends State<XiaolanCreatorSubView> with Tick
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(child: _buildTop3Item(data.length > 1 ? data[1] : {}, 1)),
+                    Expanded(child: data.length > 1 ? _buildTop3Item(data[1], 1) : SizedBox.shrink()),
                     SizedBox(
                       width: 4.w,
                     ),
-                    Expanded(child: _buildTop3Item(data.length > 0 ? data[0] : {}, 0)),
+                    Expanded(child: data.length > 0 ? _buildTop3Item(data[0], 0) : SizedBox.shrink()),
                     SizedBox(
                       width: 4.w,
                     ),
-                    Expanded(child: _buildTop3Item(data.length > 2 ? data[2] : {}, 2)),
+                    Expanded(child: data.length > 2 ? _buildTop3Item(data[2], 2) : SizedBox.shrink()),
                   ],
                 ),
                 SizedBox(
@@ -170,7 +171,7 @@ class _XiaolanCreatorSubViewState extends State<XiaolanCreatorSubView> with Tick
     );
   }
 
-  Widget _buildUser(dynamic user,{bool vertical = true}) {
+  Widget _buildUser(dynamic user, {bool vertical = true}) {
     double avatarSize = vertical ? 65.w : 44.w;
     List<Widget> widgets = [
       Container(
@@ -199,11 +200,11 @@ class _XiaolanCreatorSubViewState extends State<XiaolanCreatorSubView> with Tick
             style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.w400),
           ),
           Text(
-            "${["作品数","点赞数","作品数","收益数"][widget.typeIndex]}：${[
-              CommonUtils.renderEnFixedNumber(user['videos_count']??0),
-              CommonUtils.renderEnFixedNumber(user['likes_count']??0),
-              CommonUtils.renderEnFixedNumber(user['videos_count']??0),
-              CommonUtils.renderEnFixedNumber(user['votes']??0),
+            "${["作品数", "点赞数", "作品数", "收益数"][widget.typeIndex]}: ${[
+              CommonUtils.renderEnFixedNumber(user['videos_count'] ?? 0),
+              CommonUtils.renderEnFixedNumber(user['likes_count'] ?? 0),
+              CommonUtils.renderEnFixedNumber(user['videos_count'] ?? 0),
+              CommonUtils.renderEnFixedNumber(user['votes'] ?? 0),
             ][widget.typeIndex]}",
             style: TextStyle(color: Color(0x66E4E4E4), fontSize: 12.sp, fontWeight: FontWeight.w400),
           ),
@@ -222,7 +223,7 @@ class _XiaolanCreatorSubViewState extends State<XiaolanCreatorSubView> with Tick
     }
     return GestureDetector(
       onTap: () {
-        XiaolanUserWorksRoute(id: user["id"] ?? "", userName: user["nickname"] ?? "").push(context);
+        XiaolanUserWorksRoute(id: "${user["aff"]}" ?? "", userName: user["nickname"] ?? "").push(context);
       },
       child: content,
     );
