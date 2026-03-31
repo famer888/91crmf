@@ -107,7 +107,7 @@ class _XiaolanCategoryOrTagDetailScreenState extends State<XiaolanCategoryOrTagD
                     ? TabBarWithView.line(
                         tabController: _tabController,
                         initialIndex: _initialIndex,
-                        tabBarHeight: 27.h,
+                        tabBarHeight: 30.h,
                         tabBarPadding: EdgeInsets.only(top: 11.w),
                         linearColors: [Colors.transparent, Colors.transparent],
                         labelStyle:
