@@ -458,6 +458,13 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      Text(
+                        "查看更多",
+                        style: TextStyle(color: Color(0xFF666666), fontSize: 12.sp, fontWeight: FontWeight.w400),
+                      ),
+                      SizedBox(
+                        width: 4.w,
+                      ),
                       Image.asset(
                         "assets/images/app_issue_arrow.png",
                         color: Color(0xFF666666),
