@@ -43,61 +43,58 @@ class _XiaoLanCommunityScreenState extends State<XiaoLanCommunityScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if(AppGlobal.context==null){
+    if (AppGlobal.context == null) {
       AppGlobal.context = context;
     }
     return Stack(
       fit: StackFit.expand,
       children: [
         ScreenBackground(
-          child: Selector<UnlockStatusNotifier, bool>(
-              selector: (_, notifier) => notifier.isUnlockClsq,
-              builder: (context, isUnlockClsq, child) {
-                return Container(
-                  color: Colors.white,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                          left: 0,
-                          right: 0,
-                          top: 0,
-                          child: Image.asset(
-                              'assets/images/xiaolan_top_navi_bg.png',
-                              width: double.infinity,
-                              fit: BoxFit.cover)),
-                      Scaffold(
-                        backgroundColor: Colors.transparent,
-                        appBar: SearchAppBar(
-                          appBarBackGroundColor: Color(0xFF130108),
-                          marginChangeToPadding: true,
-                          isCrackApp: true,
-                          showLeftBack: false,
-                          type: CrackAppType.xiaolan,
-                          openEndDrawer: widget.openEndDrawer,
-                          showMoreButton: widget.showMoreButton,
-                          onTap: () {
-                            if (isUnlockClsq) {
-                              context.push(AppRouterPaths.xiaolanSearch);
-                            } else {
-                              if (widget.crackApp == null) return;
-                              // 解锁弹窗
-                              AppUtil.checkUnlockStatus(
-                                context: context,
-                                crackApp: widget.crackApp!,
-                                userNotifier: _userNotifier,
-                                unlockStatusNotifier: _unlockStatusNotifier,
-                                userDomain: _userDomain,
-                              );
-                            }
-                          },
-                        ),
-                        body: XiaoLanTopNaviView(
-                            id: widget.id, crackApp: widget.crackApp),
-                      )
-                    ],
-                  ),
-                );
-              }),
+          child: Selector<UnlockStatusNotifier, bool>(selector: (_, notifier) {
+            return notifier.isUnlockXiaolan;
+          }, builder: (context, isUnlockXiaolan, child) {
+            return Container(
+              color: Colors.white,
+              child: Stack(
+                children: [
+                  Positioned(
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      child: Image.asset('assets/images/xiaolan_top_navi_bg.png',
+                          width: double.infinity, fit: BoxFit.cover)),
+                  Scaffold(
+                    backgroundColor: Colors.transparent,
+                    appBar: SearchAppBar(
+                      appBarBackGroundColor: Color(0xFF130108),
+                      marginChangeToPadding: true,
+                      isCrackApp: true,
+                      showLeftBack: false,
+                      type: CrackAppType.xiaolan,
+                      openEndDrawer: widget.openEndDrawer,
+                      showMoreButton: widget.showMoreButton,
+                      onTap: () {
+                        if (isUnlockXiaolan) {
+                          context.push(AppRouterPaths.xiaolanSearch);
+                        } else {
+                          if (widget.crackApp == null) return;
+                          // 解锁弹窗
+                          AppUtil.checkUnlockStatus(
+                            context: context,
+                            crackApp: widget.crackApp!,
+                            userNotifier: _userNotifier,
+                            unlockStatusNotifier: _unlockStatusNotifier,
+                            userDomain: _userDomain,
+                          );
+                        }
+                      },
+                    ),
+                    body: XiaoLanTopNaviView(id: widget.id, crackApp: widget.crackApp),
+                  )
+                ],
+              ),
+            );
+          }),
         ),
         // const _BlurView(),
       ],

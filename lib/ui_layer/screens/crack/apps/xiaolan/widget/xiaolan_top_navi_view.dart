@@ -74,8 +74,8 @@ class _XiaoLanTopNaviViewState extends State<XiaoLanTopNaviView> with TickerProv
   @override
   Widget build(BuildContext context) {
     return Selector<UnlockStatusNotifier, bool>(
-        selector: (_, notifier) => notifier.isUnlockClsq,
-        builder: (context, isUnlockClsq, child) {
+        selector: (_, notifier) => notifier.isUnlockXiaolan,
+        builder: (context, isUnlockXiaolan, child) {
           return Stack(
             children: [
               _asyncValue.maybeWhen(
@@ -135,10 +135,10 @@ class _XiaoLanTopNaviViewState extends State<XiaoLanTopNaviView> with TickerProv
               ),
 
               /// ===== 蒙层（不穿透）=====
-              if (!isUnlockClsq && widget.crackApp != null)
+              if (!isUnlockXiaolan && widget.crackApp != null)
                 LockMask(
                     crackApp: widget.crackApp!,
-                    type: CrackAppType.clsq.type,
+                    type: CrackAppType.xiaolan.type,
                     onUnlock: () {
                       setState(() {});
                     })
