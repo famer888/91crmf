@@ -374,6 +374,13 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        Text(
+                          "查看更多",
+                          style: TextStyle(color: Color(0xFF666666), fontSize: 12.sp, fontWeight: FontWeight.w400),
+                        ),
+                        SizedBox(
+                          width: 4.w,
+                        ),
                         Image.asset(
                           "assets/images/app_issue_arrow.png",
                           color: Color(0xFF666666),
@@ -388,7 +395,7 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
             ),
             //   横向滚动
             SizedBox(
-              height: 56.h,
+              height: 50.h,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
@@ -401,7 +408,7 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
                       children: [
                         Container(
                             width: 38.w,
-                            height: 38.h,
+                            height: 38.w,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                             ),
