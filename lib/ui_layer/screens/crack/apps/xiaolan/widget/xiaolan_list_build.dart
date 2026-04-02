@@ -520,82 +520,87 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
   }
 
   Widget _buildHandle({Function? onMoreTap}) {
-    return Row(
+    return Column(
       children: [
-        Expanded(
-            child: GestureDetector(
-          onTap: () async {
-            if (_isRefreshing || widget.onRefresh == null) {
-              return;
-            }
-            _isRefreshing = true;
-            _refreshIconController.repeat();
-            try {
-              await widget.onRefresh!.call();
-            } finally {
-              _isRefreshing = false;
-              if (mounted) {
-                _refreshIconController
-                  ..stop()
-                  ..reset();
-              }
-            }
-          },
-          child: Container(
-            height: 39.h,
-            decoration: BoxDecoration(
-              color: Color(0xFFF3F8FF),
-              borderRadius: BorderRadius.circular(20.5.w),
+        SizedBox(height: 10.w,),
+        Row(
+          children: [
+            Expanded(
+                child: GestureDetector(
+                  onTap: () async {
+                    if (_isRefreshing || widget.onRefresh == null) {
+                      return;
+                    }
+                    _isRefreshing = true;
+                    _refreshIconController.repeat();
+                    try {
+                      await widget.onRefresh!.call();
+                    } finally {
+                      _isRefreshing = false;
+                      if (mounted) {
+                        _refreshIconController
+                          ..stop()
+                          ..reset();
+                      }
+                    }
+                  },
+                  child: Container(
+                    height: 39.h,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFF3F8FF),
+                      borderRadius: BorderRadius.circular(20.5.w),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        RotationTransition(
+                          turns: _refreshIconController,
+                          child: Image.asset("assets/images/xiaolan_icon_refresh.png", width: 16.w),
+                        ),
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        Text(
+                          "换一换",
+                          style: TextStyle(color: Color(0xFF333333), fontSize: 14.sp),
+                        )
+                      ],
+                    ),
+                  ),
+                )),
+            SizedBox(
+              width: 8.w,
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                RotationTransition(
-                  turns: _refreshIconController,
-                  child: Image.asset("assets/images/xiaolan_icon_refresh.png", width: 16.w),
-                ),
-                SizedBox(
-                  width: 5.w,
-                ),
-                Text(
-                  "换一换",
-                  style: TextStyle(color: Color(0xFF333333), fontSize: 14.sp),
-                )
-              ],
-            ),
-          ),
-        )),
-        SizedBox(
-          width: 8.w,
-        ),
-        Expanded(
-            child: GestureDetector(
-          onTap: () {
-            onMoreTap?.call();
-          },
-          child: Container(
-            height: 39.h,
-            decoration: BoxDecoration(
-              color: Color(0xFFF3F8FF),
-              borderRadius: BorderRadius.circular(20.5.w),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset("assets/images/xiaolan_icon_more_list.png", width: 16.w),
-                SizedBox(
-                  width: 5.w,
-                ),
-                Text(
-                  "查看更多",
-                  style: TextStyle(color: Color(0xFF333333), fontSize: 14.sp),
-                )
-              ],
-            ),
-          ),
-        )),
+            Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    onMoreTap?.call();
+                  },
+                  child: Container(
+                    height: 39.h,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFF3F8FF),
+                      borderRadius: BorderRadius.circular(20.5.w),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset("assets/images/xiaolan_icon_more_list.png", width: 16.w),
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        Text(
+                          "查看更多",
+                          style: TextStyle(color: Color(0xFF333333), fontSize: 14.sp),
+                        )
+                      ],
+                    ),
+                  ),
+                )),
+          ],
+        )
       ],
     );
   }
