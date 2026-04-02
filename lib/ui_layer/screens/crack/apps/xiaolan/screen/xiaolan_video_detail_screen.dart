@@ -17,6 +17,7 @@ import '../../../../../../domain/domain.dart';
 import '../../../../../../domain/model/banner_model.dart';
 import '../../../../../../domain/model/video_detail_model.dart';
 import '../../../../../../report/ui_layer/report_gesture_detector.dart';
+import '../../../widgets/scroll_top_button.dart';
 import '../widget/xiaolan_ads_header.dart';
 
 class XiaolanVideoDetailScreen extends StatefulWidget {
@@ -123,6 +124,17 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
     super.dispose();
   }
 
+  void _scrollToTop() {
+    if (!_nestedController.hasClients) return;
+
+    _showToTopBtn.value = false;
+    _nestedController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScreenBackground(
@@ -171,235 +183,265 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
           ),
         ),
         Expanded(
-            child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 15.w,
-              ),
-              Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 15.w),
-                  child: Row(
+            child: Stack(
+          children: [
+            NotificationListener<ScrollNotification>(
+                onNotification: (ScrollNotification notification) {
+                  if (!_nestedController.hasClients) return false;
+                  final pos = _nestedController.position;
+                  final viewportHeight = pos.viewportDimension * 0.4; // NestedScrollView可视高度
+                  final offset = pos.pixels;
+
+                  final overOnePage = offset >= viewportHeight;
+                  _showToTopBtn.value = overOnePage;
+                  return false;
+                },
+                child: SingleChildScrollView(
+                  controller: _nestedController,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Expanded(
-                          child: GestureDetector(
-                        onTap: () {
-                          XiaolanUserWorksRoute(
-                            id: "${detail['user']['uid']}",
-                            userName: detail['user']['nickname'],
-                          ).push(context);
-                        },
+                      SizedBox(
+                        height: 15.w,
+                      ),
+                      Container(
+                          color: Colors.white,
+                          padding: EdgeInsets.symmetric(horizontal: 15.w),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  child: GestureDetector(
+                                onTap: () {
+                                  XiaolanUserWorksRoute(
+                                    id: "${detail['user']['uid']}",
+                                    userName: detail['user']['nickname'],
+                                  ).push(context);
+                                },
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 50.w,
+                                      height: 50.w,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(25.w),
+                                      ),
+                                      child: MyImage.network(detail['user']['thumb'],
+                                          fit: BoxFit.cover,
+                                          borderRadius: 25.w,
+                                          backgroundColor: const Color(0xFFE6E6E6)),
+                                    ),
+                                    SizedBox(
+                                      width: 11.w,
+                                    ),
+                                    Expanded(
+                                        child: Text(
+                                      "${detail['user']['nickname']}",
+                                      style: TextStyle(
+                                          color: Color(0xFF151515), fontSize: 15.sp, fontWeight: FontWeight.w500),
+                                    ))
+                                  ],
+                                ),
+                              )),
+                              Spacer(),
+                              GestureDetector(
+                                onTap: () {
+                                  _onFollow(detail['user']);
+                                },
+                                child: Container(
+                                    height: 32.w,
+                                    width: 69.w,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF558AEF),
+                                      borderRadius: BorderRadius.circular(32.w),
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Text(detail['user']['is_follow'] == 1 ? "已关注" : "关注",
+                                        style: TextStyle(fontSize: 14.sp, color: Colors.white))),
+                              )
+                            ],
+                          )),
+                      SizedBox(
+                        height: 15.w,
+                      ),
+                      // 标题
+                      Container(
+                        color: Colors.white,
+                        padding: EdgeInsets.symmetric(horizontal: 15.w),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          title,
+                          textAlign: TextAlign.start,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            color: const Color(0xFF1A1A1A),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15.w,
+                      ),
+                      // 标签
+                      if (tags.isNotEmpty) ...[
+                        Container(
+                          color: Colors.white,
+                          width: double.infinity,
+                          padding: EdgeInsets.symmetric(horizontal: 15.w),
+                          child: Wrap(
+                            spacing: 8.w,
+                            runSpacing: 8.w,
+                            children: tags.map((tag) {
+                              return ReportGestureDetector(
+                                onTap: () {
+                                  XiaolanCategoryOrTagDetailRoute(id: 0, title: tag, type: 'tag', has_sort: "1")
+                                      .push(context);
+                                  // XiaolanTagRoute(tag: tag).push(context)
+                                  // context.push('/xiaolanCategoryOrTagDetail/$id/${type}/${hasSort ? "1" : "0"}/${Uri.encodeComponent(title)}');
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 1.w),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFF2F2F2),
+                                    borderRadius: BorderRadius.circular(5.w),
+                                  ),
+                                  child: Text(
+                                    '#$tag',
+                                    style: TextStyle(fontSize: 12.sp, color: const Color(0xFF666666)),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15.w,
+                        ),
+                      ],
+                      // 统计信息
+                      Container(
+                        color: Colors.white,
+                        padding: EdgeInsets.symmetric(horizontal: 15.w),
                         child: Row(
                           children: [
-                            Container(
-                              width: 50.w,
-                              height: 50.w,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25.w),
+                            Text("${CommonUtils.formatNumber(rating)}播放   ${detail['created_at']}",
+                                style: TextStyle(fontSize: 12.sp, color: const Color(0xFF666666))),
+                            const Spacer(),
+                            GestureDetector(
+                              onTap: _toggleLike,
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    _isLiked
+                                        ? "assets/images/app_short_like_h.png"
+                                        : "assets/images/xiaolan_icon_like.png",
+                                    width: 16.w,
+                                  ),
+                                  SizedBox(
+                                    width: 5.w,
+                                  ),
+                                  Text('${CommonUtils.formatNumber(_likeCount)}',
+                                      style: TextStyle(fontSize: 12.sp, color: const Color(0xFF666666))),
+                                ],
                               ),
-                              child: MyImage.network(detail['user']['thumb'],
-                                  fit: BoxFit.cover, borderRadius: 25.w, backgroundColor: const Color(0xFFE6E6E6)),
                             ),
-                            SizedBox(
-                              width: 11.w,
-                            ),
-                            Expanded(
-                                child: Text(
-                              "${detail['user']['nickname']}",
-                              style: TextStyle(color: Color(0xFF151515), fontSize: 15.sp, fontWeight: FontWeight.w500),
-                            ))
+                            SizedBox(width: 16.w),
+                            GestureDetector(
+                              onTap: () {
+                                ShareInviteRoute().push(context);
+                                // XiaolanVideoCommentRoute(videoId: widget.id).push(context);
+                              },
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/xiaolan_icon_share.png",
+                                    width: 16.w,
+                                  ),
+                                  SizedBox(
+                                    width: 5.w,
+                                  ),
+                                  Text(
+                                    '分享',
+                                    style: TextStyle(fontSize: 12.sp, color: const Color(0xFF666666)),
+                                  ),
+                                ],
+                              ),
+                            )
                           ],
                         ),
-                      )),
-                      Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          _onFollow(detail['user']);
-                        },
-                        child: Container(
-                            height: 32.w,
-                            width: 69.w,
-                            decoration: BoxDecoration(
-                              color: Color(0xFF558AEF),
-                              borderRadius: BorderRadius.circular(32.w),
-                            ),
-                            alignment: Alignment.center,
-                            child: Text(detail['user']['is_follow'] == 1 ? "已关注" : "关注",
-                                style: TextStyle(fontSize: 14.sp, color: Colors.white))),
-                      )
+                      ),
+                      SizedBox(
+                        height: 15.w,
+                      ),
+                      XiaoLanAdsHeader(
+                        bannersNotifier: bannersNotifier,
+                      ),
+                      SizedBox(
+                        height: 15.w,
+                      ),
+                      // 推荐列表标题
+                      Container(
+                        color: Colors.white,
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(horizontal: 15.w),
+                        child: Text(
+                          '为你推荐',
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      // 推荐列表
+                      Container(
+                        color: Colors.white,
+                        child: _recommendList.isEmpty
+                            ? Container(
+                                height: 200,
+                                child: Center(
+                                  child: Text(
+                                    '暂无推荐',
+                                    style: TextStyle(fontSize: 14.sp, color: const Color(0xFF999999)),
+                                  ),
+                                ),
+                              )
+                            : GridView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.symmetric(horizontal: 12.5.w, vertical: 8.w),
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 10.h,
+                                  crossAxisSpacing: 8.w,
+                                  childAspectRatio: 344 / 240,
+                                ),
+                                itemCount: _recommendList.length,
+                                itemBuilder: (context, index) {
+                                  final item = _recommendList[index];
+                                  return XiaoLanItem.build(
+                                    XiaoLanItemType.video,
+                                    item,
+                                    onTap: () {
+                                      XiaolanVideoDetailRoute(id: item['id']).push(context);
+                                    },
+                                  );
+                                },
+                              ),
+                      ),
                     ],
-                  )),
-              SizedBox(
-                height: 15.w,
-              ),
-              // 标题
-              Container(
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  title,
-                  textAlign: TextAlign.start,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    color: const Color(0xFF1A1A1A),
-                    fontWeight: FontWeight.w600,
                   ),
-                ),
+                )),
+            Positioned(
+              right: 20.w,
+              bottom: 42.w,
+              child: ScrollTopButton(
+                showToTopButtonNotifier: _showToTopBtn,
+                scrollTopCallback: _scrollToTop,
               ),
-              SizedBox(
-                height: 15.w,
-              ),
-              // 标签
-              if (tags.isNotEmpty) ...[
-                Container(
-                  color: Colors.white,
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: 15.w),
-                  child: Wrap(
-                    spacing: 8.w,
-                    runSpacing: 8.w,
-                    children: tags.map((tag) {
-                      return ReportGestureDetector(
-                        onTap: () {
-                          XiaolanCategoryOrTagDetailRoute(id: 0, title: tag, type: 'tag', has_sort: "1").push(context);
-                          // XiaolanTagRoute(tag: tag).push(context)
-                          // context.push('/xiaolanCategoryOrTagDetail/$id/${type}/${hasSort ? "1" : "0"}/${Uri.encodeComponent(title)}');
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 1.w),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF2F2F2),
-                            borderRadius: BorderRadius.circular(5.w),
-                          ),
-                          child: Text(
-                            '#$tag',
-                            style: TextStyle(fontSize: 12.sp, color: const Color(0xFF666666)),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                SizedBox(
-                  height: 15.w,
-                ),
-              ],
-              // 统计信息
-              Container(
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                child: Row(
-                  children: [
-                    Text("${CommonUtils.formatNumber(rating)}播放   ${detail['created_at']}",
-                        style: TextStyle(fontSize: 12.sp, color: const Color(0xFF666666))),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: _toggleLike,
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            _isLiked ? "assets/images/app_short_like_h.png" : "assets/images/xiaolan_icon_like.png",
-                            width: 16.w,
-                          ),
-                          SizedBox(
-                            width: 5.w,
-                          ),
-                          Text('${CommonUtils.formatNumber(_likeCount)}',
-                              style: TextStyle(fontSize: 12.sp, color: const Color(0xFF666666))),
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: 16.w),
-                    GestureDetector(
-                      onTap: () {
-                        ShareInviteRoute().push(context);
-                        // XiaolanVideoCommentRoute(videoId: widget.id).push(context);
-                      },
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            "assets/images/xiaolan_icon_share.png",
-                            width: 16.w,
-                          ),
-                          SizedBox(
-                            width: 5.w,
-                          ),
-                          Text(
-                            '分享',
-                            style: TextStyle(fontSize: 12.sp, color: const Color(0xFF666666)),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 15.w,
-              ),
-              XiaoLanAdsHeader(
-                bannersNotifier: bannersNotifier,
-              ),
-              SizedBox(
-                height: 15.w,
-              ),
-              // 推荐列表标题
-              Container(
-                color: Colors.white,
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                child: Text(
-                  '为你推荐',
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              // 推荐列表
-              Container(
-                color: Colors.white,
-                child: _recommendList.isEmpty
-                    ? Container(
-                        height: 200,
-                        child: Center(
-                          child: Text(
-                            '暂无推荐',
-                            style: TextStyle(fontSize: 14.sp, color: const Color(0xFF999999)),
-                          ),
-                        ),
-                      )
-                    : GridView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        padding: EdgeInsets.symmetric(horizontal: 12.5.w, vertical: 8.w),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 10.h,
-                          crossAxisSpacing: 8.w,
-                          childAspectRatio: 344 / 240,
-                        ),
-                        itemCount: _recommendList.length,
-                        itemBuilder: (context, index) {
-                          final item = _recommendList[index];
-                          return XiaoLanItem.build(
-                            XiaoLanItemType.video,
-                            item,
-                            onTap: () {
-                              XiaolanVideoDetailRoute(id: item['id']).push(context);
-                            },
-                          );
-                        },
-                      ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ))
       ],
     );
