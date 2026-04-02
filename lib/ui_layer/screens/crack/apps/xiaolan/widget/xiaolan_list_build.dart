@@ -591,69 +591,38 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
       onTap: () {
         onTap.call();
       },
-      child: Stack(
-        clipBehavior: Clip.none,
+      child:Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Positioned(
-              top: -11.w,
-              left: 0,
-              child: Opacity(
-                opacity: .1,
-                child: ShaderMask(
-                  shaderCallback: (bounds) {
-                    return const LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Color(0xFF103265),
-                        Color(0x00103265),
-                      ],
-                    ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height));
-                  },
-                  child: Text(
-                    "RECOM MEND",
-                    style: TextStyle(
-                      fontSize: 24.sp,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              )),
+          Text(
+            "${name}",
+            style: TextStyle(color: Color(0xFF333333), fontSize: 20.sp, fontWeight: FontWeight.w600),
+          ),
+          SizedBox(
+            width: 16.w,
+          ),
+          Text(
+            "${subName}",
+            style: TextStyle(color: Color(0xFF666666), fontSize: 12.sp, fontWeight: FontWeight.w400),
+          ),
+          Spacer(),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "${name}",
-                style: TextStyle(color: Color(0xFF333333), fontSize: 20.sp, fontWeight: FontWeight.w600),
-              ),
-              SizedBox(
-                width: 16.w,
-              ),
-              Text(
-                "${subName}",
+                "查看更多",
                 style: TextStyle(color: Color(0xFF666666), fontSize: 12.sp, fontWeight: FontWeight.w400),
               ),
-              Spacer(),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "查看更多",
-                    style: TextStyle(color: Color(0xFF666666), fontSize: 12.sp, fontWeight: FontWeight.w400),
-                  ),
-                  SizedBox(
-                    width: 4.w,
-                  ),
-                  Image.asset(
-                    "assets/images/app_issue_arrow.png",
-                    color: Color(0xFF666666),
-                    width: 5.w,
-                  ),
-                ],
+              SizedBox(
+                width: 4.w,
+              ),
+              Image.asset(
+                "assets/images/app_issue_arrow.png",
+                color: Color(0xFF666666),
+                width: 5.w,
               ),
             ],
-          )
+          ),
         ],
       ),
     );
