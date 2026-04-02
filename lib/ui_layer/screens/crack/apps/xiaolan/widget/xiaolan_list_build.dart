@@ -439,12 +439,23 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
+                  // Container(
+                  //   width: 38.w,
+                  //   height: 38.h,
+                  //   decoration: BoxDecoration(
+                  //     color: Color(0xFFD9D9D9),
+                  //     shape: BoxShape.circle,
+                  //   ),
+                  //   child: ,
+                  // ),
+                  SizedBox(
+                    height: 38.w,
                     width: 38.w,
-                    height: 38.h,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFD9D9D9),
-                      shape: BoxShape.circle,
+                    child: MyImage.network(
+                      widget.model['thumb'],
+                      width: 38.w,
+                      height: 38.w,
+                      fit: BoxFit.cover,
                     ),
                   ),
                   SizedBox(

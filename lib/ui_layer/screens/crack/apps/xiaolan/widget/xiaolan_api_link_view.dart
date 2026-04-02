@@ -204,11 +204,11 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
     // _asyncValue = const AsyncData([]);
 
     _tabController = TabController(length: titles.length, vsync: this, initialIndex: initialIndex);
-    _tabController.addListener(() {
-      if (initialIndex == _tabController.index) return;
-      _listKey.currentState?.reloadPage();
-      initialIndex = _tabController.index;
-    });
+    // _tabController.addListener(() {
+    //   if (initialIndex == _tabController.index) return;
+    //   _listKey.currentState?.reloadPage();
+    //   initialIndex = _tabController.index;
+    // });
     super.initState();
   }
 
@@ -279,133 +279,158 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
               return false;
             },
             child: widget.linkModel.name == "推荐" || widget.linkModel.type == 4
-                ? (MyListView.list(
-                    padding: EdgeInsets.zero,
-                    header: Column(
-                      children: [
-                        XiaoLanAdsHeader(
-                          bannersNotifier: bannersNotifier,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
-                    itemBuilder: (context, item, index) {
-                      return Column(
-                        children: [
-                          SizedBox(
-                            height: 10.w,
-                          ),
-                          if (widget.linkModel.type == 4 && index == 0) ...[
-                            XiaoLanListBuild(
-                                type: XiaoLanListBuildType.creator, linkModel: widget.linkModel, model: rank),
-                            SizedBox(
-                              height: 10.w,
-                            )
-                          ],
-                          XiaoLanListBuild(
-                            type: widget.linkModel.type == 4
-                                ? XiaoLanListBuildType.userScroll
-                                : [
-                                    XiaoLanListBuildType.fourGrid,
-                                    XiaoLanListBuildType.oneBigSecondScroll,
-                                    XiaoLanListBuildType.oneBigFourGrid,
-                                    XiaoLanListBuildType.sixGrid,
-                                    XiaoLanListBuildType.oneLineScroll,
-                                    XiaoLanListBuildType.fourGrid,
-                                  ][item['show_style']],
-                            linkModel: widget.linkModel,
-                            model: item,
-                            onRefresh: () async {
-                              final res = await onRefresh(item);
-                              return res;
-                            },
-                          ),
-                          SizedBox(
-                            height: 20.w,
-                          )
-                        ],
-                      );
-                    },
-                    onFetchingMore: (currentPage, pageSize) async {
-                      return _getData(page: currentPage, pageSize: pageSize);
-                    }))
-                : MyListView.grid(
-                    key: _listKey,
-                    header: Column(
-                      children: [
-                        XiaoLanAdsHeader(
-                          bannersNotifier: bannersNotifier,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        if (mid_style_category != null && mid_style_category!.isNotEmpty) ...[
-                          XiaoLanListBuild(
-                              type: XiaoLanListBuildType.categoryScroll,
-                              linkModel: widget.linkModel,
-                              model: mid_style_category),
-                          SizedBox(
-                            height: 10.w,
+                ? (NestedScrollView(
+                    controller: _nestedController,
+                    headerSliverBuilder: (_, __) => [
+                          SliverToBoxAdapter(
+                            child: Column(
+                              children: [
+                                if (bannersNotifier.value.isNotEmpty) ...[
+                                  XiaoLanAdsHeader(
+                                    bannersNotifier: bannersNotifier,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
+                              ],
+                            ),
                           ),
                         ],
-                        if (tags_mv != null)
-                          XiaoLanListBuild(type: XiaoLanListBuildType.tag, linkModel: widget.linkModel, model: tags_mv),
-                        SizedBox(
-                          height: 10.w,
-                        ),
-                      ],
-                    ),
-                    persistentHeader: StickyHeaderDelegate(
-                      height: 30.w,
-                      child: Container(
-                        color: Colors.white,
-                        child: TabBarWithView.line(
-                          tabBarPadding: EdgeInsets.symmetric(horizontal: 5.w),
-                          tabController: _tabController,
-                          initialIndex: initialIndex,
-                          tabBarHeight: 30.w,
-                          linearColors: [Colors.transparent, Colors.transparent],
-                          labelStyle:
-                              TextStyle(color: const Color(0xFF333333), fontSize: 16.sp, fontWeight: FontWeight.w600),
-                          unselectedLabelStyle: TextStyle(
-                            color: const Color(0xFF646C85),
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w400,
+                    body: MyListView.list(
+                        padding: EdgeInsets.zero,
+                        itemBuilder: (context, item, index) {
+                          return Column(
+                            children: [
+                              SizedBox(
+                                height: 10.w,
+                              ),
+                              if (widget.linkModel.type == 4 && index == 0) ...[
+                                XiaoLanListBuild(
+                                    type: XiaoLanListBuildType.creator, linkModel: widget.linkModel, model: rank),
+                                SizedBox(
+                                  height: 10.w,
+                                )
+                              ],
+                              XiaoLanListBuild(
+                                type: widget.linkModel.type == 4
+                                    ? XiaoLanListBuildType.userScroll
+                                    : [
+                                        XiaoLanListBuildType.fourGrid,
+                                        XiaoLanListBuildType.oneBigSecondScroll,
+                                        XiaoLanListBuildType.oneBigFourGrid,
+                                        XiaoLanListBuildType.sixGrid,
+                                        XiaoLanListBuildType.oneLineScroll,
+                                        XiaoLanListBuildType.fourGrid,
+                                      ][item['show_style']],
+                                linkModel: widget.linkModel,
+                                model: item,
+                                onRefresh: () async {
+                                  final res = await onRefresh(item);
+                                  return res;
+                                },
+                              ),
+                              SizedBox(
+                                height: 20.w,
+                              )
+                            ],
+                          );
+                        },
+                        onFetchingMore: (currentPage, pageSize) {
+                          return _getData(page: currentPage, pageSize: pageSize);
+                        })))
+                : NestedScrollView(
+                    controller: _nestedController,
+                    headerSliverBuilder: (_, __) => [
+                          SliverToBoxAdapter(
+                            child: Column(
+                              children: [
+                                if (bannersNotifier.value.isNotEmpty) ...[
+                                  XiaoLanAdsHeader(
+                                    bannersNotifier: bannersNotifier,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
+                              ],
+                            ),
                           ),
-                          titles: titles,
-                          views: titles.map((e) {
-                            return SizedBox.shrink();
-                          }).toList(),
+                        ],
+                    body: CustomScrollView(
+                      slivers: [
+                        SliverToBoxAdapter(
+                          child: Column(children: [
+                            if (mid_style_category != null && mid_style_category!.isNotEmpty) ...[
+                              XiaoLanListBuild(
+                                  type: XiaoLanListBuildType.categoryScroll,
+                                  linkModel: widget.linkModel,
+                                  model: mid_style_category),
+                              SizedBox(
+                                height: 10.w,
+                              ),
+                            ],
+                            if (tags_mv != null) ...[
+                              XiaoLanListBuild(
+                                  type: XiaoLanListBuildType.tag, linkModel: widget.linkModel, model: tags_mv),
+                              SizedBox(
+                                height: 10.w,
+                              ),
+                            ],
+                          ],),
                         ),
-                      ),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 10.h,
-                    crossAxisSpacing: 8.w,
-                    childAspectRatio: 344 / 240,
-                    itemBuilder: (context, item, index) => XiaoLanItem.build(XiaoLanItemType.video, item, onTap: () {
-                      XiaolanVideoDetailRoute(id: item['id']).push(context);
-                    }),
-                    onFetchingMore: (currentPage, pageSize) {
-                      final res =
-                          _getVideoData(page: currentPage, pageSize: pageSize, sort: titlesSort[_tabController.index]);
-                      return res;
-                    },
-                  )),
-        if (!(widget.linkModel.name == "推荐" || widget.linkModel.type == 4))
-          Positioned.fill(
-            child: _asyncValue.maybeWhen(
-                error: (_, __) => Container(color: Colors.white,child: NetworkErrorView(onTap: () {
-                  _getData(page: 1, pageSize: 20);
-                }),),
-                orElse: () => Container(color: Colors.white, child: const LoadingView()),
-                data: (data) {
-                  return SizedBox.shrink();
-                }),
-          ),
+                        SliverFillRemaining(
+                          child: TabBarWithView.line(
+                            tabBarPadding: EdgeInsets.symmetric(horizontal: 5.w),
+                            tabController: _tabController,
+                            initialIndex: initialIndex,
+                            tabBarHeight: 30.w,
+                            linearColors: [Colors.transparent, Colors.transparent],
+                            labelStyle: TextStyle(
+                                color: const Color(0xFF333333), fontSize: 16.sp, fontWeight: FontWeight.w600),
+                            unselectedLabelStyle: TextStyle(
+                              color: const Color(0xFF646C85),
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            titles: titles,
+                            views: titles.asMap().entries.map((e) {
+                              return MyListView.grid(
+                                // key: _listKey,
+                                padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 10.h,
+                                crossAxisSpacing: 8.w,
+                                childAspectRatio: 344 / 240,
+                                itemBuilder: (context, item, index) =>
+                                    XiaoLanItem.build(XiaoLanItemType.video, item, onTap: () {
+                                      XiaolanVideoDetailRoute(id: item['id']).push(context);
+                                    }),
+                                onFetchingMore: (currentPage, pageSize) {
+                                  final res = _getVideoData(
+                                      page: currentPage, pageSize: pageSize, sort: titlesSort[_tabController.index]);
+                                  return res;
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        )
+                      ],
+                    ))),
+        // if (!(widget.linkModel.name == "推荐" || widget.linkModel.type == 4))
+        //   Positioned.fill(
+        //     child: _asyncValue.maybeWhen(
+        //         error: (_, __) => Container(
+        //               color: Colors.white,
+        //               child: NetworkErrorView(onTap: () {
+        //                 _getData(page: 1, pageSize: 20);
+        //               }),
+        //             ),
+        //         orElse: () => Container(color: Colors.white, child: const LoadingView()),
+        //         data: (data) {
+        //           return SizedBox.shrink();
+        //         }),
+        //   ),
         Positioned(
           right: 20.w,
           bottom: 42.w,
