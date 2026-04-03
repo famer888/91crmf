@@ -31,6 +31,8 @@ import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:provider/provider.dart';
 
+import '../../../app_global.dart';
+
 class NewCrackScreen extends StatefulWidget {
   const NewCrackScreen({super.key});
 
@@ -118,6 +120,7 @@ class _NewCrackScreenState extends State<NewCrackScreen> {
 
   @override
   Widget build(BuildContext context) {
+    AppGlobal.context = context;
     return ScreenBackground(
       appBg: MyImage.asset(MyImagePaths.appBg, fit: BoxFit.cover, width: _screenUtil.screenWidth, height: 148.w),
       child: _asyncValue.maybeWhen(
