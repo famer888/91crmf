@@ -395,7 +395,7 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
             ),
             //   横向滚动
             SizedBox(
-              height: 50.h,
+              height: 55.h,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
@@ -456,6 +456,7 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
                       width: 38.w,
                       height: 38.w,
                       fit: BoxFit.cover,
+                      borderRadius: 38.r,
                     ),
                   ),
                   SizedBox(
