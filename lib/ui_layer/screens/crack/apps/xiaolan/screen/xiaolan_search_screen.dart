@@ -300,7 +300,7 @@ class _XiaolanSearchScreenState extends State<XiaolanSearchScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '热门搜索',
+            '热搜排行',
             style: TextStyle(
                 fontSize: 16.sp,
                 color: const Color(0xFF151515),
