@@ -33,12 +33,12 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/video_player/utils/shelf_
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
+import 'package:jycrpj/ui_layer/utils/platform_utils.dart';
 import 'package:jycrpj/ui_layer/utils/preload_utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:universal_html/html.dart' as html;
-import 'package:universal_html/js_util.dart' as js_util;
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 import 'package:utils/utils.dart';
 
@@ -83,12 +83,7 @@ class CommonUtils {
 
   //苹果PWA浏览器
   static bool isPWA() {
-    if (kIsWeb) {
-      final isStandalone = html.window.matchMedia('(display-mode: standalone)').matches;
-      final isIOSStandalone = js_util.getProperty(html.window.navigator, 'standalone') as bool? ?? false;
-      return isStandalone || isIOSStandalone;
-    }
-    return false;
+    return PlatformUtils.isPwaStandalone;
   }
 
   static String convertEmojiAndHtml(String str) {
@@ -428,11 +423,7 @@ class CommonUtils {
 
   //苹果浏览器
   static bool isIPhoneWeb() {
-    if (kIsWeb) {
-      final userAgent = html.window.navigator.userAgent.toLowerCase();
-      return userAgent.contains('iphone') || userAgent.contains('ipad') || userAgent.contains('ipod');
-    }
-    return false;
+    return PlatformUtils.isIosWeb;
   }
 
   //安卓浏览器

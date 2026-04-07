@@ -36,8 +36,18 @@ import 'ui_layer/router/router.dart';
 import 'ui_layer/screens/theme.dart';
 import 'ui_layer/utils/common_utils.dart';
 import 'ui_layer/utils/download_utils.dart';
+import 'ui_layer/utils/platform_utils.dart';
 
 import 'package:universal_html/html.dart' as html;
+
+void configureWebImageCache() {
+  if (!kIsWeb) return;
+
+  // iOS Safari/PWA 的 WebContent 进程内存阈值较低，限制图片缓存可减少 Jetsam 触发概率。
+  final imageCache = PaintingBinding.instance.imageCache;
+  imageCache.maximumSize = 80;
+  imageCache.maximumSizeBytes = PlatformUtils.isIosWeb ? (30 << 20) : (60 << 20);
+}
 
 //防止键盘弹出时web界面被放大
 void disableZoomOnWeb() {
@@ -48,7 +58,10 @@ void disableZoomOnWeb() {
 }
 
 void main() async {
-  if (kIsWeb) disableZoomOnWeb();
+  if (kIsWeb) {
+    disableZoomOnWeb();
+    configureWebImageCache();
+  }
 
   /// 初始化仓库，必须放在最前面
   final appRepo = AppRepo();
