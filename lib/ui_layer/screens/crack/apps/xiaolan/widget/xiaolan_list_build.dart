@@ -228,13 +228,13 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
                 ),
               ),
             ],
-            SizedBox(
-              height: 14.h,
-            ),
-            _buildHandle(onMoreTap: () {
-              _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
-                  hasSort: "${widget.model['has_tab']}" == "1");
-            })
+            // SizedBox(
+            //   height: 14.h,
+            // ),
+            // _buildHandle(onMoreTap: () {
+            //   _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
+            //       hasSort: "${widget.model['has_tab']}" == "1");
+            // })
           ],
         );
       case XiaoLanListBuildType.fourGrid:
