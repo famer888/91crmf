@@ -22,7 +22,8 @@ import '../../../../theme.dart';
 import '../widget/xiaolan_list_build.dart';
 
 class XiaolanUserWorksScreen extends StatefulWidget {
-  const XiaolanUserWorksScreen({super.key, required this.userId, required this.userName});
+  const XiaolanUserWorksScreen(
+      {super.key, required this.userId, required this.userName});
 
   final String userId;
   final String userName;
@@ -32,7 +33,6 @@ class XiaolanUserWorksScreen extends StatefulWidget {
 }
 
 class _XiaolanUserWorksScreenState extends State<XiaolanUserWorksScreen> {
-
   late final _appDomain = context.read<AppDomain>();
 
   @override
@@ -47,7 +47,8 @@ class _XiaolanUserWorksScreenState extends State<XiaolanUserWorksScreen> {
   }) async {
     bool isInit = false;
 
-    final result = await _appDomain.getConstructByApiLink(apiLink: "/api/usersxiaolan/videos", params: {
+    final result = await _appDomain
+        .getConstructByApiLink(apiLink: "/api/usersxiaolan/videos", params: {
       "uid": widget.userId,
       "page": page,
       "limit": pageSize,
@@ -77,7 +78,8 @@ class _XiaolanUserWorksScreenState extends State<XiaolanUserWorksScreen> {
               left: 0,
               right: 0,
               top: 0,
-              child: Image.asset('assets/images/xiaolan_top_navi_bg.png', width: double.infinity, fit: BoxFit.cover)),
+              child: Image.asset('assets/images/xiaolan_top_navi_bg.png',
+                  width: double.infinity, fit: BoxFit.cover)),
           Scaffold(
               backgroundColor: Colors.transparent,
               appBar: MyAppBar(
@@ -86,12 +88,14 @@ class _XiaolanUserWorksScreenState extends State<XiaolanUserWorksScreen> {
                   titleColor: Color(0xFF151515),
                   backgroundColor: Colors.transparent),
               body: MyListView.grid(
-                padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
-                crossAxisCount: 3,
-                mainAxisSpacing: 7.h,
-                crossAxisSpacing: 7.w,
-                childAspectRatio: 225 / 224,
-                itemBuilder: (context, item, index) => XiaoLanItem.build(XiaoLanItemType.video, item, onTap: () {
+                padding: EdgeInsets.symmetric(
+                    horizontal: MyTheme.pagePadding, vertical: 8.w),
+                crossAxisCount: 2,
+                mainAxisSpacing: 10.h,
+                crossAxisSpacing: 8.w,
+                childAspectRatio: 344 / 240,
+                itemBuilder: (context, item, index) =>
+                    XiaoLanItem.build(XiaoLanItemType.video, item, onTap: () {
                   XiaolanVideoDetailRoute(id: item['id']).push(context);
                 }),
                 onFetchingMore: (currentPage, pageSize) {
