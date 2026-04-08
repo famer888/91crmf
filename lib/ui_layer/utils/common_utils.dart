@@ -33,15 +33,14 @@ import 'package:jycrpj/ui_layer/screens/common_widgets/video_player/utils/shelf_
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
-import 'package:jycrpj/ui_layer/utils/platform_utils.dart';
 import 'package:jycrpj/ui_layer/utils/preload_utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:universal_html/html.dart' as html;
+import 'package:universal_html/js_util.dart' as js_util;
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 import 'package:utils/utils.dart';
-import 'package:universal_html/js_util.dart' as js_util;
 
 import '../../report/ui_layer/report_gesture_detector.dart';
 
@@ -112,16 +111,16 @@ class CommonUtils {
 
   //特殊字符处理
   static Widget getContentSpan(
-    String text, {
-    bool isCopy = false,
-    TextStyle? style,
-    TextStyle? lightStyle,
-    InlineSpan? extraSpan,
-  }) {
+      String text, {
+        bool isCopy = false,
+        TextStyle? style,
+        TextStyle? lightStyle,
+        InlineSpan? extraSpan,
+      }) {
     style = style ?? MyTheme.black51_14;
     lightStyle = lightStyle ??
         TextStyle(
-            // fontFamily: hanyi,
+          // fontFamily: hanyi,
             color: const Color.fromRGBO(25, 103, 210, 1),
             fontSize: 15.sp,
             decoration: TextDecoration.none);
@@ -429,7 +428,11 @@ class CommonUtils {
 
   //苹果浏览器
   static bool isIPhoneWeb() {
-    return PlatformUtils.isIosWeb;
+    if (kIsWeb) {
+      final userAgent = html.window.navigator.userAgent.toLowerCase();
+      return userAgent.contains('iphone') || userAgent.contains('ipad') || userAgent.contains('ipod');
+    }
+    return false;
   }
 
   //安卓浏览器
@@ -512,9 +515,9 @@ class CommonUtils {
     if (data['link_url'] case final String url when url.isNotEmpty) {
       if (data['report_id'] != null) {
         context.read<HomeDomain>().reqAdClickCount(
-              id: data['report_id'],
-              type: data['report_type'],
-            );
+          id: data['report_id'],
+          type: data['report_type'],
+        );
       }
 
       if (data['redirect_type'] == 1) {
@@ -953,17 +956,17 @@ class CommonUtils {
   }
 
   static Widget contentWidget(
-    BuildContext context,
-    VlogModel data, {
-    Function? enterUserCenter, //进用户空间
-    Function? follow, //关注
-    Function? like, //点赞
-    Function? comment, //评论
-    Function? collect, //收藏
-    Function? showAlert, //分享
-    Function? cleanView, //清屏
-    bool keepBottomBlank = false,
-  }) {
+      BuildContext context,
+      VlogModel data, {
+        Function? enterUserCenter, //进用户空间
+        Function? follow, //关注
+        Function? like, //点赞
+        Function? comment, //评论
+        Function? collect, //收藏
+        Function? showAlert, //分享
+        Function? cleanView, //清屏
+        bool keepBottomBlank = false,
+      }) {
     Widget dgt = Container();
 
     final userNotifier = context.read<UserNotifier>();
@@ -1081,14 +1084,14 @@ class CommonUtils {
                 (data.member?.nickname ?? "").isEmpty
                     ? Container()
                     : Text(
-                        "@${data.member?.nickname ?? ""}",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                          shadows: const [Shadow(color: Colors.black54, offset: Offset(1, 1))],
-                        ),
-                      ),
+                  "@${data.member?.nickname ?? ""}",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    shadows: const [Shadow(color: Colors.black54, offset: Offset(1, 1))],
+                  ),
+                ),
                 SizedBox(height: 10.w),
                 Text(
                   maxLines: 3,
@@ -1102,51 +1105,51 @@ class CommonUtils {
                 (data.tagList?.isNotEmpty ?? false) ? SizedBox(height: 10.w) : Container(),
                 List.from(data.tagList ?? []).isNotEmpty
                     ? Wrap(
-                        runSpacing: 8.w,
-                        spacing: 15.w,
-                        children: data.tagList!
-                            .take(3)
-                            .map(
-                              (tag) => Listener(
-                                behavior: HitTestBehavior.opaque, // ⭐ 必须 opaque
-                                onPointerDown: (_) {
-                                  // 直接拦截触摸
-                                },
-                                onPointerUp: (_) {
-                                  VlogTagRoute(tag: tag).push(context);
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 2.w, horizontal: 3.w),
-                                  child: Text('#$tag', style: MyTheme.blue80_12.copyWith(color: MyTheme.whiteColor)),
-                                ),
-                              ),
-                              //     InkWell(
-                              //   onTap: () {
-                              //     VlogTagRoute(tag: tag).push(context);
-                              //   },
-                              //   child: Text('#$tag', style: MyTheme.blue80_12.copyWith(color: MyTheme.whiteColor)),
-                              // ),
-                            )
-                            .toList(),
-                      )
+                  runSpacing: 8.w,
+                  spacing: 15.w,
+                  children: data.tagList!
+                      .take(3)
+                      .map(
+                        (tag) => Listener(
+                      behavior: HitTestBehavior.opaque, // ⭐ 必须 opaque
+                      onPointerDown: (_) {
+                        // 直接拦截触摸
+                      },
+                      onPointerUp: (_) {
+                        VlogTagRoute(tag: tag).push(context);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 2.w, horizontal: 3.w),
+                        child: Text('#$tag', style: MyTheme.blue80_12.copyWith(color: MyTheme.whiteColor)),
+                      ),
+                    ),
+                    //     InkWell(
+                    //   onTap: () {
+                    //     VlogTagRoute(tag: tag).push(context);
+                    //   },
+                    //   child: Text('#$tag', style: MyTheme.blue80_12.copyWith(color: MyTheme.whiteColor)),
+                    // ),
+                  )
+                      .toList(),
+                )
                     : const SizedBox.shrink(),
                 vflag ? SizedBox(height: 10.w) : Container(),
                 vflag ? Listener(
-                        behavior: HitTestBehavior.opaque, // ⭐ 必须 opaque
-                        onPointerDown: (_) {
-                          // 直接拦截触摸
-                        },
-                        onPointerUp: (_) {
-                          showAlert?.call();
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 6.w,
-                            horizontal: 4.w,
-                          ),
-                          child: dgt,
-                        ),
-                      ) /*ReportGestureDetector(
+                  behavior: HitTestBehavior.opaque, // ⭐ 必须 opaque
+                  onPointerDown: (_) {
+                    // 直接拦截触摸
+                  },
+                  onPointerUp: (_) {
+                    showAlert?.call();
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 6.w,
+                      horizontal: 4.w,
+                    ),
+                    child: dgt,
+                  ),
+                ) /*ReportGestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
                           showAlert?.call();
@@ -1176,38 +1179,38 @@ class CommonUtils {
                       },
                       child: data.member == null
                           ? Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.43),
-                                borderRadius: BorderRadius.circular(20.w),
-                                border: Border.all(color: Colors.white, width: 1),
-                              ),
-                              width: 30.w,
-                              height: 30.w,
-                              child: Center(
-                                child: MyImage.asset(
-                                  MyImagePaths.appPlaceholder,
-                                  width: 30.w,
-                                  height: 30.w,
-                                  borderRadius: 15.w,
-                                  backgroundColor: MyTheme.white008Color,
-                                ),
-                              ),
-                            )
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.43),
+                          borderRadius: BorderRadius.circular(20.w),
+                          border: Border.all(color: Colors.white, width: 1),
+                        ),
+                        width: 30.w,
+                        height: 30.w,
+                        child: Center(
+                          child: MyImage.asset(
+                            MyImagePaths.appPlaceholder,
+                            width: 30.w,
+                            height: 30.w,
+                            borderRadius: 15.w,
+                            backgroundColor: MyTheme.white008Color,
+                          ),
+                        ),
+                      )
                           : Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.43),
-                                borderRadius: BorderRadius.circular(15.w),
-                                border: Border.all(color: Colors.white, width: 1),
-                              ),
-                              width: 30.w,
-                              height: 30.w,
-                              child: MyImage.network(
-                                data.member?.thumb ?? "",
-                                borderRadius: 15.w,
-                                backgroundColor: MyTheme.white008Color,
-                                placeHolder: MyImagePaths.appPlaceholder,
-                              ),
-                            ),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.43),
+                          borderRadius: BorderRadius.circular(15.w),
+                          border: Border.all(color: Colors.white, width: 1),
+                        ),
+                        width: 30.w,
+                        height: 30.w,
+                        child: MyImage.network(
+                          data.member?.thumb ?? "",
+                          borderRadius: 15.w,
+                          backgroundColor: MyTheme.white008Color,
+                          placeHolder: MyImagePaths.appPlaceholder,
+                        ),
+                      ),
                     ),
                     // 屏蔽关注按钮
                     // data.member == null
@@ -1243,7 +1246,7 @@ class CommonUtils {
                       ),
                       Text(
                         renderFixedNumber(
-                            // 如果用户点赞了 但是 countLike == 0 就直接显示1
+                          // 如果用户点赞了 但是 countLike == 0 就直接显示1
                             data.isLike == 1 && data.countLike == 0 ? 1 : data.countLike ?? 0),
                         style: MyTheme.white12medium,
                       ),
@@ -1286,7 +1289,7 @@ class CommonUtils {
                       SizedBox(height: 1.w),
                       Text(
                         renderFixedNumber(
-                            // 如果用户收藏了 但是 favorites == 0 就直接显示1
+                          // 如果用户收藏了 但是 favorites == 0 就直接显示1
                             data.isFavorite == 1 && data.favorites == 0 ? 1 : data.favorites ?? 0),
                         style: MyTheme.white12medium,
                       ),
@@ -1358,10 +1361,10 @@ class CommonUtils {
 
   //广告模块UI复用
   static Widget adModuleInShortFlowUI(
-    BuildContext context,
-    VlogModel data, {
-    double imageRatio = 9 / 16,
-  }) {
+      BuildContext context,
+      VlogModel data, {
+        double imageRatio = 9 / 16,
+      }) {
     return LayoutBuilder(builder: (context, constrains) {
       double w = constrains.maxWidth;
       return Container(
@@ -1675,12 +1678,12 @@ class DashedBorderPainter extends CustomPainter {
   }
 
   void _drawDashedArc(
-    Canvas canvas,
-    Paint paint,
-    Rect arcRect,
-    double startAngle,
-    double sweepAngle,
-  ) {
+      Canvas canvas,
+      Paint paint,
+      Rect arcRect,
+      double startAngle,
+      double sweepAngle,
+      ) {
     final path = Path();
     path.addArc(arcRect, startAngle, sweepAngle);
     canvas.drawPath(path, paint);

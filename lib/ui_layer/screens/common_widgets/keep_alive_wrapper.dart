@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:jycrpj/ui_layer/utils/platform_utils.dart';
 
 class KeepAliveWrapper extends StatefulWidget {
   const KeepAliveWrapper({super.key, required this.child});
@@ -19,5 +17,5 @@ class _KeepAliveWrapperState extends State<KeepAliveWrapper>
   }
 
   @override
-  bool get wantKeepAlive => !PlatformUtils.isIosPwa;
+  bool get wantKeepAlive => true;
 }
