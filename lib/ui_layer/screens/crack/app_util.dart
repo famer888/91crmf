@@ -44,29 +44,31 @@ class AppUtil {
   static Future<void> initCheckAppUnlockStatus() async {
     final context = AppGlobal.context;
     if (context == null) return;
+    if (!context.mounted) return;
 
     final crackDomain = context.read<CrackDomain>();
+    final userNotifier = context.read<UserNotifier>();
+    final unlockStatusNotifier = context.read<UnlockStatusNotifier>();
+
     final resCrackRes = await crackDomain.getCrackList(isCrack: 1);
     if (resCrackRes.status == 1) {
-      if (context.mounted) {
-        final userNotifier = context.read<UserNotifier>();
-        final unlockStatusNotifier = context.read<UnlockStatusNotifier>();
-        final crackApps = resCrackRes.data?.crackApps ?? <CrackApp>[];
-        initialAppUnlockStatus(unlockStatusNotifier, userNotifier, crackApps);
-      }
+      final crackApps = resCrackRes.data?.crackApps ?? <CrackApp>[];
+      initialAppUnlockStatus(unlockStatusNotifier, userNotifier, crackApps);
     } else {
       CommonUtils.log('刷新破解列表失败 - ${resCrackRes.msg}');
     }
   }
 
-  static void initialAppUnlockStatus(UnlockStatusNotifier unlockStatusNotifier, UserNotifier userNotifier, List<CrackApp> sortedApps) {
+  static void initialAppUnlockStatus(UnlockStatusNotifier unlockStatusNotifier,
+      UserNotifier userNotifier, List<CrackApp> sortedApps) {
     for (var app in sortedApps) {
       final isUnlockApp = AppUtil.isUnlockApp(app, userNotifier.member);
       changeAppUnlockStatus(unlockStatusNotifier, app, isUnlockApp);
     }
   }
 
-  static void changeAppUnlockStatus(UnlockStatusNotifier unlockStatusNotifier, CrackApp app, bool status) {
+  static void changeAppUnlockStatus(
+      UnlockStatusNotifier unlockStatusNotifier, CrackApp app, bool status) {
     if (app.appName == CrackAppType.clsq.appName) {
       unlockStatusNotifier.changeClsqUnlockStatus(status);
     } else if (app.appName == CrackAppType.pzhan.appName) {
@@ -155,7 +157,8 @@ class AppUtil {
             crackApp.isPay = true;
             MyToast.showText(text: result.data?.message ?? '');
 
-            AppUtil.changeAppUnlockStatus(unlockStatusNotifier, crackApp, crackApp.isPay);
+            AppUtil.changeAppUnlockStatus(
+                unlockStatusNotifier, crackApp, crackApp.isPay);
           } else {
             MyToast.showText(text: result.msg ?? '');
           }

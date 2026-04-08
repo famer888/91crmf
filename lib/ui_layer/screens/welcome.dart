@@ -52,7 +52,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   bool showAd = false;
 
   List<String> lines = [];
-  var amplitude;
+  Amplitude? _amplitude;
+  bool _isAmplitudeReady = false;
 
   @override
   void initState() {
@@ -63,8 +64,30 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   void _initAmp() async {
-    amplitude = Amplitude(Configuration(apiKey: "c9354b2d3cdf9bc6164f17bf6651ea43"));
-    await amplitude.track(BaseEvent("open app", deviceId: appDomain.info["oauth_id"].toString()));
+    final amplitude = Amplitude(
+      Configuration(apiKey: "c9354b2d3cdf9bc6164f17bf6651ea43"),
+    );
+    final isBuilt = await amplitude.isBuilt;
+    if (!mounted) return;
+
+    _amplitude = amplitude;
+    _isAmplitudeReady = isBuilt;
+    await _trackAmplitude("open app");
+  }
+
+  Future<void> _trackAmplitude(String eventName) async {
+    if (!_isAmplitudeReady) return;
+
+    final amplitude = _amplitude;
+    if (amplitude == null) return;
+
+    try {
+      await amplitude.track(
+        BaseEvent(eventName, deviceId: appDomain.info["oauth_id"]?.toString()),
+      );
+    } catch (e) {
+      debugPrint('Amplitude track failed: $e');
+    }
   }
 
   void _loadDataFromCache() async {
@@ -84,11 +107,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       failed: () async {
         isCheckingLine = false;
         if (mounted) setState(() {});
-        await amplitude.track(BaseEvent("entry failure", deviceId: appDomain.info["oauth_id"].toString()));
+        await _trackAmplitude("entry failure");
       },
       success: () async {
         _enterAdOrHome();
-        await amplitude.track(BaseEvent("enter app", deviceId: appDomain.info["oauth_id"].toString()));
+        await _trackAmplitude("enter app");
       },
       lines: (x) {
         lines = x;
@@ -110,7 +133,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         try {
           final params = Uri.splitQueryString(text);
           String traceID = params['trace_id'] ?? '';
-          if (traceID.isNotEmpty) context.read<AppRepo>().setReportTraceId(traceID);
+          if (traceID.isNotEmpty)
+            context.read<AppRepo>().setReportTraceId(traceID);
 
           String aff = params[BuildConfig.affCodeKey] ?? '';
           if (aff.isNotEmpty) context.read<AppRepo>().setAffXCode(aff);
@@ -166,7 +190,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 TextSpan(
                                   text: 'dwzl'.tr(context: context),
                                   style: TextStyle(
-                                      color: const Color.fromRGBO(240, 75, 62, 1),
+                                      color:
+                                          const Color.fromRGBO(240, 75, 62, 1),
                                       fontSize: 14.sp,
                                       overflow: TextOverflow.ellipsis,
                                       decoration: TextDecoration.none),
@@ -183,7 +208,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         Positioned(
                           top: 43,
                           right: 48,
-                          child: MyImage.asset(MyImagePaths.appClickLines, width: 25.w, height: 29.w),
+                          child: MyImage.asset(MyImagePaths.appClickLines,
+                              width: 25.w, height: 29.w),
                         ),
                       ],
                     ),
@@ -232,11 +258,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           _enterAdOrHome(showTip: true);
                         },
                         child: Container(
-                          margin: EdgeInsets.only(bottom: 10.w, left: 40.w, right: 40.w),
-                          decoration: BoxDecoration(color: MyTheme.gray117, borderRadius: BorderRadius.all(Radius.circular(3.w))),
+                          margin: EdgeInsets.only(
+                              bottom: 10.w, left: 40.w, right: 40.w),
+                          decoration: BoxDecoration(
+                              color: MyTheme.gray117,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(3.w))),
                           alignment: Alignment.center,
                           height: 36.w,
-                          child: Text('byxl'.tr(context: context).replaceAll("0", "${x + 1}"), style: MyTheme.white13),
+                          child: Text(
+                              'byxl'
+                                  .tr(context: context)
+                                  .replaceAll("0", "${x + 1}"),
+                              style: MyTheme.white13),
                         ));
                   }).toList(),
                 )
@@ -250,7 +284,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       child: ScreenBackground(
         child: Scaffold(
           // backgroundColor: MyTheme.bgColor,
-          body: showAd ? ReportAdView(adModels: welcomeStartScreenAds!) : checkLineView(),
+          body: showAd
+              ? ReportAdView(adModels: welcomeStartScreenAds!)
+              : checkLineView(),
         ),
       ),
     );
@@ -292,7 +328,11 @@ class _AdViewState extends State<AdView> {
             child: Swiper(
           autoplay: length > 1,
           itemBuilder: (BuildContext context, int index) {
-            precacheImage(NetworkImage(CommonUtils.getThumb(widget.adModels[(index + 1).clamp(0, length - 1)].toJson())), context);
+            precacheImage(
+                NetworkImage(CommonUtils.getThumb(widget
+                    .adModels[(index + 1).clamp(0, length - 1)]
+                    .toJson())),
+                context);
 
             return ReportGestureDetector(
               onTap: () {
@@ -323,7 +363,9 @@ class _AdViewState extends State<AdView> {
                       height: 5.w,
                       margin: EdgeInsets.only(right: 7.w),
                       decoration: BoxDecoration(
-                        color: isActive ? Colors.white : Colors.white.withOpacity(0.3),
+                        color: isActive
+                            ? Colors.white
+                            : Colors.white.withOpacity(0.3),
                         shape: BoxShape.circle,
                       ),
                     );
