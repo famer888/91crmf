@@ -41,6 +41,7 @@ import 'package:provider/provider.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 import 'package:utils/utils.dart';
+import 'package:universal_html/js_util.dart' as js_util;
 
 import '../../report/ui_layer/report_gesture_detector.dart';
 
@@ -83,7 +84,12 @@ class CommonUtils {
 
   //苹果PWA浏览器
   static bool isPWA() {
-    return PlatformUtils.isPwaStandalone;
+    if (kIsWeb) {
+      final isStandalone = html.window.matchMedia('(display-mode: standalone)').matches;
+      final isIOSStandalone = js_util.getProperty(html.window.navigator, 'standalone') as bool? ?? false;
+      return isStandalone || isIOSStandalone;
+    }
+    return false;
   }
 
   static String convertEmojiAndHtml(String str) {

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:universal_html/html.dart' as html;
 
 class PlatformUtils {
@@ -19,13 +20,5 @@ class PlatformUtils {
         (platform.contains('mac') && maxTouchPoints > 1);
   }
 
-  static bool get isPwaStandalone {
-    if (!kIsWeb) return false;
-
-    final isDisplayModeStandalone = html.window.matchMedia('(display-mode: standalone)').matches;
-    final isNavigatorStandalone = (html.window.navigator as dynamic).standalone == true;
-    return isDisplayModeStandalone || isNavigatorStandalone;
-  }
-
-  static bool get isIosPwa => isIosWeb && isPwaStandalone;
+  static bool get isIosPwa => isIosWeb && CommonUtils.isPWA();
 }
