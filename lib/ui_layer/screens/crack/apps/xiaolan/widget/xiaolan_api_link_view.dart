@@ -218,6 +218,7 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
 
   @override
   void dispose() {
+    _tabController.dispose();
     bannersNotifier.dispose();
     _nestedController.dispose();
     _showToTopBtn.dispose();

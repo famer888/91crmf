@@ -46,6 +46,7 @@ class _XiaolanCreatorScreenState extends State<XiaolanCreatorScreen> with Ticker
   @override
   void dispose() {
     bannersNotifier.dispose();
+    _nestedController.dispose();
     _showToTopBtn.dispose();
     super.dispose();
   }

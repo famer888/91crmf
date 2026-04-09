@@ -38,7 +38,7 @@ class _XiaoLanTopNaviViewState extends State<XiaoLanTopNaviView> with TickerProv
   late final _appDomain = context.read<DynamicDomain>();
   AsyncValue<List<LinkModel>> _asyncValue = const AsyncInit();
 
-  late final TabController _tabController;
+  TabController? _tabController;
   int _initialIndex = 0;
 
   @override
@@ -59,6 +59,7 @@ class _XiaoLanTopNaviViewState extends State<XiaoLanTopNaviView> with TickerProv
       final data = result['data'];
       if (data case final List data when data.isNotEmpty) {
         final linkModelList = data.map((x) => LinkModel.fromJson(x)).toList();
+        _tabController?.dispose();
         _tabController = TabController(length: linkModelList.length, vsync: this, initialIndex: _initialIndex);
         _asyncValue = AsyncData(linkModelList);
       }
@@ -72,6 +73,12 @@ class _XiaoLanTopNaviViewState extends State<XiaoLanTopNaviView> with TickerProv
   }
 
   @override
+  void dispose() {
+    _tabController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Selector<UnlockStatusNotifier, bool>(
         selector: (_, notifier) => notifier.isUnlockXiaolan,
@@ -80,12 +87,14 @@ class _XiaoLanTopNaviViewState extends State<XiaoLanTopNaviView> with TickerProv
             children: [
               _asyncValue.maybeWhen(
                 data: (data) {
+                  final tc = _tabController;
+                  if (tc == null) return const LoadingView();
                   final titles = data.map((e) => e.name).toList();
                   return LayoutBuilder(builder: (context, constraints) {
                     return SizedBox(
                       height: constraints.maxHeight, // 使用父级约束的高度
                       child: TabBarWithView.line(
-                        tabController: _tabController,
+                        tabController: tc,
                         initialIndex: _initialIndex,
                         tabBarHeight: 54.w,
                         tabBarPadding: EdgeInsets.only(top: 0.w),
@@ -120,7 +129,7 @@ class _XiaoLanTopNaviViewState extends State<XiaoLanTopNaviView> with TickerProv
                               onLinkNavTap: (value) {
                                 if (data.indexWhere((element) => element.linkUrl == value) case final index
                                     when index != -1) {
-                                  _tabController.index = index;
+                                  tc.index = index;
                                 }
                               },
                             ),

@@ -49,6 +49,11 @@ class _XiaolanCategoryOrTagDetailScreenState extends State<XiaolanCategoryOrTagD
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   Future<List> _getVideoData({
     required int page,
