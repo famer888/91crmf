@@ -108,10 +108,9 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
 
       setState(() {
         if (page == 1) rank = result.data['rank'];
-
-        mid_style_category = result.data['mid_style_category'];
+        mid_style_category ??= result.data['mid_style_category'];
         if (result.data['body'] != null && result.data['body'] is Map && result.data['body']['type'] == "tags-mv") {
-          tags_mv = result.data['body'];
+          tags_mv ??= result.data['body'];
         }
       });
       // bot_style_one = result.data['bot_style_one'];
@@ -168,9 +167,9 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
       setState(() {
         if (page == 1) rank = result.data['rank'];
 
-        mid_style_category = result.data['mid_style_category'];
+        mid_style_category ??= result.data['mid_style_category'];
         if (result.data['body'] != null && result.data['body'] is Map && result.data['body']['type'] == "tags-mv") {
-          tags_mv = result.data['body'];
+          tags_mv ??= result.data['body'];
         }
       });
 
@@ -360,24 +359,26 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
                     body: CustomScrollView(
                       slivers: [
                         SliverToBoxAdapter(
-                          child: Column(children: [
-                            if (mid_style_category != null && mid_style_category!.isNotEmpty) ...[
-                              XiaoLanListBuild(
-                                  type: XiaoLanListBuildType.categoryScroll,
-                                  linkModel: widget.linkModel,
-                                  model: mid_style_category),
-                              SizedBox(
-                                height: 10.w,
-                              ),
+                          child: Column(
+                            children: [
+                              if (mid_style_category != null && mid_style_category!.isNotEmpty) ...[
+                                XiaoLanListBuild(
+                                    type: XiaoLanListBuildType.categoryScroll,
+                                    linkModel: widget.linkModel,
+                                    model: mid_style_category),
+                                SizedBox(
+                                  height: 10.w,
+                                ),
+                              ],
+                              if (tags_mv != null) ...[
+                                XiaoLanListBuild(
+                                    type: XiaoLanListBuildType.tag, linkModel: widget.linkModel, model: tags_mv),
+                                SizedBox(
+                                  height: 10.w,
+                                ),
+                              ],
                             ],
-                            if (tags_mv != null) ...[
-                              XiaoLanListBuild(
-                                  type: XiaoLanListBuildType.tag, linkModel: widget.linkModel, model: tags_mv),
-                              SizedBox(
-                                height: 10.w,
-                              ),
-                            ],
-                          ],),
+                          ),
                         ),
                         SliverFillRemaining(
                           child: TabBarWithView.line(
@@ -386,8 +387,8 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
                             initialIndex: initialIndex,
                             tabBarHeight: 30.w,
                             linearColors: [Colors.transparent, Colors.transparent],
-                            labelStyle: TextStyle(
-                                color: const Color(0xFF333333), fontSize: 16.sp, fontWeight: FontWeight.w600),
+                            labelStyle:
+                                TextStyle(color: const Color(0xFF333333), fontSize: 16.sp, fontWeight: FontWeight.w600),
                             unselectedLabelStyle: TextStyle(
                               color: const Color(0xFF646C85),
                               fontSize: 16.sp,
@@ -404,8 +405,8 @@ class _XiaoLanApiLinkViewState extends State<XiaoLanApiLinkView> with TickerProv
                                 childAspectRatio: 344 / 240,
                                 itemBuilder: (context, item, index) =>
                                     XiaoLanItem.build(XiaoLanItemType.video, item, onTap: () {
-                                      XiaolanVideoDetailRoute(id: item['id']).push(context);
-                                    }),
+                                  XiaolanVideoDetailRoute(id: item['id']).push(context);
+                                }),
                                 onFetchingMore: (currentPage, pageSize) {
                                   final res = _getVideoData(
                                       page: currentPage, pageSize: pageSize, sort: titlesSort[_tabController.index]);
