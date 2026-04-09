@@ -384,16 +384,16 @@ class _XiaolanSearchScreenState extends State<XiaolanSearchScreen> {
                     color: const Color(0xFF151515),
                     fontWeight: FontWeight.w500),
               ),
-              GestureDetector(
-                onTap: () {
-                  _getData();
-                },
-                child: Image.asset(
-                  "assets/images/xiaolan_search_refresh.png",
-                  width: 14.w,
-                  color: Colors.black.withValues(alpha: .3),
-                ),
-              ),
+              // GestureDetector(
+              //   onTap: () {
+              //     _getData();
+              //   },
+              //   child: Image.asset(
+              //     "assets/images/xiaolan_search_refresh.png",
+              //     width: 14.w,
+              //     color: Colors.black.withValues(alpha: .3),
+              //   ),
+              // ),
             ],
           ),
           SizedBox(
