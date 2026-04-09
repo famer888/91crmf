@@ -31,6 +31,13 @@ class _MineWelfareScreenState extends State<MineWelfareScreen>
       config.showApp == 1 ? ['dlzq', 'flrw', 'yytj'] : ['dlzq', 'flrw'];
   late final tabController = TabController(
       length: titles.length, vsync: this, initialIndex: widget.index);
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScreenBackground(

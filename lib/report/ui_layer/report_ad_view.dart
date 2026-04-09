@@ -79,6 +79,13 @@ class _ReportAdViewState extends State<ReportAdView> {
   }
 
   @override
+  void dispose() {
+    _timer.cancel();
+    countDownNotifier.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final length = widget.adModels.length;
 

@@ -63,6 +63,12 @@ class _VlogScreenState extends State<VlogScreen> with TickerProviderStateMixin {
   }
 
   @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return _asyncValue.maybeWhen(
       data: (data) => Scaffold(

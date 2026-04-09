@@ -35,6 +35,12 @@ class _NewHomeScreenState extends State<NewHomeScreen> with TickerProviderStateM
   }
 
   @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ScreenBackground(
       appBg: MyImage.asset(MyImagePaths.appBg, fit:BoxFit.cover, width: ScreenUtil().screenWidth, height: 148.w),

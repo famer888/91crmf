@@ -166,6 +166,12 @@ class _BodyState extends State<_Body> with TickerProviderStateMixin {
   }
 
   @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

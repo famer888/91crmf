@@ -59,6 +59,12 @@ class _AIArtScreenState extends State<AIArtScreen>
   }
 
   @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(

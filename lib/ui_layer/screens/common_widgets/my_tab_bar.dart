@@ -282,6 +282,17 @@ class _TabBarWithViewState extends State<TabBarWithView> with SingleTickerProvid
     }
   }
 
+  @override
+  void dispose() {
+    // 只在内部创建的 TabController 时才销毁
+    if (widget.tabController == null) {
+      _tabController.dispose();
+    }
+    _pageController.dispose();
+    indexChangeNotifier.dispose();
+    super.dispose();
+  }
+
 // @override
 // Widget build(BuildContext context) {
 //   return Column(

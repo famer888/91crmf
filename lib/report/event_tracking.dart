@@ -25,7 +25,8 @@ class EventTracking {
   factory EventTracking() => _instance;
 
   EventTracking._internal() {
-    _startTimer();
+    // 不再在构造时立即启动定时器，等到有数据入队时按需启动
+    // 避免在 Safari 上空跑定时器造成内存压力
   }
 
   /// 上报地址
@@ -52,15 +53,18 @@ class EventTracking {
   /// 定时器实例
   Timer? _batchTimer;
 
-  /// 启动定时器
+  /// 启动定时器（仅在队列非空时启动，避免空跑浪费资源）
   void _startTimer() {
-    // 每10秒检查一次
+    if (_batchTimer?.isActive ?? false) return; // 已在运行则跳过
     _batchTimer = Timer.periodic(
       const Duration(seconds: _timerIntervalSeconds),
       (timer) {
         if (_eventQueue.isNotEmpty && !_isReporting) {
           CommonUtils.log('定时器触发上报，队列长度: ${_eventQueue.length}');
           unawaited(_batchReport());
+        } else if (_eventQueue.isEmpty) {
+          // 队列为空时停止定时器，减少 Safari 内存压力
+          _stopTimer();
         }
       },
     );
@@ -364,6 +368,8 @@ class EventTracking {
   /// 将事件添加到队列
   void _addToQueue(Map<String, dynamic> eventData) {
     _eventQueue.add(eventData);
+    // 队列有数据时确保定时器在运行
+    _startTimer();
 
     // 限制队列大小，避免内存溢出
     const maxQueueSize = 1000;

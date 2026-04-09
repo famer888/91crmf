@@ -51,7 +51,7 @@ class ImWebSocket {
       await _webSocketChannel!.ready;
       _webSocketSubscription = _webSocketChannel?.stream.listen(
         _onData,
-        onError: (e) => _webSocketReconnect,
+        onError: (e) => _webSocketReconnect(),
         onDone: _webSocketReconnect,
       );
       _startHeartBeat();
