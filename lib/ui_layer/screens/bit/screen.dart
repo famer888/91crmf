@@ -27,6 +27,12 @@ class _BitScreenState extends State<BitScreen> with TickerProviderStateMixin {
   late final tabController = TabController(length: navList.length, vsync: this);
 
   @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ScreenBackground(
       child: Scaffold(

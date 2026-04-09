@@ -72,6 +72,12 @@ class _HjsqTopNaviViewState extends State<HjsqTopNaviView> with TickerProviderSt
   }
 
   @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Selector<UnlockStatusNotifier, bool>(
         selector: (_, notifier) => notifier.isUnlockHjsq,

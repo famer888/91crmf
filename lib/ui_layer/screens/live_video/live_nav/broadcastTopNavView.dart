@@ -44,6 +44,12 @@ class _TopNaviViewState extends State<BroadcastTopNavView>
   }
 
   @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return _asyncValue.maybeWhen(
       data: (data) => TabBarWithView.line(
