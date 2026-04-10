@@ -56,6 +56,7 @@ class VideoPlayer {
 
   /// 存储所有事件监听的订阅，用于 dispose 时清理
   final List<StreamSubscription> _subscriptions = [];
+  final List<StreamSubscription> _sourceSubscriptions = [];
 
   /// Returns the [Stream] of [VideoEvent]s from the inner [html.VideoElement].
   Stream<VideoEvent> get events => _eventController.stream;
@@ -202,6 +203,11 @@ class VideoPlayer {
       sub.cancel();
     }
     _subscriptions.clear();
+
+    for (final sub in _sourceSubscriptions) {
+      sub.cancel();
+    }
+    _sourceSubscriptions.clear();
     _listenersAttached = false;
 
     _hls?.stopLoad();
@@ -212,9 +218,6 @@ class VideoPlayer {
     _videoElement.removeAttribute('src');
     _videoElement.load();
     _isInitialized = false;
-
-    // 关闭 StreamController
-    _eventController.close();
   }
 
   // Sends an [VideoEventType.initialized] [VideoEvent] with info about the wrapped video.
@@ -283,6 +286,12 @@ class VideoPlayer {
   }
 
   FutureOr<void> changeVideo(String src) async {
+    for (final sub in _sourceSubscriptions) {
+      await sub.cancel();
+    }
+    _sourceSubscriptions.clear();
+    _isInitialized = false;
+
     _hls?.stopLoad();
     _hls?.destroy();
     _videoElement.currentTime = 0;
@@ -310,7 +319,7 @@ class VideoPlayer {
           ));
         }
       }));
-      _subscriptions.add(_videoElement.onCanPlay.listen((dynamic _) {
+      _sourceSubscriptions.add(_videoElement.onCanPlay.listen((dynamic _) {
         if (!_isInitialized) {
           _isInitialized = true;
           _sendInitialized();
@@ -322,7 +331,7 @@ class VideoPlayer {
       _videoElement.load();
       _videoElement.src = src;
       _videoElement.load();
-      _subscriptions.add(_videoElement.on['durationchange'].listen((_) {
+      _sourceSubscriptions.add(_videoElement.on['durationchange'].listen((_) {
         if (_videoElement.duration == 0) {
           return;
         }
@@ -331,7 +340,7 @@ class VideoPlayer {
           _sendInitialized();
         }
       }));
-      _subscriptions.add(_videoElement.onCanPlay.listen((dynamic _) {
+      _sourceSubscriptions.add(_videoElement.onCanPlay.listen((dynamic _) {
         if (!_isInitialized && !isAndroid) {
           _isInitialized = true;
           _sendInitialized();
