@@ -163,7 +163,7 @@ class _XiaolanCreatorScreenState extends State<XiaolanCreatorScreen> with Ticker
                             linearColors: [Color(0xFFCB4AED), Color(0xFF5D3EF9)],
                             labelStyle: TextStyle(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w600),
                             unselectedLabelStyle: TextStyle(
-                              color: Colors.white.withValues(alpha: .5),
+                              color: Colors.white.withOpacity(.5),
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w400,
                             ),
@@ -213,7 +213,7 @@ class _XiaolanCreatorScreenState extends State<XiaolanCreatorScreen> with Ticker
                   ),
                   SliverToBoxAdapter(
                     child:
-                        XiaoLanAdsHeader(bannersNotifier: bannersNotifier, color: Colors.white.withValues(alpha: .7)),
+                        XiaoLanAdsHeader(bannersNotifier: bannersNotifier, color: Colors.white.withOpacity(.7)),
                   ),
                   SliverToBoxAdapter(
                     child: SizedBox(
