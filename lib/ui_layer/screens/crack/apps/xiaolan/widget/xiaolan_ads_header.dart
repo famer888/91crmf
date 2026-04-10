@@ -32,7 +32,7 @@ class _XiaoLanAdsHeaderState extends State<XiaoLanAdsHeader> {
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding),
               child: ReportGeneralAppsListVidget(
-                  data: banners, titleColor: widget.color ?? Colors.black.withValues(alpha: .7)),
+                  data: banners, titleColor: widget.color ?? Colors.black.withOpacity(.7)),
             );
           },
         ),

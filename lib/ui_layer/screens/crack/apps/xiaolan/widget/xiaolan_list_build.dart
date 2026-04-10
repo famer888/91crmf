@@ -172,7 +172,7 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
                       return Container(
                         width: 145.w,
                         height: 99.5.h,
-                        color: Colors.black.withValues(alpha: .5),
+                        color: Colors.black.withOpacity(.5),
                       );
                     }
                     return SizedBox(
@@ -270,7 +270,7 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
                   });
                 }
                 return Container(
-                  color: Colors.black.withValues(alpha: .5),
+                  color: Colors.black.withOpacity(.5),
                 );
               },
             ),
@@ -328,7 +328,7 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
                       });
                     }
                     return Container(
-                      color: Colors.black.withValues(alpha: .5),
+                      color: Colors.black.withOpacity(.5),
                     );
                   },
                 ),
@@ -417,7 +417,7 @@ class _XiaoLanListBuildState extends State<XiaoLanListBuild> with SingleTickerPr
                         Spacer(),
                         Text(
                           "${user['nickname']}",
-                          style: TextStyle(color: Colors.black.withValues(alpha: .7), fontSize: 12.sp),
+                          style: TextStyle(color: Colors.black.withOpacity(.7), fontSize: 12.sp),
                         )
                       ],
                     ),
@@ -690,7 +690,7 @@ class XiaoLanItem {
                     child: Container(
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: .2),
+                    color: Colors.black.withOpacity(.2),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Stack(
@@ -711,8 +711,8 @@ class XiaoLanItem {
                                 begin: Alignment.bottomCenter,
                                 end: Alignment.topCenter,
                                 colors: [
-                                  Colors.black.withValues(alpha: .5),
-                                  Colors.black.withValues(alpha: 0),
+                                  Colors.black.withOpacity(.5),
+                                  Colors.black.withOpacity(0),
                                 ],
                               ),
                               borderRadius: BorderRadius.only(
@@ -769,7 +769,7 @@ class XiaoLanItem {
           },
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: .5),
+              color: Colors.black.withOpacity(.5),
               borderRadius: BorderRadius.circular(7.5.r),
             ),
             child: Stack(
@@ -778,7 +778,7 @@ class XiaoLanItem {
                 Positioned.fill(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: .5),
+                      color: Colors.black.withOpacity(.5),
                       borderRadius: BorderRadius.circular(7.5.r),
                     ),
                   ),
@@ -815,7 +815,7 @@ class XiaoLanItem {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: .5),
+                    color: Colors.black.withOpacity(.5),
                     borderRadius: BorderRadius.circular(7.r),
                   ),
                   child: MyImage.network(item["bg_thumb"], fit: BoxFit.cover, borderRadius: 7.r),

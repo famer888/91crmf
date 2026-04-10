@@ -349,7 +349,7 @@ class _XiaolanCalendarDialogState extends State<_XiaolanCalendarDialog> {
         decoration: BoxDecoration(
           color: Color(0xFFF7F8FA),
           boxShadow: [
-            BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 16.r, offset: Offset(0, 4.h)),
+            BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 16.r, offset: Offset(0, 4.h)),
           ],
         ),
         child: Column(

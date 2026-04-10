@@ -231,7 +231,7 @@ class _XiaolanSearchScreenState extends State<XiaolanSearchScreen> {
                       child: Image.asset(
                         "assets/images/app_asmr_del.png",
                         width: 14.w,
-                        color: Colors.black.withValues(alpha: .5),
+                        color: Colors.black.withOpacity(.5),
                       ),
                     ),
                 ],
@@ -397,7 +397,7 @@ class _XiaolanSearchScreenState extends State<XiaolanSearchScreen> {
               //   child: Image.asset(
               //     "assets/images/xiaolan_search_refresh.png",
               //     width: 14.w,
-              //     color: Colors.black.withValues(alpha: .3),
+              //     color: Colors.black.withOpacity(.3),
               //   ),
               // ),
             ],

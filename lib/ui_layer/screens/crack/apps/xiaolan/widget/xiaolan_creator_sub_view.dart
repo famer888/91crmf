@@ -85,7 +85,7 @@ class _XiaolanCreatorSubViewState extends State<XiaolanCreatorSubView> with Tick
             return Center(
               child: Text(
                 "暂无数据",
-                style: TextStyle(color: Colors.white.withValues(alpha: .6), fontSize: 15.sp),
+                style: TextStyle(color: Colors.white.withOpacity(.6), fontSize: 15.sp),
               ),
             );
           }

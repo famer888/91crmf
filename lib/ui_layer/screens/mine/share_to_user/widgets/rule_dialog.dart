@@ -40,7 +40,7 @@ class RuleDialog extends StatelessWidget {
                       Text(
                         'gzsmc'.tr(context: context),
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: .7),
+                          color: Colors.white.withOpacity(.7),
                           letterSpacing: 0.5,
                           height: 1.8,
                           fontSize: 14.sp,
