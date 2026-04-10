@@ -69,6 +69,10 @@ class _ShortvMvPlayerState extends State<ShortvMvPlayer> with NVideoURLMinxin {
   }
 
   initURL() async {
+    // 先释放旧的 FlickManager，避免多个实例同时存在
+    flickManager?.dispose();
+    flickManager = null;
+
     String source_240 = widget.info.source240 ?? '';
     String previewUrl = widget.info.previewUrl ?? '';
     VideoPlayerController? cr;
@@ -80,6 +84,7 @@ class _ShortvMvPlayerState extends State<ShortvMvPlayer> with NVideoURLMinxin {
       cr = await initController(source240: previewUrl, isLocal: widget.isLocal);
     }
     if (cr == null) return;
+    if (!mounted) return;
     flickManager = FlickManager(
         videoPlayerController: cr,
         autoPlay: !kIsWeb,
@@ -99,6 +104,9 @@ class _ShortvMvPlayerState extends State<ShortvMvPlayer> with NVideoURLMinxin {
     //显式停止播放器,防止视频格式异常导致播放器一直在播放错误无法释放
     flickManager?.flickVideoManager?.videoPlayerController?.pause();
     flickManager?.dispose();
+    flickManager = null;
+    // 释放 mixin 中创建的 Blob URL
+    _revokePreviousBlobUrl();
     super.dispose();
   }
 
@@ -109,7 +117,8 @@ class _ShortvMvPlayerState extends State<ShortvMvPlayer> with NVideoURLMinxin {
         : VisibilityDetector(
             key: ObjectKey(flickManager),
             onVisibilityChanged: (visibility) {
-              if (visibility.visibleFraction == 0 && mounted) {
+              if (!mounted || flickManager == null) return;
+              if (visibility.visibleFraction == 0) {
                 flickManager?.flickControlManager?.autoPause();
               } else if (visibility.visibleFraction == 1) {
                 flickManager?.flickControlManager?.autoResume();

@@ -65,6 +65,7 @@ class _LiveMvPlayerState extends State<LiveMvPlayer> with NVideoURLMinxin {
   FlickManager? flickManager;
   String playerStr = '';
   int chanelIndex = 0; //播放线路
+  VoidCallback? _webVoiceListener; // 存储 listener 引用，用于清理
 
   final TextEditingController _textFieldController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
@@ -143,7 +144,11 @@ class _LiveMvPlayerState extends State<LiveMvPlayer> with NVideoURLMinxin {
   //禁止web播放时默认静音
   void _openWebVioce() {
     if (kIsWeb) {
-      flickManager?.flickVideoManager?.videoPlayerController?.addListener(() {
+      // 移除旧的 listener，避免累积
+      if (_webVoiceListener != null) {
+        flickManager?.flickVideoManager?.videoPlayerController?.removeListener(_webVoiceListener!);
+      }
+      _webVoiceListener = () {
         if (flickManager?.flickVideoManager?.videoPlayerController?.value.isInitialized ?? false) {
           // 视频初始化完成后取消静音
           List<html.VideoElement> elements = html.document.getElementsByTagName('video').cast<html.VideoElement>();
@@ -154,13 +159,23 @@ class _LiveMvPlayerState extends State<LiveMvPlayer> with NVideoURLMinxin {
           }
           if (mounted) setState(() {});
         }
-      });
+      };
+      flickManager?.flickVideoManager?.videoPlayerController?.addListener(_webVoiceListener!);
     }
   }
 
   @override
   void dispose() {
+    // 移除 web voice listener
+    if (_webVoiceListener != null) {
+      flickManager?.flickVideoManager?.videoPlayerController?.removeListener(_webVoiceListener!);
+      _webVoiceListener = null;
+    }
     flickManager?.dispose();
+    flickManager = null;
+    _textFieldController.dispose();
+    // 释放 mixin 中创建的 Blob URL
+    _revokePreviousBlobUrl();
     super.dispose();
   }
 

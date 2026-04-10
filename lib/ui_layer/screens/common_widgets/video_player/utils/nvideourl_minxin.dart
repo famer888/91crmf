@@ -12,6 +12,19 @@ import '../../../../utils/common_utils.dart';
 import 'shelf_proxy.dart';
 
 mixin NVideoURLMinxin<T extends StatefulWidget> on State<T> {
+  /// 追踪创建的 Blob URL，用于释放内存
+  String? _currentBlobUrl;
+
+  /// 释放上一次创建的 Blob URL
+  void _revokePreviousBlobUrl() {
+    if (_currentBlobUrl != null) {
+      try {
+        html.Url.revokeObjectUrl(_currentBlobUrl!);
+      } catch (_) {}
+      _currentBlobUrl = null;
+    }
+  }
+
   //获取播放控制器
   Future<VideoPlayerController>? initController({
     String source240 = '',
@@ -30,10 +43,13 @@ mixin NVideoURLMinxin<T extends StatefulWidget> on State<T> {
     if (kIsWeb) {
       if (AppGlobal.m3u8Encrypt == '1') {
         return Dio().get(purl).then((res) {
+          // 释放上一次的 Blob URL，避免 Safari 内存泄漏
+          _revokePreviousBlobUrl();
           String decrypted = PlatformAwareCrypto.decryptM3U8(res.data);
           final blob =
               html.Blob([decrypted], 'application/x-mpegURL', 'native');
           final url = html.Url.createObjectUrl(blob);
+          _currentBlobUrl = url;
           CommonUtils.log(url);
           return VideoPlayerController.network(url);
         });

@@ -120,8 +120,8 @@ class FlickVideoManager extends ChangeNotifier {
     _currentVideoEnded = false;
     _notify();
 
-    // Dispose the old controller after 5 seconds.
-    Future.delayed(Duration(seconds: 5), () => oldController?.dispose());
+    // Dispose the old controller promptly to reduce Safari memory pressure.
+    Future.delayed(Duration(seconds: 1), () => oldController?.dispose());
 
     // Initialize the video if not initialized
     // (User can initialize the video while passing to flick).

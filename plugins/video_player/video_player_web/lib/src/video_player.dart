@@ -51,7 +51,11 @@ class VideoPlayer {
 
   bool _isInitialized = false;
   bool _isBuffering = false;
+  bool _listenersAttached = false;
   Hls? _hls;
+
+  /// 存储所有事件监听的订阅，用于 dispose 时清理
+  final List<StreamSubscription> _subscriptions = [];
 
   /// Returns the [Stream] of [VideoEvent]s from the inner [html.VideoElement].
   Stream<VideoEvent> get events => _eventController.stream;
@@ -70,21 +74,25 @@ class VideoPlayer {
     // Set autoplay to false since most browsers won't autoplay a video unless it is muted
     _videoElement.setAttribute('autoplay', 'false');
 
-    _videoElement.onCanPlayThrough.listen((dynamic _) {
-      setBuffering(false);
-    });
+    // 防止重复绑定监听器（changeVideo 会再次调用 initialize）
+    if (_listenersAttached) return;
+    _listenersAttached = true;
 
-    _videoElement.onPlaying.listen((dynamic _) {
+    _subscriptions.add(_videoElement.onCanPlayThrough.listen((dynamic _) {
       setBuffering(false);
-    });
+    }));
 
-    _videoElement.onWaiting.listen((dynamic _) {
+    _subscriptions.add(_videoElement.onPlaying.listen((dynamic _) {
+      setBuffering(false);
+    }));
+
+    _subscriptions.add(_videoElement.onWaiting.listen((dynamic _) {
       setBuffering(true);
       _sendBufferingRangesUpdate();
-    });
+    }));
 
     // The error event fires when some form of error occurs while attempting to load or perform the media.
-    _videoElement.onError.listen((html.Event _) {
+    _subscriptions.add(_videoElement.onError.listen((html.Event _) {
       setBuffering(false);
       // The Event itself (_) doesn't contain info about the actual error.
       // We need to look at the HTMLMediaElement.error.
@@ -95,12 +103,12 @@ class VideoPlayer {
         message: error.message != '' ? error.message : _kDefaultErrorMessage,
         details: _kErrorValueToErrorDescription[error.code],
       ));
-    });
+    }));
 
-    _videoElement.onEnded.listen((dynamic _) {
+    _subscriptions.add(_videoElement.onEnded.listen((dynamic _) {
       setBuffering(false);
       _eventController.add(VideoEvent(eventType: VideoEventType.completed));
-    });
+    }));
   }
 
   /// Attempts to play the video.
@@ -189,15 +197,24 @@ class VideoPlayer {
 
   /// Disposes of the current [html.VideoElement].
   void dispose() {
-    // if (_isInitialized) {
+    // 取消所有事件监听订阅
+    for (final sub in _subscriptions) {
+      sub.cancel();
+    }
+    _subscriptions.clear();
+    _listenersAttached = false;
+
     _hls?.stopLoad();
     _hls?.destroy();
+    _hls = null;
     _videoElement.pause();
     _videoElement.currentTime = 0;
     _videoElement.removeAttribute('src');
     _videoElement.load();
     _isInitialized = false;
-    // }
+
+    // 关闭 StreamController
+    _eventController.close();
   }
 
   // Sends an [VideoEventType.initialized] [VideoEvent] with info about the wrapped video.
@@ -293,19 +310,19 @@ class VideoPlayer {
           ));
         }
       }));
-      _videoElement.onCanPlay.listen((dynamic _) {
+      _subscriptions.add(_videoElement.onCanPlay.listen((dynamic _) {
         if (!_isInitialized) {
           _isInitialized = true;
           _sendInitialized();
         }
         setBuffering(false);
-      });
+      }));
     } else {
       _videoElement.removeAttribute('src');
       _videoElement.load();
       _videoElement.src = src;
       _videoElement.load();
-      _videoElement.addEventListener('durationchange', (_) {
+      _subscriptions.add(_videoElement.on['durationchange'].listen((_) {
         if (_videoElement.duration == 0) {
           return;
         }
@@ -313,13 +330,13 @@ class VideoPlayer {
           _isInitialized = true;
           _sendInitialized();
         }
-      });
-      _videoElement.onCanPlay.listen((dynamic _) {
+      }));
+      _subscriptions.add(_videoElement.onCanPlay.listen((dynamic _) {
         if (!_isInitialized && !isAndroid) {
           _isInitialized = true;
           _sendInitialized();
         }
-      });
+      }));
     }
     initialize();
   }

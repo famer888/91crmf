@@ -73,6 +73,12 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       AppVisitUtil.updateVlogVisitRecord(context, widget.info!);
     });
+
+    // 先释放旧的 FlickManager 和控制器，避免多个实例同时存在导致 Safari 崩溃
+    flickManager?.dispose();
+    flickManager = null;
+    cr = null;
+
     String source_240 = widget.info?.source_240 ?? '';
     String preview_url = widget.info?.previewUrl ?? '';
 
@@ -87,6 +93,9 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
     vlogDomain.reportVlogPlay(id: widget.info?.id ?? 0);
 
     if (cr == null) return;
+    // 如果在 await 期间 Widget 已经被销毁，不再创建 FlickManager
+    if (!mounted) return;
+
     flickManager = FlickManager(
         videoPlayerController: cr!,
         autoPlay: !kIsWeb,
@@ -108,6 +117,8 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
     flickManager?.dispose();
     flickManager = null;
     cr = null;
+    // 释放 mixin 中创建的 Blob URL
+    _revokePreviousBlobUrl();
     super.dispose();
   }
 
@@ -118,11 +129,13 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
         : VisibilityDetector(
             key: ObjectKey(flickManager),
             onVisibilityChanged: (visibility) async {
-              if (visibility.visibleFraction == 0 && mounted) {
+              // 确保 Widget 未被销毁且 flickManager 仍然有效
+              if (!mounted || flickManager == null || cr == null) return;
+              if (visibility.visibleFraction == 0) {
                 if (cr?.value.isInitialized == true) {
                   await flickManager?.flickControlManager?.autoPause();
                 }
-              } else if (visibility.visibleFraction == 1 && mounted) {
+              } else if (visibility.visibleFraction == 1) {
                 if (cr?.value.isInitialized == true) {
                   flickManager?.flickControlManager?.autoResume();
                 }
