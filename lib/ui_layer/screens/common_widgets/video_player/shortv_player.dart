@@ -118,7 +118,7 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
     flickManager = null;
     cr = null;
     // 释放 mixin 中创建的 Blob URL
-    _revokePreviousBlobUrl();
+    revokePreviousBlobUrl();
     super.dispose();
   }
 

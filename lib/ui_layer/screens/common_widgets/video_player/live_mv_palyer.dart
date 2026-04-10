@@ -175,7 +175,7 @@ class _LiveMvPlayerState extends State<LiveMvPlayer> with NVideoURLMinxin {
     flickManager = null;
     _textFieldController.dispose();
     // 释放 mixin 中创建的 Blob URL
-    _revokePreviousBlobUrl();
+    revokePreviousBlobUrl();
     super.dispose();
   }
 
