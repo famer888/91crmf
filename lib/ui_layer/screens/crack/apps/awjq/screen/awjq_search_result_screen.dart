@@ -100,7 +100,7 @@ class _AwjqSearchResultScreenState extends State<AwjqSearchResultScreen> {
                 "click_item_id": item.id,
                 "click_item_type_key": "video",
                 "click_item_type_name": "视频",
-                "click_ position": index,
+                "click_position": index,
               }),
               onFetchingMore: (currentPage, pageSize) => _getData(page: currentPage, pageSize: pageSize, type: widget.type),
             ),

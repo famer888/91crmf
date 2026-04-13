@@ -140,7 +140,7 @@ class _VideoViewState extends State<_VideoView> {
         "click_item_id": item.id,
         "click_item_type_key": "video",
         "click_item_type_name": "视频",
-        "click_ position": index,
+        "click_position": index,
       }),
       onFetchingMore: (currentPage, pageSize) => _getData(
         page: currentPage,
@@ -185,7 +185,7 @@ class _TieztViewState extends State<_TieztView> {
         "click_item_id": item.id,
         "click_item_type_key": "community",
         "click_item_type_name": "帖子",
-        "click_ position": index,
+        "click_position": index,
       }),
       onFetchingMore: (currentPage, pageSize) => _getData(
         page: currentPage,
@@ -230,7 +230,7 @@ class _ZhozViewState extends State<_ZhozView> {
         "click_item_id": item.id,
         "click_item_type_key": "bit",
         "click_item_type_name": "种子",
-        "click_ position": index,
+        "click_position": index,
       }),
       onFetchingMore: (currentPage, pageSize) => _getData(
         page: currentPage,
@@ -272,7 +272,7 @@ class _LiveVideoViewState extends State<_LiveVideoView> {
         "click_item_id": item.id,
         "click_item_type_key": "live",
         "click_item_type_name": "直播",
-        "click_ position": index,
+        "click_position": index,
       }),
       onFetchingMore: (currentPage, pageSize) => _getData(
         page: currentPage,
@@ -316,7 +316,7 @@ class _ASMRViewState extends State<_ASMRView> {
         "click_item_id": item.id,
         "click_item_type_key": "voice",
         "click_item_type_name": "有声",
-        "click_ position": index,
+        "click_position": index,
       }),
       onFetchingMore: (currentPage, pageSize) => _getData(
         page: currentPage,
@@ -361,7 +361,7 @@ class _TorrentViewState extends State<_TorrentView> {
         "click_item_id": item.id,
         "click_item_type_key": "bit",
         "click_item_type_name": "种子",
-        "click_ position": index,
+        "click_position": index,
       }),
       onFetchingMore: (currentPage, pageSize) => _getData(
         page: currentPage,
@@ -440,7 +440,7 @@ class _VlogVideoViewState extends State<_VlogVideoView> {
         "click_item_id": item.id,
         "click_item_type_key": "vlog",
         "click_item_type_name": "短视频",
-        "click_ position": index,
+        "click_position": index,
       }),
       onFetchingMore: (currentPage, pageSize) => _getData(
         page: currentPage,
@@ -487,7 +487,7 @@ class _CartoonViewState extends State<_CartoonView> {
         "click_item_id": item.id,
         "click_item_type_key": "cartoon",
         "click_item_type_name": "动漫",
-        "click_ position": index,
+        "click_position": index,
       }),
       onFetchingMore: (currentPage, pageSize) => _getData(
         page: currentPage,
@@ -534,7 +534,7 @@ class _GameViewState extends State<_GameView> {
         "click_item_id": item.id,
         "click_item_type_key": "game",
         "click_item_type_name": "游戏",
-        "click_ position": index,
+        "click_position": index,
       }),
       onFetchingMore: (currentPage, pageSize) => _getData(
         page: currentPage,
