@@ -4,18 +4,15 @@ import 'home_data_model.dart';
 
 class VideoDetailData {
   VideoDetailData({required this.detail, this.banner, this.adPops});
+
   final VideoData detail;
   final List<Notice>? banner;
   final Notice? adPops;
 
-  factory VideoDetailData.fromJson(Map<String, dynamic> json) =>
-      VideoDetailData(
+  factory VideoDetailData.fromJson(Map<String, dynamic> json) => VideoDetailData(
         detail: VideoData.fromJson(json['detail']),
-        banner: json['banner'] == null
-            ? null
-            : List<Notice>.from(json['banner'].map((e) => Notice.fromJson(e))),
-        adPops:
-            json['ad_pops'] == null ? null : Notice.fromJson(json['ad_pops']),
+        banner: json['banner'] == null ? null : List<Notice>.from(json['banner'].map((e) => Notice.fromJson(e))),
+        adPops: json['ad_pops'] == null ? null : Notice.fromJson(json['ad_pops']),
       );
 
   Map<String, dynamic> toJson() => {
@@ -27,6 +24,14 @@ class VideoDetailData {
 
 class VideoData {
   VideoData({
+    this.videoTypeId,
+    this.videoTypeName,
+    this.videoContentType,
+    this.recommendTraceId,
+    this.videoTagKey,
+    this.videoTagName,
+    this.mediaId = "",
+    this.tagList,
     this.id,
     this.memberUuid,
     this.title,
@@ -96,6 +101,15 @@ class VideoData {
     this.secondTitle,
   });
 
+  final String? videoTypeId;
+  final String? videoTypeName;
+  final String? videoContentType;
+  final String? recommendTraceId;
+  final String? videoTagKey;
+  final String? videoTagName;
+  final String mediaId;
+  final List<dynamic>? tagList;
+
   int? id;
   final dynamic topic;
   final dynamic userAction;
@@ -119,6 +133,7 @@ class VideoData {
   final String? directors;
   final String? publisher;
   final String? actors;
+
   // final String? category;
   final String? tags;
   final String? selfTag;
@@ -165,7 +180,16 @@ class VideoData {
   final int? seriesId;
 
   int? isSpeed;
+
   factory VideoData.fromJson(Map json) => VideoData(
+      videoTypeId: json['video_type_id']?.toString() ?? '',
+      videoTypeName: json['video_type_name'] ?? '',
+      videoContentType: json['video_content_type'],
+      recommendTraceId: json['recommend_trace_id'],
+      videoTagKey: json['video_tag_key'],
+      videoTagName: json['video_tag_name'],
+      mediaId: json['media_id'],
+      tagList: json['tag_list'],
       secondTitle: json['second_title'] ?? '',
       id: json['id'],
       topic: json['topic'],
@@ -230,9 +254,7 @@ class VideoData {
       coverThumbHorizontal: json['cover_horizontal'],
       coverThumbVerticle: json['cover_vertical'],
       discountCoins: json['discount_coins'] ?? 0,
-      discount: json['discount'] == null
-          ? 0
-          : double.parse(json['discount'].toString()),
+      discount: json['discount'] == null ? 0 : double.parse(json['discount'].toString()),
       favorites: json['favorites'] ?? 0,
       seriesId: json['series_id'] ?? 0);
 

@@ -24,7 +24,6 @@ import 'package:jycrpj/domain/remote_domain/domains/report.dart';
 import 'package:jycrpj/report/analytics/analytics_page_sync.dart';
 import 'package:jycrpj/report/analytics/report_search_event.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 /// 与 a_hjsq 对齐：远程加密配置刷新。
@@ -48,7 +47,6 @@ Future<void> fetchAndApplyConfig() async {
 
 Future<void> initAnalyticsSdk(BuildContext? context,
     {String oauthId = ''}) async {
-  final pkg = await PackageInfo.fromPlatform();
   final appId =
       AppGlobal.reportAppId.isNotEmpty ? AppGlobal.reportAppId : 'DX-105';
   await AnalyticsSdk.instance.init(
@@ -56,10 +54,11 @@ Future<void> initAnalyticsSdk(BuildContext? context,
     encryptedConfig: null,
     deviceId: oauthId,
     enableDebugBanner: kDebugMode,
-    appVersion:"26.0424.2215",
+    appVersion: '26.0424.2352',
   );
 }
 
+// 安装事件
 void analyticsReportInstall(BuildContext context, String traceID) {
   if (AppGlobal.installFlag.isEmpty) {
     AnalyticsSdk.instance.track(AppInstallEvent(traceId: traceID));
@@ -67,6 +66,7 @@ void analyticsReportInstall(BuildContext context, String traceID) {
   }
 }
 
+// 用户登陆
 void analyticsUserLogin(int vipLevel) {
   AnalyticsSdk.setUserIdAndType(
     userId: (AppGlobal.aff > 0) ? AppGlobal.aff.toString() : '',
@@ -74,20 +74,24 @@ void analyticsUserLogin(int vipLevel) {
   );
 }
 
+// 设置UID
 void analyticsSetUid(String uid) {
   AnalyticsSdk.setUid(uid);
 }
 
+// 设置Channel
 void analyticsSetChannel(String channel) {
   AnalyticsSdk.setChannel(
     channel == 'self' ? '' : channel,
   );
 }
 
+// 登出
 void analyticsLogout() {
   AnalyticsSdk.logoutUser();
 }
 
+// 页面导航切换
 void analyticsNavigationChange() {
   final key = PageLifecycleObserver.currentPageKey;
   final pageName = PageNameMapper.getPageName(key);
@@ -98,6 +102,7 @@ void analyticsNavigationChange() {
   );
 }
 
+// 视频行为上报
 void analyticsVideo({
   FlickManager? flickManager,
   dynamic data,
@@ -110,10 +115,10 @@ void analyticsVideo({
   final value = flickManager?.flickVideoManager?.videoPlayerValue;
   if (value == null || !value.isInitialized) return;
 
-  final playDuration = value.position.inSeconds;
-  final videoDuration = value.duration.inSeconds;
+  int playDuration = value.position.inSeconds;
+  int videoDuration = value.duration.inSeconds;
 
-  var percent = videoDuration > 0 ? playDuration / videoDuration : 0.0;
+  double percent = videoDuration > 0 ? playDuration / videoDuration : 0;
   if (percent.isNaN || percent.isInfinite) {
     percent = 0;
   }
@@ -129,24 +134,26 @@ void analyticsVideo({
   if (data is VideoData) {
     videoId = data.id?.toString() ?? '';
     videoTitle = data.title ?? '';
-    videoTypeId = data.mvType?.toString() ?? '';
-    videoTypeName = '';
-    videoTagKey = 'video_detail';
-    videoTagName = data.tags ?? '';
-    recommendTraceId = '';
-    mediaId = data.id?.toString() ?? '';
-  } else if (data is VlogModel) {
-    videoId = data.id?.toString() ?? '';
-    videoTitle = data.title ?? '';
-    videoTypeId = data.mvType?.toString() ?? '';
-    videoTypeName = '';
-    videoTagKey = 'vlog';
-    videoTagName = data.tags ?? '';
-    recommendTraceId = '';
-    mediaId = data.id?.toString() ?? '';
+    videoTypeId = data.videoTypeId?.toString() ?? '';
+    videoTypeName = data.videoTypeName ?? '';
+    videoTagKey = data.videoTagKey ?? 'video_detail';
+    videoTagName = data.videoTagName ?? (data.tags ?? '');
+    recommendTraceId = data.recommendTraceId ?? '';
+    mediaId = data.mediaId;
   }
 
-  final progress = (percent * 100).clamp(0, 100).round();
+  if (data is VlogModel) {
+    videoId = data.id?.toString() ?? '';
+    videoTitle = data.title ?? '';
+    videoTypeId = data.videoTypeId?.toString() ?? '';
+    videoTypeName = data.videoTypeName ?? '';
+    videoTagKey = data.videoTagKey ?? 'video_detail';
+    videoTagName = data.videoTagName ?? (data.tags ?? '');
+    recommendTraceId = data.recommendTraceId ?? '';
+    mediaId = data.mediaId;
+  }
+
+  int progress = (percent * 100).clamp(0, 100).round();
   AnalyticsSdk.instance.track(
     VideoEvent(
       videoId: videoId,
@@ -160,12 +167,14 @@ void analyticsVideo({
       playProgress: progress,
       videoBehavior: videoEvent,
       videoContentType: videoContentType,
+      // 未接推荐引擎传 ''
       recommendTraceId: recommendTraceId,
       mediaId: mediaId,
     ),
   );
 }
 
+// 点击广告上报
 void analyticsAdClick(BuildContext context, dynamic data) {
   if (data is! FeedAdModel && data is! AdModel) return;
 
@@ -177,21 +186,23 @@ void analyticsAdClick(BuildContext context, dynamic data) {
     adSlotKey = data.advertiseLocationCode ?? '';
     adSlotName = data.adSlotName ?? '';
     adId = data.advertiseCode ?? '';
-    adType = data.adType?.toString() ?? '';
+    adType = "${data.adType}" ?? '';
   }
 
   if (data is AdModel) {
     adSlotKey = data.advertiseLocationCode ?? '';
     adSlotName = data.adSlotName ?? '';
     adId = data.advertiseCode ?? '';
-    adType = data.adType.toString();
+    adType = "${data.adType}" ?? '';
   }
 
   final pageInfo = syncAnalyticsPageFromContext(context);
+  final pageKey = pageInfo.pageKey;
+  final pageName = pageInfo.pageName;
   AnalyticsSdk.instance.track(
     AdClickEvent(
-      pageKey: pageInfo.pageKey,
-      pageName: pageInfo.pageName,
+      pageKey: pageKey,
+      pageName: pageName,
       adSlotKey: adSlotKey,
       adSlotName: adSlotName,
       adId: adId,
@@ -201,6 +212,7 @@ void analyticsAdClick(BuildContext context, dynamic data) {
   );
 }
 
+// 广告行为上报
 void analyticsAdvertising({required dynamic data, required String action}) {
   if (data is! FeedAdModel && data is! AdModel) return;
 
@@ -229,6 +241,7 @@ void analyticsAdvertising({required dynamic data, required String action}) {
   );
 }
 
+// 搜索关键词上报
 void analyticsKeywordClick({
   required String keyword,
   required String clickItemId,
@@ -236,7 +249,7 @@ void analyticsKeywordClick({
   required int clickPosition,
   required String searchTraceId,
 }) {
-  final cType = ClickItemTypeEnum(
+  ClickItemTypeEnum cType = ClickItemTypeEnum(
     contentType.key,
     contentType.name,
   );
@@ -252,6 +265,7 @@ void analyticsKeywordClick({
   );
 }
 
+// 关键词搜索
 void analyticsKeywordSearch({
   required String keyword,
   required int searchResultCount,

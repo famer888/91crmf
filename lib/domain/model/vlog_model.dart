@@ -41,6 +41,15 @@ class VlogModel {
   final int? reportId;
   final int? reportType;
 
+  final String? videoTypeId;
+  final String? videoTypeName;
+  final String? videoContentType;
+  final String? recommendTraceId;
+  final String? videoTagKey;
+  final String? videoTagName;
+  final String mediaId;
+  String? searchTraceId;
+
   VlogModel({
     this.id,
     this.title,
@@ -78,6 +87,14 @@ class VlogModel {
     this.redirectType,
     this.reportType,
     this.reportId,
+    this.videoTypeId,
+    this.videoTypeName,
+    this.videoContentType,
+    this.recommendTraceId,
+    this.videoTagKey,
+    this.videoTagName,
+    this.mediaId = '',
+    this.searchTraceId = '',
   });
 
   factory VlogModel.fromJson(Map<String, dynamic> json) => VlogModel(
@@ -105,9 +122,7 @@ class VlogModel {
         discountCoins: json['discount_coins'],
         isPackage: json['is_package'],
         previewUrl: json['preview_url'],
-        member: json['member'] != null
-            ? UserModel.fromJson(json['member'] as Map<String, dynamic>)
-            : null,
+        member: json['member'] != null ? UserModel.fromJson(json['member'] as Map<String, dynamic>) : null,
         description: json['description'],
         imgUrl: json['img_url'],
         type: json['type'],
@@ -119,6 +134,14 @@ class VlogModel {
         redirectType: json['redirect_type'],
         reportId: json['report_id'],
         reportType: json['report_type'],
+        videoTypeId: json['video_type_id']?.toString() ?? '',
+        videoTypeName: json['video_type_name'] ?? '',
+        videoContentType: json['video_content_type'],
+        recommendTraceId: json['recommend_trace_id'],
+        videoTagKey: json['video_tag_key'],
+        videoTagName: json['video_tag_name'],
+        mediaId: json['media_id'],
+        searchTraceId: json['search_trace_id'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -166,30 +189,21 @@ class HotFollowUseRecommendModel {
   final List<RecommendBloggerModel>? recommendBlogger;
   final List<VlogModel>? bloggerVlogs;
 
-  HotFollowUseRecommendModel(
-      {this.hotBlogger,
-      this.myFollow,
-      this.recommendBlogger,
-      this.bloggerVlogs});
+  HotFollowUseRecommendModel({this.hotBlogger, this.myFollow, this.recommendBlogger, this.bloggerVlogs});
 
-  factory HotFollowUseRecommendModel.fromJson(Map<String, dynamic> json) =>
-      HotFollowUseRecommendModel(
+  factory HotFollowUseRecommendModel.fromJson(Map<String, dynamic> json) => HotFollowUseRecommendModel(
         hotBlogger: json['hot_blogger'] == null
             ? null
-            : List<UserModel>.from(
-                json['hot_blogger'].map((e) => UserModel.fromJson(e))),
+            : List<UserModel>.from(json['hot_blogger'].map((e) => UserModel.fromJson(e))),
         myFollow: json['my_follow'] == null
             ? null
-            : List<FollowingUserData>.from(
-                json['my_follow'].map((e) => FollowingUserData.fromJson(e))),
+            : List<FollowingUserData>.from(json['my_follow'].map((e) => FollowingUserData.fromJson(e))),
         recommendBlogger: json['recommend_blogger'] == null
             ? null
-            : List<RecommendBloggerModel>.from(json['recommend_blogger']
-                .map((e) => RecommendBloggerModel.fromJson(e))),
+            : List<RecommendBloggerModel>.from(json['recommend_blogger'].map((e) => RecommendBloggerModel.fromJson(e))),
         bloggerVlogs: json['blogger_mvs'] == null
             ? null
-            : List<VlogModel>.from(
-                json['blogger_mvs'].map((e) => VlogModel.fromJson(e))),
+            : List<VlogModel>.from(json['blogger_mvs'].map((e) => VlogModel.fromJson(e))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -225,16 +239,12 @@ class RecommendBloggerModel {
     this.likeCt,
   });
 
-  factory RecommendBloggerModel.fromJson(Map<String, dynamic> json) =>
-      RecommendBloggerModel(
+  factory RecommendBloggerModel.fromJson(Map<String, dynamic> json) => RecommendBloggerModel(
         aff: json['aff'],
         nickname: json['nickname'],
         thumb: json['thumb'],
         releasedAt: json['released_at'],
-        mvs: json['mvs'] == null
-            ? null
-            : List<VlogModel>.from(
-                json['mvs'].map((e) => VlogModel.fromJson(e))),
+        mvs: json['mvs'] == null ? null : List<VlogModel>.from(json['mvs'].map((e) => VlogModel.fromJson(e))),
         isFollow: json['is_follow'],
         vipStr: json['vip_str'],
         fansCt: json['fans_ct'].toString(),
