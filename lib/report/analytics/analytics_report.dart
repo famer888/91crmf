@@ -39,13 +39,13 @@ Future<void> initAnalyticsSdk(BuildContext? context,
     {String oauthId = ''}) async {
   final pkg = await PackageInfo.fromPlatform();
   final appId =
-      AppGlobal.reportAppId.isNotEmpty ? AppGlobal.reportAppId : 'DX-002';
+      AppGlobal.reportAppId.isNotEmpty ? AppGlobal.reportAppId : 'DX-105';
   await AnalyticsSdk.instance.init(
     appId: appId,
     encryptedConfig: null,
     deviceId: oauthId,
     enableDebugBanner: kDebugMode,
-    appVersion: pkg.version,
+    appVersion:"26.0424.2215",
   );
 }
 
