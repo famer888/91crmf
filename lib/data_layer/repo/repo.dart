@@ -25,6 +25,7 @@ import 'package:jycrpj/data_layer/data_source/remote/game_service.dart';
 import 'package:jycrpj/data_layer/data_source/remote/invite_service.dart';
 import 'package:jycrpj/data_layer/data_source/remote/live_service.dart';
 import 'package:jycrpj/data_layer/data_source/remote/rank_service.dart';
+import 'package:jycrpj/data_layer/data_source/remote/report_service.dart';
 import 'package:jycrpj/data_layer/repo/r2_uploader.dart';
 import 'package:jycrpj/domain/model/ai/ai_draw_model.dart';
 import 'package:jycrpj/domain/model/ai/ai_draw_record_model.dart';
@@ -50,6 +51,7 @@ import 'package:jycrpj/domain/remote_domain/domains/crack.dart';
 
 import 'package:jycrpj/domain/remote_domain/domains/live.dart';
 import 'package:jycrpj/domain/remote_domain/domains/rank.dart';
+import 'package:jycrpj/domain/remote_domain/domains/report.dart';
 import 'package:jycrpj/domain/remote_domain/domains/buy.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:jycrpj/report/event_tracking.dart';
@@ -208,6 +210,8 @@ part 'mixin/crack_mixin.dart';
 
 part 'mixin/buy_mixin.dart';
 
+part 'mixin/report_mixin.dart';
+
 class AppRepo extends _BaseAppRepo
     with
         _Home,
@@ -241,7 +245,8 @@ class AppRepo extends _BaseAppRepo
         _Crack,
         _Buy,
         _Asmr,
-        _Rank {}
+        _Rank,
+        _Report {}
 
 abstract class _BaseAppRepo implements AppDomain {
   late final _homeService = HomeService(_apiDio);
@@ -277,6 +282,7 @@ abstract class _BaseAppRepo implements AppDomain {
   late final _crackService = CrackService(_apiDio);
   late final _inviteService = InviteService(_apiDio);
   late final _buyService = BuyService(_apiDio);
+  late final _reportService = ReportService(_apiDio);
 
   final _cacheManager = _CacheManager();
 

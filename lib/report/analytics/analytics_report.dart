@@ -20,16 +20,27 @@ import 'package:jycrpj/domain/model/feed/feed_model.dart';
 import 'package:jycrpj/domain/model/home_data_model.dart';
 import 'package:jycrpj/domain/model/video_detail_model.dart';
 import 'package:jycrpj/domain/model/vlog_model.dart';
+import 'package:jycrpj/domain/remote_domain/domains/report.dart';
 import 'package:jycrpj/report/analytics/analytics_page_sync.dart';
 import 'package:jycrpj/report/analytics/report_search_event.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
-/// 与 a_hjsq 对齐：远程加密配置刷新。本仓库未接 ReportDomain 时仅占位。
+/// 与 a_hjsq 对齐：远程加密配置刷新。
 Future<void> fetchAndApplyConfig() async {
   try {
-    CommonUtils.log('fetchAndApplyConfig: 未配置 ReportDomain，跳过 SDK 远程配置刷新');
+    final reportDomain = AppGlobal.context?.read<ReportDomain>();
+    final res = await reportDomain?.getEncryptedConfig();
+    // 根据实际的API响应格式提取config
+    if (res != null && res.status == 1) {
+      if (res.data case final encryptedConfig) {
+        CommonUtils.log('encryptedConfig:$encryptedConfig');
+        await AnalyticsSdk.instance.refreshDomainConfig(
+          encryptedConfig: encryptedConfig,
+        );
+      }
+    }
   } catch (e) {
     CommonUtils.log('获取加密config失败: $e');
   }

@@ -19,6 +19,7 @@ import 'package:jycrpj/domain/remote_domain/domains/crack.dart';
 import 'package:jycrpj/domain/remote_domain/domains/game.dart';
 import 'package:jycrpj/domain/remote_domain/domains/live.dart';
 import 'package:jycrpj/domain/remote_domain/domains/rank.dart';
+import 'package:jycrpj/domain/remote_domain/domains/report.dart';
 import 'package:isolated_worker/worker_delegator.dart';
 import 'package:jycrpj/ui_layer/screens/crack/unlock_status_notifier.dart';
 import 'package:provider/provider.dart';
@@ -117,6 +118,7 @@ void main() async {
         Provider<AIAudioDomain>(lazy: false, create: (_) => appRepo),
         Provider<ASMRDomain>(lazy: false, create: (_) => appRepo),
         Provider<RankDomain>(lazy: false, create: (_) => appRepo),
+        Provider<ReportDomain>(lazy: false, create: (_) => appRepo),
         Provider<InviteDomain>(lazy: false, create: (_) => appRepo),
         Provider<BlackDomain>(lazy: false, create: (_) => appRepo),
         Provider<CrackDomain>(lazy: false, create: (_) => appRepo),
