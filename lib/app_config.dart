@@ -14,19 +14,19 @@ class BuildConfig {
   static const defaultFdsKey =
       'P/D/+MulHay6Jzah0AnECON76PVOS4idWjlv/W9FmBnsXsGE+wXTI/uP4UpmvvPD';
 
-  static const linesUrlKey = 'lines_url_v4'; // 每次换线路都要v+1！！！！
+  static const linesUrlKey = 'lines_url_v5'; // 每次换线路都要v+1！！！！
 
   static final apiLines = kIsWeb
       ? [
-          'https://wapi.jllwdhii.cc/api.php',
+          'https://wapi.gmxegvla.com/api.php',
         ]
       : [
-          'https://api1.jllwdhii.cc/api.php',
-          'https://api2.jllwdhii.cc/api.php',
-          'https://api3.jllwdhii.cc/api.php',
-          'https://api4.jllwdhii.cc/api.php',
-          'https://api5.jllwdhii.cc/api.php',
-          'https://api6.jllwdhii.cc/api.php'
+          'https://api1.glfdosvj.cc/api.php',
+          'https://api2.glfdosvj.cc/api.php',
+          'https://api3.glfdosvj.cc/api.php',
+          'https://api4.glfdosvj.cc/api.php',
+          'https://api5.glfdosvj.cc/api.php',
+          'https://api6.glfdosvj.cc/api.php'
         ];
 
   /// 备用线路
