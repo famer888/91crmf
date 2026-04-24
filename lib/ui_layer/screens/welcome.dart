@@ -1,4 +1,6 @@
 import 'dart:async';
+
+import 'package:analytics_sdk/analytics_sdk.dart';
 import 'package:amplitude_flutter/amplitude.dart';
 import 'package:amplitude_flutter/configuration.dart';
 import 'package:amplitude_flutter/events/base_event.dart';
@@ -11,6 +13,7 @@ import 'package:flutter_swiper_null_safety_flutter3/flutter_swiper_null_safety_f
 import 'package:jycrpj/app_config.dart';
 import 'package:jycrpj/app_global.dart';
 import 'package:jycrpj/data_layer/repo/repo.dart';
+import 'package:jycrpj/report/analytics/analytics_report.dart';
 import 'package:jycrpj/report/ui_layer/report_ad_view.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/screen_background.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
@@ -60,6 +63,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     _initAmp();
     _loadDataFromCache();
     _checkLineAndFetchBeforeEnterHome();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AnalyticsSdk.instance.updateCurrentPage(
+        pageKey: 'launch',
+        pageName: '启动页',
+      );
+    });
     super.initState();
   }
 
@@ -110,6 +119,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         await _trackAmplitude("entry failure");
       },
       success: () async {
+        await fetchAndApplyConfig();
         _enterAdOrHome();
         await _trackAmplitude("enter app");
       },
@@ -127,6 +137,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
       String aff = uri.queryParameters[BuildConfig.affCodeKey] ?? '';
       if (aff.isNotEmpty) context.read<AppRepo>().setAffXCode(aff);
+
+      analyticsReportInstall(context, traceID);
     } else {
       final result = await Clipboard.getData(Clipboard.kTextPlain);
       if (result?.text case final String text when text.isNotEmpty) {
@@ -138,6 +150,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
           String aff = params[BuildConfig.affCodeKey] ?? '';
           if (aff.isNotEmpty) context.read<AppRepo>().setAffXCode(aff);
+
+          analyticsReportInstall(context, traceID);
         } catch (e) {
           return;
         }

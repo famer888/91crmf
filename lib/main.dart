@@ -1,8 +1,11 @@
+import 'package:analytics_sdk/widget/global_click_wrapper.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:jycrpj/app_global.dart';
+import 'package:jycrpj/report/analytics/analytic_page_mapper.dart';
+import 'package:jycrpj/report/analytics/analytics_report.dart';
 import 'package:jycrpj/domain/remote_domain/domains/aiaudio.dart';
 import 'package:jycrpj/domain/remote_domain/domains/aidraw.dart';
 import 'package:jycrpj/domain/remote_domain/domains/aikiss.dart';
@@ -54,6 +57,8 @@ void main() async {
   final appRepo = AppRepo();
   await appRepo.init();
   disableUrlStrategy();
+  await initAnalyticsSdk(null, oauthId: appRepo.getOAuthId());
+  initPage();
 
   /// 初始化多语系
   await EasyLocalization.ensureInitialized();
@@ -231,7 +236,7 @@ class _MyAppState extends State<MyApp> {
           data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
           child: widget,
         );
-        return widget;
+        return GlobalClickWrapper(child: ExcludeSemantics(child: widget));
       },
       scrollBehavior: ScrollConfiguration.of(context).copyWith(
         physics: const BouncingScrollPhysics(),

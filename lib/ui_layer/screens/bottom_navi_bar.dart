@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:analytics_sdk/analytics_sdk.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_swiper_null_safety_flutter3/flutter_swiper_null_safety_f
 import 'package:go_router/go_router.dart';
 import 'package:jycrpj/app_global.dart';
 import 'package:jycrpj/domain/model/banner_model.dart';
+import 'package:jycrpj/report/analytics/analytics_report.dart';
 import 'package:jycrpj/report/event_tracking.dart';
 import 'package:jycrpj/report/ui_layer/report_app_down_center_dialog.dart';
 import 'package:jycrpj/report/ui_layer/report_popup_alert.dart';
@@ -93,6 +95,11 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
           eventBus.fire(MyEvent('to-torrentDownload'));
         });
       }
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AnalyticsSdk.instance
+          .updateCurrentPage(pageKey: 'home', pageName: '首页');
     });
   }
 
@@ -446,6 +453,8 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
     PageInfo info = PageInfo.path(currentLocation);
     RouteStore.currentPageKey = info.key;
     RouteStore.currentPageName = info.name;
+
+    analyticsNavigationChange();
 
     EventTracking().reportSingle({
       "event": "navigation",

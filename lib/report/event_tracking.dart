@@ -326,6 +326,9 @@ class EventTracking {
       if (!_eventCanPass(payload)) {
         return;
       }
+      final userInfo = await _getUserInfo();
+      if ((userInfo?.uid ?? 0) <= 0) return;
+
       // 构建事件数据
       final eventData = await _buildEventData(payload);
 

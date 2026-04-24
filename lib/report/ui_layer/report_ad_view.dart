@@ -10,6 +10,7 @@ import '../../ui_layer/screens/common_widgets/my_image.dart';
 import '../../ui_layer/screens/theme.dart';
 import '../../ui_layer/utils/common_utils.dart';
 import '../../domain/model/home_data_model.dart';
+import '../analytics/analytics_report.dart';
 import '../event_tracking.dart';
 import 'report_timing_observer.dart';
 
@@ -40,6 +41,7 @@ class _ReportAdViewState extends State<ReportAdView> {
 
   //上传广告行为
   void postActionReport(AdModel tp, String action) {
+    analyticsAdvertising(data: tp, action: action);
     EventTracking().reportSingle({
       "event": "advertising",
       "event_type": action,
@@ -51,6 +53,7 @@ class _ReportAdViewState extends State<ReportAdView> {
 
   //点击广告上报
   void postClickReport(AdModel tp) {
+    analyticsAdClick(context, tp);
     postActionReport(tp, "click");
 
     EventTracking().reportSingle({

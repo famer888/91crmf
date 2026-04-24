@@ -34,6 +34,7 @@ class _CacheManager implements CacheDomain {
   final _blackPostKey = 'black_post';
   final _vlogPostKey = 'vlog_post';
   final _guideKey = 'guide';
+  final _installKey = 'install';
 
   final _downloadVideoTasksKey = 'download_video_tasks';
   final _chatsKey = 'imchats';
@@ -47,7 +48,20 @@ class _CacheManager implements CacheDomain {
     appBox = HiveBoxCache(await Hive.openLazyBox(cacheKeys.appBox));
     chatBox = HiveBoxCache(await Hive.openLazyBox(cacheKeys.chats));
     videoBox = HiveBoxCache(await Hive.openLazyBox(cacheKeys.videoBox));
+    refreshInstallFlag();
   }
+
+  void refreshInstallFlag() async {
+    final String? flag = await readInstallFlag();
+    if (flag case final String install) {
+      AppGlobal.installFlag = install;
+    }
+  }
+
+  Future<String?> readInstallFlag() async =>
+      (await appBox.read(_installKey))?.toString();
+  Future<void> upsertInstallFlag(String installFlag) =>
+      appBox.upsert(_installKey, installFlag);
 
   Future<String?> readAuthToken() async => (await appBox.read(_authTokenKey))?.toString();
 

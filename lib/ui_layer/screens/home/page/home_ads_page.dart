@@ -1,3 +1,7 @@
+import 'package:analytics_sdk/analytics_sdk.dart';
+import 'package:analytics_sdk/entity/ad_click_event.dart';
+import 'package:analytics_sdk/entity/ad_impression_event.dart';
+import 'package:analytics_sdk/entity/advertising_event.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,6 +18,7 @@ import '../../common_widgets/status/loading.dart';
 import '../../common_widgets/status/network_error.dart';
 import '../../theme.dart';
 
+import '../../../../report/analytics/analytics_page_sync.dart';
 import '../../../../report/ui_layer/report_gesture_detector.dart';
 
 class HomeAdsPage extends StatefulWidget {
@@ -51,6 +56,18 @@ class _HomeAdsPageState extends State<HomeAdsPage> {
     if (didTopReport) return;
 
     TopAdsModel tp = _asyncValue.data!.top.first;
+    final pageInfo = syncAnalyticsPageFromContext(context);
+    AnalyticsSdk.instance.track(
+      AdImpressionEvent(
+        pageKey: pageInfo.pageKey,
+        pageName: pageInfo.pageName,
+        adSlotKey: tp.advertiseLocationCode,
+        adSlotName: tp.adSlotName,
+        adId: topAdIds.join(","),
+        creativeId: "",
+        adType: tp.adType.toString(),
+      ),
+    );
     EventTracking().reportSingle({
       "event": "ad_impression",
       "page_key": RouteStore.currentPageKey,
@@ -102,6 +119,14 @@ class _HomeAdsPageState extends State<HomeAdsPage> {
 
   //上传广告行为
   void postActionReport(TopAdsModel tp, String action) {
+    AnalyticsSdk.instance.track(
+      AdvertisingEvent(
+        eventType: action,
+        advertisingKey: tp.advertiseLocationCode,
+        advertisingName: tp.adSlotName,
+        advertisingId: tp.advertiseCode,
+      ),
+    );
     EventTracking().reportSingle({
       "event": "advertising",
       "event_type": action,
@@ -113,6 +138,18 @@ class _HomeAdsPageState extends State<HomeAdsPage> {
 
   //点击广告上报
   void postClickReport(TopAdsModel tp) {
+    final pageInfo = syncAnalyticsPageFromContext(context);
+    AnalyticsSdk.instance.track(
+      AdClickEvent(
+        pageKey: pageInfo.pageKey,
+        pageName: pageInfo.pageName,
+        adSlotKey: tp.advertiseLocationCode,
+        adSlotName: tp.adSlotName,
+        adId: tp.advertiseCode,
+        creativeId: '',
+        adType: tp.adType.toString(),
+      ),
+    );
     postActionReport(tp, "click");
 
     EventTracking().reportSingle({
