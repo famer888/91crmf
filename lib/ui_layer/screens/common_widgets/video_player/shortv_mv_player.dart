@@ -92,6 +92,7 @@ class _ShortvMvPlayerState extends State<ShortvMvPlayer> with NVideoURLMinxin {
           isDone = true;
           if (mounted) setState(() {});
         });
+
     if (mounted) setState(() {});
 
     VoicePlayerManager.instance.audioController?.pause();
