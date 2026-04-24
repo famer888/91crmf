@@ -1,3 +1,4 @@
+import 'package:analytics_sdk/analytics_sdk.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
@@ -18,6 +19,7 @@ class AppRouter {
       BotToastNavigatorObserver(),
       AppRouteObserver().routeObserver,
       ReportTimingObserver(),
+      AnalyticsSdk.instance.pageObserver,
     ],
   );
 }

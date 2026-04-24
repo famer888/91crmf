@@ -213,17 +213,20 @@ class EventTracking {
   }
 
   /// 获取设备ID（从AppGlobal）
-  String _getDeviceId() {
+  static String getDeviceId() {
     try {
       if (AppGlobal.context == null) return "unknown_device";
 
-      final deviceId = AppGlobal.context?.read<AppDomain>().info["oauth_id"].toString();
+      final deviceId =
+          AppGlobal.context?.read<AppDomain>().info["oauth_id"].toString();
       return deviceId?.toString() ?? "unknown_device";
     } catch (e) {
       CommonUtils.log('获取设备ID失败: $e');
       return "unknown_device";
     }
   }
+
+  get _getDeviceId => getDeviceId();
 
   /// 生成事件ID
   String _generateEventId() {

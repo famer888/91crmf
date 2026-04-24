@@ -1,3 +1,7 @@
+import 'package:analytics_sdk/analytics_sdk.dart';
+import 'package:analytics_sdk/config/sdk_config.dart';
+import 'package:analytics_sdk/manager/page_name_manager.dart';
+import 'package:analytics_sdk/widget/global_click_wrapper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +21,8 @@ import 'package:jycrpj/domain/remote_domain/domains/game.dart';
 import 'package:jycrpj/domain/remote_domain/domains/live.dart';
 import 'package:jycrpj/domain/remote_domain/domains/rank.dart';
 import 'package:isolated_worker/worker_delegator.dart';
+import 'package:jycrpj/report/event_tracking.dart';
+import 'package:jycrpj/report/report_page_map.dart';
 import 'package:jycrpj/ui_layer/screens/crack/unlock_status_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -44,7 +50,8 @@ void disableZoomOnWeb() {
   html.document.documentElement?.style.overflow = 'hidden';
   html.document.documentElement?.style.touchAction = 'manipulation';
   html.document.documentElement?.style.setProperty('user-select', 'none');
-  html.document.documentElement?.style.setProperty('overscroll-behavior', 'contain');
+  html.document.documentElement?.style
+      .setProperty('overscroll-behavior', 'contain');
 }
 
 void main() async {
@@ -58,25 +65,42 @@ void main() async {
   /// 初始化多语系
   await EasyLocalization.ensureInitialized();
 
+  SdkConfig.configure(
+    uploadInterval: const Duration(seconds: 5),
+    autoUploadThreshold: 10,
+  );
+  await AnalyticsSdk.instance.init(
+      appId: AppGlobal.reportAppId,
+      encryptedConfig: null,
+      // 服务端下发
+      deviceId: EventTracking.getDeviceId(),
+      // Android IMEI/OAID、iOS IDFV 等
+      enableDebugBanner: true,
+      appVersion:
+          AppGlobal.context?.read<AppDomain>().info["version"].toString());
+
   /// 强制竖屏
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   /// 设置屏幕状态栏、导航列底色
   CommonUtils.setStatusBar(isLight: true);
   // ==============注册图片加载线程=======================
-  DefaultDelegate<dynamic, dynamic> fooDelegate = const DefaultDelegate(callback: PlatformAwareCrypto.decryptImage);
+  DefaultDelegate<dynamic, dynamic> fooDelegate =
+      const DefaultDelegate(callback: PlatformAwareCrypto.decryptImage);
   JsDelegate fooJsDelegate = const JsDelegate(callback: 'decryptImage');
   List<WorkerDelegate<dynamic, dynamic>> wds = List.generate(
     5,
-        (index) => WorkerDelegate(
+    (index) => WorkerDelegate(
       key: 'decryptImage$index',
       defaultDelegate: fooDelegate,
       jsDelegate: fooJsDelegate,
     ),
   );
   WorkerDelegator().addAllDelegates(wds);
-  await WorkerDelegator()
-      .importScripts(const <String>['js/aware.js?v=2', 'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js?v=2']);
+  await WorkerDelegator().importScripts(const <String>[
+    'js/aware.js?v=2',
+    'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js?v=2'
+  ]);
 
   runApp(
     MultiProvider(
@@ -116,7 +140,8 @@ void main() async {
         Provider<BlackDomain>(lazy: false, create: (_) => appRepo),
         Provider<CrackDomain>(lazy: false, create: (_) => appRepo),
         Provider<BuyDomain>(lazy: false, create: (_) => appRepo),
-        Provider<DownloadUtil>(lazy: false, create: (_) => DownloadUtil(cache: appRepo.cache)),
+        Provider<DownloadUtil>(
+            lazy: false, create: (_) => DownloadUtil(cache: appRepo.cache)),
         ChangeNotifierProvider(create: (_) => HomeConfigNotifier(appRepo)),
         ChangeNotifierProvider(create: (_) => UserNotifier(appRepo)),
         ChangeNotifierProxyProvider<UserNotifier, ChatNotifier?>(
@@ -129,11 +154,11 @@ void main() async {
             return previous?.member.uuid == value.member.uuid
                 ? previous!
                 : ChatNotifier(
-              cache: appRepo.cache,
-              member: value.member,
-              oauthType: appRepo.getOAuthType(),
-              oauthId: appRepo.getOAuthId(),
-            );
+                    cache: appRepo.cache,
+                    member: value.member,
+                    oauthType: appRepo.getOAuthType(),
+                    oauthId: appRepo.getOAuthId(),
+                  );
           },
           create: (BuildContext context) => null,
         ),
@@ -177,6 +202,8 @@ class _MyAppState extends State<MyApp> {
     AppGlobal.context = context;
     final botToastBuilder = BotToastInit();
 
+    PageNameMapper.addMappings(appPageMap);
+
     return MaterialApp.router(
       routerConfig: AppRouter.router,
       localizationsDelegates: context.localizationDelegates,
@@ -184,7 +211,8 @@ class _MyAppState extends State<MyApp> {
       locale: context.locale,
       onGenerateTitle: (context) => 'yybt'.tr(context: context),
       theme: ThemeData(
-        progressIndicatorTheme: const ProgressIndicatorThemeData(color: MyTheme.jellyCyanColor103224185),
+        progressIndicatorTheme: const ProgressIndicatorThemeData(
+            color: MyTheme.jellyCyanColor103224185),
         splashColor: Colors.transparent,
         scaffoldBackgroundColor: MyTheme.bgColor,
         canvasColor: MyTheme.bgColor,
@@ -228,10 +256,11 @@ class _MyAppState extends State<MyApp> {
         widget = botToastBuilder(context, widget!);
         widget = MediaQuery(
           //设置文字大小不随系统设置改变
-          data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: const TextScaler.linear(1.0)),
           child: widget,
         );
-        return widget;
+        return GlobalClickWrapper(child: widget);
       },
       scrollBehavior: ScrollConfiguration.of(context).copyWith(
         physics: const BouncingScrollPhysics(),
