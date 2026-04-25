@@ -32,6 +32,7 @@ import 'domain/domain.dart';
 import 'domain/remote_domain/domains/ai.dart';
 import 'domain/remote_domain/domains/invite_domain.dart';
 import 'domain/remote_domain/domains/original.dart';
+import 'domain/remote_domain/domains/report.dart';
 import 'ui_layer/notifiers/chat_notifier.dart';
 import 'ui_layer/notifiers/home_config_notifier.dart';
 import 'ui_layer/notifiers/user_notifier.dart';
@@ -101,6 +102,7 @@ void main() async {
         Provider<ProxyDomain>(lazy: false, create: (_) => appRepo),
         Provider<WithdrawDomain>(lazy: false, create: (_) => appRepo),
         Provider<SearchDomain>(lazy: false, create: (_) => appRepo),
+        Provider<ReportDomain>(lazy: false, create: (_) => appRepo),
         Provider<MvDomain>(lazy: false, create: (_) => appRepo),
         Provider<VlogDomain>(lazy: false, create: (_) => appRepo),
         Provider<CartoonDomain>(lazy: false, create: (_) => appRepo),

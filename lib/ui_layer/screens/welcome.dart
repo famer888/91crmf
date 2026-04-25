@@ -119,7 +119,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         await _trackAmplitude("entry failure");
       },
       success: () async {
-        await fetchAndApplyConfig();
+        await fetchAndApplyConfig(context);
         _enterAdOrHome();
         await _trackAmplitude("enter app");
       },

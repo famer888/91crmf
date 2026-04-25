@@ -27,9 +27,9 @@ import '../../domain/model/vlog_model.dart';
 import '../../domain/remote_domain/domains/report.dart';
 import 'analytics_page_sync.dart';
 
-Future<void> fetchAndApplyConfig() async {
+Future<void> fetchAndApplyConfig([BuildContext? context]) async {
   try {
-    final reportDomain = AppGlobal.context?.read<ReportDomain>();
+    final reportDomain = context?.read<ReportDomain>() ?? AppGlobal.context?.read<ReportDomain>();
     final res = await reportDomain?.getEncryptedConfig();
     // 根据实际的API响应格式提取config
     if (res != null && res.status == 1) {
@@ -54,7 +54,7 @@ Future<void> initAnalyticsSdk(BuildContext? context,
     encryptedConfig: null,
     deviceId: oauthId,
     enableDebugBanner: kDebugMode,
-    appVersion: '26.0425.1027',
+    appVersion: '26.0425.1115',
   );
 }
 

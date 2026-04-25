@@ -60,6 +60,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:utils/utils.dart';
 import 'package:universal_html/html.dart' as html;
 
+import '../../domain/remote_domain/domains/report.dart';
 import '../../ui_layer/utils/common_utils.dart';
 import '../../app_config.dart';
 import '../../crypto.dart';
@@ -129,6 +130,7 @@ import '../data_source/remote/element_service.dart';
 import '../data_source/remote/home_service.dart';
 import '../data_source/remote/message_service.dart';
 import '../data_source/remote/mv_service.dart';
+import '../data_source/remote/report_service.dart';
 import '../data_source/remote/vlog_service.dart';
 import '../data_source/remote/order_service.dart';
 import '../data_source/remote/original_service.dart';
@@ -208,6 +210,8 @@ part 'mixin/crack_mixin.dart';
 
 part 'mixin/buy_mixin.dart';
 
+part 'mixin/report_mixin.dart';
+
 class AppRepo extends _BaseAppRepo
     with
         _Home,
@@ -241,7 +245,8 @@ class AppRepo extends _BaseAppRepo
         _Crack,
         _Buy,
         _Asmr,
-        _Rank {}
+        _Rank,
+        _Report {}
 
 abstract class _BaseAppRepo implements AppDomain {
   late final _homeService = HomeService(_apiDio);
@@ -277,6 +282,7 @@ abstract class _BaseAppRepo implements AppDomain {
   late final _crackService = CrackService(_apiDio);
   late final _inviteService = InviteService(_apiDio);
   late final _buyService = BuyService(_apiDio);
+  late final _reportService = ReportService(_apiDio);
 
   final _cacheManager = _CacheManager();
 
