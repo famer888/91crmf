@@ -33,6 +33,7 @@ import 'domain/domain.dart';
 import 'domain/remote_domain/domains/ai.dart';
 import 'domain/remote_domain/domains/invite_domain.dart';
 import 'domain/remote_domain/domains/original.dart';
+import 'domain/remote_domain/domains/report.dart';
 import 'ui_layer/notifiers/chat_notifier.dart';
 import 'ui_layer/notifiers/home_config_notifier.dart';
 import 'ui_layer/notifiers/user_notifier.dart';
@@ -48,7 +49,8 @@ void disableZoomOnWeb() {
   html.document.documentElement?.style.overflow = 'hidden';
   html.document.documentElement?.style.touchAction = 'manipulation';
   html.document.documentElement?.style.setProperty('user-select', 'none');
-  html.document.documentElement?.style.setProperty('overscroll-behavior', 'contain');
+  html.document.documentElement?.style
+      .setProperty('overscroll-behavior', 'contain');
 }
 
 void main() async {
@@ -70,19 +72,22 @@ void main() async {
   /// 设置屏幕状态栏、导航列底色
   CommonUtils.setStatusBar(isLight: true);
   // ==============注册图片加载线程=======================
-  DefaultDelegate<dynamic, dynamic> fooDelegate = const DefaultDelegate(callback: PlatformAwareCrypto.decryptImage);
+  DefaultDelegate<dynamic, dynamic> fooDelegate =
+      const DefaultDelegate(callback: PlatformAwareCrypto.decryptImage);
   JsDelegate fooJsDelegate = const JsDelegate(callback: 'decryptImage');
   List<WorkerDelegate<dynamic, dynamic>> wds = List.generate(
     5,
-        (index) => WorkerDelegate(
+    (index) => WorkerDelegate(
       key: 'decryptImage$index',
       defaultDelegate: fooDelegate,
       jsDelegate: fooJsDelegate,
     ),
   );
   WorkerDelegator().addAllDelegates(wds);
-  await WorkerDelegator()
-      .importScripts(const <String>['js/aware.js?v=2', 'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js?v=2']);
+  await WorkerDelegator().importScripts(const <String>[
+    'js/aware.js?v=2',
+    'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js?v=2'
+  ]);
 
   runApp(
     MultiProvider(
@@ -102,6 +107,7 @@ void main() async {
         Provider<ProxyDomain>(lazy: false, create: (_) => appRepo),
         Provider<WithdrawDomain>(lazy: false, create: (_) => appRepo),
         Provider<SearchDomain>(lazy: false, create: (_) => appRepo),
+        Provider<ReportDomain>(lazy: false, create: (_) => appRepo),
         Provider<MvDomain>(lazy: false, create: (_) => appRepo),
         Provider<VlogDomain>(lazy: false, create: (_) => appRepo),
         Provider<CartoonDomain>(lazy: false, create: (_) => appRepo),
@@ -123,7 +129,8 @@ void main() async {
         Provider<BlackDomain>(lazy: false, create: (_) => appRepo),
         Provider<CrackDomain>(lazy: false, create: (_) => appRepo),
         Provider<BuyDomain>(lazy: false, create: (_) => appRepo),
-        Provider<DownloadUtil>(lazy: false, create: (_) => DownloadUtil(cache: appRepo.cache)),
+        Provider<DownloadUtil>(
+            lazy: false, create: (_) => DownloadUtil(cache: appRepo.cache)),
         ChangeNotifierProvider(create: (_) => HomeConfigNotifier(appRepo)),
         ChangeNotifierProvider(create: (_) => UserNotifier(appRepo)),
         ChangeNotifierProxyProvider<UserNotifier, ChatNotifier?>(
@@ -136,11 +143,11 @@ void main() async {
             return previous?.member.uuid == value.member.uuid
                 ? previous!
                 : ChatNotifier(
-              cache: appRepo.cache,
-              member: value.member,
-              oauthType: appRepo.getOAuthType(),
-              oauthId: appRepo.getOAuthId(),
-            );
+                    cache: appRepo.cache,
+                    member: value.member,
+                    oauthType: appRepo.getOAuthType(),
+                    oauthId: appRepo.getOAuthId(),
+                  );
           },
           create: (BuildContext context) => null,
         ),
@@ -191,7 +198,8 @@ class _MyAppState extends State<MyApp> {
       locale: context.locale,
       onGenerateTitle: (context) => 'yybt'.tr(context: context),
       theme: ThemeData(
-        progressIndicatorTheme: const ProgressIndicatorThemeData(color: MyTheme.jellyCyanColor103224185),
+        progressIndicatorTheme: const ProgressIndicatorThemeData(
+            color: MyTheme.jellyCyanColor103224185),
         splashColor: Colors.transparent,
         scaffoldBackgroundColor: MyTheme.bgColor,
         canvasColor: MyTheme.bgColor,
@@ -235,7 +243,8 @@ class _MyAppState extends State<MyApp> {
         widget = botToastBuilder(context, widget!);
         widget = MediaQuery(
           //设置文字大小不随系统设置改变
-          data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: const TextScaler.linear(1.0)),
           child: widget,
         );
         return GlobalClickWrapper(child: ExcludeSemantics(child: widget));

@@ -62,6 +62,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:utils/utils.dart';
 import 'package:universal_html/html.dart' as html;
 
+import '../../domain/remote_domain/domains/report.dart';
 import '../../ui_layer/utils/common_utils.dart';
 import '../../app_config.dart';
 import '../../crypto.dart';
@@ -131,6 +132,7 @@ import '../data_source/remote/element_service.dart';
 import '../data_source/remote/home_service.dart';
 import '../data_source/remote/message_service.dart';
 import '../data_source/remote/mv_service.dart';
+import '../data_source/remote/report_service.dart';
 import '../data_source/remote/vlog_service.dart';
 import '../data_source/remote/order_service.dart';
 import '../data_source/remote/original_service.dart';
@@ -287,7 +289,8 @@ abstract class _BaseAppRepo implements AppDomain {
   final _cacheManager = _CacheManager();
 
   @override
-  late final tokenStatusStream = _tokenValidStreamController.stream.asBroadcastStream();
+  late final tokenStatusStream =
+      _tokenValidStreamController.stream.asBroadcastStream();
 
   final _tokenValidStreamController = StreamController<MyTokenStatus?>();
 
@@ -383,7 +386,8 @@ abstract class _BaseAppRepo implements AppDomain {
     deviceId ??= await _cacheManager.readOauthId();
 
     if (deviceId == null) {
-      deviceId = '${RepoUtils.randomId(16)}_${DateTime.now().millisecondsSinceEpoch}';
+      deviceId =
+          '${RepoUtils.randomId(16)}_${DateTime.now().millisecondsSinceEpoch}';
       await _cacheManager.upsertOauthId(deviceId);
     }
     return RepoUtils.gvMD5(deviceId);
@@ -472,7 +476,8 @@ abstract class _BaseAppRepo implements AppDomain {
     Function? failed,
     Function(List<String>)? lines,
   }) async {
-    List<String> unCheckLines = (await _cacheManager.readLinesUrl()) ?? BuildConfig.apiLines;
+    List<String> unCheckLines =
+        (await _cacheManager.readLinesUrl()) ?? BuildConfig.apiLines;
 
     // 测试服
     // unCheckLines = ['https://91crapi.dyclub.co/api.php'];
@@ -504,7 +509,8 @@ abstract class _BaseAppRepo implements AppDomain {
 
     // 检查网络
     final connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult.contains(ConnectivityResult.mobile) || connectivityResult.contains(ConnectivityResult.wifi)) {
+    if (connectivityResult.contains(ConnectivityResult.mobile) ||
+        connectivityResult.contains(ConnectivityResult.wifi)) {
       //返回所有线路 让用户直链
       var gitLine = await _backupLine();
       if (gitLine.isNotEmpty) linesTemp.add(gitLine);
@@ -514,7 +520,8 @@ abstract class _BaseAppRepo implements AppDomain {
       Future.wait(unCheckLines.map((x) async {
         return _checkLine(x);
       })).then((result) async {
-        var first = result.firstWhere((p) => p["code"] == 200, orElse: () => {});
+        var first =
+            result.firstWhere((p) => p["code"] == 200, orElse: () => {});
         if (first.isNotEmpty) {
           _apiDio.options.baseUrl = first["url"].toString();
           success?.call();
@@ -540,7 +547,9 @@ abstract class _BaseAppRepo implements AppDomain {
     const duration = Duration(seconds: 5);
     for (String fdsApi in BuildConfig.fdsKeyApi) {
       try {
-        final resp = await Dio(BaseOptions(connectTimeout: duration, receiveTimeout: duration)).get(fdsApi);
+        final resp = await Dio(
+                BaseOptions(connectTimeout: duration, receiveTimeout: duration))
+            .get(fdsApi);
         if (resp.statusCode == 200) {
           final fdsKey = resp.data.toString().replaceAll('\n', '');
           _cacheManager.upsertFdsKey(fdsKey);
@@ -559,11 +568,14 @@ abstract class _BaseAppRepo implements AppDomain {
     String xt = line.trim();
     try {
       if (kIsWeb) {
-        code = await html.HttpRequest.request('$xt/api/callback/checkLine', method: "POST")
+        code = await html.HttpRequest.request('$xt/api/callback/checkLine',
+                method: "POST")
             .then((value) => value.status ?? 0)
             .timeout(const Duration(milliseconds: 5 * 1000));
       } else {
-        code = await _dio.post('$xt/api/callback/checkLine').then((value) => value.statusCode ?? 0);
+        code = await _dio
+            .post('$xt/api/callback/checkLine')
+            .then((value) => value.statusCode ?? 0);
       }
     } catch (_) {
       code = 0;
@@ -573,7 +585,8 @@ abstract class _BaseAppRepo implements AppDomain {
 
   /// 启用备用线路
   Future<String> _backupLine() async {
-    final github = (await _cacheManager.readGithubUrl()) ?? BuildConfig.githubLine;
+    final github =
+        (await _cacheManager.readGithubUrl()) ?? BuildConfig.githubLine;
     dynamic line;
     try {
       if (kIsWeb) {
@@ -581,7 +594,10 @@ abstract class _BaseAppRepo implements AppDomain {
             .then((value) => value.response)
             .timeout(const Duration(milliseconds: 5 * 1000));
       } else {
-        line = await Dio(BaseOptions(connectTimeout: const Duration(seconds: 5), receiveTimeout: const Duration(seconds: 5))).get(github);
+        line = await Dio(BaseOptions(
+                connectTimeout: const Duration(seconds: 5),
+                receiveTimeout: const Duration(seconds: 5)))
+            .get(github);
       }
     } catch (_) {
       line = "";
@@ -592,7 +608,7 @@ abstract class _BaseAppRepo implements AppDomain {
   /// 上报线路
   void _reportLine(List<Map<String, Object>> lines) {
     if (lines.isEmpty) return;
-    Future.delayed(const Duration(seconds: 5), (){
+    Future.delayed(const Duration(seconds: 5), () {
       _apiDio.post('/api/home/domainCheckReport2', data: {'list': lines});
     });
   }
@@ -679,7 +695,8 @@ abstract class _BaseAppRepo implements AppDomain {
     CancelToken? cancelToken,
     ProgressCallback? progressCallback,
   }) async {
-    final result = await R2UploaderUtil(context: context, cancelToken: cancelToken).upload(
+    final result =
+        await R2UploaderUtil(context: context, cancelToken: cancelToken).upload(
       xFile: xFile,
       progressCallback: progressCallback,
     );
@@ -687,7 +704,10 @@ abstract class _BaseAppRepo implements AppDomain {
   }
 
   @override
-  Future<Response> downloadApk({required String urlPath, required String savePath, ProgressCallback? onReceiveProgress}) =>
+  Future<Response> downloadApk(
+          {required String urlPath,
+          required String savePath,
+          ProgressCallback? onReceiveProgress}) =>
       _dio.download(urlPath, savePath, onReceiveProgress: onReceiveProgress);
 }
 
@@ -734,7 +754,6 @@ String _gvSha256(String data) {
 }
 
 class ReqPrint {
-
   static void logRequest(RequestOptions options) {
     final buffer = StringBuffer();
 

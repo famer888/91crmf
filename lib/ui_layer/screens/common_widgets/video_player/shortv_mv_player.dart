@@ -1,3 +1,5 @@
+import 'package:analytics_sdk/enum/video_content_type_enum.dart';
+import 'package:analytics_sdk/enum/video_event_enum.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/foundation.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jycrpj/domain/remote_domain/domains/cartoon.dart';
+import 'package:jycrpj/report/analytics/analytics_report.dart';
 import 'package:jycrpj/ui_layer/screens/asmr/voice_player/voice_player_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -60,6 +63,8 @@ class _ShortvMvPlayerState extends State<ShortvMvPlayer> with NVideoURLMinxin {
   bool opened = true;
   bool isPreview = false;
   bool isDone = false;
+  VideoPlayerController? _listeningController;
+  bool _wasPlaying = false;
 
   @override
   void initState() {
@@ -90,8 +95,27 @@ class _ShortvMvPlayerState extends State<ShortvMvPlayer> with NVideoURLMinxin {
         autoPlay: !kIsWeb,
         onVideoEnd: () {
           isDone = true;
+          analyticsVideo(
+            flickManager: flickManager,
+            data: widget.info,
+            videoEvent:VideoEventEnum.VIDEO_COMPLETE,
+            videoContentType: VideoContentTypeEnum.video,
+          );
           if (mounted) setState(() {});
         });
+
+    // 移除旧监听，绑定新 controller
+    _listeningController?.removeListener(_onVideoPlayerStateChanged);
+    _listeningController = cr;
+    cr.addListener(_onVideoPlayerStateChanged);
+
+    // VIDEO_VIEW 埋点：视频资源就绪
+    analyticsVideo(
+      flickManager: flickManager,
+      data: widget.info,
+      videoEvent: VideoEventEnum.VIDEO_VIEW,
+      videoContentType: VideoContentTypeEnum.video,
+    );
 
     if (mounted) setState(() {});
 
@@ -108,7 +132,30 @@ class _ShortvMvPlayerState extends State<ShortvMvPlayer> with NVideoURLMinxin {
     flickManager = null;
     // 释放 mixin 中创建的 Blob URL
     revokePreviousBlobUrl();
+    _listeningController?.removeListener(_onVideoPlayerStateChanged);
+    _listeningController = null;
     super.dispose();
+  }
+
+  void _onVideoPlayerStateChanged() {
+    if (!mounted) return;
+    final isPlaying = _listeningController?.value.isPlaying ?? false;
+    if (isPlaying && !_wasPlaying) {
+      analyticsVideo(
+        flickManager: flickManager,
+        data: widget.info,
+        videoEvent: VideoEventEnum.VIDEO_PLAY,
+        videoContentType: VideoContentTypeEnum.video,
+      );
+    } else if (!isPlaying && _wasPlaying && !isDone) {
+      analyticsVideo(
+        flickManager: flickManager,
+        data: widget.info,
+        videoEvent: VideoEventEnum.VIDEO_PAUSE,
+        videoContentType: VideoContentTypeEnum.video,
+      );
+    }
+    _wasPlaying = isPlaying;
   }
 
   @override

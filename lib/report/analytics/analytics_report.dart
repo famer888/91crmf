@@ -26,10 +26,18 @@ import 'package:jycrpj/report/analytics/report_search_event.dart';
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:provider/provider.dart';
 
-/// 与 a_hjsq 对齐：远程加密配置刷新。
-Future<void> fetchAndApplyConfig() async {
+import '../../data_layer/repo/repo.dart';
+import '../../domain/model/feed/feed_model.dart';
+import '../../domain/model/home_data_model.dart';
+import '../../domain/model/video_detail_model.dart';
+import '../../domain/model/vlog_model.dart';
+import '../../domain/remote_domain/domains/report.dart';
+import 'analytics_page_sync.dart';
+
+Future<void> fetchAndApplyConfig([BuildContext? context]) async {
   try {
-    final reportDomain = AppGlobal.context?.read<ReportDomain>();
+    final reportDomain = context?.read<ReportDomain>() ??
+        AppGlobal.context?.read<ReportDomain>();
     final res = await reportDomain?.getEncryptedConfig();
     // 根据实际的API响应格式提取config
     if (res != null && res.status == 1) {
@@ -54,7 +62,7 @@ Future<void> initAnalyticsSdk(BuildContext? context,
     encryptedConfig: null,
     deviceId: oauthId,
     enableDebugBanner: kDebugMode,
-    appVersion: '26.0425.1027',
+    appVersion: '26.0425.1254',
   );
 }
 
