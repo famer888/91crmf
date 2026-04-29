@@ -28,6 +28,10 @@ import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import 'package:analytics_sdk/enum/video_content_type_enum.dart';
+import 'package:analytics_sdk/enum/video_event_enum.dart';
+import 'package:jycrpj/report/analytics/analytics_report.dart';
+
 import '../../../../report/ui_layer/report_gesture_detector.dart';
 
 class ShortVPlayer extends StatefulWidget {
@@ -49,6 +53,8 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
   FlickManager? flickManager;
   bool isPreview = false;
   bool isDone = false;
+  VideoPlayerController? _listeningController;
+  bool _wasPlaying = false;
 
   late final vlogDomain = context.read<VlogDomain>();
   late final userDomain = context.read<UserDomain>();
@@ -101,8 +107,27 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
         autoPlay: !kIsWeb,
         onVideoEnd: () {
           isDone = true;
+          analyticsVideo(
+            flickManager: flickManager,
+            data: widget.info,
+            videoEvent: VideoEventEnum.VIDEO_COMPLETE,
+            videoContentType: VideoContentTypeEnum.shortVideo,
+          );
           if (mounted) setState(() {});
         });
+
+    // 移除旧监听，绑定新 controller
+    _listeningController?.removeListener(_onVideoPlayerStateChanged);
+    _listeningController = cr;
+    cr?.addListener(_onVideoPlayerStateChanged);
+
+    // VIDEO_VIEW 埋点：视频资源就绪
+    analyticsVideo(
+      flickManager: flickManager,
+      data: widget.info,
+      videoEvent: VideoEventEnum.VIDEO_VIEW,
+      videoContentType: VideoContentTypeEnum.shortVideo,
+    );
 
     if (mounted) setState(() {});
 
@@ -119,7 +144,30 @@ class _ShortVPlayerState extends State<ShortVPlayer> with NVideoURLMinxin {
     cr = null;
     // 释放 mixin 中创建的 Blob URL
     revokePreviousBlobUrl();
+    _listeningController?.removeListener(_onVideoPlayerStateChanged);
+    _listeningController = null;
     super.dispose();
+  }
+
+  void _onVideoPlayerStateChanged() {
+    if (!mounted) return;
+    final isPlaying = _listeningController?.value.isPlaying ?? false;
+    if (isPlaying && !_wasPlaying) {
+      analyticsVideo(
+        flickManager: flickManager,
+        data: widget.info,
+        videoEvent: VideoEventEnum.VIDEO_PLAY,
+        videoContentType: VideoContentTypeEnum.shortVideo,
+      );
+    } else if (!isPlaying && _wasPlaying && !isDone) {
+      analyticsVideo(
+        flickManager: flickManager,
+        data: widget.info,
+        videoEvent: VideoEventEnum.VIDEO_PAUSE,
+        videoContentType: VideoContentTypeEnum.shortVideo,
+      );
+    }
+    _wasPlaying = isPlaying;
   }
 
   @override
