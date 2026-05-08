@@ -14,19 +14,19 @@ class BuildConfig {
   static const defaultFdsKey =
       'P/D/+MulHay6Jzah0AnECON76PVOS4idWjlv/W9FmBnsXsGE+wXTI/uP4UpmvvPD';
 
-  static const linesUrlKey = 'lines_url_v6'; // 每次换线路都要v+1！！！！
+  static const linesUrlKey = 'lines_url_v7'; // 每次换线路都要v+1！！！！
 
   static final apiLines = kIsWeb
       ? [
-          'https://wapi.xzjsqsoe.cc/api.php',
+          'https://wapi.dilquwsv.cc/api.php',
         ]
       : [
-          'https://api1.xujumqcr.cc/api.php',
-          'https://api2.xujumqcr.cc/api.php',
-          'https://api3.xujumqcr.cc/api.php',
-          'https://api4.xujumqcr.cc/api.php',
-          'https://api5.xujumqcr.cc/api.php',
-          'https://api6.xujumqcr.cc/api.php'
+          'https://api1.diekzheq.com/api.php',
+          'https://api2.diekzheq.com/api.php',
+          'https://api3.diekzheq.com/api.php',
+          'https://api4.diekzheq.com/api.php',
+          'https://api5.diekzheq.com/api.php',
+          'https://api6.diekzheq.com/api.php'
         ];
 
   /// 备用线路
