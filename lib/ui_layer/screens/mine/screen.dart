@@ -182,8 +182,8 @@ class _Body extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(height: 20.w),
-              const _VIPCenter(),
-              SizedBox(height: 15.w),
+              // const _VIPCenter(),
+              // SizedBox(height: 15.w),
               const _CenterMenu(),
               SizedBox(height: 15.w),
               const _SecondMenu(),
@@ -446,7 +446,7 @@ class _CenterMenu extends StatelessWidget {
                 );
               }),
         ),
-        SizedBox(width: 5.5.w),
+        SizedBox(width: 10.w),
         Expanded(
           child: SizedBox(
             width: 170.w,
