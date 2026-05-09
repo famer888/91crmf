@@ -98,7 +98,7 @@ class MyImage extends StatelessWidget {
     this.color,
     this.borderRadius,
     this.backgroundColor,
-    this.placeHolder = MyImagePaths.appPlaceholder,
+    this.placeHolder = MyImagePaths.appPlaceholderNew,
   }) : _type = _ImageType.network;
 
   final String src;
@@ -146,7 +146,7 @@ class MyImage extends StatelessWidget {
           return Stack(
             fit: StackFit.expand,
             children: [
-              placeHolder == MyImagePaths.appPlaceholder
+              placeHolder == MyImagePaths.appPlaceholderNew
                   ? Center(
                       child: Image.asset(
                         placeHolder!,

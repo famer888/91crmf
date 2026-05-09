@@ -234,7 +234,7 @@ class _SnapShotView extends StatelessWidget {
                     Align(
                       alignment: Alignment.topCenter,
                       child: MyImage.asset(
-                        MyImagePaths.appLogo,
+                        MyImagePaths.appLogoNew,
                         width: 80.w,
                         height: 80.w,
                       ),

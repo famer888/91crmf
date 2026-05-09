@@ -20,14 +20,18 @@ class InviteQrDialog extends StatefulWidget {
   final HomeConfigNotifier homeConfigNotifier;
   final VoidCallback onSnap;
 
-  const InviteQrDialog({super.key, required this.cancel, required this.userNotifier, required this.homeConfigNotifier, required this.onSnap});
+  const InviteQrDialog(
+      {super.key,
+      required this.cancel,
+      required this.userNotifier,
+      required this.homeConfigNotifier,
+      required this.onSnap});
 
   @override
   State<InviteQrDialog> createState() => _InviteQrDialogState();
 }
 
 class _InviteQrDialogState extends State<InviteQrDialog> {
-
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
@@ -47,7 +51,9 @@ class _InviteQrDialogState extends State<InviteQrDialog> {
                   padding: EdgeInsets.only(left: 0.w, top: 20.w, right: 0.w),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(8.w)),
-                    image: const DecorationImage(image: AssetImage(MyImagePaths.appMineJellyShareQrBg), fit: BoxFit.cover),
+                    image: const DecorationImage(
+                        image: AssetImage(MyImagePaths.appMineJellyShareQrBg),
+                        fit: BoxFit.cover),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -64,16 +70,19 @@ class _InviteQrDialogState extends State<InviteQrDialog> {
                               margin: 1,
                               size: 60.w,
                               thumb: widget.userNotifier.member.thumb,
-                              gradient: const LinearGradient(colors: [Colors.white, Colors.white]),
+                              gradient: const LinearGradient(
+                                  colors: [Colors.white, Colors.white]),
                             ),
                             SizedBox(width: 10.w),
                             Column(
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('cr'.tr(context: context), style: MyTheme.white255_13.s18.w600),
+                                Text('cr'.tr(context: context),
+                                    style: MyTheme.white255_13.s18.w600),
                                 SizedBox(height: 10.w),
-                                Text('kpzq'.tr(context: context), style: MyTheme.white255_14.w500.white25506),
+                                Text('kpzq'.tr(context: context),
+                                    style: MyTheme.white255_14.w500.white25506),
                               ],
                             ),
                           ],
@@ -85,22 +94,26 @@ class _InviteQrDialogState extends State<InviteQrDialog> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(5.w)),
                           child: QrImageView(
-                              data: '${widget.userNotifier.member.share?.affUrl}',
+                              data:
+                                  '${widget.userNotifier.member.share?.affUrl}',
                               version: 3,
                               size: 135.w,
                               padding: const EdgeInsets.all(8)),
                         ),
                       ),
                       SizedBox(height: 12.w),
-                      Text('smgk'.tr(context: context), style: MyTheme.white255_12.w400),
+                      Text('smgk'.tr(context: context),
+                          style: MyTheme.white255_12.w400),
                       SizedBox(height: 12.w),
                       Container(
                         width: 110.w,
                         alignment: Alignment.center,
-                        padding: EdgeInsets.symmetric(vertical: 4.0.w, horizontal: 8.0.w),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 4.0.w, horizontal: 8.0.w),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(5.w)),
-                          gradient: const LinearGradient(colors: MyTheme.gradient_90_135_colors),
+                          gradient: const LinearGradient(
+                              colors: MyTheme.gradient_90_135_colors),
                         ),
                         child: Text(
                           '${'yqm'.tr(context: context)} ${widget.userNotifier.member.share?.affCode}',
@@ -121,8 +134,12 @@ class _InviteQrDialogState extends State<InviteQrDialog> {
                           SizedBox(width: 22.5.w),
                           ReportGestureDetector(
                             onTap: () {
-                              if (widget.userNotifier.member.share?.affUrlCopy != null &&
-                                  widget.userNotifier.member.share?.affUrlCopy?.url?.isNotEmpty == true) {
+                              if (widget.userNotifier.member.share
+                                          ?.affUrlCopy !=
+                                      null &&
+                                  widget.userNotifier.member.share?.affUrlCopy
+                                          ?.url?.isNotEmpty ==
+                                      true) {
                                 _copyLinkShare();
                               }
                             },
@@ -131,10 +148,12 @@ class _InviteQrDialogState extends State<InviteQrDialog> {
                               alignment: Alignment.center,
                               padding: EdgeInsets.symmetric(horizontal: 32.w),
                               decoration: BoxDecoration(
-                                gradient: const LinearGradient(colors: MyTheme.gradient_90_135_colors),
+                                gradient: const LinearGradient(
+                                    colors: MyTheme.gradient_90_135_colors),
                                 borderRadius: BorderRadius.circular(20.w),
                               ),
-                              child: Text('fzlj'.tr(context: context), style: MyTheme.white255_14.w500),
+                              child: Text('fzlj'.tr(context: context),
+                                  style: MyTheme.white255_14.w500),
                             ),
                           ),
                           SizedBox(width: 20.w),
@@ -145,10 +164,12 @@ class _InviteQrDialogState extends State<InviteQrDialog> {
                               alignment: Alignment.center,
                               padding: EdgeInsets.symmetric(horizontal: 32.w),
                               decoration: BoxDecoration(
-                                gradient: const LinearGradient(colors: MyTheme.gradient_90_114_colors),
+                                gradient: const LinearGradient(
+                                    colors: MyTheme.gradient_90_114_colors),
                                 borderRadius: BorderRadius.circular(20.w),
                               ),
-                              child: Text('bctp'.tr(context: context), style: MyTheme.white255_14.w500),
+                              child: Text('bctp'.tr(context: context),
+                                  style: MyTheme.white255_14.w500),
                             ),
                           ),
                           SizedBox(width: 22.5.w),
@@ -163,39 +184,58 @@ class _InviteQrDialogState extends State<InviteQrDialog> {
                   width: 305.w,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(8.w)),
-                    image: const DecorationImage(image: AssetImage(MyImagePaths.appMineJellyShareBottomBg), fit: BoxFit.cover),
+                    image: const DecorationImage(
+                        image:
+                            AssetImage(MyImagePaths.appMineJellyShareBottomBg),
+                        fit: BoxFit.cover),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('yqbz'.tr(context: context), style: MyTheme.white255_14.w500),
+                      Text('yqbz'.tr(context: context),
+                          style: MyTheme.white255_14.w500),
                       SizedBox(height: 10.w),
                       Row(
                         children: [
                           Expanded(
                             child: Column(
                               children: [
-                                SizedBox(width: 46.w, height: 46.w, child: const MyImage.asset(MyImagePaths.appInvite1)),
+                                SizedBox(
+                                    width: 46.w,
+                                    height: 46.w,
+                                    child: const MyImage.asset(
+                                        MyImagePaths.appInvite1)),
                                 SizedBox(height: 7.w),
-                                Text('', style: MyTheme.white255_12.white25506.w400),
+                                Text('',
+                                    style: MyTheme.white255_12.white25506.w400),
                               ],
                             ),
                           ),
                           Expanded(
                             child: Column(
                               children: [
-                                SizedBox(width: 46.w, height: 46.w, child: const MyImage.asset(MyImagePaths.appInvite2)),
+                                SizedBox(
+                                    width: 46.w,
+                                    height: 46.w,
+                                    child: const MyImage.asset(
+                                        MyImagePaths.appInvite2)),
                                 SizedBox(height: 7.w),
-                                Text('yqhybd'.tr(context: context), style: MyTheme.white255_12.white25506.w400),
+                                Text('yqhybd'.tr(context: context),
+                                    style: MyTheme.white255_12.white25506.w400),
                               ],
                             ),
                           ),
                           Expanded(
                             child: Column(
                               children: [
-                                SizedBox(width: 46.w, height: 46.w, child: const MyImage.asset(MyImagePaths.appInvite3)),
+                                SizedBox(
+                                    width: 46.w,
+                                    height: 46.w,
+                                    child: const MyImage.asset(
+                                        MyImagePaths.appInvite3)),
                                 SizedBox(height: 7.w),
-                                Text('yqhybd'.tr(context: context), style: MyTheme.white255_12.white25506.w400),
+                                Text('yqhybd'.tr(context: context),
+                                    style: MyTheme.white255_12.white25506.w400),
                               ],
                             ),
                           ),
@@ -207,7 +247,9 @@ class _InviteQrDialogState extends State<InviteQrDialog> {
                 SizedBox(height: 20.w),
                 ReportGestureDetector(
                   onTap: () => widget.cancel.call(),
-                  child: SizedBox(child: MyImage.asset(MyImagePaths.appCancelWithCircle, fit: BoxFit.cover, width: 33.w, height: 33.w)),
+                  child: SizedBox(
+                      child: MyImage.asset(MyImagePaths.appCancelWithCircle,
+                          fit: BoxFit.cover, width: 33.w, height: 33.w)),
                 ),
               ],
             ),
@@ -219,10 +261,10 @@ class _InviteQrDialogState extends State<InviteQrDialog> {
 
   /// 复制链接分享
   Future<void> _copyLinkShare() async {
-    CommonUtils.copyToClipboard(text: '${widget.userNotifier.member.share?.affUrlCopy?.url}');
+    CommonUtils.copyToClipboard(
+        text: '${widget.userNotifier.member.share?.affUrlCopy?.url}');
     MyToast.showText(text: 'fzcg'.tr());
   }
-
 }
 
 class _SnapShotView extends StatelessWidget {
@@ -251,14 +293,18 @@ class _SnapShotView extends StatelessWidget {
                       bottom: 0,
                       child: Container(
                         height: 428.w,
-                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10.w)),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10.w)),
                         child: Column(
                           children: [
                             SizedBox(height: 90.w),
                             SizedBox(
                               height: 45.w,
                               child: Center(
-                                child: Text('Hey bro，我在${'yybt'.tr(context: context)}，来免费看原创乱伦视频', style: MyTheme.black13.s10),
+                                child: Text(
+                                    'Hey bro，我在${'yybt'.tr(context: context)}，来免费看原创乱伦视频',
+                                    style: MyTheme.black13.s10),
                               ),
                             ),
                             SizedBox(
@@ -267,7 +313,8 @@ class _SnapShotView extends StatelessWidget {
                               child: Stack(
                                 children: [
                                   const Positioned.fill(
-                                    child: MyImage.asset(MyImagePaths.appMineShareQrcodeBg),
+                                    child: MyImage.asset(
+                                        MyImagePaths.appMineShareQrcodeBg),
                                   ),
                                   Center(
                                     child: SizedBox(
@@ -288,7 +335,8 @@ class _SnapShotView extends StatelessWidget {
                               child: Container(
                                 width: 185.w,
                                 height: 45.w,
-                                decoration: const BoxDecoration(gradient: MyTheme.shareButtonGradient),
+                                decoration: const BoxDecoration(
+                                    gradient: MyTheme.shareButtonGradient),
                                 child: Center(
                                   child: RichText(
                                     text: TextSpan(
@@ -302,7 +350,10 @@ class _SnapShotView extends StatelessWidget {
                                           const TextSpan(text: '  '),
                                           TextSpan(
                                             text: '$affCode',
-                                            style: TextStyle(color: Colors.white, fontSize: 17.sp, fontWeight: FontWeight.w600),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 17.sp,
+                                                fontWeight: FontWeight.w600),
                                           )
                                         ]),
                                   ),
@@ -316,7 +367,7 @@ class _SnapShotView extends StatelessWidget {
                     Align(
                       alignment: Alignment.topCenter,
                       child: MyImage.asset(
-                        MyImagePaths.appLogo,
+                        MyImagePaths.appLogoNew,
                         width: 80.w,
                         height: 80.w,
                       ),
@@ -327,7 +378,11 @@ class _SnapShotView extends StatelessWidget {
               SizedBox(height: 20.w),
               Text(
                 '${'gwdz'.tr(context: context)}：$officeSite',
-                style: TextStyle(color: Colors.white, decoration: TextDecoration.none, fontSize: 19.sp, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                    color: Colors.white,
+                    decoration: TextDecoration.none,
+                    fontSize: 19.sp,
+                    fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 11.w),
               Text(

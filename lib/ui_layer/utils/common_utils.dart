@@ -56,7 +56,8 @@ class CommonUtils {
       SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
     } else if (Platform.isIOS) {
       //导航栏状态栏文字颜色
-      SystemChrome.setSystemUIOverlayStyle(isLight ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark);
+      SystemChrome.setSystemUIOverlayStyle(
+          isLight ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark);
     }
   }
 
@@ -84,8 +85,11 @@ class CommonUtils {
   //苹果PWA浏览器
   static bool isPWA() {
     if (kIsWeb) {
-      final isStandalone = html.window.matchMedia('(display-mode: standalone)').matches;
-      final isIOSStandalone = js_util.getProperty(html.window.navigator, 'standalone') as bool? ?? false;
+      final isStandalone =
+          html.window.matchMedia('(display-mode: standalone)').matches;
+      final isIOSStandalone =
+          js_util.getProperty(html.window.navigator, 'standalone') as bool? ??
+              false;
       return isStandalone || isIOSStandalone;
     }
     return false;
@@ -100,7 +104,8 @@ class CommonUtils {
 
     /// 转 emoji
     final Pattern unicodePattern = RegExp(r'\\\\u([0-9A-Fa-f]{4})');
-    final String newStr = str.replaceAllMapped(unicodePattern, (Match unicodeMatch) {
+    final String newStr =
+        str.replaceAllMapped(unicodePattern, (Match unicodeMatch) {
       final int hexCode = int.parse(unicodeMatch.group(1)!, radix: 16);
       final unicode = String.fromCharCode(hexCode);
       return unicode;
@@ -111,22 +116,23 @@ class CommonUtils {
 
   //特殊字符处理
   static Widget getContentSpan(
-      String text, {
-        bool isCopy = false,
-        TextStyle? style,
-        TextStyle? lightStyle,
-        InlineSpan? extraSpan,
-      }) {
+    String text, {
+    bool isCopy = false,
+    TextStyle? style,
+    TextStyle? lightStyle,
+    InlineSpan? extraSpan,
+  }) {
     style = style ?? MyTheme.black51_14;
     lightStyle = lightStyle ??
         TextStyle(
-          // fontFamily: hanyi,
+            // fontFamily: hanyi,
             color: const Color.fromRGBO(25, 103, 210, 1),
             fontSize: 15.sp,
             decoration: TextDecoration.none);
     // StyleTheme.font(size: 14, color: const Color.fromRGBO(25, 103, 210, 1));
     List<InlineSpan> contentList = [];
-    RegExp exp = RegExp(r'(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?');
+    RegExp exp = RegExp(
+        r'(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?');
     Iterable<RegExpMatch> matches = exp.allMatches(text);
 
     int index = 0;
@@ -168,13 +174,16 @@ class CommonUtils {
     if (isCopy) {
       return SelectableText.rich(
         TextSpan(children: contentList),
-        strutStyle: const StrutStyle(forceStrutHeight: true, height: 1, leading: kIsWeb ? 1.1 : 0.8),
+        strutStyle: const StrutStyle(
+            forceStrutHeight: true, height: 1, leading: kIsWeb ? 1.1 : 0.8),
       );
     }
     return RichText(
         textAlign: TextAlign.left,
-        text: TextSpan(children: contentList..insert(0, extraSpan ?? const TextSpan())),
-        strutStyle: const StrutStyle(forceStrutHeight: true, height: 1, leading: kIsWeb ? 1.1 : 0.8));
+        text: TextSpan(
+            children: contentList..insert(0, extraSpan ?? const TextSpan())),
+        strutStyle: const StrutStyle(
+            forceStrutHeight: true, height: 1, leading: kIsWeb ? 1.1 : 0.8));
   }
 
   static launchUrl(String url) async {
@@ -369,11 +378,18 @@ class CommonUtils {
   }
 
   static formatNum(double number, int postion) {
-    if ((number.toString().length - number.toString().lastIndexOf('.') - 1) < postion) {
+    if ((number.toString().length - number.toString().lastIndexOf('.') - 1) <
+        postion) {
       //小数点后有几位小数
-      return number.toStringAsFixed(postion).substring(0, number.toString().lastIndexOf('.') + postion + 1).toString();
+      return number
+          .toStringAsFixed(postion)
+          .substring(0, number.toString().lastIndexOf('.') + postion + 1)
+          .toString();
     } else {
-      return number.toString().substring(0, number.toString().lastIndexOf('.') + postion + 1).toString();
+      return number
+          .toString()
+          .substring(0, number.toString().lastIndexOf('.') + postion + 1)
+          .toString();
     }
   }
 
@@ -403,7 +419,8 @@ class CommonUtils {
           const end = Offset.zero;
           const curve = Curves.easeInOut;
 
-          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
           var offsetAnimation = animation.drive(tween);
 
           return SlideTransition(
@@ -432,7 +449,9 @@ class CommonUtils {
   static bool isIPhoneWeb() {
     if (kIsWeb) {
       final userAgent = html.window.navigator.userAgent.toLowerCase();
-      return userAgent.contains('iphone') || userAgent.contains('ipad') || userAgent.contains('ipod');
+      return userAgent.contains('iphone') ||
+          userAgent.contains('ipad') ||
+          userAgent.contains('ipod');
     }
     return false;
   }
@@ -482,14 +501,24 @@ class CommonUtils {
 
   //下载APP
   static Future<void> downLoadApp(BuildContext context) async {
-    String site = Provider.of<HomeConfigNotifier>(context, listen: false).homeData.config.pwaDownloadUrl ?? '';
-    String apk = Provider.of<HomeConfigNotifier>(context, listen: false).homeData.config.pwaApk ?? '';
+    String site = Provider.of<HomeConfigNotifier>(context, listen: false)
+            .homeData
+            .config
+            .pwaDownloadUrl ??
+        '';
+    String apk = Provider.of<HomeConfigNotifier>(context, listen: false)
+            .homeData
+            .config
+            .pwaApk ??
+        '';
     Uri u = Uri.parse(html.window.location.href);
     String aff = u.queryParameters[BuildConfig.affCodeKey] ?? "";
 
     if (isIPhoneWeb()) {
       if (isSafariBrowser()) {
-        await url_launcher.launchUrl(Uri.parse('$site/index.php/index/mobileConfig?aff_code=$aff'), webOnlyWindowName: '_self');
+        await url_launcher.launchUrl(
+            Uri.parse('$site/index.php/index/mobileConfig?aff_code=$aff'),
+            webOnlyWindowName: '_self');
         await Future.delayed(const Duration(seconds: 2));
         bool flag = await url_launcher.launchUrl(
           Uri.parse('$site/js/embedded.mobileprovision?v=1'),
@@ -517,9 +546,9 @@ class CommonUtils {
     if (data['link_url'] case final String url when url.isNotEmpty) {
       if (data['report_id'] != null) {
         context.read<HomeDomain>().reqAdClickCount(
-          id: data['report_id'],
-          type: data['report_type'],
-        );
+              id: data['report_id'],
+              type: data['report_type'],
+            );
       }
 
       if (data['redirect_type'] == 1) {
@@ -621,7 +650,8 @@ class CommonUtils {
   }
 
   static Future<XFile?> pickImage() async {
-    if (await ImagePicker().pickImage(source: ImageSource.gallery) case final xFile? when await _pngLimitSize(xFile)) {
+    if (await ImagePicker().pickImage(source: ImageSource.gallery)
+        case final xFile? when await _pngLimitSize(xFile)) {
       return xFile;
     }
     return null;
@@ -722,10 +752,15 @@ class CommonUtils {
   static Widget buildNotifyWidget(List<TipModel> tips) {
     if (tips.isEmpty) return const SizedBox();
     return Padding(
-      padding: EdgeInsets.only(left: MyTheme.pagePadding, top: 8.w, right: MyTheme.pagePadding, bottom: 3.w),
+      padding: EdgeInsets.only(
+          left: MyTheme.pagePadding,
+          top: 8.w,
+          right: MyTheme.pagePadding,
+          bottom: 3.w),
       child: Row(
         children: [
-          MyImage.asset(MyImagePaths.appLivesNoticeIcon, width: 18.w, height: 14.w),
+          MyImage.asset(MyImagePaths.appLivesNoticeIcon,
+              width: 18.w, height: 14.w),
           Expanded(
             child: Stack(
               children: [
@@ -735,7 +770,10 @@ class CommonUtils {
                   height: 20.w,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Color.fromARGB(255, 0, 0, 0), Color.fromARGB(0, 0, 0, 0)],
+                      colors: [
+                        Color.fromARGB(255, 0, 0, 0),
+                        Color.fromARGB(0, 0, 0, 0)
+                      ],
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
                     ),
@@ -755,7 +793,8 @@ class CommonUtils {
       PermissionStatus storageStatus = await Permission.camera.status;
       if (storageStatus == PermissionStatus.denied) {
         storageStatus = await Permission.camera.request();
-        if (storageStatus == PermissionStatus.denied || storageStatus == PermissionStatus.permanentlyDenied) {
+        if (storageStatus == PermissionStatus.denied ||
+            storageStatus == PermissionStatus.permanentlyDenied) {
           MyToast.showText(text: tr('qdkqx'));
           return;
         } else {}
@@ -775,10 +814,11 @@ class CommonUtils {
     if (kIsWeb) {
       dynamic blob = html.Blob([bytes]);
       String url = html.Url.createObjectUrlFromBlob(blob);
-      html.AnchorElement anchor = html.document.createElement('a') as html.AnchorElement
-        ..href = url
-        ..style.display = 'none'
-        ..download = '${CommonUtils.randomId(16)}.jpg';
+      html.AnchorElement anchor =
+          html.document.createElement('a') as html.AnchorElement
+            ..href = url
+            ..style.display = 'none'
+            ..download = '${CommonUtils.randomId(16)}.jpg';
       html.document.body?.children.add(anchor);
 // download
       anchor.click();
@@ -786,7 +826,8 @@ class CommonUtils {
       html.document.body?.children.remove(anchor);
       html.Url.revokeObjectUrl(url);
     } else {
-      final result = await ImageGallerySaverPlus.saveImage(bytes); //这个是核心的保存图片的插件
+      final result =
+          await ImageGallerySaverPlus.saveImage(bytes); //这个是核心的保存图片的插件
       if (result['isSuccess']) {
         MyToast.showText(text: tr('tpybc'));
       } else if (Platform.isAndroid) {
@@ -802,7 +843,8 @@ class CommonUtils {
   static Future<Uint8List?> isolatedImage(String url) async {
     Uint8List? bytes;
     if (kIsWeb) {
-      html.HttpRequest xhr = await html.HttpRequest.request(method: 'GET', url, responseType: 'arraybuffer');
+      html.HttpRequest xhr = await html.HttpRequest.request(
+          method: 'GET', url, responseType: 'arraybuffer');
       if (xhr.response != null) {
         ByteBuffer bb = xhr.response;
         bytes = bb.asUint8List();
@@ -935,7 +977,8 @@ class CommonUtils {
       if (videoUrl != null) {
         if (videoUrl.contains('.m3u8')) {
           try {
-            String folderName = stringByHashEncode(videoUrl.substring(videoUrl.lastIndexOf('/') + 1, videoUrl.indexOf('.m3u8')));
+            String folderName = stringByHashEncode(videoUrl.substring(
+                videoUrl.lastIndexOf('/') + 1, videoUrl.indexOf('.m3u8')));
             cachePath += '/$folderName';
           } catch (e) {
             CommonUtils.log(e);
@@ -958,17 +1001,17 @@ class CommonUtils {
   }
 
   static Widget contentWidget(
-      BuildContext context,
-      VlogModel data, {
-        Function? enterUserCenter, //进用户空间
-        Function? follow, //关注
-        Function? like, //点赞
-        Function? comment, //评论
-        Function? collect, //收藏
-        Function? showAlert, //分享
-        Function? cleanView, //清屏
-        bool keepBottomBlank = false,
-      }) {
+    BuildContext context,
+    VlogModel data, {
+    Function? enterUserCenter, //进用户空间
+    Function? follow, //关注
+    Function? like, //点赞
+    Function? comment, //评论
+    Function? collect, //收藏
+    Function? showAlert, //分享
+    Function? cleanView, //清屏
+    bool keepBottomBlank = false,
+  }) {
     Widget dgt = Container();
 
     final userNotifier = context.read<UserNotifier>();
@@ -995,7 +1038,8 @@ class CommonUtils {
           //     ));
 
           // 创建一个TextPainter对象
-          TextPainter textPainter = TextPainter(textDirection: ui.TextDirection.ltr);
+          TextPainter textPainter =
+              TextPainter(textDirection: ui.TextDirection.ltr);
           String tempStr = "${data.coins ?? 0}${'jbgm'.tr(context: context)}";
           // 设置文本样式
           textPainter.text = TextSpan(text: tempStr, style: MyTheme.black13_11);
@@ -1015,7 +1059,8 @@ class CommonUtils {
               child: DefaultTextStyle(
                 style: MyTheme.white11,
                 textAlign: TextAlign.center,
-                child: Text.rich(TextSpan(children: [TextSpan(text: 'czvip'.tr(context: context))])),
+                child: Text.rich(TextSpan(
+                    children: [TextSpan(text: 'czvip'.tr(context: context))])),
               ),
             ),
           );
@@ -1086,14 +1131,16 @@ class CommonUtils {
                 (data.member?.nickname ?? "").isEmpty
                     ? Container()
                     : Text(
-                  "@${data.member?.nickname ?? ""}",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                    shadows: const [Shadow(color: Colors.black54, offset: Offset(1, 1))],
-                  ),
-                ),
+                        "@${data.member?.nickname ?? ""}",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          shadows: const [
+                            Shadow(color: Colors.black54, offset: Offset(1, 1))
+                          ],
+                        ),
+                      ),
                 SizedBox(height: 10.w),
                 Text(
                   maxLines: 3,
@@ -1101,57 +1148,65 @@ class CommonUtils {
                   style: TextStyle(
                     fontSize: 14.sp,
                     color: Colors.white,
-                    shadows: const [Shadow(color: Colors.black54, offset: Offset(1, 1))],
+                    shadows: const [
+                      Shadow(color: Colors.black54, offset: Offset(1, 1))
+                    ],
                   ),
                 ),
-                (data.tagList?.isNotEmpty ?? false) ? SizedBox(height: 10.w) : Container(),
+                (data.tagList?.isNotEmpty ?? false)
+                    ? SizedBox(height: 10.w)
+                    : Container(),
                 List.from(data.tagList ?? []).isNotEmpty
                     ? Wrap(
-                  runSpacing: 8.w,
-                  spacing: 15.w,
-                  children: data.tagList!
-                      .take(3)
-                      .map(
-                        (tag) => Listener(
-                      behavior: HitTestBehavior.opaque, // ⭐ 必须 opaque
-                      onPointerDown: (_) {
-                        // 直接拦截触摸
-                      },
-                      onPointerUp: (_) {
-                        VlogTagRoute(tag: tag).push(context);
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 2.w, horizontal: 3.w),
-                        child: Text('#$tag', style: MyTheme.blue80_12.copyWith(color: MyTheme.whiteColor)),
-                      ),
-                    ),
-                    //     InkWell(
-                    //   onTap: () {
-                    //     VlogTagRoute(tag: tag).push(context);
-                    //   },
-                    //   child: Text('#$tag', style: MyTheme.blue80_12.copyWith(color: MyTheme.whiteColor)),
-                    // ),
-                  )
-                      .toList(),
-                )
+                        runSpacing: 8.w,
+                        spacing: 15.w,
+                        children: data.tagList!
+                            .take(3)
+                            .map(
+                              (tag) => Listener(
+                                behavior: HitTestBehavior.opaque, // ⭐ 必须 opaque
+                                onPointerDown: (_) {
+                                  // 直接拦截触摸
+                                },
+                                onPointerUp: (_) {
+                                  VlogTagRoute(tag: tag).push(context);
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 2.w, horizontal: 3.w),
+                                  child: Text('#$tag',
+                                      style: MyTheme.blue80_12
+                                          .copyWith(color: MyTheme.whiteColor)),
+                                ),
+                              ),
+                              //     InkWell(
+                              //   onTap: () {
+                              //     VlogTagRoute(tag: tag).push(context);
+                              //   },
+                              //   child: Text('#$tag', style: MyTheme.blue80_12.copyWith(color: MyTheme.whiteColor)),
+                              // ),
+                            )
+                            .toList(),
+                      )
                     : const SizedBox.shrink(),
                 vflag ? SizedBox(height: 10.w) : Container(),
-                vflag ? Listener(
-                  behavior: HitTestBehavior.opaque, // ⭐ 必须 opaque
-                  onPointerDown: (_) {
-                    // 直接拦截触摸
-                  },
-                  onPointerUp: (_) {
-                    showAlert?.call();
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 6.w,
-                      horizontal: 4.w,
-                    ),
-                    child: dgt,
-                  ),
-                ) /*ReportGestureDetector(
+                vflag
+                    ? Listener(
+                        behavior: HitTestBehavior.opaque, // ⭐ 必须 opaque
+                        onPointerDown: (_) {
+                          // 直接拦截触摸
+                        },
+                        onPointerUp: (_) {
+                          showAlert?.call();
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 6.w,
+                            horizontal: 4.w,
+                          ),
+                          child: dgt,
+                        ),
+                      ) /*ReportGestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
                           showAlert?.call();
@@ -1181,38 +1236,40 @@ class CommonUtils {
                       },
                       child: data.member == null
                           ? Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.43),
-                          borderRadius: BorderRadius.circular(20.w),
-                          border: Border.all(color: Colors.white, width: 1),
-                        ),
-                        width: 30.w,
-                        height: 30.w,
-                        child: Center(
-                          child: MyImage.asset(
-                            MyImagePaths.appPlaceholder,
-                            width: 30.w,
-                            height: 30.w,
-                            borderRadius: 15.w,
-                            backgroundColor: MyTheme.white008Color,
-                          ),
-                        ),
-                      )
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.43),
+                                borderRadius: BorderRadius.circular(20.w),
+                                border:
+                                    Border.all(color: Colors.white, width: 1),
+                              ),
+                              width: 30.w,
+                              height: 30.w,
+                              child: Center(
+                                child: MyImage.asset(
+                                  MyImagePaths.appPlaceholderNew,
+                                  width: 30.w,
+                                  height: 30.w,
+                                  borderRadius: 15.w,
+                                  backgroundColor: MyTheme.white008Color,
+                                ),
+                              ),
+                            )
                           : Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.43),
-                          borderRadius: BorderRadius.circular(15.w),
-                          border: Border.all(color: Colors.white, width: 1),
-                        ),
-                        width: 30.w,
-                        height: 30.w,
-                        child: MyImage.network(
-                          data.member?.thumb ?? "",
-                          borderRadius: 15.w,
-                          backgroundColor: MyTheme.white008Color,
-                          placeHolder: MyImagePaths.appPlaceholder,
-                        ),
-                      ),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.43),
+                                borderRadius: BorderRadius.circular(15.w),
+                                border:
+                                    Border.all(color: Colors.white, width: 1),
+                              ),
+                              width: 30.w,
+                              height: 30.w,
+                              child: MyImage.network(
+                                data.member?.thumb ?? "",
+                                borderRadius: 15.w,
+                                backgroundColor: MyTheme.white008Color,
+                                placeHolder: MyImagePaths.appPlaceholderNew,
+                              ),
+                            ),
                     ),
                     // 屏蔽关注按钮
                     // data.member == null
@@ -1242,14 +1299,18 @@ class CommonUtils {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       MyImage.asset(
-                        data.isLike == 1 ? MyImagePaths.appShortLikeH : MyImagePaths.appShortLikeN,
+                        data.isLike == 1
+                            ? MyImagePaths.appShortLikeH
+                            : MyImagePaths.appShortLikeN,
                         width: 25.w,
                         height: 25.w,
                       ),
                       Text(
                         renderFixedNumber(
-                          // 如果用户点赞了 但是 countLike == 0 就直接显示1
-                            data.isLike == 1 && data.countLike == 0 ? 1 : data.countLike ?? 0),
+                            // 如果用户点赞了 但是 countLike == 0 就直接显示1
+                            data.isLike == 1 && data.countLike == 0
+                                ? 1
+                                : data.countLike ?? 0),
                         style: MyTheme.white12medium,
                       ),
                     ],
@@ -1264,7 +1325,8 @@ class CommonUtils {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      MyImage.asset(MyImagePaths.appShortReview, width: 25.w, height: 25.w),
+                      MyImage.asset(MyImagePaths.appShortReview,
+                          width: 25.w, height: 25.w),
                       SizedBox(height: 1.w),
                       Text(
                         renderFixedNumber(data.countComment ?? 0),
@@ -1283,7 +1345,9 @@ class CommonUtils {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       MyImage.asset(
-                        data.isFavorite == 1 ? MyImagePaths.appVlogCollectionS : MyImagePaths.appVlogCollectionN,
+                        data.isFavorite == 1
+                            ? MyImagePaths.appVlogCollectionS
+                            : MyImagePaths.appVlogCollectionN,
                         width: 25.w,
                         height: 25.w,
                         fit: BoxFit.cover,
@@ -1291,8 +1355,10 @@ class CommonUtils {
                       SizedBox(height: 1.w),
                       Text(
                         renderFixedNumber(
-                          // 如果用户收藏了 但是 favorites == 0 就直接显示1
-                            data.isFavorite == 1 && data.favorites == 0 ? 1 : data.favorites ?? 0),
+                            // 如果用户收藏了 但是 favorites == 0 就直接显示1
+                            data.isFavorite == 1 && data.favorites == 0
+                                ? 1
+                                : data.favorites ?? 0),
                         style: MyTheme.white12medium,
                       ),
                     ],
@@ -1308,10 +1374,12 @@ class CommonUtils {
                     const ShareInviteRoute().push(context);
                   },
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 6.w, horizontal: 4.w),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 6.w, horizontal: 4.w),
                     child: Column(
                       children: [
-                        MyImage.asset(MyImagePaths.appShortShare, width: 25.w, height: 25.w),
+                        MyImage.asset(MyImagePaths.appShortShare,
+                            width: 25.w, height: 25.w),
                         SizedBox(height: 1.w),
                         Text('fx'.tr(), style: MyTheme.white12medium),
                       ],
@@ -1363,10 +1431,10 @@ class CommonUtils {
 
   //广告模块UI复用
   static Widget adModuleInShortFlowUI(
-      BuildContext context,
-      VlogModel data, {
-        double imageRatio = 9 / 16,
-      }) {
+    BuildContext context,
+    VlogModel data, {
+    double imageRatio = 9 / 16,
+  }) {
     return LayoutBuilder(builder: (context, constrains) {
       double w = constrains.maxWidth;
       return Container(
@@ -1416,7 +1484,9 @@ class CommonUtils {
                         children: [
                           const Spacer(),
                           Container(
-                            padding: EdgeInsets.only(left: MyTheme.pagePadding, right: MyTheme.pagePadding),
+                            padding: EdgeInsets.only(
+                                left: MyTheme.pagePadding,
+                                right: MyTheme.pagePadding),
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
                                 begin: Alignment.topCenter,
@@ -1441,7 +1511,11 @@ class CommonUtils {
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 15.sp,
-                                          shadows: const [Shadow(color: Colors.black54, offset: Offset(1, 1))],
+                                          shadows: const [
+                                            Shadow(
+                                                color: Colors.black54,
+                                                offset: Offset(1, 1))
+                                          ],
                                         ),
                                         maxLines: 999,
                                       )),
@@ -1501,7 +1575,8 @@ class RelativeDateFormat {
   /// 时间转换
   static String format({DateTime? date}) {
     if (date case final target?) {
-      num delta = DateTime.now().millisecondsSinceEpoch - target.millisecondsSinceEpoch;
+      num delta =
+          DateTime.now().millisecondsSinceEpoch - target.millisecondsSinceEpoch;
 
       if (delta < 1 * oneMinute) {
         num seconds = toSeconds(delta);
@@ -1570,7 +1645,8 @@ class RelativeDateFormat {
   }
 
   /// 格式化两位数不足补0
-  static String formatTwoDigitNumber(int number) => number.toString().padLeft(2, '0');
+  static String formatTwoDigitNumber(int number) =>
+      number.toString().padLeft(2, '0');
 }
 
 class DashedBorderPainter extends CustomPainter {
@@ -1612,7 +1688,9 @@ class DashedBorderPainter extends CustomPainter {
   void _drawDashedRect(Canvas canvas, Paint paint, RRect rect) {
     double x = rect.tlRadius.x;
     while (x < rect.width - rect.trRadius.x) {
-      final endX = (x + dashWidth < rect.width - rect.trRadius.x) ? x + dashWidth : rect.width - rect.trRadius.x;
+      final endX = (x + dashWidth < rect.width - rect.trRadius.x)
+          ? x + dashWidth
+          : rect.width - rect.trRadius.x;
       canvas.drawLine(Offset(x, 0), Offset(endX, 0), paint);
       x = endX + dashSpace;
     }
@@ -1629,7 +1707,9 @@ class DashedBorderPainter extends CustomPainter {
 
     double y = rect.trRadius.y;
     while (y < rect.height - rect.brRadius.y) {
-      final endY = (y + dashWidth < rect.height - rect.brRadius.y) ? y + dashWidth : rect.height - rect.brRadius.y;
+      final endY = (y + dashWidth < rect.height - rect.brRadius.y)
+          ? y + dashWidth
+          : rect.height - rect.brRadius.y;
       canvas.drawLine(Offset(rect.width, y), Offset(rect.width, endY), paint);
       y = endY + dashSpace;
     }
@@ -1646,7 +1726,8 @@ class DashedBorderPainter extends CustomPainter {
 
     x = rect.width - rect.brRadius.x;
     while (x > rect.blRadius.x) {
-      final endX = (x - dashWidth > rect.blRadius.x) ? x - dashWidth : rect.blRadius.x;
+      final endX =
+          (x - dashWidth > rect.blRadius.x) ? x - dashWidth : rect.blRadius.x;
       canvas.drawLine(Offset(x, rect.height), Offset(endX, rect.height), paint);
       x = endX - dashSpace;
     }
@@ -1663,7 +1744,8 @@ class DashedBorderPainter extends CustomPainter {
 
     y = rect.height - rect.blRadius.y;
     while (y > rect.tlRadius.y) {
-      final endY = (y - dashWidth > rect.tlRadius.y) ? y - dashWidth : rect.tlRadius.y;
+      final endY =
+          (y - dashWidth > rect.tlRadius.y) ? y - dashWidth : rect.tlRadius.y;
       canvas.drawLine(Offset(0, y), Offset(0, endY), paint);
       y = endY - dashSpace;
     }
@@ -1680,12 +1762,12 @@ class DashedBorderPainter extends CustomPainter {
   }
 
   void _drawDashedArc(
-      Canvas canvas,
-      Paint paint,
-      Rect arcRect,
-      double startAngle,
-      double sweepAngle,
-      ) {
+    Canvas canvas,
+    Paint paint,
+    Rect arcRect,
+    double startAngle,
+    double sweepAngle,
+  ) {
     final path = Path();
     path.addArc(arcRect, startAngle, sweepAngle);
     canvas.drawPath(path, paint);

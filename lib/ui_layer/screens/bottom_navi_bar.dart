@@ -47,7 +47,9 @@ import 'theme.dart';
 import '../../report/ui_layer/report_gesture_detector.dart';
 
 class BottomNaviBar extends StatefulWidget {
-  const BottomNaviBar({required this.navigationShell, super.key = const ValueKey<String>('ScaffoldWithNavBar')});
+  const BottomNaviBar(
+      {required this.navigationShell,
+      super.key = const ValueKey<String>('ScaffoldWithNavBar')});
 
   final StatefulNavigationShell navigationShell;
 
@@ -85,12 +87,14 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
       CommonUtils.log('Received event: ${event.message}');
       const index = 2;
       if (event.message == 'asmr') {
-        widget.navigationShell.goBranch(index, initialLocation: index == widget.navigationShell.currentIndex);
+        widget.navigationShell.goBranch(index,
+            initialLocation: index == widget.navigationShell.currentIndex);
         Future.delayed(const Duration(milliseconds: 200), () {
           eventBus.fire(MyEvent('to-asmr'));
         });
       } else if (event.message == 'torrentDownload') {
-        widget.navigationShell.goBranch(index, initialLocation: index == widget.navigationShell.currentIndex);
+        widget.navigationShell.goBranch(index,
+            initialLocation: index == widget.navigationShell.currentIndex);
         Future.delayed(const Duration(milliseconds: 200), () {
           eventBus.fire(MyEvent('to-torrentDownload'));
         });
@@ -98,8 +102,7 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      AnalyticsSdk.instance
-          .updateCurrentPage(pageKey: 'home', pageName: '首页');
+      AnalyticsSdk.instance.updateCurrentPage(pageKey: 'home', pageName: '首页');
     });
   }
 
@@ -217,7 +220,8 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
 
       final String targetNumber = version.replaceAll('.', '');
 
-      final needUpdate = (int.tryParse(targetNumber) ?? 0) > (int.tryParse(currentVersion) ?? 0);
+      final needUpdate = (int.tryParse(targetNumber) ?? 0) >
+          (int.tryParse(currentVersion) ?? 0);
 
       if (kIsWeb) {
         _showActivityDialogReport();
@@ -304,7 +308,6 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
               confirm: () {
                 cancelFunc();
                 const ShareInviteRoute().push(context);
-
               },
               text: homeConfigNotifier.homeData.versionMsg?.message ?? '',
             ));
@@ -353,7 +356,11 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
               bottomNavigationBar: DecoratedBox(
                 decoration: const BoxDecoration(
                   boxShadow: [
-                    BoxShadow(color: Color.fromRGBO(39, 39, 39, 1), spreadRadius: 0.0, offset: Offset(0.0, -0.5), blurRadius: 0.0),
+                    BoxShadow(
+                        color: Color.fromRGBO(39, 39, 39, 1),
+                        spreadRadius: 0.0,
+                        offset: Offset(0.0, -0.5),
+                        blurRadius: 0.0),
                   ],
                 ),
                 child: BottomNavigationBar(
@@ -405,8 +412,11 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
                   onTap: _goBranch,
                 ),
               ),
-              floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-              floatingActionButton: kIsWeb && !CommonUtils.isPWA() && !CommonUtils.isIosWkWebView()
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerFloat,
+              floatingActionButton: kIsWeb &&
+                      !CommonUtils.isPWA() &&
+                      !CommonUtils.isIosWkWebView()
                   ? Padding(
                       padding: EdgeInsets.only(bottom: 10.w),
                       child: ReportGestureDetector(
@@ -417,13 +427,18 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
                           height: 30.w,
                           width: 200.w,
                           alignment: Alignment.center,
-                          decoration: BoxDecoration(color: MyTheme.white255Color, borderRadius: BorderRadius.all(Radius.circular(15.w))),
+                          decoration: BoxDecoration(
+                              color: MyTheme.white255Color,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15.w))),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              MyImage.asset(MyImagePaths.appLogoIcon, width: 18.w, height: 18.w),
+                              MyImage.asset(MyImagePaths.appLogoIconNew,
+                                  width: 18.w, height: 18.w),
                               SizedBox(width: 5.w),
-                              Text('mrdxdk'.tr(context: context), style: MyTheme.black1434)
+                              Text('mrdxdk'.tr(context: context),
+                                  style: MyTheme.black1434)
                             ],
                           ),
                         ),
@@ -435,7 +450,8 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
             Positioned(
               right: 13.w,
               bottom: 110.w,
-              child: ReportTopADWidget(toADs: homeConfigNotifier.config.buoy ?? []),
+              child: ReportTopADWidget(
+                  toADs: homeConfigNotifier.config.buoy ?? []),
             )
           ],
         ),
@@ -445,10 +461,12 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
   }
 
   void _goBranch(int index) {
-    widget.navigationShell.goBranch(index, initialLocation: index == widget.navigationShell.currentIndex);
+    widget.navigationShell.goBranch(index,
+        initialLocation: index == widget.navigationShell.currentIndex);
 
     // 获取当前路由的路径
-    final currentLocation = GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString();
+    final currentLocation =
+        GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString();
 
     PageInfo info = PageInfo.path(currentLocation);
     RouteStore.currentPageKey = info.key;
@@ -525,7 +543,8 @@ class _TopADWidgetState extends State<TopADWidget> {
                   return ReportGestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
-                      CommonUtils.openRoute(context, widget.toADs[index].toJson());
+                      CommonUtils.openRoute(
+                          context, widget.toADs[index].toJson());
                     },
                     child: SizedBox(
                         width: w,
@@ -540,7 +559,8 @@ class _TopADWidgetState extends State<TopADWidget> {
                 pagination: widget.toADs.length > 1
                     ? SwiperPagination(
                         margin: EdgeInsets.only(bottom: 5.w),
-                        builder: SwiperCustomPagination(builder: (context, config) {
+                        builder:
+                            SwiperCustomPagination(builder: (context, config) {
                           int count = widget.toADs.length;
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -552,7 +572,8 @@ class _TopADWidgetState extends State<TopADWidget> {
                                       margin: EdgeInsets.only(right: 4.w),
                                       decoration: BoxDecoration(
                                         color: Colors.white,
-                                        borderRadius: BorderRadius.all(Radius.circular(2.w)),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(2.w)),
                                       ),
                                     )
                                   : Container(
@@ -561,7 +582,8 @@ class _TopADWidgetState extends State<TopADWidget> {
                                       margin: EdgeInsets.only(right: 4.w),
                                       decoration: BoxDecoration(
                                         color: MyTheme.grayColor150,
-                                        borderRadius: BorderRadius.all(Radius.circular(2.w)),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(2.w)),
                                       ),
                                     );
                             }),

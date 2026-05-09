@@ -32,7 +32,7 @@ class MyAvatar extends StatelessWidget {
       padding: EdgeInsets.all(margin),
       child: isAssets
           ? MyImage.asset(
-              thumb ?? MyImagePaths.appLogoIcon,
+              thumb ?? MyImagePaths.appLogoIconNew,
               width: double.infinity,
               fit: BoxFit.fitHeight,
               borderRadius: (size - margin) / 2,
@@ -44,7 +44,7 @@ class MyAvatar extends StatelessWidget {
                   borderRadius: (size - margin) / 2,
                 ),
               _ => MyImage.asset(
-                  MyImagePaths.appLogoIcon,
+                  MyImagePaths.appLogoIconNew,
                   width: double.infinity,
                   fit: BoxFit.fitHeight,
                   borderRadius: (size - margin) / 2,
