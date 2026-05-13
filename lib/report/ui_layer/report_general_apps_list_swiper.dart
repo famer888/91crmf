@@ -85,6 +85,8 @@ class _ReportGeneralAppListSwiperState extends State<ReportGeneralAppListSwiper>
   void postShowReport() {
     if (didReport) return;
 
+    // final pageName = context.parentTitle;
+    // final widgetType = context.parentWidgetType.toString();
     BannerModel tp = widget.data.first;
     final pageInfo = syncAnalyticsPageFromContext(context);
     AnalyticsSdk.instance.track(
@@ -95,9 +97,10 @@ class _ReportGeneralAppListSwiperState extends State<ReportGeneralAppListSwiper>
         adSlotName: tp.adSlotName ?? '',
         adId: adIds.join(","),
         creativeId: "",
-        adType: tp.adType?.toString() ?? '',
+        adType: tp.adType.toString() ?? '',
       ),
     );
+
     EventTracking().reportSingle({
       "event": "ad_impression",
       "page_key": RouteStore.currentPageKey,
@@ -115,6 +118,8 @@ class _ReportGeneralAppListSwiperState extends State<ReportGeneralAppListSwiper>
 
   //上传广告行为
   void postActionReport(BannerModel tp, String action) {
+    // final pageName = context.parentTitle;
+    // final widgetType = context.parentWidgetType.toString();
     AnalyticsSdk.instance.track(
       AdvertisingEvent(
         eventType: action,
@@ -123,6 +128,7 @@ class _ReportGeneralAppListSwiperState extends State<ReportGeneralAppListSwiper>
         advertisingId: tp.advertiseCode ?? '',
       ),
     );
+
     EventTracking().reportSingle({
       "event": "advertising",
       "event_type": action,
@@ -143,11 +149,14 @@ class _ReportGeneralAppListSwiperState extends State<ReportGeneralAppListSwiper>
         adSlotName: tp.adSlotName ?? '',
         adId: tp.advertiseCode ?? '',
         creativeId: '',
-        adType: tp.adType?.toString() ?? '',
+        adType: tp.adType.toString() ?? '',
       ),
     );
+
     postActionReport(tp, "click");
 
+    // final pageName = context.parentTitle;
+    // final widgetType = context.parentWidgetType.toString();
     EventTracking().reportSingle({
       "event": "ad_click",
       "page_key": RouteStore.currentPageKey,
@@ -201,7 +210,7 @@ class _ReportGeneralAppListSwiperState extends State<ReportGeneralAppListSwiper>
             //                 Text(
             //                   item.name ?? item.title ?? "",
             //                   style: TextStyle(
-            //                       color: widget.titleColor ?? Colors.white,
+            //                       color: Colors.white,
             //                       overflow: TextOverflow.ellipsis,
             //                       decoration: TextDecoration.none,
             //                       height: 1,
@@ -214,59 +223,58 @@ class _ReportGeneralAppListSwiperState extends State<ReportGeneralAppListSwiper>
             //     }),
             //   ),
             // ),
-            if (firstPart.isNotEmpty)
-              GridView.count(
-                shrinkWrap: true,
-                mainAxisSpacing: 6.w,
-                crossAxisSpacing: 6.w,
-                padding: EdgeInsets.only(bottom: 0.w),
-                crossAxisCount: _ColumNumber,
-                childAspectRatio: _childAspectRatio,
-                physics: const NeverScrollableScrollPhysics(),
-                children: List.generate(firstPart.length, (index) {
-                  final item = firstPart[index];
+            GridView.count(
+              shrinkWrap: true,
+              mainAxisSpacing: 6.w,
+              crossAxisSpacing: 6.w,
+              padding: EdgeInsets.only(bottom: 0.w),
+              crossAxisCount: _ColumNumber,
+              childAspectRatio: _childAspectRatio,
+              physics: const NeverScrollableScrollPhysics(),
+              children: List.generate(firstPart.length, (index) {
+                final item = firstPart[index];
 
-                  _showBanner(item);
-                  return ReportGestureDetector(
-                    onTap: () {
-                      postClickReport(firstPart[index]);
-                      CommonUtils.openRoute(context, item.toJson());
-                    },
-                    child: SizedBox(
-                      width: itemWidth,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                            width: itemWidth,
-                            height: itemWidth,
-                            child: AspectRatio(
-                              aspectRatio: 1,
-                              child: MyImage.network(
-                                fit: BoxFit.cover,
-                                borderRadius: 8.w,
-                                CommonUtils.getThumb(item.toJson()),
-                              ),
+                _showBanner(item);
+                return ReportGestureDetector(
+                  onTap: () {
+                    postClickReport(firstPart[index]);
+                    CommonUtils.openRoute(context, item.toJson());
+                  },
+                  child: SizedBox(
+                    width: itemWidth,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          width: itemWidth,
+                          height: itemWidth,
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: MyImage.network(
+                              fit: BoxFit.cover,
+                              borderRadius: 8.w,
+                              CommonUtils.getThumb(item.toJson()),
                             ),
                           ),
-                          SizedBox(height: 8.w),
-                          Text(
-                            item.name ?? item.title ?? "",
-                            style: TextStyle(
-                              color: widget.titleColor?? Colors.white,
-                              overflow: TextOverflow.ellipsis,
-                              decoration: TextDecoration.none,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 11.sp,
-                            ),
+                        ),
+                        SizedBox(height: 8.w),
+                        Text(
+                          item.name ?? item.title ?? "",
+                          style: TextStyle(
+                            color: widget.titleColor ?? Colors.white,
+                            overflow: TextOverflow.ellipsis,
+                            decoration: TextDecoration.none,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 11.sp,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  );
-                }),
-              ),
+                  ),
+                );
+              }),
+            ),
             if (secondPart.isNotEmpty && secondPart is List<BannerModel>) SizedBox(height: 8.w),
             if (secondPart.isNotEmpty && secondPart is List<BannerModel>)
               ReportInfiniteBannerList(
@@ -315,7 +323,8 @@ class _ReportGeneralAppListSwiperState extends State<ReportGeneralAppListSwiper>
                       height: itemWidth,
                       child: AspectRatio(
                         aspectRatio: 1,
-                        child: MyImage.network(CommonUtils.getThumb(item.toJson()), fit: BoxFit.cover, borderRadius: 8.w),
+                        child:
+                            MyImage.network(CommonUtils.getThumb(item.toJson()), fit: BoxFit.cover, borderRadius: 8.w),
                       ),
                     ),
                     SizedBox(height: 8.w),
@@ -431,7 +440,7 @@ class _ReportGeneralAppListSwiperState extends State<ReportGeneralAppListSwiper>
       //                                               child: Text(
       //                                                 e.name ?? e.title ?? "",
       //                                                 style: TextStyle(
-      //                                                     color: widget.titleColor ?? Colors.white,
+      //                                                     color: Colors.white,
       //                                                     overflow: TextOverflow.ellipsis,
       //                                                     decoration: TextDecoration.none,
       //                                                     height: 1,
@@ -579,7 +588,8 @@ class _ReportInfiniteBannerListState extends State<ReportInfiniteBannerList> {
 
   @override
   Widget build(BuildContext context) {
-    final itemWidth = (ScreenUtil().screenWidth - (widget.columNumber + 1) * 7 - MyTheme.pagePadding * 2) / widget.columNumber;
+    final itemWidth =
+        (ScreenUtil().screenWidth - (widget.columNumber + 1) * 7 - MyTheme.pagePadding * 2) / widget.columNumber;
     final shouldLoop = _shouldLoop;
     final itemCount = shouldLoop ? widget.banners.length * 1000 : widget.banners.length;
     final itemExtent = itemWidth + 8;

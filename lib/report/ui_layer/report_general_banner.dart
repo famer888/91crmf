@@ -236,20 +236,25 @@ class _ReportGeneralAppsListVidgetState extends State<ReportGeneralAppsListVidge
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     if (homeConfigNotifier.config.adVersion != 1) {
-      return ReportGeneralBanner(
+      return RepaintBoundary(
+        child: ReportGeneralBanner(
+          data: widget.data,
+          radius: widget.radius,
+          aspectRatio: widget.aspectRatio,
+        ),
+      );
+    }
+    return RepaintBoundary(
+      child: ReportGeneralAppListSwiper(
         data: widget.data,
         radius: widget.radius,
         aspectRatio: widget.aspectRatio,
-      );
-    }
-    return ReportGeneralAppListSwiper(
-      data: widget.data,
-      radius: widget.radius,
-      aspectRatio: widget.aspectRatio,
-      titleColor: widget.titleColor,
+        titleColor: widget.titleColor,
+      ),
     );
   }
 }
