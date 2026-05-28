@@ -401,6 +401,30 @@ class AppRouterPaths {
   // 小蓝 搜索结果
   static const xiaoLanSearchResult = '/xiaoLanSearchResult/:kwy';
 
+  // tiktok 搜索结果
+  static const tiktokSearchResult = '/tiktokSearchResult/:kwy';
+
+  // tiktok 创作达人
+  static const tiktokCreator = '/tiktokCreator';
+
+  // tiktok 用户作品列表
+  static const tiktokUserWorks = '/tiktokUserWorks/:id/:userName';
+
+  // tiktok 发现精彩
+  static const tiktokDiscover = '/tiktokDiscover';
+
+  // tiktok 分类/标签 详情
+  static const tiktokCategoryOrTagDetail = '/tiktokCategoryOrTagDetail/:id/:type/:has_sort/:title';
+
+  // tiktok 视频详情
+  static const tiktokVideoDetail = '/tiktokVideoDetail/:id';
+
+  // tiktok 搜索
+  static const tiktokSearch = '/tiktokSearch';
+
+  // tiktok 每日推荐
+  static const tiktokDaily = '/tiktokDaily';
+
   // 小蓝 创作达人
   static const xiaolanCreator = '/xiaolanCreator';
 

@@ -94,11 +94,17 @@ class UnlockStatusNotifier extends ChangeNotifier {
   bool get isUnlockXiaolan => _isUnlockXiaolan;
   bool _isUnlockXiaolan = false;
 
+  bool get isUnlockTiktok => _isUnlockXiaolan;
+
   void changeXiaolanUnlockStatus(bool status) async {
     if (_isUnlockXiaolan != status) {
       _isUnlockXiaolan = status;
       notifyListeners();
     }
+  }
+
+  void changeTiktokUnlockStatus(bool status) async {
+    changeXiaolanUnlockStatus(status);
   }
 
 }

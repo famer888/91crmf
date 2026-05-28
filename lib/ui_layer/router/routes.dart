@@ -54,6 +54,7 @@ import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_search_resul
 import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_tag_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_video_detail_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/hjsq/screen/hjsq_video_search_screen.dart';
+import 'package:jycrpj/ui_layer/screens/crack/apps/tiktok/screen/tiktok_video_detail_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/xiaolan/screen/xiaolan_video_detail_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_more_screen.dart';
 import 'package:jycrpj/ui_layer/screens/crack/apps/pzhan/screen/pzhan_search_result_screen.dart';
@@ -97,6 +98,13 @@ import '../screens/community/issue/screen.dart';
 import '../screens/community/original_screen/original_screen.dart';
 import '../screens/community/community_screen/screen.dart';
 import '../screens/community/tag_detail/screen.dart';
+import '../screens/crack/apps/tiktok/screen/tiktok_category_or_tag_detail_screen.dart';
+import '../screens/crack/apps/tiktok/screen/tiktok_creator_screen.dart';
+import '../screens/crack/apps/tiktok/screen/tiktok_daily_screen.dart';
+import '../screens/crack/apps/tiktok/screen/tiktok_discover_screen.dart';
+import '../screens/crack/apps/tiktok/screen/tiktok_search_result_screen.dart';
+import '../screens/crack/apps/tiktok/screen/tiktok_search_screen.dart';
+import '../screens/crack/apps/tiktok/screen/tiktok_user_works_screen.dart';
 import '../screens/crack/apps/xiaolan/screen/xiaolan_category_or_tag_detail_screen.dart';
 import '../screens/crack/apps/xiaolan/screen/xiaolan_creator_screen.dart';
 import '../screens/crack/apps/xiaolan/screen/xiaolan_daily_screen.dart';
@@ -2274,6 +2282,35 @@ class XiaolanVideoDetailRoute extends GoRouteData {
   }
 }
 
+@TypedGoRoute<TiktokVideoDetailRoute>(path: AppRouterPaths.tiktokVideoDetail)
+class TiktokVideoDetailRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppRouter.rootNavigatorKey;
+
+  const TiktokVideoDetailRoute({required this.id});
+
+  final int id;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(
+        state: state, child: TiktokVideoDetailScreen(id: id));
+  }
+}
+
+@TypedGoRoute<TiktokSearchResultRoute>(path: AppRouterPaths.tiktokSearchResult)
+class TiktokSearchResultRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
+
+  const TiktokSearchResultRoute({required this.kwy});
+
+  final String kwy;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(state: state, child: TiktokSearchResultScreen(kwy: kwy));
+  }
+}
 
 @TypedGoRoute<XiaolanSearchResultRoute>(path: AppRouterPaths.xiaoLanSearchResult)
 class XiaolanSearchResultRoute extends GoRouteData {
@@ -2289,6 +2326,18 @@ class XiaolanSearchResultRoute extends GoRouteData {
   }
 }
 
+@TypedGoRoute<TiktokCreatorRoute>(path: AppRouterPaths.tiktokCreator)
+class TiktokCreatorRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
+
+  const TiktokCreatorRoute();
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(state: state, child: const TiktokCreatorScreen());
+  }
+}
+
 @TypedGoRoute<XiaolanCreatorRoute>(path: AppRouterPaths.xiaolanCreator)
 class XiaolanCreatorRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
@@ -2298,6 +2347,22 @@ class XiaolanCreatorRoute extends GoRouteData {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return CommonUtils.buildSlideTransitionPage(state: state, child: const XiaolanCreatorScreen());
+  }
+}
+
+@TypedGoRoute<TiktokUserWorksRoute>(path: AppRouterPaths.tiktokUserWorks)
+class TiktokUserWorksRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
+
+  const TiktokUserWorksRoute({required this.id, required this.userName});
+
+  final String id;
+  final String userName;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(
+        state: state, child: TiktokUserWorksScreen(userId: id, userName: userName));
   }
 }
 
@@ -2314,6 +2379,25 @@ class XiaolanUserWorksRoute extends GoRouteData {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return CommonUtils.buildSlideTransitionPage(
         state: state, child: XiaolanUserWorksScreen(userId: id, userName: userName));
+  }
+}
+
+@TypedGoRoute<TiktokCategoryOrTagDetailRoute>(path: AppRouterPaths.tiktokCategoryOrTagDetail)
+class TiktokCategoryOrTagDetailRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
+
+  const TiktokCategoryOrTagDetailRoute(
+      {required this.id, required this.type, required this.has_sort, required this.title});
+
+  final int id;
+  final String type;
+  final String has_sort;
+  final String title;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(state: state,
+        child: TiktokCategoryOrTagDetailScreen(id: id, title: title, type: type, hasSort: has_sort == '1'));
   }
 }
 
@@ -2336,6 +2420,21 @@ class XiaolanCategoryOrTagDetailRoute extends GoRouteData {
   }
 }
 
+@TypedGoRoute<TiktokDiscoverRoute>(path: AppRouterPaths.tiktokDiscover)
+class TiktokDiscoverRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
+
+  const TiktokDiscoverRoute({required this.type, this.nagId = ''});
+
+  final String type;
+  final String nagId;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(state: state, child: TiktokDiscoverScreen(type: type, nagId: nagId));
+  }
+}
+
 @TypedGoRoute<XiaolanDiscoverRoute>(path: AppRouterPaths.xiaolanDiscover)
 class XiaolanDiscoverRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
@@ -2351,6 +2450,18 @@ class XiaolanDiscoverRoute extends GoRouteData {
   }
 }
 
+@TypedGoRoute<TiktokSearchRoute>(path: AppRouterPaths.tiktokSearch)
+class TiktokSearchRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
+
+  const TiktokSearchRoute();
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(state: state, child: const TiktokSearchScreen());
+  }
+}
+
 @TypedGoRoute<XiaolanSearchRoute>(path: AppRouterPaths.xiaolanSearch)
 class XiaolanSearchRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
@@ -2360,6 +2471,18 @@ class XiaolanSearchRoute extends GoRouteData {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return CommonUtils.buildSlideTransitionPage(state: state, child: const XiaolanSearchScreen());
+  }
+}
+
+@TypedGoRoute<TiktokDailyRoute>(path: AppRouterPaths.tiktokDaily)
+class TiktokDailyRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
+
+  const TiktokDailyRoute();
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CommonUtils.buildSlideTransitionPage(state: state, child: const TiktokDailyScreen());
   }
 }
 

@@ -50,6 +50,7 @@ class HomeConfigNotifier extends ChangeNotifier {
     final pzhanSearchHistory = await _domain.cache.readSearchHistory(key: pzhanSearchHistoryKey);
     final hjsqSearchHistory = await _domain.cache.readSearchHistory(key: hjsqSearchHistoryKey);
     final tiktokSearchHistory = await _domain.cache.readSearchHistory(key: tiktok51SearchHistoryKey);
+    final tiktokAppSearchHistory = await _domain.cache.readSearchHistory(key: tiktokSearchHistoryKey);
     final dspSearchHistory = await _domain.cache.readSearchHistory(key: dspSearchHistoryKey);
     final xiaolanSearchHistory = await _domain.cache.readSearchHistory(key: xiaolanSearchHistoryKey);
     _searchHistoryMap[clSearchHistoryKey] = clSearchHistory;
@@ -59,6 +60,7 @@ class HomeConfigNotifier extends ChangeNotifier {
     _searchHistoryMap[pzhanSearchHistoryKey] = pzhanSearchHistory;
     _searchHistoryMap[hjsqSearchHistoryKey] = hjsqSearchHistory;
     _searchHistoryMap[tiktok51SearchHistoryKey] = tiktokSearchHistory;
+    _searchHistoryMap[tiktokSearchHistoryKey] = tiktokAppSearchHistory;
     _searchHistoryMap[dspSearchHistoryKey] = dspSearchHistory;
     _searchHistoryMap[xiaolanSearchHistoryKey] = xiaolanSearchHistory;
   }

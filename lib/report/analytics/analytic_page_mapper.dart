@@ -141,6 +141,17 @@ void initPage() {
     'mineBrowseRecord': {'key': 'mineBrowseRecord', 'name': '浏览记录页'},
     'mineShareInvite': {'key': 'mineShareInvite', 'name': '分享邀请页'},
     'mineFansFollow': {'key': 'mineFansFollow', 'name': '粉丝关注页'},
+    'tiktokSearchResult/:kwy': {'key': 'tiktokSearchResult', 'name': 'Tiktok搜索结果页'},
+    'tiktokCreator': {'key': 'tiktokCreator', 'name': 'Tiktok创作达人页'},
+    'tiktokUserWorks/:id/:userName': {'key': 'tiktokUserWorks', 'name': 'Tiktok用户作品页'},
+    'tiktokDiscover': {'key': 'tiktokDiscover', 'name': 'Tiktok发现页'},
+    'tiktokCategoryOrTagDetail/:id/:type/:has_sort/:title': {
+      'key': 'tiktokCategoryOrTagDetail',
+      'name': 'Tiktok分类标签详情页'
+    },
+    'tiktokVideoDetail/:id': {'key': 'tiktokVideoDetail', 'name': 'Tiktok视频详情页'},
+    'tiktokSearch': {'key': 'tiktokSearch', 'name': 'Tiktok搜索页'},
+    'tiktokDaily': {'key': 'tiktokDaily', 'name': 'Tiktok每日推荐页'},
     'xiaolanSearchResult/:kwy': {'key': 'xiaolanSearchResult', 'name': '小蓝搜索结果页'},
     'xiaolanCreator': {'key': 'xiaolanCreator', 'name': '小蓝创作达人页'},
     'xiaolanUserWorks/:id/:userName': {'key': 'xiaolanUserWorks', 'name': '小蓝用户作品页'},

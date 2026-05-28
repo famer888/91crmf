@@ -50,7 +50,10 @@ class PZhanVideoCard extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  MyImage.network(imageUrl, fit: BoxFit.cover, backgroundColor: MyTheme.imageBgColor, borderRadius: 5.w),
+                  // MyImage.network(imageUrl, fit: BoxFit.cover, backgroundColor: MyTheme.imageBgColor, borderRadius: 5.w),
+                  MyImage.network(
+                    'https://imgpublic.ycomesc.live/upload_01/xiao/20260516/2026051603154338964.jpg',
+                  ),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
@@ -75,7 +78,8 @@ class PZhanVideoCard extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('${CommonUtils.renderFixedNumber(data.playNum)}${'bf'.tr()}', style: MyTheme.white12medium),
+                          Text('${CommonUtils.renderFixedNumber(data.playNum)}${'bf'.tr()}',
+                              style: MyTheme.white12medium),
                           Text(RelativeDateFormat.getHMTime(time: data.duration), style: MyTheme.white12medium),
                         ],
                       ),

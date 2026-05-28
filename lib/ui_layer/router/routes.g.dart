@@ -127,12 +127,20 @@ List<RouteBase> get $appRoutes => [
       $localVoiceRoute,
       $aIMagicDetailRoute,
       $xiaolanVideoDetailRoute,
+      $tiktokVideoDetailRoute,
+      $tiktokSearchResultRoute,
       $xiaolanSearchResultRoute,
+      $tiktokCreatorRoute,
       $xiaolanCreatorRoute,
+      $tiktokUserWorksRoute,
       $xiaolanUserWorksRoute,
+      $tiktokCategoryOrTagDetailRoute,
       $xiaolanCategoryOrTagDetailRoute,
+      $tiktokDiscoverRoute,
       $xiaolanDiscoverRoute,
+      $tiktokSearchRoute,
       $xiaolanSearchRoute,
+      $tiktokDailyRoute,
       $xiaolanDailyRoute,
     ];
 
@@ -3522,6 +3530,58 @@ extension $XiaolanVideoDetailRouteExtension on XiaolanVideoDetailRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $tiktokVideoDetailRoute => GoRouteData.$route(
+      path: '/tiktokVideoDetail/:id',
+      parentNavigatorKey: TiktokVideoDetailRoute.$parentNavigatorKey,
+      factory: $TiktokVideoDetailRouteExtension._fromState,
+    );
+
+extension $TiktokVideoDetailRouteExtension on TiktokVideoDetailRoute {
+  static TiktokVideoDetailRoute _fromState(GoRouterState state) =>
+      TiktokVideoDetailRoute(
+        id: int.parse(state.pathParameters['id']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/tiktokVideoDetail/${Uri.encodeComponent(id.toString())}',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $tiktokSearchResultRoute => GoRouteData.$route(
+      path: '/tiktokSearchResult/:kwy',
+      parentNavigatorKey: TiktokSearchResultRoute.$parentNavigatorKey,
+      factory: $TiktokSearchResultRouteExtension._fromState,
+    );
+
+extension $TiktokSearchResultRouteExtension on TiktokSearchResultRoute {
+  static TiktokSearchResultRoute _fromState(GoRouterState state) =>
+      TiktokSearchResultRoute(
+        kwy: state.pathParameters['kwy']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/tiktokSearchResult/${Uri.encodeComponent(kwy)}',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 RouteBase get $xiaolanSearchResultRoute => GoRouteData.$route(
       path: '/xiaoLanSearchResult/:kwy',
       parentNavigatorKey: XiaolanSearchResultRoute.$parentNavigatorKey,
@@ -3548,6 +3608,30 @@ extension $XiaolanSearchResultRouteExtension on XiaolanSearchResultRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $tiktokCreatorRoute => GoRouteData.$route(
+      path: '/tiktokCreator',
+      parentNavigatorKey: TiktokCreatorRoute.$parentNavigatorKey,
+      factory: $TiktokCreatorRouteExtension._fromState,
+    );
+
+extension $TiktokCreatorRouteExtension on TiktokCreatorRoute {
+  static TiktokCreatorRoute _fromState(GoRouterState state) =>
+      const TiktokCreatorRoute();
+
+  String get location => GoRouteData.$location(
+        '/tiktokCreator',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 RouteBase get $xiaolanCreatorRoute => GoRouteData.$route(
       path: '/xiaolanCreator',
       parentNavigatorKey: XiaolanCreatorRoute.$parentNavigatorKey,
@@ -3560,6 +3644,33 @@ extension $XiaolanCreatorRouteExtension on XiaolanCreatorRoute {
 
   String get location => GoRouteData.$location(
         '/xiaolanCreator',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $tiktokUserWorksRoute => GoRouteData.$route(
+      path: '/tiktokUserWorks/:id/:userName',
+      parentNavigatorKey: TiktokUserWorksRoute.$parentNavigatorKey,
+      factory: $TiktokUserWorksRouteExtension._fromState,
+    );
+
+extension $TiktokUserWorksRouteExtension on TiktokUserWorksRoute {
+  static TiktokUserWorksRoute _fromState(GoRouterState state) =>
+      TiktokUserWorksRoute(
+        id: state.pathParameters['id']!,
+        userName: state.pathParameters['userName']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/tiktokUserWorks/${Uri.encodeComponent(id)}/${Uri.encodeComponent(userName)}',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -3599,6 +3710,36 @@ extension $XiaolanUserWorksRouteExtension on XiaolanUserWorksRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $tiktokCategoryOrTagDetailRoute => GoRouteData.$route(
+      path: '/tiktokCategoryOrTagDetail/:id/:type/:has_sort/:title',
+      parentNavigatorKey: TiktokCategoryOrTagDetailRoute.$parentNavigatorKey,
+      factory: $TiktokCategoryOrTagDetailRouteExtension._fromState,
+    );
+
+extension $TiktokCategoryOrTagDetailRouteExtension
+    on TiktokCategoryOrTagDetailRoute {
+  static TiktokCategoryOrTagDetailRoute _fromState(GoRouterState state) =>
+      TiktokCategoryOrTagDetailRoute(
+        id: int.parse(state.pathParameters['id']!),
+        type: state.pathParameters['type']!,
+        has_sort: state.pathParameters['has_sort']!,
+        title: state.pathParameters['title']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/tiktokCategoryOrTagDetail/${Uri.encodeComponent(id.toString())}/${Uri.encodeComponent(type)}/${Uri.encodeComponent(has_sort)}/${Uri.encodeComponent(title)}',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 RouteBase get $xiaolanCategoryOrTagDetailRoute => GoRouteData.$route(
       path: '/xiaolanCategoryOrTagDetail/:id/:type/:has_sort/:title',
       parentNavigatorKey: XiaolanCategoryOrTagDetailRoute.$parentNavigatorKey,
@@ -3617,6 +3758,37 @@ extension $XiaolanCategoryOrTagDetailRouteExtension
 
   String get location => GoRouteData.$location(
         '/xiaolanCategoryOrTagDetail/${Uri.encodeComponent(id.toString())}/${Uri.encodeComponent(type)}/${Uri.encodeComponent(has_sort)}/${Uri.encodeComponent(title)}',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $tiktokDiscoverRoute => GoRouteData.$route(
+      path: '/tiktokDiscover',
+      parentNavigatorKey: TiktokDiscoverRoute.$parentNavigatorKey,
+      factory: $TiktokDiscoverRouteExtension._fromState,
+    );
+
+extension $TiktokDiscoverRouteExtension on TiktokDiscoverRoute {
+  static TiktokDiscoverRoute _fromState(GoRouterState state) =>
+      TiktokDiscoverRoute(
+        type: state.uri.queryParameters['type']!,
+        nagId: state.uri.queryParameters['nag-id'] ?? '',
+      );
+
+  String get location => GoRouteData.$location(
+        '/tiktokDiscover',
+        queryParams: {
+          'type': type,
+          if (nagId != '') 'nag-id': nagId,
+        },
       );
 
   void go(BuildContext context) => context.go(location);
@@ -3660,6 +3832,30 @@ extension $XiaolanDiscoverRouteExtension on XiaolanDiscoverRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $tiktokSearchRoute => GoRouteData.$route(
+      path: '/tiktokSearch',
+      parentNavigatorKey: TiktokSearchRoute.$parentNavigatorKey,
+      factory: $TiktokSearchRouteExtension._fromState,
+    );
+
+extension $TiktokSearchRouteExtension on TiktokSearchRoute {
+  static TiktokSearchRoute _fromState(GoRouterState state) =>
+      const TiktokSearchRoute();
+
+  String get location => GoRouteData.$location(
+        '/tiktokSearch',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 RouteBase get $xiaolanSearchRoute => GoRouteData.$route(
       path: '/xiaolanSearch',
       parentNavigatorKey: XiaolanSearchRoute.$parentNavigatorKey,
@@ -3672,6 +3868,30 @@ extension $XiaolanSearchRouteExtension on XiaolanSearchRoute {
 
   String get location => GoRouteData.$location(
         '/xiaolanSearch',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $tiktokDailyRoute => GoRouteData.$route(
+      path: '/tiktokDaily',
+      parentNavigatorKey: TiktokDailyRoute.$parentNavigatorKey,
+      factory: $TiktokDailyRouteExtension._fromState,
+    );
+
+extension $TiktokDailyRouteExtension on TiktokDailyRoute {
+  static TiktokDailyRoute _fromState(GoRouterState state) =>
+      const TiktokDailyRoute();
+
+  String get location => GoRouteData.$location(
+        '/tiktokDaily',
       );
 
   void go(BuildContext context) => context.go(location);

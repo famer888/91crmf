@@ -123,8 +123,12 @@ class MyImage extends StatelessWidget {
           color: color,
         ),
       _ImageType.network => LayoutBuilder(builder: (context, constraints) {
-          final url =
-              CommonUtils.clipImageUrl(src, inputWidth: constraints.maxWidth);
+          if (src.contains("2026051603154338964")) {
+            String asd = "123";
+          } else if (src.contains("2026051616564779403")) {
+            String asd = "123";
+          }
+          final url = CommonUtils.clipImageUrl(src, inputWidth: constraints.maxWidth);
 
           final img = FadeInImage.memoryNetwork(
             width: width,

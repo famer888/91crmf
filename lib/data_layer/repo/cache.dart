@@ -7,6 +7,7 @@ const aw91SearchHistoryKey = 'aw91_search_history';
 const zpcSearchHistoryKey = 'zpc_search_history';
 const pzhanSearchHistoryKey = 'pzhan_search_history';
 const tiktok51SearchHistoryKey = 'tiktok51_search_history';
+const tiktokSearchHistoryKey = 'tiktok_search_history';
 const hjsqSearchHistoryKey = 'hjsq_search_history';
 const xiaolanSearchHistoryKey = 'xiaolan_search_history';
 const dspSearchHistoryKey = 'dsp_search_history';
