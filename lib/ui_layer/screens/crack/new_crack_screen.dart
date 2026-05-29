@@ -32,6 +32,7 @@ import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:provider/provider.dart';
 
 import '../../../app_global.dart';
+import 'apps/tiktok/screen/screen.dart';
 
 class NewCrackScreen extends StatefulWidget {
   const NewCrackScreen({super.key});
@@ -170,7 +171,17 @@ class _NewCrackScreenState extends State<NewCrackScreen> {
                           builders: List.generate(
                             data.length,
                             (index) => (BuildContext _) {
+
+
                               final crackApp_ = data[index];
+
+                              return TiktokCommunityScreen(
+                                id: 34,
+                                crackApp: crackApp_,
+                                openEndDrawer: () {
+                                  Scaffold.of(scaffoldContext).openEndDrawer();
+                                },
+                              );
                               // 根据类型动态返回对应页面
                               // return XiaoLanCommunityScreen(
                               //   id: 1,

@@ -45,10 +45,11 @@ class _TiktokSearchScreenState extends State<TiktokSearchScreen> {
       });
     }
 
-    final param = Map.from({});
+    final param = Map.from({"page": 1, "limit": 20});
 
     final result = await _appDomain.getConstructByApiLink(
-      apiLink: "/api/searchxiaolan/index",
+      // apiLink: "/api/searchxiaolan/index",
+      apiLink: "/api/searchttav/hotSearch",
       params: param,
     );
 
