@@ -135,7 +135,7 @@ class _TiktokSearchScreenState extends State<TiktokSearchScreen> {
                                       contentPadding: EdgeInsets.zero,
                                       isDense: true,
                                       border: InputBorder.none,
-                                      hintText: '少妇',
+                                      hintText: '少妇  约炮  裸聊',
                                       hintStyle: TextStyle(fontSize: 14.sp, color: Colors.white.withOpacity(.7)))))
                         ],
                       ),
