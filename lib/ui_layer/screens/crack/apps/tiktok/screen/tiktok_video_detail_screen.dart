@@ -12,6 +12,7 @@ import 'package:jycrpj/ui_layer/screens/crack/apps/tiktok/widget/tiktok_list_bui
 import 'package:jycrpj/ui_layer/utils/common_utils.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
 import 'package:provider/provider.dart';
+import 'package:utils/utils.dart';
 
 import '../../../../../../domain/domain.dart';
 import '../../../../../../domain/model/banner_model.dart';
@@ -202,8 +203,21 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      Row(
+                        children: [
+                          Expanded(child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 13.w,horizontal: 11.w),
+                            decoration:
+                            BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFF343743), width: 1.w))),
+                            child: Text(
+                              "简介",
+                              style: TextStyle(color: Color(0xFFF3F3F4), fontSize: 15.sp),
+                            ),
+                          ))
+                        ],
+                      ),
                       SizedBox(
-                        height: 17.w,
+                        height: 8.w,
                       ),
                       // 标题
                       Container(
@@ -216,9 +230,9 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 18.sp,
+                            fontSize: 14.sp,
                             color: const Color(0xFFE8E8E8),
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                       ),
@@ -277,8 +291,8 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
                                 child: Row(
                                   children: [
                                     Container(
-                                      width: 50.w,
-                                      height: 50.w,
+                                      width: 36.w,
+                                      height: 36.w,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(25.w),
                                       ),
@@ -294,27 +308,25 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
                                         child: Text(
                                       "${detail['user']['nickname']}",
                                       style: TextStyle(
-                                          color: Color(0xFF151515), fontSize: 15.sp, fontWeight: FontWeight.w500),
+                                          color: Color(0xFFE8E8E8), fontSize: 15.sp, fontWeight: FontWeight.w400),
                                     ))
                                   ],
                                 ),
                               )),
-                              Spacer(),
-                              GestureDetector(
-                                onTap: () {
-                                  _onFollow(detail['user']);
-                                },
-                                child: Container(
-                                    height: 32.w,
-                                    width: 69.w,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xFF558AEF),
-                                      borderRadius: BorderRadius.circular(32.w),
-                                    ),
-                                    alignment: Alignment.center,
-                                    child: Text(detail['user']['is_follow'] == 1 ? "已关注" : "关注",
-                                        style: TextStyle(fontSize: 14.sp, color: Colors.white))),
-                              )
+                              Text(
+                                "作品",
+                                style: TextStyle(color: Color(0xFF8A8B8C), fontSize: 13.sp),
+                              ),
+                              Container(
+                                height: 12.w,
+                                width: 1.w,
+                                color: Color(0xFF8A8B8C),
+                                margin: EdgeInsets.symmetric(horizontal: 7.w),
+                              ),
+                              Text(
+                                "粉丝",
+                                style: TextStyle(color: Color(0xFF8A8B8C), fontSize: 13.sp),
+                              ),
                             ],
                           )),
                       SizedBox(
