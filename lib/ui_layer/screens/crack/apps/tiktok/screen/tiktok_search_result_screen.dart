@@ -31,7 +31,6 @@ class TiktokSearchResultScreen extends StatefulWidget {
 }
 
 class _TiktokSearchResultScreenState extends State<TiktokSearchResultScreen> {
-
   late final _appDomain = context.read<AppDomain>();
   late final _homeConfigNotifier = context.read<HomeConfigNotifier>();
 
@@ -72,27 +71,26 @@ class _TiktokSearchResultScreenState extends State<TiktokSearchResultScreen> {
   Widget build(BuildContext context) {
     return ScreenBackground(
         bgColor: Color(0xFF181A25),
-      child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: MyAppBar(
-              title: "${widget.kwy}",
-              backIconColor: Color(0xFF151515),
-              titleColor: Color(0xFF151515),
-              backgroundColor: Colors.transparent),
-          body: MyListView.grid(
-            padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
-            crossAxisCount: 2,
-            mainAxisSpacing: 10.h,
-            crossAxisSpacing: 8.w,
-            childAspectRatio: 344 / 240,
-            itemBuilder: (context, item, index) => TiktokItem.build(TiktokItemType.video, item, onTap: () {
-              TiktokVideoDetailRoute(id: item['id']).push(context);
-            }),
-            onFetchingMore: (currentPage, pageSize) {
-              final res = _getData(page: currentPage, pageSize: pageSize);
-              return res;
-            },
-          ))
-    );
+        child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: MyAppBar(
+                title: "${widget.kwy}",
+                backIconColor: Colors.white,
+                titleColor: Colors.white,
+                backgroundColor: Colors.transparent),
+            body: MyListView.grid(
+              padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
+              crossAxisCount: 2,
+              mainAxisSpacing: 10.h,
+              crossAxisSpacing: 8.w,
+              childAspectRatio: 344 / 240,
+              itemBuilder: (context, item, index) => TiktokItem.build(TiktokItemType.video, item, onTap: () {
+                TiktokVideoDetailRoute(id: item['id']).push(context);
+              }),
+              onFetchingMore: (currentPage, pageSize) {
+                final res = _getData(page: currentPage, pageSize: pageSize);
+                return res;
+              },
+            )));
   }
 }
