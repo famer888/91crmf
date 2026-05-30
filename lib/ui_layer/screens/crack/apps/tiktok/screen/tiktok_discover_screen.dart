@@ -123,12 +123,9 @@ class _TiktokDiscoverScreenState extends State<TiktokDiscoverScreen> {
                     childAspectRatio: 225 / 224,
                     itemBuilder: (context, item, index) => TiktokItem.build(
                         widget.type == "tag" ? TiktokItemType.tag : TiktokItemType.category, item, onTap: () {
-                      TiktokCategoryOrTagDetailRoute(
-                              id: item['id'],
-                              type: widget.type,
-                              title: item['name'] ?? item['title'] ?? '',
-                              has_sort: item['has_sort'] ?? '1')
-                          .push(context);
+                      TiktokVideoClassDetailRoute(
+                        id: item['id'],
+                      ).push(context);
                     }),
                     onFetchingMore: (currentPage, pageSize) {
                       final res = _getData(page: currentPage, pageSize: pageSize);

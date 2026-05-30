@@ -47,7 +47,7 @@ class _TiktokSearchResultScreenState extends State<TiktokSearchResultScreen> {
   }) async {
     bool isInit = false;
 
-    final result = await _appDomain.getConstructByApiLink(apiLink: "/api/searchxiaolan/mv", params: {
+    final result = await _appDomain.getConstructByApiLink(apiLink: "/api/searchttav/mv", params: {
       "kwy": widget.kwy,
       "page": page,
       "limit": pageSize,

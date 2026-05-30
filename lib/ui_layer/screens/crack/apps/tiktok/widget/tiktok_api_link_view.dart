@@ -57,17 +57,18 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
   final ValueNotifier<bool> _showToTopBtn = ValueNotifier(false);
 
   late final TabController _tabController;
-  List<String> titles = ['正在看', '最热', '推荐', '最新', '畅销', '随机'];
-  List<String> titlesSort = ['see', 'hot', 'recommend', 'new', 'sale', 'rand'];
+  List<String> titles = ['最新', '热门', '本周热门', '热搜', '随机'];
+  List<String> titlesSort = ['new', 'hot', 'hot_week', 'search', "rand"];
   AsyncValue<List> _asyncValue = const AsyncInit();
+
+  bool gridLayout = true;
 
   // 普通列表中间类被
   List? mid_style_category;
 
   dynamic? rank;
 
-  // 普通列表中间标签
-  dynamic? tags_mv;
+  dynamic? mid_style_up;
 
   final GlobalKey<MyListViewState<dynamic>> _listKey = GlobalKey<MyListViewState<dynamic>>();
 
@@ -96,7 +97,7 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
 
     CommonUtils.log('getData: ${widget.linkModel.api}  param:$param');
     final result = await _appDomain.getConstructByApiLink(
-      apiLink: widget.linkModel.type == 4 ? "/api/tabnewxiaolan/hotRank" : widget.linkModel.api,
+      apiLink: widget.linkModel.api,
       params: param,
     );
 
@@ -106,12 +107,13 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
         bannersNotifier.value = banner;
       }
 
+      if (result.data['mid_style_up'] != null) {
+        mid_style_up ??= result.data['mid_style_up'];
+      }
+
       setState(() {
         if (page == 1) rank = result.data['rank'];
         mid_style_category ??= result.data['mid_style_category'];
-        if (result.data['body'] != null && result.data['body'] is Map && result.data['body']['type'] == "tags-mv") {
-          tags_mv ??= result.data['body'];
-        }
       });
       // bot_style_one = result.data['bot_style_one'];
       // bot_style_two = result.data['bot_style_two'];
@@ -120,7 +122,8 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
       if (mounted) {
         setState(() {});
       }
-      return widget.linkModel.type == 4
+      return result.data['list'] ?? result.data['bot_style_one'] ?? result.data['bot_style_two'] ?? [];
+      return widget.linkModel.type == 1
           ? result.data['list'] as List
           : widget.linkModel.name == "推荐"
               ? result.data['bot_style_one']
@@ -168,9 +171,8 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
         if (page == 1) rank = result.data['rank'];
 
         mid_style_category ??= result.data['mid_style_category'];
-        if (result.data['body'] != null && result.data['body'] is Map && result.data['body']['type'] == "tags-mv") {
-          tags_mv ??= result.data['body'];
-        }
+
+        mid_style_up ??= result.data['mid_style_up'];
       });
 
       _asyncValue = AsyncData([]);
@@ -179,9 +181,9 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
       }
 
       if (widget.linkModel.type == 2) {
-        return result.data['list'] ?? [];
+        return result.data['list'] ?? result.data['bot_style_two'] ?? [];
       } else {
-        return result.data['bot_style_two'] ?? [];
+        return result.data['bot_style_two'] ?? result.data['list'] ?? [];
       }
     } else {
       MyToast.showText(text: result.msg ?? '');
@@ -237,23 +239,19 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
   }
 
   Future<String> onRefresh(dynamic model) async {
-    // _getData(page: 1, pageSize: 20);
     DateTime now = DateTime.now();
-    final year = now.year.toString();
-    final month = now.month.toString().padLeft(2, '0');
-    final day = now.day.toString().padLeft(2, '0');
 
     final result = await _appDomain.getConstructByApiLink(
-      apiLink: model['type'] == 5 ? "/api/dailyvideoxiaolan/list" : "/api/tabnewxiaolan/list_tab_mv",
+      apiLink: widget.linkModel.api,
       params: {
-        "date": "$year-$month-$day",
-        'page': 1,
-        'limit': 20,
-        'sort': 'rand',
-        'construct_id': model['id'],
+        "tab_id": model['id'],
       },
     );
     if (result.status == 1) {
+      if (result.data['mid_style_up'] != null) {
+        mid_style_up = result.data['mid_style_up'];
+      }
+
       setState(() {
         model['list'] = result.data['list'] ?? [];
       });
@@ -278,7 +276,7 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
               _showToTopBtn.value = overOnePage;
               return false;
             },
-            child: widget.linkModel.name == "推荐" || widget.linkModel.type == 4
+            child: widget.linkModel.type == 1 && widget.linkModel.name.contains("推荐")
                 ? (NestedScrollView(
                     controller: _nestedController,
                     headerSliverBuilder: (_, __) => [
@@ -305,9 +303,11 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
                               SizedBox(
                                 height: 10.w,
                               ),
-                              if (widget.linkModel.type == 4 && index == 0) ...[
+                              if (mid_style_up != null && mid_style_up!.isNotEmpty) ...[
                                 TiktokListBuild(
-                                    type: TiktokListBuildType.creator, linkModel: widget.linkModel, model: rank),
+                                    type: TiktokListBuildType.creator,
+                                    linkModel: widget.linkModel,
+                                    model: mid_style_up),
                                 SizedBox(
                                   height: 10.w,
                                 )
@@ -365,12 +365,15 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
                                   height: 10.w,
                                 ),
                               ],
-                              if (tags_mv != null) ...[
+                              if (mid_style_up != null && mid_style_up!.isNotEmpty) ...[
+
                                 TiktokListBuild(
-                                    type: TiktokListBuildType.tag, linkModel: widget.linkModel, model: tags_mv),
+                                    type: TiktokListBuildType.creator,
+                                    linkModel: widget.linkModel,
+                                    model: mid_style_up),
                                 SizedBox(
                                   height: 10.w,
-                                ),
+                                )
                               ],
                             ],
                           ),
@@ -378,6 +381,11 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
                         SliverFillRemaining(
                           child: TabBarWithView.line(
                             tabBarRightWidget: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  gridLayout = !gridLayout;
+                                });
+                              },
                               child: Row(
                                 children: [
                                   Text(
@@ -385,7 +393,11 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
                                     style: TextStyle(color: Colors.white, fontSize: 13.sp),
                                   ),
                                   SizedBox(width: 6.w),
-                                  Image.asset("assets/images/tiktok_switch_layout.png", width: 16.w),
+                                  Image.asset(
+                                      gridLayout
+                                          ? "assets/images/tiktok_switch_layout.png"
+                                          : "assets/images/tiktok_switch_layout2.png",
+                                      width: 16.w),
                                 ],
                               ),
                             ),
@@ -406,10 +418,10 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
                               return MyListView.grid(
                                 // key: _listKey,
                                 padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 10.h,
-                                crossAxisSpacing: 8.w,
-                                childAspectRatio: 344 / 240,
+                                crossAxisCount: gridLayout ? 2 : 1,
+                                mainAxisSpacing: gridLayout ? 10.w : 10.w,
+                                crossAxisSpacing: gridLayout ? 8.w : 10.w,
+                                childAspectRatio: gridLayout ? 344 / 240 : 704 / 439,
                                 itemBuilder: (context, item, index) =>
                                     TiktokItem.build(TiktokItemType.video, item, onTap: () {
                                   TiktokVideoDetailRoute(id: item['id']).push(context);
@@ -425,20 +437,6 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
                         )
                       ],
                     ))),
-        // if (!(widget.linkModel.name == "推荐" || widget.linkModel.type == 4))
-        //   Positioned.fill(
-        //     child: _asyncValue.maybeWhen(
-        //         error: (_, __) => Container(
-        //               color: Colors.white,
-        //               child: NetworkErrorView(onTap: () {
-        //                 _getData(page: 1, pageSize: 20);
-        //               }),
-        //             ),
-        //         orElse: () => Container(color: Colors.white, child: const LoadingView()),
-        //         data: (data) {
-        //           return SizedBox.shrink();
-        //         }),
-        //   ),
         Positioned(
           right: 20.w,
           bottom: 42.w,

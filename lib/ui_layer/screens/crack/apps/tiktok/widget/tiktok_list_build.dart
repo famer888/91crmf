@@ -64,25 +64,20 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
     super.dispose();
   }
 
-  void _openDaily() {
-    TiktokDailyRoute().push(context);
-  }
-
-  void _openCreator() {
-    TiktokCreatorRoute().push(context);
+  void _openCreator(String id, String name) {
+    TiktokCreatorRoute(id: id, name: name).push(context);
   }
 
   void _openDiscover(String type, {String nagId = ""}) {
     TiktokDiscoverRoute(type: type, nagId: nagId).push(context);
   }
 
-  void _openCategoryDetail(int id, String title, String type, {bool hasSort = true}) {
-    if (!(widget.model is List) && widget.model['type'] == 5) {
-      _openDaily();
-      return;
-    }
-    TiktokCategoryOrTagDetailRoute(id: id, title: title, type: type, has_sort: hasSort == true ? "1" : "0")
-        .push(context);
+  void _openCategoryDetail(int id) {
+    // if (!(widget.model is List) && widget.model['type'] == 5) {
+    //   _openDaily();
+    //   return;
+    // }
+    TiktokVideoClassDetailRoute(id: id).push(context);
   }
 
   Widget _buildTypeLayout() {
@@ -91,8 +86,19 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
         List items = widget.model ?? [];
         return Column(
           children: [
-            _buildTagGrid(items,onTap: (item){
-              _openCategoryDetail(item['id'], item['title'], 'category');
+            _buildTagGrid(items, onTap: (item) {
+              if (item['bg_thumb'] == null) {
+                final route = TiktokVideoClassListRoute(
+                  id: item['id'],
+                  name: '${item['tab_name'] ?? ''}',
+                );
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (!context.mounted) return;
+                  route.push(context);
+                });
+              } else {
+                _openCategoryDetail(item['id']);
+              }
             })
             // _buildHead(
             //     name: "发现精彩",
@@ -150,8 +156,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
                 subName: widget.model["sub_title"],
                 onTap: () {
                   // _openDiscover('tag');
-                  _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
-                      hasSort: "${widget.model['has_tab']}" == "1");
+                  _openCategoryDetail(widget.model['id']);
                 }),
             if ((widget.model['list'] as List).length > 0) ...[
               SizedBox(
@@ -195,8 +200,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
               height: 14.h,
             ),
             _buildHandle(onMoreTap: () {
-              _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
-                  hasSort: "${widget.model['has_tab']}" == "1");
+              _openCategoryDetail(widget.model['id']);
             })
           ],
         );
@@ -209,8 +213,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
                 subName: widget.model["sub_title"],
                 onTap: () {
                   // _openDiscover('tag');
-                  _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
-                      hasSort: "${widget.model['has_tab']}" == "1");
+                  _openCategoryDetail(widget.model['id']);
                 }),
             if ((widget.model['list'] as List).length > 0) ...[
               SizedBox(
@@ -248,8 +251,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
                 name: widget.model["title"],
                 subName: widget.model["sub_title"],
                 onTap: () {
-                  _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
-                      hasSort: "${widget.model['has_tab']}" == "1");
+                  _openCategoryDetail(widget.model['id']);
                 }),
             SizedBox(
               height: 10.w,
@@ -281,8 +283,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
               height: 14.h,
             ),
             _buildHandle(onMoreTap: () {
-              _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
-                  hasSort: "${widget.model['has_tab']}" == "1");
+              _openCategoryDetail(widget.model['id']);
             })
           ],
         );
@@ -296,8 +297,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
                 subName: widget.model["sub_title"],
                 onTap: () {
                   // _openDiscover('tag');
-                  _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
-                      hasSort: "${widget.model['has_tab']}" == "1");
+                  _openCategoryDetail(widget.model['id']);
                 }),
             if ((widget.model['list'] as List).length > 0) ...[
               SizedBox(
@@ -336,8 +336,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
                   },
                 ),
               _buildHandle(onMoreTap: () {
-                _openCategoryDetail(widget.model['id'], widget.model['title'], 'category',
-                    hasSort: "${widget.model['has_tab']}" == "1");
+                _openCategoryDetail(widget.model['id']);
               })
             ]
           ],
@@ -347,7 +346,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
           children: [
             GestureDetector(
                 onTap: () {
-                  _openCreator();
+                  _openCreator("${widget.model['group_id'] ?? ""}", widget.model['title']);
                 },
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -355,7 +354,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
                     Row(
                       children: [
                         Text(
-                          "${widget.model['name']}",
+                          "${widget.model['title']}",
                           style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 15.sp, fontWeight: FontWeight.w600),
                         ),
                       ],
@@ -389,7 +388,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  dynamic user = widget.model['item'][index];
+                  dynamic user = widget.model['list'][index];
                   return GestureDetector(
                     onTap: () {
                       TiktokUserWorksRoute(userName: user['nickname'], id: "${user['uid']}").push(context);
@@ -402,11 +401,11 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                             ),
-                            child: MyImage.network(user['thumb'],
+                            child: MyImage.network(user['thumb_full'] ?? "",
                                 width: 38.w, height: 38.w, fit: BoxFit.cover, borderRadius: 38.r)),
                         Spacer(),
                         Text(
-                          "${user['nickname']}",
+                          "${user['nickname'] ?? ""}",
                           style: TextStyle(color: Color(0xB2FFFFFF), fontSize: 12.sp),
                         )
                       ],
@@ -414,7 +413,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
                   );
                 },
                 separatorBuilder: (context, index) => SizedBox(width: 25.w),
-                itemCount: (widget.model['item'] as List).length,
+                itemCount: (widget.model['list'] as List).length,
               ),
             )
           ],
@@ -513,11 +512,13 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
       ),
       itemBuilder: (context, index) {
         dynamic item = items[index];
-        return TiktokItem.build(TiktokItemType.tag, item,
-            onTap: onTap ??
-                () {
-                  _openCategoryDetail(item['id'], item['name'] ?? '', 'tag');
-                });
+        return TiktokItem.build(TiktokItemType.tag, item, onTap: () {
+          if (onTap != null) {
+            onTap?.call(item);
+          } else {
+            _openCategoryDetail(item['id']);
+          }
+        });
       },
     );
   }
@@ -762,7 +763,7 @@ class TiktokItem {
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(6.r), color: Color(0xFF22262F)),
                 alignment: Alignment.center,
                 child: Text(
-                  "${item["name"]}",
+                  "${item["tab_name"]}",
                   style: TextStyle(color: Color(0xFFBCBCBC), fontSize: 13.sp),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

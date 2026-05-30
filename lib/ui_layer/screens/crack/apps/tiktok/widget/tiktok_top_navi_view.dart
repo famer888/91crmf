@@ -54,7 +54,7 @@ class _TiktokTopNaviViewState extends State<TiktokTopNaviView> with TickerProvid
       _asyncValue = const AsyncLoading();
     });
     final result =
-        await _appDomain.getConstructByApiLink(apiLink: CrackAppType.xiaolan.topNavApi, params: {'id': widget.id});
+        await _appDomain.getConstructByApiLink(apiLink: CrackAppType.ttav.topNavApi, params: {'id': widget.id});
     if (result.status == 1) {
       final data = result['data'];
       if (data case final List data when data.isNotEmpty) {

@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:jycrpj/domain/type_def.dart';
+import 'package:jycrpj/ui_layer/router/routes.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../domain/domain.dart';
+import '../../../../../utils/my_toast.dart';
 import '../../../../common_widgets/my_app_bar.dart';
 import '../../../../common_widgets/my_list_view.dart';
 import '../../../../common_widgets/screen_background.dart';
+import '../widget/tiktok_list_build.dart';
 
-class TiktokCreatorScreen extends StatefulWidget {
+class TiktokVideoClassListScreen extends StatefulWidget {
+  const TiktokVideoClassListScreen({super.key, required this.id, required this.name});
+
+  final int id;
   final String name;
-  final String id;
-
-  const TiktokCreatorScreen({
-    super.key,
-    required this.name,
-    required this.id,
-  });
 
   @override
-  State<TiktokCreatorScreen> createState() => _TiktokCreatorScreenState();
+  State<TiktokVideoClassListScreen> createState() => _TiktokVideoClassListScreenState();
 }
 
-class _TiktokCreatorScreenState extends State<TiktokCreatorScreen> with TickerProviderStateMixin {
+class _TiktokVideoClassListScreenState extends State<TiktokVideoClassListScreen> {
   late final _appDomain = context.read<AppDomain>();
 
   Future<List> _getData({
@@ -125,58 +125,54 @@ class _ClassListRow extends StatelessWidget {
       onTap: () {
         final videoId = item['id'];
         if (videoId != null) {
-          // TiktokVideoDetailRoute(id: videoId is int ? videoId : int.tryParse('$videoId') ?? 0).push(context);
+          TiktokVideoDetailRoute(id: videoId is int ? videoId : int.tryParse('$videoId') ?? 0).push(context);
         }
       },
-      child: Container(
-        height: 103.w,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15.r),
-          color: Color(0xFF22262F),
-        ),
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: SizedBox(
+        height: 90.w,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 50.w,
-                  height: 50.w,
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(50.w), color: Colors.white.withOpacity(.9)),
-                ),
-                SizedBox(width: 7.w),
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.w500),
+            Container(
+              width: 172.w,
+              height: 90.w,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(.2),
+                borderRadius: BorderRadius.circular(10.r),
+              ),
+              child: item['cover_thumb_url'] != null
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(10.r),
+                      child: Image.network(
+                        '${item['cover_thumb_url']}',
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => const SizedBox.shrink(),
                       ),
-                      SizedBox(height: 4.w),
-                      Text(
-                        '作品：$works  粉丝：$follow',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: Colors.white.withOpacity(.4), fontSize: 12.sp),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                    )
+                  : null,
             ),
-            Text(
-              "Hi，我是芋圆呀呀!现正式入驻TikTok成人版啦!我会在这…",
-              style: TextStyle(color: Colors.white.withOpacity(.4), fontSize: 13.sp, fontWeight: FontWeight.w500),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            SizedBox(width: 10.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(color: Colors.white, fontSize: 14.sp),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    '关注：$follow',
+                    style: TextStyle(color: Colors.white.withOpacity(.4), fontSize: 10.sp),
+                  ),
+                  Text(
+                    '作品：$works',
+                    style: TextStyle(color: Colors.white.withOpacity(.4), fontSize: 10.sp),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

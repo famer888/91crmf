@@ -134,13 +134,13 @@ List<RouteBase> get $appRoutes => [
       $xiaolanCreatorRoute,
       $tiktokUserWorksRoute,
       $xiaolanUserWorksRoute,
-      $tiktokCategoryOrTagDetailRoute,
+      $tiktokVideoClassDetailRoute,
+      $tiktokVideoClassListRoute,
       $xiaolanCategoryOrTagDetailRoute,
       $tiktokDiscoverRoute,
       $xiaolanDiscoverRoute,
       $tiktokSearchRoute,
       $xiaolanSearchRoute,
-      $tiktokDailyRoute,
       $xiaolanDailyRoute,
     ];
 
@@ -160,8 +160,7 @@ extension $WelcomeRouteExtension on WelcomeRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -221,8 +220,7 @@ RouteBase get $statefulShellRoute => StatefulShellRouteData.$route(
     );
 
 extension $StatefulShellRouteExtension on StatefulShellRoute {
-  static StatefulShellRoute _fromState(GoRouterState state) =>
-      const StatefulShellRoute();
+  static StatefulShellRoute _fromState(GoRouterState state) => const StatefulShellRoute();
 }
 
 extension $CrackRoute1Extension on CrackRoute1 {
@@ -236,8 +234,7 @@ extension $CrackRoute1Extension on CrackRoute1 {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -253,8 +250,7 @@ extension $HomeRouteExtension on HomeRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -270,8 +266,7 @@ extension $BlackRouteExtension on BlackRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -287,8 +282,7 @@ extension $VlogRouteExtension on VlogRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -304,8 +298,7 @@ extension $AIServerRouteExtension on AIServerRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -321,8 +314,7 @@ extension $MineRouteExtension on MineRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -349,8 +341,7 @@ extension $BlockDetailsRouteExtension on BlockDetailsRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -377,8 +368,7 @@ extension $BlockTagListRouteExtension on BlockTagListRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -391,8 +381,7 @@ RouteBase get $vlogSecondRoute => GoRouteData.$route(
 
 extension $VlogSecondRouteExtension on VlogSecondRoute {
   static VlogSecondRoute _fromState(GoRouterState state) => VlogSecondRoute(
-        userGlobalData:
-            _$boolConverter(state.uri.queryParameters['user-global-data']!),
+        userGlobalData: _$boolConverter(state.uri.queryParameters['user-global-data']!),
       );
 
   String get location => GoRouteData.$location(
@@ -406,8 +395,7 @@ extension $VlogSecondRouteExtension on VlogSecondRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -442,8 +430,7 @@ extension $VlogTagRouteExtension on VlogTagRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -455,8 +442,7 @@ RouteBase get $groupChatListContentRoute => GoRouteData.$route(
     );
 
 extension $GroupChatListContentRouteExtension on GroupChatListContentRoute {
-  static GroupChatListContentRoute _fromState(GoRouterState state) =>
-      GroupChatListContentRoute(
+  static GroupChatListContentRoute _fromState(GoRouterState state) => GroupChatListContentRoute(
         state.extra as GroupsModel,
       );
 
@@ -466,14 +452,11 @@ extension $GroupChatListContentRouteExtension on GroupChatListContentRoute {
 
   void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location, extra: $extra);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
+  void replace(BuildContext context) => context.replace(location, extra: $extra);
 }
 
 RouteBase get $groupChatTopMsgContentRoute => GoRouteData.$route(
@@ -483,8 +466,7 @@ RouteBase get $groupChatTopMsgContentRoute => GoRouteData.$route(
     );
 
 extension $GroupChatTopMsgContentRouteExtension on GroupChatTopMsgContentRoute {
-  static GroupChatTopMsgContentRoute _fromState(GoRouterState state) =>
-      GroupChatTopMsgContentRoute(
+  static GroupChatTopMsgContentRoute _fromState(GoRouterState state) => GroupChatTopMsgContentRoute(
         state.extra as GroupsMessageModel,
       );
 
@@ -494,14 +476,11 @@ extension $GroupChatTopMsgContentRouteExtension on GroupChatTopMsgContentRoute {
 
   void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location, extra: $extra);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
+  void replace(BuildContext context) => context.replace(location, extra: $extra);
 }
 
 RouteBase get $groupChatDetailContentRoute => GoRouteData.$route(
@@ -511,8 +490,7 @@ RouteBase get $groupChatDetailContentRoute => GoRouteData.$route(
     );
 
 extension $GroupChatDetailContentRouteExtension on GroupChatDetailContentRoute {
-  static GroupChatDetailContentRoute _fromState(GoRouterState state) =>
-      GroupChatDetailContentRoute(
+  static GroupChatDetailContentRoute _fromState(GoRouterState state) => GroupChatDetailContentRoute(
         id: int.parse(state.uri.queryParameters['id']!),
         ms: int.parse(state.uri.queryParameters['ms']!),
       );
@@ -529,8 +507,7 @@ extension $GroupChatDetailContentRouteExtension on GroupChatDetailContentRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -542,8 +519,7 @@ RouteBase get $groupMembersContentRoute => GoRouteData.$route(
     );
 
 extension $GroupMembersContentRouteExtension on GroupMembersContentRoute {
-  static GroupMembersContentRoute _fromState(GoRouterState state) =>
-      GroupMembersContentRoute(
+  static GroupMembersContentRoute _fromState(GoRouterState state) => GroupMembersContentRoute(
         id: int.parse(state.uri.queryParameters['id']!),
       );
 
@@ -558,8 +534,7 @@ extension $GroupMembersContentRouteExtension on GroupMembersContentRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -581,8 +556,7 @@ extension $CartoonRouteExtension on CartoonRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -607,8 +581,7 @@ extension $CartoonMoreRouteExtension on CartoonMoreRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -620,8 +593,7 @@ RouteBase get $cartoonDetailRoute => GoRouteData.$route(
     );
 
 extension $CartoonDetailRouteExtension on CartoonDetailRoute {
-  static CartoonDetailRoute _fromState(GoRouterState state) =>
-      CartoonDetailRoute(
+  static CartoonDetailRoute _fromState(GoRouterState state) => CartoonDetailRoute(
         state.extra as String,
       );
 
@@ -631,14 +603,11 @@ extension $CartoonDetailRouteExtension on CartoonDetailRoute {
 
   void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location, extra: $extra);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
+  void replace(BuildContext context) => context.replace(location, extra: $extra);
 }
 
 RouteBase get $gameRoute => GoRouteData.$route(
@@ -658,8 +627,7 @@ extension $GameRouteExtension on GameRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -684,8 +652,7 @@ extension $GameMoreRouteExtension on GameMoreRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -710,8 +677,7 @@ extension $GameNavRouteExtension on GameNavRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -733,14 +699,11 @@ extension $GameDetailRouteExtension on GameDetailRoute {
 
   void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location, extra: $extra);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
+  void replace(BuildContext context) => context.replace(location, extra: $extra);
 }
 
 RouteBase get $gameTagRoute => GoRouteData.$route(
@@ -762,8 +725,7 @@ extension $GameTagRouteExtension on GameTagRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -787,8 +749,7 @@ extension $WebViewRouteExtension on WebViewRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -800,8 +761,7 @@ RouteBase get $bitPostDetailRoute => GoRouteData.$route(
     );
 
 extension $BitPostDetailRouteExtension on BitPostDetailRoute {
-  static BitPostDetailRoute _fromState(GoRouterState state) =>
-      BitPostDetailRoute(
+  static BitPostDetailRoute _fromState(GoRouterState state) => BitPostDetailRoute(
         state.pathParameters['id']!,
       );
 
@@ -813,8 +773,7 @@ extension $BitPostDetailRouteExtension on BitPostDetailRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -827,9 +786,7 @@ RouteBase get $vipCenterRoute => GoRouteData.$route(
 
 extension $VipCenterRouteExtension on VipCenterRoute {
   static VipCenterRoute _fromState(GoRouterState state) => VipCenterRoute(
-        pageIndex: _$convertMapValue(
-                'page-index', state.uri.queryParameters, int.parse) ??
-            0,
+        pageIndex: _$convertMapValue('page-index', state.uri.queryParameters, int.parse) ?? 0,
       );
 
   String get location => GoRouteData.$location(
@@ -843,8 +800,7 @@ extension $VipCenterRouteExtension on VipCenterRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -865,8 +821,7 @@ RouteBase get $vipUpgradeRoute => GoRouteData.$route(
     );
 
 extension $VipUpgradeRouteExtension on VipUpgradeRoute {
-  static VipUpgradeRoute _fromState(GoRouterState state) =>
-      const VipUpgradeRoute();
+  static VipUpgradeRoute _fromState(GoRouterState state) => const VipUpgradeRoute();
 
   String get location => GoRouteData.$location(
         '/mineVipUpgrade',
@@ -876,8 +831,7 @@ extension $VipUpgradeRouteExtension on VipUpgradeRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -889,8 +843,7 @@ RouteBase get $coinRechargeRoute => GoRouteData.$route(
     );
 
 extension $CoinRechargeRouteExtension on CoinRechargeRoute {
-  static CoinRechargeRoute _fromState(GoRouterState state) =>
-      const CoinRechargeRoute();
+  static CoinRechargeRoute _fromState(GoRouterState state) => const CoinRechargeRoute();
 
   String get location => GoRouteData.$location(
         '/mineCoinRecharge',
@@ -900,8 +853,7 @@ extension $CoinRechargeRouteExtension on CoinRechargeRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -913,8 +865,7 @@ RouteBase get $coinDetailRoute => GoRouteData.$route(
     );
 
 extension $CoinDetailRouteExtension on CoinDetailRoute {
-  static CoinDetailRoute _fromState(GoRouterState state) =>
-      const CoinDetailRoute();
+  static CoinDetailRoute _fromState(GoRouterState state) => const CoinDetailRoute();
 
   String get location => GoRouteData.$location(
         '/mineCoinDetail',
@@ -924,8 +875,7 @@ extension $CoinDetailRouteExtension on CoinDetailRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -947,8 +897,7 @@ extension $RankRouteExtension on RankRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -960,8 +909,7 @@ RouteBase get $rechargeRecordRoute => GoRouteData.$route(
     );
 
 extension $RechargeRecordRouteExtension on RechargeRecordRoute {
-  static RechargeRecordRoute _fromState(GoRouterState state) =>
-      RechargeRecordRoute(
+  static RechargeRecordRoute _fromState(GoRouterState state) => RechargeRecordRoute(
         state.pathParameters['type']!,
       );
 
@@ -973,8 +921,7 @@ extension $RechargeRecordRouteExtension on RechargeRecordRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -986,10 +933,8 @@ RouteBase get $communityIssueRoute => GoRouteData.$route(
     );
 
 extension $CommunityIssueRouteExtension on CommunityIssueRoute {
-  static CommunityIssueRoute _fromState(GoRouterState state) =>
-      CommunityIssueRoute(
-        type: _$CommunityIssueTypeEnumMap
-            ._$fromName(state.pathParameters['type']!),
+  static CommunityIssueRoute _fromState(GoRouterState state) => CommunityIssueRoute(
+        type: _$CommunityIssueTypeEnumMap._$fromName(state.pathParameters['type']!),
         org: _$boolConverter(state.pathParameters['org']!),
       );
 
@@ -1001,8 +946,7 @@ extension $CommunityIssueRouteExtension on CommunityIssueRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1014,8 +958,7 @@ const _$CommunityIssueTypeEnumMap = {
 };
 
 extension<T extends Enum> on Map<T, String> {
-  T _$fromName(String value) =>
-      entries.singleWhere((element) => element.value == value).key;
+  T _$fromName(String value) => entries.singleWhere((element) => element.value == value).key;
 }
 
 RouteBase get $communityModuleRoute => GoRouteData.$route(
@@ -1025,8 +968,7 @@ RouteBase get $communityModuleRoute => GoRouteData.$route(
     );
 
 extension $CommunityModuleRouteExtension on CommunityModuleRoute {
-  static CommunityModuleRoute _fromState(GoRouterState state) =>
-      CommunityModuleRoute(
+  static CommunityModuleRoute _fromState(GoRouterState state) => CommunityModuleRoute(
         id: int.parse(state.uri.queryParameters['id']!),
         type: state.uri.queryParameters['type']!,
       );
@@ -1043,8 +985,7 @@ extension $CommunityModuleRouteExtension on CommunityModuleRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1056,8 +997,7 @@ RouteBase get $communityPostDetailRoute => GoRouteData.$route(
     );
 
 extension $CommunityPostDetailRouteExtension on CommunityPostDetailRoute {
-  static CommunityPostDetailRoute _fromState(GoRouterState state) =>
-      CommunityPostDetailRoute(
+  static CommunityPostDetailRoute _fromState(GoRouterState state) => CommunityPostDetailRoute(
         state.pathParameters['id']!,
       );
 
@@ -1069,8 +1009,7 @@ extension $CommunityPostDetailRouteExtension on CommunityPostDetailRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1092,8 +1031,7 @@ extension $LoginRouteExtension on LoginRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1105,8 +1043,7 @@ RouteBase get $mineSetupRoute => GoRouteData.$route(
     );
 
 extension $MineSetupRouteExtension on MineSetupRoute {
-  static MineSetupRoute _fromState(GoRouterState state) =>
-      const MineSetupRoute();
+  static MineSetupRoute _fromState(GoRouterState state) => const MineSetupRoute();
 
   String get location => GoRouteData.$location(
         '/mineSetup',
@@ -1116,8 +1053,7 @@ extension $MineSetupRouteExtension on MineSetupRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1129,8 +1065,7 @@ RouteBase get $mineShareToUserRoute => GoRouteData.$route(
     );
 
 extension $MineShareToUserRouteExtension on MineShareToUserRoute {
-  static MineShareToUserRoute _fromState(GoRouterState state) =>
-      const MineShareToUserRoute();
+  static MineShareToUserRoute _fromState(GoRouterState state) => const MineShareToUserRoute();
 
   String get location => GoRouteData.$location(
         '/mineShareToUser',
@@ -1140,8 +1075,7 @@ extension $MineShareToUserRouteExtension on MineShareToUserRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1153,8 +1087,7 @@ RouteBase get $shareInviteRoute => GoRouteData.$route(
     );
 
 extension $ShareInviteRouteExtension on ShareInviteRoute {
-  static ShareInviteRoute _fromState(GoRouterState state) =>
-      const ShareInviteRoute();
+  static ShareInviteRoute _fromState(GoRouterState state) => const ShareInviteRoute();
 
   String get location => GoRouteData.$location(
         '/mineShareInvite',
@@ -1164,8 +1097,7 @@ extension $ShareInviteRouteExtension on ShareInviteRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1177,8 +1109,7 @@ RouteBase get $mineShareToUserRecordRoute => GoRouteData.$route(
     );
 
 extension $MineShareToUserRecordRouteExtension on MineShareToUserRecordRoute {
-  static MineShareToUserRecordRoute _fromState(GoRouterState state) =>
-      const MineShareToUserRecordRoute();
+  static MineShareToUserRecordRoute _fromState(GoRouterState state) => const MineShareToUserRecordRoute();
 
   String get location => GoRouteData.$location(
         '/mineShareToUserRecord',
@@ -1188,8 +1119,7 @@ extension $MineShareToUserRecordRouteExtension on MineShareToUserRecordRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1201,8 +1131,7 @@ RouteBase get $mineAgentRoute => GoRouteData.$route(
     );
 
 extension $MineAgentRouteExtension on MineAgentRoute {
-  static MineAgentRoute _fromState(GoRouterState state) =>
-      const MineAgentRoute();
+  static MineAgentRoute _fromState(GoRouterState state) => const MineAgentRoute();
 
   String get location => GoRouteData.$location(
         '/mineAgent',
@@ -1212,8 +1141,7 @@ extension $MineAgentRouteExtension on MineAgentRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1225,8 +1153,7 @@ RouteBase get $mineAgentProfitRoute => GoRouteData.$route(
     );
 
 extension $MineAgentProfitRouteExtension on MineAgentProfitRoute {
-  static MineAgentProfitRoute _fromState(GoRouterState state) =>
-      const MineAgentProfitRoute();
+  static MineAgentProfitRoute _fromState(GoRouterState state) => const MineAgentProfitRoute();
 
   String get location => GoRouteData.$location(
         '/mineAgentProfit',
@@ -1236,8 +1163,7 @@ extension $MineAgentProfitRouteExtension on MineAgentProfitRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1249,8 +1175,7 @@ RouteBase get $mineAgentPromoteDataRoute => GoRouteData.$route(
     );
 
 extension $MineAgentPromoteDataRouteExtension on MineAgentPromoteDataRoute {
-  static MineAgentPromoteDataRoute _fromState(GoRouterState state) =>
-      const MineAgentPromoteDataRoute();
+  static MineAgentPromoteDataRoute _fromState(GoRouterState state) => const MineAgentPromoteDataRoute();
 
   String get location => GoRouteData.$location(
         '/mineAgentPromoteData',
@@ -1260,8 +1185,7 @@ extension $MineAgentPromoteDataRouteExtension on MineAgentPromoteDataRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1273,8 +1197,7 @@ RouteBase get $mineCustomerServiceRoute => GoRouteData.$route(
     );
 
 extension $MineCustomerServiceRouteExtension on MineCustomerServiceRoute {
-  static MineCustomerServiceRoute _fromState(GoRouterState state) =>
-      const MineCustomerServiceRoute();
+  static MineCustomerServiceRoute _fromState(GoRouterState state) => const MineCustomerServiceRoute();
 
   String get location => GoRouteData.$location(
         '/customerService',
@@ -1284,8 +1207,7 @@ extension $MineCustomerServiceRouteExtension on MineCustomerServiceRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1297,8 +1219,7 @@ RouteBase get $mineWithdrawalRoute => GoRouteData.$route(
     );
 
 extension $MineWithdrawalRouteExtension on MineWithdrawalRoute {
-  static MineWithdrawalRoute _fromState(GoRouterState state) =>
-      MineWithdrawalRoute(
+  static MineWithdrawalRoute _fromState(GoRouterState state) => MineWithdrawalRoute(
         _$boolConverter(state.pathParameters['isAgent']!),
       );
 
@@ -1310,8 +1231,7 @@ extension $MineWithdrawalRouteExtension on MineWithdrawalRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1323,8 +1243,7 @@ RouteBase get $mineWithdrawalRecordRoute => GoRouteData.$route(
     );
 
 extension $MineWithdrawalRecordRouteExtension on MineWithdrawalRecordRoute {
-  static MineWithdrawalRecordRoute _fromState(GoRouterState state) =>
-      const MineWithdrawalRecordRoute();
+  static MineWithdrawalRecordRoute _fromState(GoRouterState state) => const MineWithdrawalRecordRoute();
 
   String get location => GoRouteData.$location(
         '/mineWithdrawalRecord',
@@ -1334,8 +1253,7 @@ extension $MineWithdrawalRecordRouteExtension on MineWithdrawalRecordRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1347,8 +1265,7 @@ RouteBase get $mineWithdrawalBankListRoute => GoRouteData.$route(
     );
 
 extension $MineWithdrawalBankListRouteExtension on MineWithdrawalBankListRoute {
-  static MineWithdrawalBankListRoute _fromState(GoRouterState state) =>
-      const MineWithdrawalBankListRoute();
+  static MineWithdrawalBankListRoute _fromState(GoRouterState state) => const MineWithdrawalBankListRoute();
 
   String get location => GoRouteData.$location(
         '/mineWithdrawalBankList',
@@ -1358,8 +1275,7 @@ extension $MineWithdrawalBankListRouteExtension on MineWithdrawalBankListRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1383,8 +1299,7 @@ extension $MineWelfareRouteExtension on MineWelfareRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1406,8 +1321,7 @@ extension $AIMagicRouteExtension on AIMagicRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1429,8 +1343,7 @@ extension $AIArtRouteExtension on AIArtRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1452,8 +1365,7 @@ extension $AiNovelRouteExtension on AiNovelRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1475,8 +1387,7 @@ extension $AiAudioRouteExtension on AiAudioRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1488,8 +1399,7 @@ RouteBase get $aiNovelDetailRoute => GoRouteData.$route(
     );
 
 extension $AiNovelDetailRouteExtension on AiNovelDetailRoute {
-  static AiNovelDetailRoute _fromState(GoRouterState state) =>
-      AiNovelDetailRoute(
+  static AiNovelDetailRoute _fromState(GoRouterState state) => AiNovelDetailRoute(
         state.uri.queryParameters['id']!,
         state.uri.queryParameters['generate-time']!,
       );
@@ -1506,8 +1416,7 @@ extension $AiNovelDetailRouteExtension on AiNovelDetailRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1519,8 +1428,7 @@ RouteBase get $aIFaceSwapRoute => GoRouteData.$route(
     );
 
 extension $AIFaceSwapRouteExtension on AIFaceSwapRoute {
-  static AIFaceSwapRoute _fromState(GoRouterState state) =>
-      const AIFaceSwapRoute();
+  static AIFaceSwapRoute _fromState(GoRouterState state) => const AIFaceSwapRoute();
 
   String get location => GoRouteData.$location(
         '/aiFaceSwap',
@@ -1530,8 +1438,7 @@ extension $AIFaceSwapRouteExtension on AIFaceSwapRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1543,8 +1450,7 @@ RouteBase get $aIVideoFaceSwapRoute => GoRouteData.$route(
     );
 
 extension $AIVideoFaceSwapRouteExtension on AIVideoFaceSwapRoute {
-  static AIVideoFaceSwapRoute _fromState(GoRouterState state) =>
-      const AIVideoFaceSwapRoute();
+  static AIVideoFaceSwapRoute _fromState(GoRouterState state) => const AIVideoFaceSwapRoute();
 
   String get location => GoRouteData.$location(
         '/aiVideoFaceSwap',
@@ -1554,8 +1460,7 @@ extension $AIVideoFaceSwapRouteExtension on AIVideoFaceSwapRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1567,8 +1472,7 @@ RouteBase get $aIOffDeRobeRoute => GoRouteData.$route(
     );
 
 extension $AIOffDeRobeRouteExtension on AIOffDeRobeRoute {
-  static AIOffDeRobeRoute _fromState(GoRouterState state) =>
-      const AIOffDeRobeRoute();
+  static AIOffDeRobeRoute _fromState(GoRouterState state) => const AIOffDeRobeRoute();
 
   String get location => GoRouteData.$location(
         '/aiOffDeRobe',
@@ -1578,8 +1482,7 @@ extension $AIOffDeRobeRouteExtension on AIOffDeRobeRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1601,8 +1504,7 @@ extension $AIKissRouteExtension on AIKissRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1624,8 +1526,7 @@ extension $MinePostRouteExtension on MinePostRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1637,8 +1538,7 @@ RouteBase get $mineIncomeDetailRoute => GoRouteData.$route(
     );
 
 extension $MineIncomeDetailRouteExtension on MineIncomeDetailRoute {
-  static MineIncomeDetailRoute _fromState(GoRouterState state) =>
-      const MineIncomeDetailRoute();
+  static MineIncomeDetailRoute _fromState(GoRouterState state) => const MineIncomeDetailRoute();
 
   String get location => GoRouteData.$location(
         '/mineIncomeDetail',
@@ -1648,8 +1548,7 @@ extension $MineIncomeDetailRouteExtension on MineIncomeDetailRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1661,8 +1560,7 @@ RouteBase get $mineCollectionRoute => GoRouteData.$route(
     );
 
 extension $MineCollectionRouteExtension on MineCollectionRoute {
-  static MineCollectionRoute _fromState(GoRouterState state) =>
-      const MineCollectionRoute();
+  static MineCollectionRoute _fromState(GoRouterState state) => const MineCollectionRoute();
 
   String get location => GoRouteData.$location(
         '/mineCollection',
@@ -1672,8 +1570,7 @@ extension $MineCollectionRouteExtension on MineCollectionRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1697,8 +1594,7 @@ extension $UserCenterRouteExtension on UserCenterRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1725,8 +1621,7 @@ extension $VlogSearchRouteExtension on VlogSearchRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1738,8 +1633,7 @@ RouteBase get $vlogSearchResultRoute => GoRouteData.$route(
     );
 
 extension $VlogSearchResultRouteExtension on VlogSearchResultRoute {
-  static VlogSearchResultRoute _fromState(GoRouterState state) =>
-      VlogSearchResultRoute(
+  static VlogSearchResultRoute _fromState(GoRouterState state) => VlogSearchResultRoute(
         word: state.uri.queryParameters['word']!,
       );
 
@@ -1754,8 +1648,7 @@ extension $VlogSearchResultRouteExtension on VlogSearchResultRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1781,8 +1674,7 @@ extension $ChatMessageRouteExtension on ChatMessageRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1794,8 +1686,7 @@ RouteBase get $mineFollowingRoute => GoRouteData.$route(
     );
 
 extension $MineFollowingRouteExtension on MineFollowingRoute {
-  static MineFollowingRoute _fromState(GoRouterState state) =>
-      const MineFollowingRoute();
+  static MineFollowingRoute _fromState(GoRouterState state) => const MineFollowingRoute();
 
   String get location => GoRouteData.$location(
         '/mineFollowing',
@@ -1805,8 +1696,7 @@ extension $MineFollowingRouteExtension on MineFollowingRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1818,8 +1708,7 @@ RouteBase get $originalEnterRoute => GoRouteData.$route(
     );
 
 extension $OriginalEnterRouteExtension on OriginalEnterRoute {
-  static OriginalEnterRoute _fromState(GoRouterState state) =>
-      const OriginalEnterRoute();
+  static OriginalEnterRoute _fromState(GoRouterState state) => const OriginalEnterRoute();
 
   String get location => GoRouteData.$location(
         '/originalEnter',
@@ -1829,8 +1718,7 @@ extension $OriginalEnterRouteExtension on OriginalEnterRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1842,8 +1730,7 @@ RouteBase get $communityTagDetailRoute => GoRouteData.$route(
     );
 
 extension $CommunityTagDetailRouteExtension on CommunityTagDetailRoute {
-  static CommunityTagDetailRoute _fromState(GoRouterState state) =>
-      CommunityTagDetailRoute(
+  static CommunityTagDetailRoute _fromState(GoRouterState state) => CommunityTagDetailRoute(
         state.pathParameters['id']!,
       );
 
@@ -1855,8 +1742,7 @@ extension $CommunityTagDetailRouteExtension on CommunityTagDetailRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1878,8 +1764,7 @@ extension $MineBuyRouteExtension on MineBuyRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1891,8 +1776,7 @@ RouteBase get $visitRecordScreenRoute => GoRouteData.$route(
     );
 
 extension $VisitRecordScreenRouteExtension on VisitRecordScreenRoute {
-  static VisitRecordScreenRoute _fromState(GoRouterState state) =>
-      const VisitRecordScreenRoute();
+  static VisitRecordScreenRoute _fromState(GoRouterState state) => const VisitRecordScreenRoute();
 
   String get location => GoRouteData.$location(
         '/mineBrowseRecord',
@@ -1902,8 +1786,7 @@ extension $VisitRecordScreenRouteExtension on VisitRecordScreenRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1916,9 +1799,7 @@ RouteBase get $mineAIRecordRoute => GoRouteData.$route(
 
 extension $MineAIRecordRouteExtension on MineAIRecordRoute {
   static MineAIRecordRoute _fromState(GoRouterState state) => MineAIRecordRoute(
-        index:
-            _$convertMapValue('index', state.uri.queryParameters, int.parse) ??
-                0,
+        index: _$convertMapValue('index', state.uri.queryParameters, int.parse) ?? 0,
       );
 
   String get location => GoRouteData.$location(
@@ -1932,8 +1813,7 @@ extension $MineAIRecordRouteExtension on MineAIRecordRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -1955,14 +1835,11 @@ extension $VideoDetailRouteExtension on VideoDetailRoute {
 
   void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location, extra: $extra);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
+  void replace(BuildContext context) => context.replace(location, extra: $extra);
 }
 
 RouteBase get $anWangRestrictedRoute => GoRouteData.$route(
@@ -1972,11 +1849,9 @@ RouteBase get $anWangRestrictedRoute => GoRouteData.$route(
     );
 
 extension $AnWangRestrictedRouteExtension on AnWangRestrictedRoute {
-  static AnWangRestrictedRoute _fromState(GoRouterState state) =>
-      AnWangRestrictedRoute(
+  static AnWangRestrictedRoute _fromState(GoRouterState state) => AnWangRestrictedRoute(
         id: int.parse(state.uri.queryParameters['id']!),
-        showMoreButton:
-            _$boolConverter(state.uri.queryParameters['show-more-button']!),
+        showMoreButton: _$boolConverter(state.uri.queryParameters['show-more-button']!),
       );
 
   String get location => GoRouteData.$location(
@@ -1991,8 +1866,7 @@ extension $AnWangRestrictedRouteExtension on AnWangRestrictedRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2004,8 +1878,7 @@ RouteBase get $anWangRestrictedDetailRoute => GoRouteData.$route(
     );
 
 extension $AnWangRestrictedDetailRouteExtension on AnWangRestrictedDetailRoute {
-  static AnWangRestrictedDetailRoute _fromState(GoRouterState state) =>
-      AnWangRestrictedDetailRoute(
+  static AnWangRestrictedDetailRoute _fromState(GoRouterState state) => AnWangRestrictedDetailRoute(
         id: int.parse(state.uri.queryParameters['id']!),
       );
 
@@ -2020,8 +1893,7 @@ extension $AnWangRestrictedDetailRouteExtension on AnWangRestrictedDetailRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2033,8 +1905,7 @@ RouteBase get $pZhanVideoDetailRoute => GoRouteData.$route(
     );
 
 extension $PZhanVideoDetailRouteExtension on PZhanVideoDetailRoute {
-  static PZhanVideoDetailRoute _fromState(GoRouterState state) =>
-      PZhanVideoDetailRoute(
+  static PZhanVideoDetailRoute _fromState(GoRouterState state) => PZhanVideoDetailRoute(
         id: int.parse(state.uri.queryParameters['id']!),
       );
 
@@ -2049,8 +1920,7 @@ extension $PZhanVideoDetailRouteExtension on PZhanVideoDetailRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2077,8 +1947,7 @@ extension $AwjqVideoTagRouteExtension on AwjqVideoTagRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2090,8 +1959,7 @@ RouteBase get $awjqVideoSearchRoute => GoRouteData.$route(
     );
 
 extension $AwjqVideoSearchRouteExtension on AwjqVideoSearchRoute {
-  static AwjqVideoSearchRoute _fromState(GoRouterState state) =>
-      AwjqVideoSearchRoute(
+  static AwjqVideoSearchRoute _fromState(GoRouterState state) => AwjqVideoSearchRoute(
         args: state.uri.queryParameters['args']!,
       );
 
@@ -2106,8 +1974,7 @@ extension $AwjqVideoSearchRouteExtension on AwjqVideoSearchRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2119,8 +1986,7 @@ RouteBase get $pZhanVideoSearchRoute => GoRouteData.$route(
     );
 
 extension $PZhanVideoSearchRouteExtension on PZhanVideoSearchRoute {
-  static PZhanVideoSearchRoute _fromState(GoRouterState state) =>
-      PZhanVideoSearchRoute(
+  static PZhanVideoSearchRoute _fromState(GoRouterState state) => PZhanVideoSearchRoute(
         args: state.uri.queryParameters['args']!,
       );
 
@@ -2135,8 +2001,7 @@ extension $PZhanVideoSearchRouteExtension on PZhanVideoSearchRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2148,11 +2013,9 @@ RouteBase get $hjsqCommunityRoute => GoRouteData.$route(
     );
 
 extension $HjsqCommunityRouteExtension on HjsqCommunityRoute {
-  static HjsqCommunityRoute _fromState(GoRouterState state) =>
-      HjsqCommunityRoute(
+  static HjsqCommunityRoute _fromState(GoRouterState state) => HjsqCommunityRoute(
         id: int.parse(state.uri.queryParameters['id']!),
-        showMoreButton:
-            _$boolConverter(state.uri.queryParameters['show-more-button']!),
+        showMoreButton: _$boolConverter(state.uri.queryParameters['show-more-button']!),
       );
 
   String get location => GoRouteData.$location(
@@ -2167,8 +2030,7 @@ extension $HjsqCommunityRouteExtension on HjsqCommunityRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2180,8 +2042,7 @@ RouteBase get $hjsqVideoSearchRoute => GoRouteData.$route(
     );
 
 extension $HjsqVideoSearchRouteExtension on HjsqVideoSearchRoute {
-  static HjsqVideoSearchRoute _fromState(GoRouterState state) =>
-      HjsqVideoSearchRoute(
+  static HjsqVideoSearchRoute _fromState(GoRouterState state) => HjsqVideoSearchRoute(
         args: state.uri.queryParameters['args']!,
       );
 
@@ -2196,8 +2057,7 @@ extension $HjsqVideoSearchRouteExtension on HjsqVideoSearchRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2219,14 +2079,11 @@ extension $HjsqVideoTagRouteExtension on HjsqVideoTagRoute {
 
   void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location, extra: $extra);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
+  void replace(BuildContext context) => context.replace(location, extra: $extra);
 }
 
 RouteBase get $hjsqSearchResultRoute => GoRouteData.$route(
@@ -2236,8 +2093,7 @@ RouteBase get $hjsqSearchResultRoute => GoRouteData.$route(
     );
 
 extension $HjsqSearchResultRouteExtension on HjsqSearchResultRoute {
-  static HjsqSearchResultRoute _fromState(GoRouterState state) =>
-      HjsqSearchResultRoute(
+  static HjsqSearchResultRoute _fromState(GoRouterState state) => HjsqSearchResultRoute(
         word: state.uri.queryParameters['word']!,
         type: int.parse(state.uri.queryParameters['type']!),
       );
@@ -2254,8 +2110,7 @@ extension $HjsqSearchResultRouteExtension on HjsqSearchResultRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2267,8 +2122,7 @@ RouteBase get $hjsqVideoDetailRoute => GoRouteData.$route(
     );
 
 extension $HjsqVideoDetailRouteExtension on HjsqVideoDetailRoute {
-  static HjsqVideoDetailRoute _fromState(GoRouterState state) =>
-      HjsqVideoDetailRoute(
+  static HjsqVideoDetailRoute _fromState(GoRouterState state) => HjsqVideoDetailRoute(
         state.extra as int,
       );
 
@@ -2278,14 +2132,11 @@ extension $HjsqVideoDetailRouteExtension on HjsqVideoDetailRoute {
 
   void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location, extra: $extra);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
+  void replace(BuildContext context) => context.replace(location, extra: $extra);
 }
 
 RouteBase get $tiktok51CommunityRoute => GoRouteData.$route(
@@ -2295,11 +2146,9 @@ RouteBase get $tiktok51CommunityRoute => GoRouteData.$route(
     );
 
 extension $Tiktok51CommunityRouteExtension on Tiktok51CommunityRoute {
-  static Tiktok51CommunityRoute _fromState(GoRouterState state) =>
-      Tiktok51CommunityRoute(
+  static Tiktok51CommunityRoute _fromState(GoRouterState state) => Tiktok51CommunityRoute(
         id: int.parse(state.uri.queryParameters['id']!),
-        showMoreButton:
-            _$boolConverter(state.uri.queryParameters['show-more-button']!),
+        showMoreButton: _$boolConverter(state.uri.queryParameters['show-more-button']!),
       );
 
   String get location => GoRouteData.$location(
@@ -2314,8 +2163,7 @@ extension $Tiktok51CommunityRouteExtension on Tiktok51CommunityRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2327,8 +2175,7 @@ RouteBase get $tiktok51VideoSearchRoute => GoRouteData.$route(
     );
 
 extension $Tiktok51VideoSearchRouteExtension on Tiktok51VideoSearchRoute {
-  static Tiktok51VideoSearchRoute _fromState(GoRouterState state) =>
-      Tiktok51VideoSearchRoute(
+  static Tiktok51VideoSearchRoute _fromState(GoRouterState state) => Tiktok51VideoSearchRoute(
         args: state.uri.queryParameters['args']!,
       );
 
@@ -2343,8 +2190,7 @@ extension $Tiktok51VideoSearchRouteExtension on Tiktok51VideoSearchRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2356,8 +2202,7 @@ RouteBase get $tiktok51SearchResultRoute => GoRouteData.$route(
     );
 
 extension $Tiktok51SearchResultRouteExtension on Tiktok51SearchResultRoute {
-  static Tiktok51SearchResultRoute _fromState(GoRouterState state) =>
-      Tiktok51SearchResultRoute(
+  static Tiktok51SearchResultRoute _fromState(GoRouterState state) => Tiktok51SearchResultRoute(
         word: state.uri.queryParameters['word']!,
         type: int.parse(state.uri.queryParameters['type']!),
       );
@@ -2374,8 +2219,7 @@ extension $Tiktok51SearchResultRouteExtension on Tiktok51SearchResultRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2387,8 +2231,7 @@ RouteBase get $tiktok51TopicRoute => GoRouteData.$route(
     );
 
 extension $Tiktok51TopicRouteExtension on Tiktok51TopicRoute {
-  static Tiktok51TopicRoute _fromState(GoRouterState state) =>
-      Tiktok51TopicRoute(
+  static Tiktok51TopicRoute _fromState(GoRouterState state) => Tiktok51TopicRoute(
         name: state.uri.queryParameters['name']!,
         id: state.uri.queryParameters['id']!,
         api: state.uri.queryParameters['api']!,
@@ -2407,8 +2250,7 @@ extension $Tiktok51TopicRouteExtension on Tiktok51TopicRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2439,8 +2281,7 @@ extension $Tiktok51MoreRouteExtension on Tiktok51MoreRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2452,8 +2293,7 @@ RouteBase get $tiktok51VideoDetailRoute => GoRouteData.$route(
     );
 
 extension $Tiktok51VideoDetailRouteExtension on Tiktok51VideoDetailRoute {
-  static Tiktok51VideoDetailRoute _fromState(GoRouterState state) =>
-      Tiktok51VideoDetailRoute(
+  static Tiktok51VideoDetailRoute _fromState(GoRouterState state) => Tiktok51VideoDetailRoute(
         id: int.parse(state.uri.queryParameters['id']!),
       );
 
@@ -2468,8 +2308,7 @@ extension $Tiktok51VideoDetailRouteExtension on Tiktok51VideoDetailRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2496,8 +2335,7 @@ extension $Tiktok51TagRouteExtension on Tiktok51TagRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2511,8 +2349,7 @@ RouteBase get $darkWeb91Route => GoRouteData.$route(
 extension $DarkWeb91RouteExtension on DarkWeb91Route {
   static DarkWeb91Route _fromState(GoRouterState state) => DarkWeb91Route(
         id: int.parse(state.uri.queryParameters['id']!),
-        showMoreButton:
-            _$boolConverter(state.uri.queryParameters['show-more-button']!),
+        showMoreButton: _$boolConverter(state.uri.queryParameters['show-more-button']!),
       );
 
   String get location => GoRouteData.$location(
@@ -2527,8 +2364,7 @@ extension $DarkWeb91RouteExtension on DarkWeb91Route {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2540,8 +2376,7 @@ RouteBase get $aw91VideoDetailRoute => GoRouteData.$route(
     );
 
 extension $Aw91VideoDetailRouteExtension on Aw91VideoDetailRoute {
-  static Aw91VideoDetailRoute _fromState(GoRouterState state) =>
-      Aw91VideoDetailRoute(
+  static Aw91VideoDetailRoute _fromState(GoRouterState state) => Aw91VideoDetailRoute(
         id: int.parse(state.uri.queryParameters['id']!),
       );
 
@@ -2556,8 +2391,7 @@ extension $Aw91VideoDetailRouteExtension on Aw91VideoDetailRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2584,8 +2418,7 @@ extension $Aw91TagRouteExtension on Aw91TagRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2597,8 +2430,7 @@ RouteBase get $aw91VideoSearchRoute => GoRouteData.$route(
     );
 
 extension $Aw91VideoSearchRouteExtension on Aw91VideoSearchRoute {
-  static Aw91VideoSearchRoute _fromState(GoRouterState state) =>
-      Aw91VideoSearchRoute(
+  static Aw91VideoSearchRoute _fromState(GoRouterState state) => Aw91VideoSearchRoute(
         args: state.uri.queryParameters['args']!,
       );
 
@@ -2613,8 +2445,7 @@ extension $Aw91VideoSearchRouteExtension on Aw91VideoSearchRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2628,8 +2459,7 @@ RouteBase get $zpcCommunityRoute => GoRouteData.$route(
 extension $ZpcCommunityRouteExtension on ZpcCommunityRoute {
   static ZpcCommunityRoute _fromState(GoRouterState state) => ZpcCommunityRoute(
         id: int.parse(state.uri.queryParameters['id']!),
-        showMoreButton:
-            _$boolConverter(state.uri.queryParameters['show-more-button']!),
+        showMoreButton: _$boolConverter(state.uri.queryParameters['show-more-button']!),
       );
 
   String get location => GoRouteData.$location(
@@ -2644,8 +2474,7 @@ extension $ZpcCommunityRouteExtension on ZpcCommunityRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2657,8 +2486,7 @@ RouteBase get $zpcVideoDetailRoute => GoRouteData.$route(
     );
 
 extension $ZpcVideoDetailRouteExtension on ZpcVideoDetailRoute {
-  static ZpcVideoDetailRoute _fromState(GoRouterState state) =>
-      ZpcVideoDetailRoute(
+  static ZpcVideoDetailRoute _fromState(GoRouterState state) => ZpcVideoDetailRoute(
         state.extra as int,
       );
 
@@ -2668,14 +2496,11 @@ extension $ZpcVideoDetailRouteExtension on ZpcVideoDetailRoute {
 
   void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location, extra: $extra);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
+  void replace(BuildContext context) => context.replace(location, extra: $extra);
 }
 
 RouteBase get $zpcVideoTagRoute => GoRouteData.$route(
@@ -2695,14 +2520,11 @@ extension $ZpcVideoTagRouteExtension on ZpcVideoTagRoute {
 
   void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location, extra: $extra);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
+  void replace(BuildContext context) => context.replace(location, extra: $extra);
 }
 
 RouteBase get $zpcVideoSearchRoute => GoRouteData.$route(
@@ -2712,8 +2534,7 @@ RouteBase get $zpcVideoSearchRoute => GoRouteData.$route(
     );
 
 extension $ZpcVideoSearchRouteExtension on ZpcVideoSearchRoute {
-  static ZpcVideoSearchRoute _fromState(GoRouterState state) =>
-      ZpcVideoSearchRoute(
+  static ZpcVideoSearchRoute _fromState(GoRouterState state) => ZpcVideoSearchRoute(
         state.extra as String,
       );
 
@@ -2723,14 +2544,11 @@ extension $ZpcVideoSearchRouteExtension on ZpcVideoSearchRoute {
 
   void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location, extra: $extra);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
+  void replace(BuildContext context) => context.replace(location, extra: $extra);
 }
 
 RouteBase get $clCommunityRoute => GoRouteData.$route(
@@ -2742,8 +2560,7 @@ RouteBase get $clCommunityRoute => GoRouteData.$route(
 extension $ClCommunityRouteExtension on ClCommunityRoute {
   static ClCommunityRoute _fromState(GoRouterState state) => ClCommunityRoute(
         id: int.parse(state.uri.queryParameters['id']!),
-        showMoreButton:
-            _$boolConverter(state.uri.queryParameters['show-more-button']!),
+        showMoreButton: _$boolConverter(state.uri.queryParameters['show-more-button']!),
       );
 
   String get location => GoRouteData.$location(
@@ -2758,8 +2575,7 @@ extension $ClCommunityRouteExtension on ClCommunityRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2771,8 +2587,7 @@ RouteBase get $clVideoDetailRoute => GoRouteData.$route(
     );
 
 extension $ClVideoDetailRouteExtension on ClVideoDetailRoute {
-  static ClVideoDetailRoute _fromState(GoRouterState state) =>
-      ClVideoDetailRoute(
+  static ClVideoDetailRoute _fromState(GoRouterState state) => ClVideoDetailRoute(
         state.extra as int,
       );
 
@@ -2782,14 +2597,11 @@ extension $ClVideoDetailRouteExtension on ClVideoDetailRoute {
 
   void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location, extra: $extra);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
+  void replace(BuildContext context) => context.replace(location, extra: $extra);
 }
 
 RouteBase get $clVideoTagRoute => GoRouteData.$route(
@@ -2809,14 +2621,11 @@ extension $ClVideoTagRouteExtension on ClVideoTagRoute {
 
   void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location, extra: $extra);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
+  void replace(BuildContext context) => context.replace(location, extra: $extra);
 }
 
 RouteBase get $pZhanVideoTagRoute => GoRouteData.$route(
@@ -2826,8 +2635,7 @@ RouteBase get $pZhanVideoTagRoute => GoRouteData.$route(
     );
 
 extension $PZhanVideoTagRouteExtension on PZhanVideoTagRoute {
-  static PZhanVideoTagRoute _fromState(GoRouterState state) =>
-      PZhanVideoTagRoute(
+  static PZhanVideoTagRoute _fromState(GoRouterState state) => PZhanVideoTagRoute(
         state.extra as String,
       );
 
@@ -2837,14 +2645,11 @@ extension $PZhanVideoTagRouteExtension on PZhanVideoTagRoute {
 
   void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location, extra: $extra);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
+  void replace(BuildContext context) => context.replace(location, extra: $extra);
 }
 
 RouteBase get $pZhanTopicRoute => GoRouteData.$route(
@@ -2873,8 +2678,7 @@ extension $PZhanTopicRouteExtension on PZhanTopicRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2905,8 +2709,7 @@ extension $PZhanMoreRouteExtension on PZhanMoreRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2918,8 +2721,7 @@ RouteBase get $clVideoSearchRoute => GoRouteData.$route(
     );
 
 extension $ClVideoSearchRouteExtension on ClVideoSearchRoute {
-  static ClVideoSearchRoute _fromState(GoRouterState state) =>
-      ClVideoSearchRoute(
+  static ClVideoSearchRoute _fromState(GoRouterState state) => ClVideoSearchRoute(
         state.extra as String,
       );
 
@@ -2929,14 +2731,11 @@ extension $ClVideoSearchRouteExtension on ClVideoSearchRoute {
 
   void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location, extra: $extra);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
+  void replace(BuildContext context) => context.replace(location, extra: $extra);
 }
 
 RouteBase get $clSearchResultRoute => GoRouteData.$route(
@@ -2946,8 +2745,7 @@ RouteBase get $clSearchResultRoute => GoRouteData.$route(
     );
 
 extension $ClSearchResultRouteExtension on ClSearchResultRoute {
-  static ClSearchResultRoute _fromState(GoRouterState state) =>
-      ClSearchResultRoute(
+  static ClSearchResultRoute _fromState(GoRouterState state) => ClSearchResultRoute(
         word: state.uri.queryParameters['word']!,
         type: int.parse(state.uri.queryParameters['type']!),
       );
@@ -2964,8 +2762,7 @@ extension $ClSearchResultRouteExtension on ClSearchResultRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -2977,8 +2774,7 @@ RouteBase get $zpcSearchResultRoute => GoRouteData.$route(
     );
 
 extension $ZpcSearchResultRouteExtension on ZpcSearchResultRoute {
-  static ZpcSearchResultRoute _fromState(GoRouterState state) =>
-      ZpcSearchResultRoute(
+  static ZpcSearchResultRoute _fromState(GoRouterState state) => ZpcSearchResultRoute(
         word: state.uri.queryParameters['word']!,
         type: int.parse(state.uri.queryParameters['type']!),
       );
@@ -2995,8 +2791,7 @@ extension $ZpcSearchResultRouteExtension on ZpcSearchResultRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3008,8 +2803,7 @@ RouteBase get $awjqSearchResultRoute => GoRouteData.$route(
     );
 
 extension $AwjqSearchResultRouteExtension on AwjqSearchResultRoute {
-  static AwjqSearchResultRoute _fromState(GoRouterState state) =>
-      AwjqSearchResultRoute(
+  static AwjqSearchResultRoute _fromState(GoRouterState state) => AwjqSearchResultRoute(
         word: state.uri.queryParameters['word']!,
         type: int.parse(state.uri.queryParameters['type']!),
       );
@@ -3026,8 +2820,7 @@ extension $AwjqSearchResultRouteExtension on AwjqSearchResultRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3039,8 +2832,7 @@ RouteBase get $pZhanSearchResultRoute => GoRouteData.$route(
     );
 
 extension $PZhanSearchResultRouteExtension on PZhanSearchResultRoute {
-  static PZhanSearchResultRoute _fromState(GoRouterState state) =>
-      PZhanSearchResultRoute(
+  static PZhanSearchResultRoute _fromState(GoRouterState state) => PZhanSearchResultRoute(
         word: state.uri.queryParameters['word']!,
         type: int.parse(state.uri.queryParameters['type']!),
       );
@@ -3057,8 +2849,7 @@ extension $PZhanSearchResultRouteExtension on PZhanSearchResultRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3070,8 +2861,7 @@ RouteBase get $aw91SearchResultRoute => GoRouteData.$route(
     );
 
 extension $Aw91SearchResultRouteExtension on Aw91SearchResultRoute {
-  static Aw91SearchResultRoute _fromState(GoRouterState state) =>
-      Aw91SearchResultRoute(
+  static Aw91SearchResultRoute _fromState(GoRouterState state) => Aw91SearchResultRoute(
         word: state.uri.queryParameters['word']!,
         type: int.parse(state.uri.queryParameters['type']!),
       );
@@ -3088,8 +2878,7 @@ extension $Aw91SearchResultRouteExtension on Aw91SearchResultRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3101,8 +2890,7 @@ RouteBase get $voicePalyerContentRoute => GoRouteData.$route(
     );
 
 extension $VoicePalyerContentRouteExtension on VoicePalyerContentRoute {
-  static VoicePalyerContentRoute _fromState(GoRouterState state) =>
-      VoicePalyerContentRoute(
+  static VoicePalyerContentRoute _fromState(GoRouterState state) => VoicePalyerContentRoute(
         state.extra as VoiceModel,
       );
 
@@ -3112,14 +2900,11 @@ extension $VoicePalyerContentRouteExtension on VoicePalyerContentRoute {
 
   void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location, extra: $extra);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
+  void replace(BuildContext context) => context.replace(location, extra: $extra);
 }
 
 RouteBase get $livesDetailRoute => GoRouteData.$route(
@@ -3139,14 +2924,11 @@ extension $LivesDetailRouteExtension on LivesDetailRoute {
 
   void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location, extra: $extra);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
+  void replace(BuildContext context) => context.replace(location, extra: $extra);
 }
 
 RouteBase get $mineDownloadRoute => GoRouteData.$route(
@@ -3156,8 +2938,7 @@ RouteBase get $mineDownloadRoute => GoRouteData.$route(
     );
 
 extension $MineDownloadRouteExtension on MineDownloadRoute {
-  static MineDownloadRoute _fromState(GoRouterState state) =>
-      const MineDownloadRoute();
+  static MineDownloadRoute _fromState(GoRouterState state) => const MineDownloadRoute();
 
   String get location => GoRouteData.$location(
         '/mineDownload',
@@ -3167,8 +2948,7 @@ extension $MineDownloadRouteExtension on MineDownloadRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3192,8 +2972,7 @@ extension $MineFillCodeRouteExtension on MineFillCodeRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3205,8 +2984,7 @@ RouteBase get $mineBindEmailRoute => GoRouteData.$route(
     );
 
 extension $MineBindEmailRouteExtension on MineBindEmailRoute {
-  static MineBindEmailRoute _fromState(GoRouterState state) =>
-      const MineBindEmailRoute();
+  static MineBindEmailRoute _fromState(GoRouterState state) => const MineBindEmailRoute();
 
   String get location => GoRouteData.$location(
         '/mine_bind_email',
@@ -3216,8 +2994,7 @@ extension $MineBindEmailRouteExtension on MineBindEmailRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3239,8 +3016,7 @@ extension $MineHelpRouteExtension on MineHelpRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3252,8 +3028,7 @@ RouteBase get $mineOfficialGroupRoute => GoRouteData.$route(
     );
 
 extension $MineOfficialGroupRouteExtension on MineOfficialGroupRoute {
-  static MineOfficialGroupRoute _fromState(GoRouterState state) =>
-      const MineOfficialGroupRoute();
+  static MineOfficialGroupRoute _fromState(GoRouterState state) => const MineOfficialGroupRoute();
 
   String get location => GoRouteData.$location(
         '/mineOfficialGroup',
@@ -3263,8 +3038,7 @@ extension $MineOfficialGroupRouteExtension on MineOfficialGroupRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3286,8 +3060,7 @@ extension $SearchRouteExtension on SearchRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3311,8 +3084,7 @@ extension $SearchResultRouteExtension on SearchResultRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3341,8 +3113,7 @@ extension $MoreVideoRouteExtension on MoreVideoRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3354,8 +3125,7 @@ RouteBase get $messageCenterRoute => GoRouteData.$route(
     );
 
 extension $MessageCenterRouteExtension on MessageCenterRoute {
-  static MessageCenterRoute _fromState(GoRouterState state) =>
-      const MessageCenterRoute();
+  static MessageCenterRoute _fromState(GoRouterState state) => const MessageCenterRoute();
 
   String get location => GoRouteData.$location(
         '/mineMessageCenter',
@@ -3365,8 +3135,7 @@ extension $MessageCenterRouteExtension on MessageCenterRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3378,8 +3147,7 @@ RouteBase get $systemMessageRoute => GoRouteData.$route(
     );
 
 extension $SystemMessageRouteExtension on SystemMessageRoute {
-  static SystemMessageRoute _fromState(GoRouterState state) =>
-      const SystemMessageRoute();
+  static SystemMessageRoute _fromState(GoRouterState state) => const SystemMessageRoute();
 
   String get location => GoRouteData.$location(
         '/mineSystemMessage',
@@ -3389,8 +3157,7 @@ extension $SystemMessageRouteExtension on SystemMessageRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3412,14 +3179,11 @@ extension $MediaViewerRouteExtension on MediaViewerRoute {
 
   void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location, extra: $extra);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
+  void replace(BuildContext context) => context.replace(location, extra: $extra);
 }
 
 RouteBase get $localVideoRoute => GoRouteData.$route(
@@ -3439,14 +3203,11 @@ extension $LocalVideoRouteExtension on LocalVideoRoute {
 
   void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location, extra: $extra);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
+  void replace(BuildContext context) => context.replace(location, extra: $extra);
 }
 
 RouteBase get $localVoiceRoute => GoRouteData.$route(
@@ -3466,14 +3227,11 @@ extension $LocalVoiceRouteExtension on LocalVoiceRoute {
 
   void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location, extra: $extra);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
+  void replace(BuildContext context) => context.replace(location, extra: $extra);
 }
 
 RouteBase get $aIMagicDetailRoute => GoRouteData.$route(
@@ -3483,8 +3241,7 @@ RouteBase get $aIMagicDetailRoute => GoRouteData.$route(
     );
 
 extension $AIMagicDetailRouteExtension on AIMagicDetailRoute {
-  static AIMagicDetailRoute _fromState(GoRouterState state) =>
-      AIMagicDetailRoute(
+  static AIMagicDetailRoute _fromState(GoRouterState state) => AIMagicDetailRoute(
         state.extra as AIMagicModel,
       );
 
@@ -3494,14 +3251,11 @@ extension $AIMagicDetailRouteExtension on AIMagicDetailRoute {
 
   void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location, extra: $extra);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
+  void replace(BuildContext context) => context.replace(location, extra: $extra);
 }
 
 RouteBase get $xiaolanVideoDetailRoute => GoRouteData.$route(
@@ -3511,8 +3265,7 @@ RouteBase get $xiaolanVideoDetailRoute => GoRouteData.$route(
     );
 
 extension $XiaolanVideoDetailRouteExtension on XiaolanVideoDetailRoute {
-  static XiaolanVideoDetailRoute _fromState(GoRouterState state) =>
-      XiaolanVideoDetailRoute(
+  static XiaolanVideoDetailRoute _fromState(GoRouterState state) => XiaolanVideoDetailRoute(
         id: int.parse(state.pathParameters['id']!),
       );
 
@@ -3524,8 +3277,7 @@ extension $XiaolanVideoDetailRouteExtension on XiaolanVideoDetailRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3537,8 +3289,7 @@ RouteBase get $tiktokVideoDetailRoute => GoRouteData.$route(
     );
 
 extension $TiktokVideoDetailRouteExtension on TiktokVideoDetailRoute {
-  static TiktokVideoDetailRoute _fromState(GoRouterState state) =>
-      TiktokVideoDetailRoute(
+  static TiktokVideoDetailRoute _fromState(GoRouterState state) => TiktokVideoDetailRoute(
         id: int.parse(state.pathParameters['id']!),
       );
 
@@ -3550,8 +3301,7 @@ extension $TiktokVideoDetailRouteExtension on TiktokVideoDetailRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3563,8 +3313,7 @@ RouteBase get $tiktokSearchResultRoute => GoRouteData.$route(
     );
 
 extension $TiktokSearchResultRouteExtension on TiktokSearchResultRoute {
-  static TiktokSearchResultRoute _fromState(GoRouterState state) =>
-      TiktokSearchResultRoute(
+  static TiktokSearchResultRoute _fromState(GoRouterState state) => TiktokSearchResultRoute(
         kwy: state.pathParameters['kwy']!,
       );
 
@@ -3576,8 +3325,7 @@ extension $TiktokSearchResultRouteExtension on TiktokSearchResultRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3589,8 +3337,7 @@ RouteBase get $xiaolanSearchResultRoute => GoRouteData.$route(
     );
 
 extension $XiaolanSearchResultRouteExtension on XiaolanSearchResultRoute {
-  static XiaolanSearchResultRoute _fromState(GoRouterState state) =>
-      XiaolanSearchResultRoute(
+  static XiaolanSearchResultRoute _fromState(GoRouterState state) => XiaolanSearchResultRoute(
         kwy: state.pathParameters['kwy']!,
       );
 
@@ -3602,32 +3349,32 @@ extension $XiaolanSearchResultRouteExtension on XiaolanSearchResultRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
 
 RouteBase get $tiktokCreatorRoute => GoRouteData.$route(
-      path: '/tiktokCreator',
+      path: '/tiktokCreator/:id/:name',
       parentNavigatorKey: TiktokCreatorRoute.$parentNavigatorKey,
       factory: $TiktokCreatorRouteExtension._fromState,
     );
 
 extension $TiktokCreatorRouteExtension on TiktokCreatorRoute {
-  static TiktokCreatorRoute _fromState(GoRouterState state) =>
-      const TiktokCreatorRoute();
+  static TiktokCreatorRoute _fromState(GoRouterState state) => TiktokCreatorRoute(
+        id: state.pathParameters['id']!,
+        name: state.pathParameters['name']!,
+      );
 
   String get location => GoRouteData.$location(
-        '/tiktokCreator',
+        '/tiktokCreator/${Uri.encodeComponent(id)}/${Uri.encodeComponent(name)}',
       );
 
   void go(BuildContext context) => context.go(location);
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3639,8 +3386,7 @@ RouteBase get $xiaolanCreatorRoute => GoRouteData.$route(
     );
 
 extension $XiaolanCreatorRouteExtension on XiaolanCreatorRoute {
-  static XiaolanCreatorRoute _fromState(GoRouterState state) =>
-      const XiaolanCreatorRoute();
+  static XiaolanCreatorRoute _fromState(GoRouterState state) => const XiaolanCreatorRoute();
 
   String get location => GoRouteData.$location(
         '/xiaolanCreator',
@@ -3650,8 +3396,7 @@ extension $XiaolanCreatorRouteExtension on XiaolanCreatorRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3663,8 +3408,7 @@ RouteBase get $tiktokUserWorksRoute => GoRouteData.$route(
     );
 
 extension $TiktokUserWorksRouteExtension on TiktokUserWorksRoute {
-  static TiktokUserWorksRoute _fromState(GoRouterState state) =>
-      TiktokUserWorksRoute(
+  static TiktokUserWorksRoute _fromState(GoRouterState state) => TiktokUserWorksRoute(
         id: state.pathParameters['id']!,
         userName: state.pathParameters['userName']!,
       );
@@ -3677,8 +3421,7 @@ extension $TiktokUserWorksRouteExtension on TiktokUserWorksRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3690,8 +3433,7 @@ RouteBase get $xiaolanUserWorksRoute => GoRouteData.$route(
     );
 
 extension $XiaolanUserWorksRouteExtension on XiaolanUserWorksRoute {
-  static XiaolanUserWorksRoute _fromState(GoRouterState state) =>
-      XiaolanUserWorksRoute(
+  static XiaolanUserWorksRoute _fromState(GoRouterState state) => XiaolanUserWorksRoute(
         id: state.pathParameters['id']!,
         userName: state.pathParameters['userName']!,
       );
@@ -3704,38 +3446,56 @@ extension $XiaolanUserWorksRouteExtension on XiaolanUserWorksRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $tiktokCategoryOrTagDetailRoute => GoRouteData.$route(
-      path: '/tiktokCategoryOrTagDetail/:id/:type/:has_sort/:title',
-      parentNavigatorKey: TiktokCategoryOrTagDetailRoute.$parentNavigatorKey,
-      factory: $TiktokCategoryOrTagDetailRouteExtension._fromState,
+RouteBase get $tiktokVideoClassDetailRoute => GoRouteData.$route(
+      path: '/tiktokVideoClassDetail/:id',
+      parentNavigatorKey: TiktokVideoClassDetailRoute.$parentNavigatorKey,
+      factory: $TiktokVideoClassDetailRouteExtension._fromState,
     );
 
-extension $TiktokCategoryOrTagDetailRouteExtension
-    on TiktokCategoryOrTagDetailRoute {
-  static TiktokCategoryOrTagDetailRoute _fromState(GoRouterState state) =>
-      TiktokCategoryOrTagDetailRoute(
+extension $TiktokVideoClassDetailRouteExtension on TiktokVideoClassDetailRoute {
+  static TiktokVideoClassDetailRoute _fromState(GoRouterState state) => TiktokVideoClassDetailRoute(
         id: int.parse(state.pathParameters['id']!),
-        type: state.pathParameters['type']!,
-        has_sort: state.pathParameters['has_sort']!,
-        title: state.pathParameters['title']!,
       );
 
   String get location => GoRouteData.$location(
-        '/tiktokCategoryOrTagDetail/${Uri.encodeComponent(id.toString())}/${Uri.encodeComponent(type)}/${Uri.encodeComponent(has_sort)}/${Uri.encodeComponent(title)}',
+        '/tiktokVideoClassDetail/${Uri.encodeComponent(id.toString())}',
       );
 
   void go(BuildContext context) => context.go(location);
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $tiktokVideoClassListRoute => GoRouteData.$route(
+      path: '/tiktokVideoClassList/:id/:name',
+      parentNavigatorKey: TiktokVideoClassListRoute.$parentNavigatorKey,
+      factory: $TiktokVideoClassListRouteExtension._fromState,
+    );
+
+extension $TiktokVideoClassListRouteExtension on TiktokVideoClassListRoute {
+  static TiktokVideoClassListRoute _fromState(GoRouterState state) => TiktokVideoClassListRoute(
+        id: int.parse(state.pathParameters['id']!),
+        name: state.pathParameters['name']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/tiktokVideoClassList/${Uri.encodeComponent(id.toString())}/${Uri.encodeComponent(name)}',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3746,10 +3506,8 @@ RouteBase get $xiaolanCategoryOrTagDetailRoute => GoRouteData.$route(
       factory: $XiaolanCategoryOrTagDetailRouteExtension._fromState,
     );
 
-extension $XiaolanCategoryOrTagDetailRouteExtension
-    on XiaolanCategoryOrTagDetailRoute {
-  static XiaolanCategoryOrTagDetailRoute _fromState(GoRouterState state) =>
-      XiaolanCategoryOrTagDetailRoute(
+extension $XiaolanCategoryOrTagDetailRouteExtension on XiaolanCategoryOrTagDetailRoute {
+  static XiaolanCategoryOrTagDetailRoute _fromState(GoRouterState state) => XiaolanCategoryOrTagDetailRoute(
         id: int.parse(state.pathParameters['id']!),
         type: state.pathParameters['type']!,
         has_sort: state.pathParameters['has_sort']!,
@@ -3764,8 +3522,7 @@ extension $XiaolanCategoryOrTagDetailRouteExtension
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3777,8 +3534,7 @@ RouteBase get $tiktokDiscoverRoute => GoRouteData.$route(
     );
 
 extension $TiktokDiscoverRouteExtension on TiktokDiscoverRoute {
-  static TiktokDiscoverRoute _fromState(GoRouterState state) =>
-      TiktokDiscoverRoute(
+  static TiktokDiscoverRoute _fromState(GoRouterState state) => TiktokDiscoverRoute(
         type: state.uri.queryParameters['type']!,
         nagId: state.uri.queryParameters['nag-id'] ?? '',
       );
@@ -3795,8 +3551,7 @@ extension $TiktokDiscoverRouteExtension on TiktokDiscoverRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3808,8 +3563,7 @@ RouteBase get $xiaolanDiscoverRoute => GoRouteData.$route(
     );
 
 extension $XiaolanDiscoverRouteExtension on XiaolanDiscoverRoute {
-  static XiaolanDiscoverRoute _fromState(GoRouterState state) =>
-      XiaolanDiscoverRoute(
+  static XiaolanDiscoverRoute _fromState(GoRouterState state) => XiaolanDiscoverRoute(
         type: state.uri.queryParameters['type']!,
         nagId: state.uri.queryParameters['nag-id'] ?? '',
       );
@@ -3826,8 +3580,7 @@ extension $XiaolanDiscoverRouteExtension on XiaolanDiscoverRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3839,8 +3592,7 @@ RouteBase get $tiktokSearchRoute => GoRouteData.$route(
     );
 
 extension $TiktokSearchRouteExtension on TiktokSearchRoute {
-  static TiktokSearchRoute _fromState(GoRouterState state) =>
-      const TiktokSearchRoute();
+  static TiktokSearchRoute _fromState(GoRouterState state) => const TiktokSearchRoute();
 
   String get location => GoRouteData.$location(
         '/tiktokSearch',
@@ -3850,8 +3602,7 @@ extension $TiktokSearchRouteExtension on TiktokSearchRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3863,8 +3614,7 @@ RouteBase get $xiaolanSearchRoute => GoRouteData.$route(
     );
 
 extension $XiaolanSearchRouteExtension on XiaolanSearchRoute {
-  static XiaolanSearchRoute _fromState(GoRouterState state) =>
-      const XiaolanSearchRoute();
+  static XiaolanSearchRoute _fromState(GoRouterState state) => const XiaolanSearchRoute();
 
   String get location => GoRouteData.$location(
         '/xiaolanSearch',
@@ -3874,32 +3624,7 @@ extension $XiaolanSearchRouteExtension on XiaolanSearchRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $tiktokDailyRoute => GoRouteData.$route(
-      path: '/tiktokDaily',
-      parentNavigatorKey: TiktokDailyRoute.$parentNavigatorKey,
-      factory: $TiktokDailyRouteExtension._fromState,
-    );
-
-extension $TiktokDailyRouteExtension on TiktokDailyRoute {
-  static TiktokDailyRoute _fromState(GoRouterState state) =>
-      const TiktokDailyRoute();
-
-  String get location => GoRouteData.$location(
-        '/tiktokDaily',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -3911,8 +3636,7 @@ RouteBase get $xiaolanDailyRoute => GoRouteData.$route(
     );
 
 extension $XiaolanDailyRouteExtension on XiaolanDailyRoute {
-  static XiaolanDailyRoute _fromState(GoRouterState state) =>
-      const XiaolanDailyRoute();
+  static XiaolanDailyRoute _fromState(GoRouterState state) => const XiaolanDailyRoute();
 
   String get location => GoRouteData.$location(
         '/xiaolanDaily',
@@ -3922,8 +3646,7 @@ extension $XiaolanDailyRouteExtension on XiaolanDailyRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }

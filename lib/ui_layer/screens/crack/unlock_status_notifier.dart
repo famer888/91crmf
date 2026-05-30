@@ -94,7 +94,6 @@ class UnlockStatusNotifier extends ChangeNotifier {
   bool get isUnlockXiaolan => _isUnlockXiaolan;
   bool _isUnlockXiaolan = false;
 
-  bool get isUnlockTiktok => _isUnlockXiaolan;
 
   void changeXiaolanUnlockStatus(bool status) async {
     if (_isUnlockXiaolan != status) {
@@ -103,8 +102,14 @@ class UnlockStatusNotifier extends ChangeNotifier {
     }
   }
 
+  bool get isUnlockTiktok => _isUnlockTiktok;
+  bool _isUnlockTiktok = true;
+
   void changeTiktokUnlockStatus(bool status) async {
-    changeXiaolanUnlockStatus(status);
+    if (_isUnlockTiktok != status) {
+      _isUnlockTiktok = status;
+      notifyListeners();
+    }
   }
 
 }

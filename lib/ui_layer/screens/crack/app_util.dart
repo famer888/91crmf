@@ -87,6 +87,8 @@ class AppUtil {
       unlockStatusNotifier.changeGdcmUnlockStatus(status);
     } else if (app.appName == CrackAppType.xiaolan.appName) {
       unlockStatusNotifier.changeXiaolanUnlockStatus(status);
+    } else if (app.appName == CrackAppType.ttav.appName) {
+      unlockStatusNotifier.changeTiktokUnlockStatus(status);
     }
   }
 

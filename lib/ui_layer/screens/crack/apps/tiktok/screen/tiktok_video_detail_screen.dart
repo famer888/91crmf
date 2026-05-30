@@ -39,6 +39,8 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
   List _recommendList = [];
   bool _isLiked = false;
   int _likeCount = 0;
+  bool _isfavorite = false;
+  int _favoriteCount = 0;
   bool _isLiking = false;
 
   final ValueNotifier<List<BannerModel>> bannersNotifier = ValueNotifier([]);
@@ -49,7 +51,7 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
     if (_isLiking) return;
     _isLiking = true;
     final result = await _appDomain.getConstructByApiLink(
-      apiLink: '/api/mvxiaolan/liking',
+      apiLink: '/api/favoritesttav/mv_like',
       params: {'id': widget.id},
     );
     _isLiking = false;
@@ -64,17 +66,21 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
     }
   }
 
-  Future<void> _onFollow(dynamic user) async {
+  Future<void> _onFavorite() async {
     MyToast.showLoading();
     final result = await _appDomain.getConstructByApiLink(
-      apiLink: '/api/user/toggle_follow',
-      params: {'is_follow': user['is_follow'] == 1 ? 0 : 1, "aff": user['aff']},
+      apiLink: '/api/mvttav/favorite',
+      params: {
+        'id': widget.id,
+        'relatedId': widget.id,
+      },
     );
     MyToast.closeAllLoading();
     if (result.status == 1) {
       MyToast.showText(text: result.data['data']?['msg'] ?? '操作成功');
       setState(() {
-        user['is_follow'] = user['is_follow'] == 1 ? 0 : 1;
+        _isfavorite = !_isfavorite;
+        _favoriteCount += _isfavorite ? 1 : -1;
       });
     } else {
       MyToast.showText(text: result.msg ?? '操作失败');
@@ -92,7 +98,7 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
     setState(() => _loadState = _LoadState.loading);
 
     final result = await _appDomain.getConstructByApiLink(
-      apiLink: '/api/mvxiaolan/detail480',
+      apiLink: '/api/mvttav/detail',
       params: {'id': widget.id},
     );
 
@@ -103,17 +109,31 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
       }
 
       final data = result.data as Map<String, dynamic>;
-      _detail = data['detail'] as Map<String, dynamic>;
-      final recommend = data['recommend'];
-      _recommendList = (recommend is List) ? recommend : [];
+      _detail = data['row'] as Map<String, dynamic>;
+      _getRecommend();
       _likeCount = (_detail!['like'] ?? 0) as int;
       _isLiked = (_detail!['is_like'] ?? 0) == 1;
+
+      _favoriteCount = (_detail!['favorite'] ?? 0) as int;
+      _isfavorite = (_detail!['is_favorite'] ?? 0) == 1;
       if (mounted) setState(() => _loadState = _LoadState.success);
     } else {
       if (result.msg case final msg? when msg.isNotEmpty) {
         MyToast.showText(text: msg);
       }
       if (mounted) setState(() => _loadState = _LoadState.error);
+    }
+  }
+
+  Future _getRecommend() async {
+    final result2 = await _appDomain.getConstructByApiLink(
+      apiLink: '/api/mvttav/recommend',
+      params: {'id': widget.id},
+    );
+    if (mounted) {
+      setState(() {
+        _recommendList = result2.data['list'] ?? [];
+      });
     }
   }
 
@@ -163,9 +183,7 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
     final tagsList = detail['tags_list'];
     final List<String> tags = tagsList is List ? List<String>.from(tagsList) : [];
     final durationStr = detail['duration_str'] as String? ?? '';
-    final rating = detail['rating'] ?? 0;
-    final like = detail['like'] ?? 0;
-    final comment = detail['comment'] ?? 0;
+    final rating = detail['play_num'] ?? 0;
 
     return Column(
       children: [
@@ -205,10 +223,11 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
                     children: [
                       Row(
                         children: [
-                          Expanded(child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 13.w,horizontal: 11.w),
+                          Expanded(
+                              child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 13.w, horizontal: 11.w),
                             decoration:
-                            BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFF343743), width: 1.w))),
+                                BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFF343743), width: 1.w))),
                             child: Text(
                               "简介",
                               style: TextStyle(color: Color(0xFFF3F3F4), fontSize: 15.sp),
@@ -251,7 +270,7 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
                             children: tags.map((tag) {
                               return ReportGestureDetector(
                                 onTap: () {
-                                  TiktokCategoryOrTagDetailRoute(id: 0, title: tag, type: 'tag', has_sort: "1")
+                                  TiktokVideoClassDetailRoute(id: 0)
                                       .push(context);
                                   // TiktokTagRoute(tag: tag).push(context)
                                   // context.push('/xiaolanCategoryOrTagDetail/$id/${type}/${hasSort ? "1" : "0"}/${Uri.encodeComponent(title)}');
@@ -314,7 +333,7 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
                                 ),
                               )),
                               Text(
-                                "作品",
+                                "作品${CommonUtils.formatNumber(_detail?['user']['fans_count'] ?? 0)}",
                                 style: TextStyle(color: Color(0xFF8A8B8C), fontSize: 13.sp),
                               ),
                               Container(
@@ -324,7 +343,7 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
                                 margin: EdgeInsets.symmetric(horizontal: 7.w),
                               ),
                               Text(
-                                "粉丝",
+                                "粉丝${CommonUtils.formatNumber(_detail?['user']['fans_count'] ?? 0)}",
                                 style: TextStyle(color: Color(0xFF8A8B8C), fontSize: 13.sp),
                               ),
                             ],
@@ -367,7 +386,7 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
                                   Image.asset(
                                     "assets/images/tiktok_icon_collection.png",
                                     width: 16.w,
-                                    color: _isLiked ? Color(0xFFF52C56) : Color(0xFFD8D8D8),
+                                    color: _isfavorite ? Color(0xFFF52C56) : Color(0xFFD8D8D8),
                                   ),
                                   SizedBox(
                                     width: 5.w,

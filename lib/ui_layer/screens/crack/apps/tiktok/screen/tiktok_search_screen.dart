@@ -178,10 +178,10 @@ class _TiktokSearchScreenState extends State<TiktokSearchScreen> {
                         height: 10,
                       ),
                     ],
-                    if (data['rank_list'] != null &&
-                        data['rank_list'] is List &&
-                        (data['rank_list'] as List).isNotEmpty) ...[
-                      _buildHotSearch(data['rank_list'] as List),
+                    if (data['list'] != null &&
+                        data['list'] is List &&
+                        (data['list'] as List).isNotEmpty) ...[
+                      _buildHotSearch(data['list'] as List),
                       SizedBox(
                         height: 7.w,
                       ),
@@ -324,7 +324,7 @@ class _TiktokSearchScreenState extends State<TiktokSearchScreen> {
   Widget _buildHotSearchItem(dynamic item, int index) {
     return GestureDetector(
       onTap: () {
-        _onSearch("${item['work'] ?? ""}");
+        _onSearch("${item['title'] ?? ""}");
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 2.5.w),
@@ -346,7 +346,7 @@ class _TiktokSearchScreenState extends State<TiktokSearchScreen> {
             ),
             Expanded(
                 child: Text(
-              "${item['work'] ?? ""}",
+              "${item['title'] ?? ""}",
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(fontSize: 13.sp, color: Colors.white),
@@ -355,7 +355,7 @@ class _TiktokSearchScreenState extends State<TiktokSearchScreen> {
               width: 14.w,
             ),
             Text(
-              "🔥${CommonUtils.renderEnFixedNumber(item['num'] ?? 0)}浏览",
+              "🔥${item['num']}浏览",
               style: TextStyle(color: Colors.white.withOpacity(.7), fontSize: 15.sp),
             )
           ],
