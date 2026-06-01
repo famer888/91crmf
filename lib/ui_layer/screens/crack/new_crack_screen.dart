@@ -253,7 +253,7 @@ class _NewCrackScreenState extends State<NewCrackScreen> {
                                     Scaffold.of(scaffoldContext).openEndDrawer();
                                   },
                                 );
-                              } else if (crackApp_.appName == CrackAppType.ttav.appName) {
+                              } else if (crackApp_.appName == CrackAppType.tk.appName) {
                                 page = TiktokCommunityScreen(
                                   id: 1,
                                   crackApp: crackApp_,

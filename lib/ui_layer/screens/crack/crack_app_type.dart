@@ -10,7 +10,7 @@ enum CrackAppType {
   xiaolan(type: 31, appName: 'bluemv', topNavApi: 'tabnewxiaolan/index'),
   hjsq(type: 32, appName: 'hjsq', topNavApi: 'elementhjsq/getElementById'),
   tiktok51(type: 33, appName: '51tikok', topNavApi: 'navigation51tikok/index'),
-  ttav(type: 54, appName: 'ttav', topNavApi: 'navigationttav/index'),
+  tk(type: 34, appName: 'Tk', topNavApi: 'navigationttav/index'),
   ;
 
   final int type;

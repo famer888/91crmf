@@ -87,7 +87,7 @@ class AppUtil {
       unlockStatusNotifier.changeGdcmUnlockStatus(status);
     } else if (app.appName == CrackAppType.xiaolan.appName) {
       unlockStatusNotifier.changeXiaolanUnlockStatus(status);
-    } else if (app.appName == CrackAppType.ttav.appName) {
+    } else if (app.appName == CrackAppType.tk.appName) {
       unlockStatusNotifier.changeTiktokUnlockStatus(status);
     }
   }
@@ -128,6 +128,8 @@ class AppUtil {
         type = CrackAppType.gd.type;
       } else if (crackApp.appName == CrackAppType.xiaolan.appName) {
         type = CrackAppType.xiaolan.type;
+      } else if (crackApp.appName == CrackAppType.tk.appName) {
+        type = CrackAppType.tk.type;
       }
       VipPayDialog.showCoinsDialog(
         context: context,
