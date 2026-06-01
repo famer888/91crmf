@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:jycrpj/domain/type_def.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../domain/domain.dart';
+import '../../../../../router/routes.dart';
+import '../../../../../utils/my_toast.dart';
 import '../../../../common_widgets/my_app_bar.dart';
+import '../../../../common_widgets/my_image.dart';
 import '../../../../common_widgets/my_list_view.dart';
 import '../../../../common_widgets/screen_background.dart';
 
@@ -28,58 +32,23 @@ class _TiktokCreatorScreenState extends State<TiktokCreatorScreen> with TickerPr
     required int page,
     required int pageSize,
   }) async {
-    // final param = {
-    //   'tab_id': widget.id,
-    //   'page': page,
-    //   'limit': pageSize,
-    // };
-    // final result = await _appDomain.getConstructByApiLink(
-    //   apiLink: '/api/tabnewttav/list_tab_mv',
-    //   params: param,
-    // );
-    //
-    // if (result.status == 1) {
-    //   return result.data['list'] ?? [];
-    // }
-    // MyToast.showText(text: result.msg ?? '');
-    return [
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-    ];
+    final param = {
+      'group_id': widget.id,
+      'page': page,
+      'limit': pageSize,
+    };
+    try {
+      final result = await _appDomain.getConstructByApiLink(
+        apiLink: '/api/mvlistttav/uper_list',
+        params: param,
+      );
+
+      if (result.status == 1) {
+        return result.data ?? [];
+      }
+      MyToast.showText(text: result?.msg ?? '');
+    } catch (e) {}
+    return [];
   }
 
   @override
@@ -117,16 +86,13 @@ class _ClassListRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = '${item['title'] ?? item['tab_name'] ?? '真实强奸视频，都给弄哭求饶了'}';
-    final follow = '${item['follow_num'] ?? item['fans'] ?? '117.5W'}';
-    final works = '${item['work_num'] ?? item['works_num'] ?? '117.5W'}';
+    final title = item['nickname'] ?? '';
+    final follow = item['fans_count'] ?? 0;
+    final works = item['videos'] ?? 0;
 
     return GestureDetector(
       onTap: () {
-        final videoId = item['id'];
-        if (videoId != null) {
-          // TiktokVideoDetailRoute(id: videoId is int ? videoId : int.tryParse('$videoId') ?? 0).push(context);
-        }
+        TiktokUserWorksRoute(id: "${item['uid']}", userName: item['nickname'] ?? '').push(context);
       },
       child: Container(
         height: 103.w,
@@ -147,6 +113,8 @@ class _ClassListRow extends StatelessWidget {
                   height: 50.w,
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(50.w), color: Colors.white.withOpacity(.9)),
+                  child: MyImage.network("${item['thumb_full'] ?? ""}",
+                      fit: BoxFit.cover, borderRadius: 50.w, backgroundColor: Colors.white.withOpacity(.9)),
                 ),
                 SizedBox(width: 7.w),
                 Expanded(
@@ -173,7 +141,7 @@ class _ClassListRow extends StatelessWidget {
               ],
             ),
             Text(
-              "Hi，我是芋圆呀呀!现正式入驻TikTok成人版啦!我会在这…",
+              "${item['desc'] ?? ""}",
               style: TextStyle(color: Colors.white.withOpacity(.4), fontSize: 13.sp, fontWeight: FontWeight.w500),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

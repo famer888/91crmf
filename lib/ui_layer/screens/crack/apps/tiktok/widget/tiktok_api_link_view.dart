@@ -313,9 +313,7 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
                                 )
                               ],
                               TiktokListBuild(
-                                type: widget.linkModel.type == 4
-                                    ? TiktokListBuildType.userScroll
-                                    : TiktokListBuildType.sixGrid,
+                                type: TiktokListBuildType.sixGrid,
                                 linkModel: widget.linkModel,
                                 model: item,
                                 onRefresh: () async {
@@ -366,7 +364,6 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
                                 ),
                               ],
                               if (mid_style_up != null && mid_style_up!.isNotEmpty) ...[
-
                                 TiktokListBuild(
                                     type: TiktokListBuildType.creator,
                                     linkModel: widget.linkModel,

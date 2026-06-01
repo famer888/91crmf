@@ -5,6 +5,7 @@ import 'package:jycrpj/ui_layer/router/routes.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../domain/domain.dart';
+import '../../../../../utils/common_utils.dart';
 import '../../../../../utils/my_toast.dart';
 import '../../../../common_widgets/my_app_bar.dart';
 import '../../../../common_widgets/my_list_view.dart';
@@ -28,58 +29,21 @@ class _TiktokVideoClassListScreenState extends State<TiktokVideoClassListScreen>
     required int page,
     required int pageSize,
   }) async {
-    // final param = {
-    //   'tab_id': widget.id,
-    //   'page': page,
-    //   'limit': pageSize,
-    // };
-    // final result = await _appDomain.getConstructByApiLink(
-    //   apiLink: '/api/tabnewttav/list_tab_mv',
-    //   params: param,
-    // );
-    //
-    // if (result.status == 1) {
-    //   return result.data['list'] ?? [];
-    // }
-    // MyToast.showText(text: result.msg ?? '');
-    return [
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-    ];
+    final param = {
+      'nag_id': widget.id,
+      'page': page,
+      'limit': pageSize,
+    };
+    final result = await _appDomain.getConstructByApiLink(
+      apiLink: '/api/tabnewttav/tab_list',
+      params: param,
+    );
+
+    if (result.status == 1) {
+      return result.data['list'] ?? [];
+    }
+    MyToast.showText(text: result.msg ?? '');
+    return [];
   }
 
   @override
@@ -117,16 +81,13 @@ class _ClassListRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = '${item['title'] ?? item['tab_name'] ?? '真实强奸视频，都给弄哭求饶了'}';
-    final follow = '${item['follow_num'] ?? item['fans'] ?? '117.5W'}';
-    final works = '${item['work_num'] ?? item['works_num'] ?? '117.5W'}';
+    final title = '${item['tab_name'] ?? ''}';
+    final follow = '${item['favorites_num'] ?? '0'}';
+    final works = '${item['work_num'] ?? '0'}';
 
     return GestureDetector(
       onTap: () {
-        final videoId = item['id'];
-        if (videoId != null) {
-          TiktokVideoDetailRoute(id: videoId is int ? videoId : int.tryParse('$videoId') ?? 0).push(context);
-        }
+        TiktokVideoClassDetailRoute(id: item['id']).push(context);
       },
       child: SizedBox(
         height: 90.w,
@@ -140,11 +101,11 @@ class _ClassListRow extends StatelessWidget {
                 color: Colors.white.withOpacity(.2),
                 borderRadius: BorderRadius.circular(10.r),
               ),
-              child: item['cover_thumb_url'] != null
+              child: item['bg_thumb'] != null
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(10.r),
                       child: Image.network(
-                        '${item['cover_thumb_url']}',
+                        '${item['bg_thumb']}',
                         fit: BoxFit.cover,
                         errorBuilder: (_, __, ___) => const SizedBox.shrink(),
                       ),
@@ -164,11 +125,11 @@ class _ClassListRow extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '关注：$follow',
+                    '关注：${CommonUtils.formatNumber(follow)}',
                     style: TextStyle(color: Colors.white.withOpacity(.4), fontSize: 10.sp),
                   ),
                   Text(
-                    '作品：$works',
+                    '作品：${CommonUtils.formatNumber(works)}',
                     style: TextStyle(color: Colors.white.withOpacity(.4), fontSize: 10.sp),
                   ),
                 ],

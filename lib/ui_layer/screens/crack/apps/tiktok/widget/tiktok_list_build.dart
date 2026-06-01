@@ -87,9 +87,10 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
         return Column(
           children: [
             _buildTagGrid(items, onTap: (item) {
-              if (item['bg_thumb'] == null) {
+              var asd = widget.linkModel;
+              if (item['id'] == -1) {
                 final route = TiktokVideoClassListRoute(
-                  id: item['id'],
+                  id: int.parse("${widget.linkModel?.id}"),
                   name: '${item['tab_name'] ?? ''}',
                 );
                 WidgetsBinding.instance.addPostFrameCallback((_) {
