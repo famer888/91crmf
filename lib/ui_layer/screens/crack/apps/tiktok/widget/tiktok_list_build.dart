@@ -34,12 +34,14 @@ enum TiktokListBuildType {
 }
 
 class TiktokListBuild extends StatefulWidget {
-  const TiktokListBuild({super.key, required this.type, this.model, this.linkModel, this.onRefresh});
+  const TiktokListBuild(
+      {super.key, required this.type, this.model, this.linkModel, this.onRefresh, this.showHandle = true});
 
   final LinkModel? linkModel;
   final TiktokListBuildType type;
   final dynamic model;
   final Future<String> Function()? onRefresh;
+  final bool? showHandle;
 
   @override
   State<TiktokListBuild> createState() => _TiktokListBuildState();
@@ -280,12 +282,14 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
                 );
               },
             ),
-            SizedBox(
-              height: 14.h,
-            ),
-            _buildHandle(onMoreTap: () {
-              _openCategoryDetail(widget.model['id']);
-            })
+            if (widget.showHandle == true) ...[
+              SizedBox(
+                height: 14.h,
+              ),
+              _buildHandle(onMoreTap: () {
+                _openCategoryDetail(widget.model['id']);
+              })
+            ]
           ],
         );
       case TiktokListBuildType.oneBigFourGrid:

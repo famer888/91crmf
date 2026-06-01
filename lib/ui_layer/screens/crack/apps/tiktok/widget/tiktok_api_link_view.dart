@@ -316,6 +316,7 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
                                 type: TiktokListBuildType.sixGrid,
                                 linkModel: widget.linkModel,
                                 model: item,
+                                showHandle: index > 1,
                                 onRefresh: () async {
                                   final res = await onRefresh(item);
                                   return res;
