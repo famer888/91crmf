@@ -42,6 +42,7 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
   bool _isfavorite = false;
   int _favoriteCount = 0;
   bool _isLiking = false;
+  bool _isFavoriteing = false;
 
   final ValueNotifier<List<BannerModel>> bannersNotifier = ValueNotifier([]);
   final ScrollController _nestedController = ScrollController();
@@ -67,21 +68,19 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
   }
 
   Future<void> _onFavorite() async {
-    MyToast.showLoading();
+    if (_isFavoriteing) return;
+    _isFavoriteing = true;
     final result = await _appDomain.getConstructByApiLink(
       apiLink: '/api/mvttav/favorite',
-      params: {
-        'id': widget.id,
-        'relatedId': widget.id,
-      },
+      params: {'id': widget.id},
     );
-    MyToast.closeAllLoading();
+    _isFavoriteing = false;
     if (result.status == 1) {
-      MyToast.showText(text: result.data['data']?['msg'] ?? '操作成功');
       setState(() {
         _isfavorite = !_isfavorite;
         _favoriteCount += _isfavorite ? 1 : -1;
       });
+      MyToast.showText(text: result.data['data']?['msg'] ?? '操作成功');
     } else {
       MyToast.showText(text: result.msg ?? '操作失败');
     }
@@ -380,7 +379,7 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
                             ),
                             SizedBox(width: 16.w),
                             GestureDetector(
-                              onTap: _toggleLike,
+                              onTap: _onFavorite,
                               child: Row(
                                 children: [
                                   Image.asset(
@@ -391,7 +390,7 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
                                   SizedBox(
                                     width: 5.w,
                                   ),
-                                  Text('${CommonUtils.formatNumber(_likeCount)}',
+                                  Text('${CommonUtils.formatNumber(_favoriteCount)}',
                                       style: TextStyle(fontSize: 12.sp, color: const Color(0xFFD8D8D8))),
                                 ],
                               ),
