@@ -6,16 +6,19 @@ import 'package:jycrpj/ui_layer/screens/theme.dart';
 
 class CrackStatusTag extends StatelessWidget {
   final CrackApp appData;
+  final bool? isUnlock;
 
   const CrackStatusTag({
     super.key,
     required this.appData,
+    this.isUnlock,
   });
 
   @override
   Widget build(BuildContext context) {
     String text = '';
     LinearGradient gradient = MyTheme.gradient_90_135;
+    final unlock = isUnlock ?? appData.isPay;
 
     switch (appData.isfree) {
       case 0:
@@ -23,7 +26,7 @@ class CrackStatusTag extends StatelessWidget {
         gradient = MyTheme.gradient_90_135;
         break;
       case 1:
-        if (appData.isPay) {
+        if (unlock) {
           text = 'ygm'.tr(context: context);
           gradient = MyTheme.ygm_gradient_90_135;
         } else {
@@ -32,7 +35,7 @@ class CrackStatusTag extends StatelessWidget {
         }
         break;
       case 2:
-        if (appData.isPay) {
+        if (unlock) {
           text = 'ygm'.tr(context: context);
           gradient = MyTheme.ygm_gradient_90_135;
         } else {

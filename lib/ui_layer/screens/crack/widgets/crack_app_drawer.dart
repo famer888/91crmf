@@ -6,10 +6,13 @@ import 'package:jycrpj/domain/model/crack_model.dart';
 import 'package:jycrpj/report/ui_layer/report_gesture_detector.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/gradient_text.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
+import 'package:jycrpj/ui_layer/screens/crack/app_util.dart';
+import 'package:jycrpj/ui_layer/screens/crack/unlock_status_notifier.dart';
 import 'package:jycrpj/ui_layer/screens/crack/widgets/crack_status_tag.dart';
 import 'package:jycrpj/ui_layer/screens/crack/widgets/no_crack_dialog.dart';
 import 'package:jycrpj/ui_layer/screens/image_paths.dart';
 import 'package:jycrpj/ui_layer/screens/theme.dart';
+import 'package:provider/provider.dart';
 
 typedef ChangeAppCallback = Function(int index, CrackApp crackApp);
 
@@ -39,6 +42,14 @@ class _CrackAppDrawerState extends State<CrackAppDrawer> {
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
+  }
+
+  @override
+  void didUpdateWidget(covariant CrackAppDrawer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialIndex != widget.initialIndex && _selectedIndex != widget.initialIndex) {
+      _selectedIndex = widget.initialIndex;
+    }
   }
 
   @override
@@ -177,7 +188,11 @@ class _CrackAppDrawerState extends State<CrackAppDrawer> {
             height: itemWidth,
             child: Stack(children: [
               MyImage.network(appData.logo, fit: BoxFit.cover, borderRadius: 10.w, width: itemWidth, height: itemWidth),
-              if (isCrack) CrackStatusTag(appData: appData),
+              if (isCrack)
+                Selector<UnlockStatusNotifier, bool>(
+                  selector: (_, notifier) => AppUtil.getAppUnlockStatus(notifier, appData),
+                  builder: (_, isUnlock, __) => CrackStatusTag(appData: appData, isUnlock: isUnlock),
+                ),
             ]),
           ),
           SizedBox(height: 3.w),

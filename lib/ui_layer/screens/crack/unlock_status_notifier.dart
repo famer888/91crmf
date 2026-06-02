@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class UnlockStatusNotifier extends ChangeNotifier {
-
   // clsq
   bool get isUnlockClsq => _isUnlockClsq;
   bool _isUnlockClsq = false;
@@ -94,7 +93,6 @@ class UnlockStatusNotifier extends ChangeNotifier {
   bool get isUnlockXiaolan => _isUnlockXiaolan;
   bool _isUnlockXiaolan = false;
 
-
   void changeXiaolanUnlockStatus(bool status) async {
     if (_isUnlockXiaolan != status) {
       _isUnlockXiaolan = status;
@@ -103,7 +101,7 @@ class UnlockStatusNotifier extends ChangeNotifier {
   }
 
   bool get isUnlockTiktok => _isUnlockTiktok;
-  bool _isUnlockTiktok = true;
+  bool _isUnlockTiktok = false;
 
   void changeTiktokUnlockStatus(bool status) async {
     if (_isUnlockTiktok != status) {
@@ -111,5 +109,4 @@ class UnlockStatusNotifier extends ChangeNotifier {
       notifyListeners();
     }
   }
-
 }

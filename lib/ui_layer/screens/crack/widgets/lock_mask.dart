@@ -8,6 +8,7 @@ import 'package:jycrpj/domain/remote_domain/domains/user.dart';
 import 'package:jycrpj/report/ui_layer/report_gesture_detector.dart';
 import 'package:jycrpj/ui_layer/notifiers/user_notifier.dart';
 import 'package:jycrpj/ui_layer/screens/black/vip_pay_dialog.dart';
+import 'package:jycrpj/ui_layer/screens/crack/app_util.dart';
 import 'package:jycrpj/ui_layer/screens/crack/crack_app_type.dart';
 import 'package:jycrpj/ui_layer/screens/crack/unlock_status_notifier.dart';
 import 'package:jycrpj/ui_layer/utils/my_toast.dart';
@@ -89,16 +90,10 @@ class _LockMaskState extends State<LockMask> {
   }
 
   _updateUnlockStatus(bool status) {
-    if (widget.type == CrackAppType.clsq.type) {
-      context.read<UnlockStatusNotifier>().changeClsqUnlockStatus(true);
-    } else if (widget.type == CrackAppType.aw91.type) {
-      context.read<UnlockStatusNotifier>().changeAw91UnlockStatus(true);
-    } else if (widget.type == CrackAppType.awjq.type) {
-      context.read<UnlockStatusNotifier>().changeAwjqUnlockStatus(true);
-    } else if (widget.type == CrackAppType.pzhan.type) {
-      context.read<UnlockStatusNotifier>().changePzhanUnlockStatus(true);
-    } else if (widget.type == CrackAppType.zpc.type) {
-      context.read<UnlockStatusNotifier>().changeZpc91UnlockStatus(true);
-    }
+    AppUtil.changeAppUnlockStatus(
+      context.read<UnlockStatusNotifier>(),
+      widget.crackApp,
+      status,
+    );
   }
 }

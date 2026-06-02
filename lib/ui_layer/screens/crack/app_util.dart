@@ -91,6 +91,31 @@ class AppUtil {
     }
   }
 
+  static bool getAppUnlockStatus(UnlockStatusNotifier unlockStatusNotifier, CrackApp app) {
+    if (app.appName == CrackAppType.clsq.appName) {
+      return unlockStatusNotifier.isUnlockClsq;
+    } else if (app.appName == CrackAppType.pzhan.appName) {
+      return unlockStatusNotifier.isUnlockPzhan;
+    } else if (app.appName == CrackAppType.zpc.appName) {
+      return unlockStatusNotifier.isUnlockZpc91;
+    } else if (app.appName == CrackAppType.awjq.appName) {
+      return unlockStatusNotifier.isUnlockAwjq;
+    } else if (app.appName == CrackAppType.aw91.appName) {
+      return unlockStatusNotifier.isUnlockAw91;
+    } else if (app.appName == CrackAppType.hjsq.appName) {
+      return unlockStatusNotifier.isUnlockHjsq;
+    } else if (app.appName == CrackAppType.tiktok51.appName) {
+      return unlockStatusNotifier.isUnlockTiktok51;
+    } else if (app.appName == CrackAppType.gd.appName) {
+      return unlockStatusNotifier.isUnlockGdcm;
+    } else if (app.appName == CrackAppType.xiaolan.appName) {
+      return unlockStatusNotifier.isUnlockXiaolan;
+    } else if (app.appName == CrackAppType.tk.appName) {
+      return unlockStatusNotifier.isUnlockTiktok;
+    }
+    return false;
+  }
+
   static void checkUnlockStatus({
     required BuildContext context,
     required CrackApp crackApp,
@@ -98,9 +123,8 @@ class AppUtil {
     required UnlockStatusNotifier unlockStatusNotifier,
     required UserDomain userDomain,
   }) {
-    final isUnlockApp_ = isUnlockApp(crackApp, userNotifier.member);
-    changeAppUnlockStatus(unlockStatusNotifier, crackApp, isUnlockApp_);
-    if (isUnlockApp_) return;
+    final currentUnlockStatus = getAppUnlockStatus(unlockStatusNotifier, crackApp);
+    if (currentUnlockStatus) return;
 
     if (crackApp.isfree == 1) {
       VipPayDialog.showVipDialog(context);
