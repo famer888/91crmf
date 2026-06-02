@@ -133,7 +133,7 @@ class _TiktokTopNaviViewState extends State<TiktokTopNaviView> with TickerProvid
               if (!isUnlockTiktok && widget.crackApp != null)
                 LockMask(
                     crackApp: widget.crackApp!,
-                    type: CrackAppType.xiaolan.type,
+                    type: CrackAppType.tk.type,
                     onUnlock: () {
                       setState(() {});
                     })

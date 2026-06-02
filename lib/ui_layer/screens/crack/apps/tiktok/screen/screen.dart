@@ -15,7 +15,6 @@ import '../../../../common_widgets/search_app_bar.dart';
 import '../../../app_util.dart';
 import '../../../crack_app_type.dart';
 import '../../../unlock_status_notifier.dart';
-import '../../clsq/widget/cl_top_navi_view.dart';
 import '../widget/tiktok_top_navi_view.dart';
 
 class TiktokCommunityScreen extends StatefulWidget {
@@ -62,7 +61,7 @@ class _TiktokCommunityScreenState extends State<TiktokCommunityScreen> {
                     marginChangeToPadding: true,
                     isCrackApp: true,
                     showLeftBack: false,
-                    type: CrackAppType.xiaolan,
+                    type: CrackAppType.tk,
                     openEndDrawer: widget.openEndDrawer,
                     showMoreButton: widget.showMoreButton,
                     onTap: () {

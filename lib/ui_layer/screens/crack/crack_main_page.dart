@@ -160,8 +160,6 @@ class _CrackMainPageState extends State<CrackMainPage> {
     _crackAppIndexNotifier.dispose();
     _topAppBackgroundColorNotifier.dispose();
     _searchAppBarTypeNotifier.dispose();
-    _unlockStatusNotifier.dispose();
-    _userNotifier.dispose();
     super.dispose();
   }
 
