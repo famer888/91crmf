@@ -68,22 +68,22 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
   }
 
   Future<void> _onFavorite() async {
-    if (_isFavoriteing) return;
-    _isFavoriteing = true;
-    final result = await _appDomain.getConstructByApiLink(
-      apiLink: '/api/mvttav/favorite',
-      params: {'id': widget.id},
-    );
-    _isFavoriteing = false;
-    if (result.status == 1) {
-      setState(() {
-        _isfavorite = !_isfavorite;
-        _favoriteCount += _isfavorite ? 1 : -1;
-      });
-      MyToast.showText(text: result.data['data']?['msg'] ?? '操作成功');
-    } else {
-      MyToast.showText(text: result.msg ?? '操作失败');
-    }
+    // if (_isFavoriteing) return;
+    // _isFavoriteing = true;
+    // final result = await _appDomain.getConstructByApiLink(
+    //   apiLink: '/api/mvttav/favorite',
+    //   params: {'id': widget.id},
+    // );
+    // _isFavoriteing = false;
+    // if (result.status == 1) {
+    //   setState(() {
+    //     _isfavorite = !_isfavorite;
+    //     _favoriteCount += _isfavorite ? 1 : -1;
+    //   });
+    //   MyToast.showText(text: result.data['data']?['msg'] ?? '操作成功');
+    // } else {
+    //   MyToast.showText(text: result.msg ?? '操作失败');
+    // }
   }
 
   @override

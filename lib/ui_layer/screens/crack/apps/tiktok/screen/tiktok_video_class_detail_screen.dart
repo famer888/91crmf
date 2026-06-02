@@ -62,6 +62,7 @@ class _TiktokVideoClassDetailScreenState extends State<TiktokVideoClassDetailScr
         await _appDomain.getConstructByApiLink(apiLink: "/api/tabnewttav/tab_detail", params: {'tab_id': widget.id});
     if (result.status == 1) {
       final tab_info = result.data['tab_info'];
+      _isfavorite = result.data['is_follow'] == 1;
       _asyncValue = AsyncData(tab_info);
     } else {
       _asyncValue = const AsyncError();
@@ -88,6 +89,27 @@ class _TiktokVideoClassDetailScreenState extends State<TiktokVideoClassDetailScr
     }
     MyToast.showText(text: result.msg ?? '');
     return [];
+  }
+
+  bool _isFavoriteing = false;
+  bool _isfavorite = false;
+
+  Future<void> _onFavorite() async {
+    if (_isFavoriteing) return;
+    _isFavoriteing = true;
+    final result = await _appDomain.getConstructByApiLink(
+      apiLink: '/api/tabnewttav/follow_tab',
+      params: {'tab_id': widget.id},
+    );
+    _isFavoriteing = false;
+    if (result.status == 1) {
+      setState(() {
+        _isfavorite = !_isfavorite;
+      });
+      MyToast.showText(text: result.data['data']?['msg'] ?? '操作成功');
+    } else {
+      MyToast.showText(text: result.msg ?? '操作失败');
+    }
   }
 
   double get _headerBannerHeight => 150.w;
@@ -189,10 +211,14 @@ class _TiktokVideoClassDetailScreenState extends State<TiktokVideoClassDetailScr
                                   width: 28.w,
                                 ),
                                 GestureDetector(
+                                  onTap: (){
+                                    _onFavorite();
+                                  },
                                   child: Row(
                                     children: [
                                       Image.asset(
                                         "assets/images/tiktok_icon_collection.png",
+                                        color: _isfavorite ? Color(0xFFF52C56) : Color(0xB2FFFFFF),
                                         width: 13.w,
                                       ),
                                       SizedBox(

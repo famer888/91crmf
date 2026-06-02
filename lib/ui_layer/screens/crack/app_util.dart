@@ -59,16 +59,15 @@ class AppUtil {
     }
   }
 
-  static void initialAppUnlockStatus(UnlockStatusNotifier unlockStatusNotifier,
-      UserNotifier userNotifier, List<CrackApp> sortedApps) {
+  static void initialAppUnlockStatus(
+      UnlockStatusNotifier unlockStatusNotifier, UserNotifier userNotifier, List<CrackApp> sortedApps) {
     for (var app in sortedApps) {
       final isUnlockApp = AppUtil.isUnlockApp(app, userNotifier.member);
       changeAppUnlockStatus(unlockStatusNotifier, app, isUnlockApp);
     }
   }
 
-  static void changeAppUnlockStatus(
-      UnlockStatusNotifier unlockStatusNotifier, CrackApp app, bool status) {
+  static void changeAppUnlockStatus(UnlockStatusNotifier unlockStatusNotifier, CrackApp app, bool status) {
     if (app.appName == CrackAppType.clsq.appName) {
       unlockStatusNotifier.changeClsqUnlockStatus(status);
     } else if (app.appName == CrackAppType.pzhan.appName) {
@@ -161,8 +160,7 @@ class AppUtil {
             crackApp.isPay = true;
             MyToast.showText(text: result.data?.message ?? '');
 
-            AppUtil.changeAppUnlockStatus(
-                unlockStatusNotifier, crackApp, crackApp.isPay);
+            AppUtil.changeAppUnlockStatus(unlockStatusNotifier, crackApp, crackApp.isPay);
           } else {
             MyToast.showText(text: result.msg ?? '');
           }

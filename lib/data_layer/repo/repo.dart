@@ -756,10 +756,11 @@ String _gvSha256(String data) {
 class ReqPrint {
   static void logRequest(RequestOptions options) {
     final buffer = StringBuffer();
+    final headers = _normalizedHeaders(options);
 
     buffer.writeln('┌────── Dio Request ──────');
     buffer.writeln('│ METHOD: ${options.method}');
-    buffer.writeln('│ URL: ${options.baseUrl}${options.path}');
+    buffer.writeln('│ URL: ${options.uri}');
 
     // query 参数
     if (options.queryParameters.isNotEmpty) {
@@ -771,7 +772,7 @@ class ReqPrint {
 
     // headers
     buffer.writeln('│ Headers:');
-    options.headers.forEach((k, v) {
+    headers.forEach((k, v) {
       buffer.writeln('│   $k: $v');
     });
 
@@ -782,8 +783,36 @@ class ReqPrint {
       _logRequestBody(options.data, buffer);
     }
 
+    buffer.writeln('│ CURL:');
+    buffer.writeln('│   ${buildCurlCommand(options)}');
     buffer.writeln('└────────────────────────');
     CommonUtils.log(buffer.toString());
+  }
+
+  static String buildCurlCommand(RequestOptions options) {
+    final segments = <String>[
+      'curl',
+      '-X',
+      options.method.toUpperCase(),
+      _quoteForPowerShell(options.uri.toString()),
+    ];
+    final headers = _normalizedHeaders(options);
+
+    headers.forEach((key, value) {
+      if (value == null) return;
+      if (value is Iterable && value is! String) {
+        for (final item in value) {
+          segments.add('-H');
+          segments.add(_quoteForPowerShell('$key: $item'));
+        }
+        return;
+      }
+      segments.add('-H');
+      segments.add(_quoteForPowerShell('$key: $value'));
+    });
+
+    _appendCurlBody(options, headers, segments);
+    return segments.join(' ');
   }
 
   static void _logRequestBody(dynamic data, StringBuffer buffer) {
@@ -807,5 +836,99 @@ class ReqPrint {
   static String _prettyJson(Object data) {
     const encoder = JsonEncoder.withIndent('  ');
     return encoder.convert(data);
+  }
+
+  static Map<String, dynamic> _normalizedHeaders(RequestOptions options) {
+    final headers = Map<String, dynamic>.from(options.headers);
+    final hasContentType = headers.keys.any(
+      (key) => key.toLowerCase() == Headers.contentTypeHeader,
+    );
+
+    if (!hasContentType && options.contentType != null) {
+      headers[Headers.contentTypeHeader] = options.contentType;
+    }
+    return headers;
+  }
+
+  static void _appendCurlBody(
+    RequestOptions options,
+    Map<String, dynamic> headers,
+    List<String> segments,
+  ) {
+    final data = options.data;
+    if (data == null) return;
+
+    if (data is FormData) {
+      for (final field in data.fields) {
+        segments.add('-F');
+        segments.add(_quoteForPowerShell('${field.key}=${field.value}'));
+      }
+      for (final file in data.files) {
+        final filename = file.value.filename ?? 'file.bin';
+        final contentType = file.value.contentType?.toString();
+        final formValue = contentType == null
+            ? '${file.key}=@$filename'
+            : '${file.key}=@$filename;type=$contentType';
+        segments.add('-F');
+        segments.add(_quoteForPowerShell(formValue));
+      }
+      return;
+    }
+
+    final contentType = headers.entries
+        .firstWhere(
+          (entry) => entry.key.toLowerCase() == Headers.contentTypeHeader,
+          orElse: () => const MapEntry('', null),
+        )
+        .value
+        ?.toString();
+    final body = _serializeBody(data, contentType);
+
+    if (body == null || body.isEmpty) return;
+    segments.add('--data-raw');
+    segments.add(_quoteForPowerShell(body));
+  }
+
+  static String? _serializeBody(dynamic data, String? contentType) {
+    if (data == null) return null;
+    if (data is String) return data;
+
+    if (_isFormUrlEncoded(contentType) && data is Map) {
+      return _encodeFormBody(data);
+    }
+
+    if (data is Map || data is List) {
+      return jsonEncode(data);
+    }
+    return data.toString();
+  }
+
+  static bool _isFormUrlEncoded(String? contentType) {
+    return contentType?.contains(Headers.formUrlEncodedContentType) ?? false;
+  }
+
+  static String _encodeFormBody(Map data) {
+    final pairs = <String>[];
+    data.forEach((key, value) {
+      final encodedKey = Uri.encodeQueryComponent('$key');
+
+      if (value is Iterable && value is! String) {
+        for (final item in value) {
+          pairs.add(
+            '$encodedKey=${Uri.encodeQueryComponent(item?.toString() ?? '')}',
+          );
+        }
+        return;
+      }
+
+      pairs.add(
+        '$encodedKey=${Uri.encodeQueryComponent(value?.toString() ?? '')}',
+      );
+    });
+    return pairs.join('&');
+  }
+
+  static String _quoteForPowerShell(String value) {
+    return "'${value.replaceAll("'", "''")}'";
   }
 }
