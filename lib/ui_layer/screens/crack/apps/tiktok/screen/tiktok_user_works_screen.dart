@@ -2,18 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jycrpj/domain/type_def.dart';
-import 'package:jycrpj/ui_layer/screens/common_widgets/my_list_view.dart';
-import 'package:jycrpj/data_layer/repo/repo.dart';
-import 'package:jycrpj/ui_layer/notifiers/home_config_notifier.dart';
 import 'package:provider/provider.dart';
+import 'package:jycrpj/ui_layer/screens/common_widgets/my_list_view.dart';
 
 import '../../../../../../domain/async_value.dart';
 import '../../../../../../domain/domain.dart';
-import '../../../../../../domain/model/feed/feed_model.dart';
 import '../../../../../router/routes.dart';
 import '../../../../../utils/common_utils.dart';
 import '../../../../../utils/my_toast.dart';
-import '../../../../common_widgets/my_app_bar.dart';
 import '../../../../common_widgets/my_image.dart';
 import '../../../../common_widgets/screen_background.dart';
 import '../../../../common_widgets/status/loading.dart';
@@ -100,6 +96,76 @@ class _TiktokUserWorksScreenState extends State<TiktokUserWorksScreen> {
 
   double get _toolbarHeight => MyTheme.navbarHegiht;
 
+  double _measureTextHeight({
+    required BuildContext context,
+    required String text,
+    required TextStyle style,
+    required double maxWidth,
+    int? maxLines,
+  }) {
+    if (text.isEmpty) return 0;
+
+    final textPainter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      textDirection: Directionality.of(context),
+      maxLines: maxLines,
+    )..layout(maxWidth: maxWidth);
+
+    return textPainter.size.height;
+  }
+
+  double _calculateExpandedHeight(BuildContext context, dynamic data) {
+    final topPadding = MediaQuery.paddingOf(context).top;
+    final horizontalPadding = 24.w;
+    final contentWidth = MediaQuery.sizeOf(context).width - horizontalPadding;
+    final nicknameStyle = TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w600);
+    final descStyle = TextStyle(color: const Color(0xFFE8E8E8), fontSize: 14.sp, fontWeight: FontWeight.w400);
+    final statsStyle = TextStyle(color: const Color(0xFFE8E8E8), fontSize: 14.sp, fontWeight: FontWeight.w400);
+    final longVideoStyle = TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.w400);
+    final desc = data['desc']?.toString() ?? '';
+    final nickname = data['nickname']?.toString() ?? '';
+    final videosCount = CommonUtils.formatNumber(data['videos']);
+
+    final contentHeight = 84.w +
+        23.w +
+        _measureTextHeight(
+          context: context,
+          text: nickname,
+          style: nicknameStyle,
+          maxWidth: contentWidth,
+          maxLines: 1,
+        ) +
+        15.w +
+        (desc.isNotEmpty
+            ? _measureTextHeight(
+                  context: context,
+                  text: desc,
+                  style: descStyle,
+                  maxWidth: contentWidth,
+                  maxLines: 3,
+                ) +
+                15.w
+            : 0) +
+        _measureTextHeight(
+          context: context,
+          text: videosCount,
+          style: statsStyle,
+          maxWidth: contentWidth,
+          maxLines: 1,
+        ) +
+        15.w +
+        _measureTextHeight(
+          context: context,
+          text: "长视频($videosCount)",
+          style: longVideoStyle,
+          maxWidth: contentWidth,
+          maxLines: 1,
+        );
+
+    final dynamicHeight = topPadding + 50.w + contentHeight + 24.w;
+    return dynamicHeight > (_toolbarHeight + _headerBannerHeight) ? dynamicHeight : (_toolbarHeight + _headerBannerHeight);
+  }
+
   Widget _buildBackButton(Color iconColor) {
     return GestureDetector(
       onTap: () => context.pop(),
@@ -114,8 +180,10 @@ class _TiktokUserWorksScreenState extends State<TiktokUserWorksScreen> {
 
   List<Widget> _buildHeaderSlivers(BuildContext context, dynamic data, bool innerBoxIsScrolled) {
     final topPadding = MediaQuery.paddingOf(context).top;
-    final title = "${widget.userName ?? ''}";
-    final expandedHeight = _toolbarHeight + _headerBannerHeight;
+    final title = widget.userName;
+    final desc = data['desc']?.toString() ?? '';
+    final videosCount = CommonUtils.formatNumber(data['videos']);
+    final expandedHeight = _calculateExpandedHeight(context, data);
 
     return [
       SliverAppBar(
@@ -160,68 +228,65 @@ class _TiktokUserWorksScreenState extends State<TiktokUserWorksScreen> {
                 left: 12.w,
                 right: 12.w,
                 child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 84.w,
-                              height: 84.w,
-                              decoration:
-                                  BoxDecoration(borderRadius: BorderRadius.circular(84.w), color: Color(0xFFF52C56)),
-                              padding: EdgeInsets.all(2.w),
-                              child: MyImage.network(
-                                data['thumb'] ?? "",
-                                borderRadius: 84.w,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 23.w,
-                            ),
-                            Text(
-                              "${data['nickname']}",
-                              style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w600),
-                            ),
-                            SizedBox(
-                              height: 15.w,
-                            ),
-                            if ("${data['desc'] ?? ""}".isNotEmpty) ...[
-                              Text(
-                                "${data['desc']}",
-                                style:
-                                    TextStyle(color: Color(0xFFE8E8E8), fontSize: 14.sp, fontWeight: FontWeight.w400),
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              SizedBox(
-                                height: 15.w,
-                              ),
-                            ],
-                            Row(
-                              children: [
-                                Text(
-                                  "${CommonUtils.formatNumber(data['videos'])}",
-                                  style:
-                                      TextStyle(color: Color(0xFFE8E8E8), fontSize: 14.sp, fontWeight: FontWeight.w400),
-                                ),
-                                SizedBox(width: 10.w,),
-                                Text(
-                                  "点赞",
-                                  style: TextStyle(
-                                      color: Colors.white.withOpacity(.5),
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 15.w,
-                            ),
-                            Text(
-                              "长视频(${CommonUtils.formatNumber(data['videos'])})",
-                              style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.w400),
-                            ),
-                          ],
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 84.w,
+                      height: 84.w,
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(84.w), color: Color(0xFFF52C56)),
+                      padding: EdgeInsets.all(2.w),
+                      child: MyImage.network(
+                        data['thumb'] ?? "",
+                        borderRadius: 84.w,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 23.w,
+                    ),
+                    Text(
+                      "${data['nickname']}",
+                      style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(
+                      height: 15.w,
+                    ),
+                    if (desc.isNotEmpty) ...[
+                      Text(
+                        desc,
+                        style: TextStyle(color: const Color(0xFFE8E8E8), fontSize: 14.sp, fontWeight: FontWeight.w400),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(
+                        height: 15.w,
+                      ),
+                    ],
+                    Row(
+                      children: [
+                        Text(
+                          videosCount,
+                          style: TextStyle(color: const Color(0xFFE8E8E8), fontSize: 14.sp, fontWeight: FontWeight.w400),
                         ),
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        Text(
+                          "点赞",
+                          style: TextStyle(
+                              color: Colors.white.withOpacity(.5), fontSize: 12.sp, fontWeight: FontWeight.w400),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15.w,
+                    ),
+                    Text(
+                      "长视频($videosCount)",
+                      style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.w400),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -245,7 +310,6 @@ class _TiktokUserWorksScreenState extends State<TiktokUserWorksScreen> {
         pageSize: pageSize,
       ),
     );
-    ;
   }
 
   @override
