@@ -276,7 +276,7 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
               _showToTopBtn.value = overOnePage;
               return false;
             },
-            child: widget.linkModel.type == 1 && widget.linkModel.name.contains("推荐")
+            child: widget.linkModel.botStyle == "1"
                 ? (NestedScrollView(
                     controller: _nestedController,
                     headerSliverBuilder: (_, __) => [
@@ -291,6 +291,25 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
                                     height: 10,
                                   ),
                                 ],
+                                if (mid_style_category != null && mid_style_category!.isNotEmpty) ...[
+                                  TiktokListBuild(
+                                      // type: TiktokListBuildType.categoryScroll,
+                                      type: TiktokListBuildType.categoryScroll,
+                                      linkModel: widget.linkModel,
+                                      model: mid_style_category),
+                                  SizedBox(
+                                    height: 10.w,
+                                  ),
+                                ],
+                                if (mid_style_up != null && mid_style_up!.isNotEmpty) ...[
+                                  TiktokListBuild(
+                                      type: TiktokListBuildType.creator,
+                                      linkModel: widget.linkModel,
+                                      model: mid_style_up),
+                                  SizedBox(
+                                    height: 10.w,
+                                  )
+                                ],
                               ],
                             ),
                           ),
@@ -300,23 +319,11 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
                         itemBuilder: (context, item, index) {
                           return Column(
                             children: [
-                              SizedBox(
-                                height: 10.w,
-                              ),
-                              if (mid_style_up != null && mid_style_up!.isNotEmpty) ...[
-                                TiktokListBuild(
-                                    type: TiktokListBuildType.creator,
-                                    linkModel: widget.linkModel,
-                                    model: mid_style_up),
-                                SizedBox(
-                                  height: 10.w,
-                                )
-                              ],
                               TiktokListBuild(
                                 type: TiktokListBuildType.sixGrid,
                                 linkModel: widget.linkModel,
                                 model: item,
-                                showHandle: index > 1,
+                                showHandle: "${widget.linkModel.name}".contains("推荐") ? index > 1 : true,
                                 onRefresh: () async {
                                   final res = await onRefresh(item);
                                   return res;

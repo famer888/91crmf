@@ -332,7 +332,7 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
                                 ),
                               )),
                               Text(
-                                "作品${CommonUtils.formatNumber(_detail?['user']['fans_count'] ?? 0)}",
+                                "作品${CommonUtils.formatNumber(_detail?['user']['videos'] ?? 0)}",
                                 style: TextStyle(color: Color(0xFF8A8B8C), fontSize: 13.sp),
                               ),
                               Container(

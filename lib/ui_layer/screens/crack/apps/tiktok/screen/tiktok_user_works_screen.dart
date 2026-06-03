@@ -96,6 +96,12 @@ class _TiktokUserWorksScreenState extends State<TiktokUserWorksScreen> {
 
   double get _toolbarHeight => MyTheme.navbarHegiht;
 
+  /// 头像尺寸（PWA / 客户端均走 ScreenUtil，与设计稿一致）
+  double get _headerAvatarSize => 84.w;
+
+  /// 头像与昵称间距，与头部 Column 中 SizedBox 一致
+  double get _headerSpacingBelowAvatar => 23.w;
+
   double _measureTextHeight({
     required BuildContext context,
     required String text,
@@ -126,8 +132,8 @@ class _TiktokUserWorksScreenState extends State<TiktokUserWorksScreen> {
     final nickname = data['nickname']?.toString() ?? '';
     final videosCount = CommonUtils.formatNumber(data['videos']);
 
-    final contentHeight = 84.w +
-        23.w +
+    final contentHeight = _headerAvatarSize +
+        _headerSpacingBelowAvatar +
         _measureTextHeight(
           context: context,
           text: nickname,
@@ -163,7 +169,9 @@ class _TiktokUserWorksScreenState extends State<TiktokUserWorksScreen> {
         );
 
     final dynamicHeight = topPadding + 50.w + contentHeight + 24.w;
-    return dynamicHeight > (_toolbarHeight + _headerBannerHeight) ? dynamicHeight : (_toolbarHeight + _headerBannerHeight);
+    return dynamicHeight > (_toolbarHeight + _headerBannerHeight)
+        ? dynamicHeight
+        : (_toolbarHeight + _headerBannerHeight);
   }
 
   Widget _buildBackButton(Color iconColor) {
@@ -182,12 +190,12 @@ class _TiktokUserWorksScreenState extends State<TiktokUserWorksScreen> {
     final topPadding = MediaQuery.paddingOf(context).top;
     final title = widget.userName;
     final desc = data['desc']?.toString() ?? '';
+    final fabulous_count = CommonUtils.formatNumber(data['fabulous_count']);
     final videosCount = CommonUtils.formatNumber(data['videos']);
     final expandedHeight = _calculateExpandedHeight(context, data);
 
     return [
       SliverAppBar(
-        primary: false,
         pinned: true,
         expandedHeight: expandedHeight,
         toolbarHeight: _toolbarHeight,
@@ -217,10 +225,21 @@ class _TiktokUserWorksScreenState extends State<TiktokUserWorksScreen> {
             children: [
               Align(
                 alignment: Alignment.topCenter,
-                child: MyImage.network(
-                  "${data['background_img']}",
-                  fit: BoxFit.fitWidth,
-                  width: double.infinity,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final imageUrl =
+                        CommonUtils.clipImageUrl("${data['background_img']}", inputWidth: constraints.maxWidth);
+                    return FadeInImage.memoryNetwork(
+                      placeholder: kTransparentImage,
+                      image: imageUrl,
+                      fit: BoxFit.fitWidth,
+                      alignment: Alignment.topCenter,
+                      width: double.infinity,
+                      fadeOutDuration: const Duration(milliseconds: 300),
+                      fadeInDuration: const Duration(milliseconds: 500),
+                      imageErrorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+                    );
+                  },
                 ),
               ),
               Positioned(
@@ -232,17 +251,18 @@ class _TiktokUserWorksScreenState extends State<TiktokUserWorksScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      width: 84.w,
-                      height: 84.w,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(84.w), color: Color(0xFFF52C56)),
+                      width: _headerAvatarSize,
+                      height: _headerAvatarSize,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(_headerAvatarSize), color: Color(0xFFF52C56)),
                       padding: EdgeInsets.all(2.w),
                       child: MyImage.network(
                         data['thumb'] ?? "",
-                        borderRadius: 84.w,
+                        borderRadius: _headerAvatarSize,
                       ),
                     ),
                     SizedBox(
-                      height: 23.w,
+                      height: _headerSpacingBelowAvatar,
                     ),
                     Text(
                       "${data['nickname']}",
@@ -265,8 +285,9 @@ class _TiktokUserWorksScreenState extends State<TiktokUserWorksScreen> {
                     Row(
                       children: [
                         Text(
-                          videosCount,
-                          style: TextStyle(color: const Color(0xFFE8E8E8), fontSize: 14.sp, fontWeight: FontWeight.w400),
+                          fabulous_count,
+                          style:
+                              TextStyle(color: const Color(0xFFE8E8E8), fontSize: 14.sp, fontWeight: FontWeight.w400),
                         ),
                         SizedBox(
                           width: 10.w,
@@ -297,7 +318,9 @@ class _TiktokUserWorksScreenState extends State<TiktokUserWorksScreen> {
 
   Widget _buildTabBody() {
     return MyListView.grid(
-      padding: EdgeInsets.symmetric(horizontal: MyTheme.pagePadding, vertical: 8.w),
+      padding: EdgeInsets.symmetric(
+        horizontal: MyTheme.pagePadding,
+      ),
       crossAxisCount: gridLayout ? 2 : 1,
       mainAxisSpacing: 10.w,
       crossAxisSpacing: gridLayout ? 8.w : 10.w,
