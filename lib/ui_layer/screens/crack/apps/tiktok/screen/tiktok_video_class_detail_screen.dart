@@ -36,8 +36,8 @@ class _TiktokVideoClassDetailScreenState extends State<TiktokVideoClassDetailScr
 
   late final TabController _tabController;
   final int _initialIndex = 0;
-  final List<String> titles = ['热门', '推荐', '最新', '随机'];
-  final List<String> titlesSort = ['hot', 'recommend', 'new', 'rand'];
+  final List<String> titles = ['热门', '推荐', '最新', '最多收藏', "畅销", "随机"];
+  final List<String> titlesSort = ['hot', 'recommend', 'new', 'favorite', "sale", "rand"];
 
   @override
   void initState() {
@@ -211,7 +211,7 @@ class _TiktokVideoClassDetailScreenState extends State<TiktokVideoClassDetailScr
                                   width: 28.w,
                                 ),
                                 GestureDetector(
-                                  onTap: (){
+                                  onTap: () {
                                     _onFavorite();
                                   },
                                   child: Row(

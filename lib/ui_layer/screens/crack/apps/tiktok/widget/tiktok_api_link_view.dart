@@ -57,8 +57,8 @@ class _TiktokApiLinkViewState extends State<TiktokApiLinkView> with TickerProvid
   final ValueNotifier<bool> _showToTopBtn = ValueNotifier(false);
 
   late final TabController _tabController;
-  List<String> titles = ['最新', '热门', '本周热门', '热搜', '随机'];
-  List<String> titlesSort = ['new', 'hot', 'hot_week', 'search', "rand"];
+  final List<String> titles = ['热门', '推荐', '最新', '最多收藏', "畅销", "随机"];
+  final List<String> titlesSort = ['hot', 'recommend', 'new', 'favorite', "sale", "rand"];
   AsyncValue<List> _asyncValue = const AsyncInit();
 
   bool gridLayout = true;
