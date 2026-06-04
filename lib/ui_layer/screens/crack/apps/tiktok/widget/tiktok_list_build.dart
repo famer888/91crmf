@@ -74,7 +74,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
     TiktokDiscoverRoute(type: type, nagId: nagId).push(context);
   }
 
-  void _openCategoryDetail(int id, {String? tagName}) {
+  void _openCategoryDetail(int id, String? tagName) {
     // if (!(widget.model is List) && widget.model['type'] == 5) {
     //   _openDaily();
     //   return;
@@ -100,7 +100,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
                   route.push(context);
                 });
               } else {
-                _openCategoryDetail(item['id']);
+                _openCategoryDetail(item['id'], item['tab_name']);
               }
             })
             // _buildHead(
@@ -159,7 +159,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
                 subName: widget.model["sub_title"],
                 onTap: () {
                   // _openDiscover('tag');
-                  _openCategoryDetail(widget.model['id']);
+                  _openCategoryDetail(widget.model['id'], widget.model['title']);
                 }),
             if ((widget.model['list'] as List).length > 0) ...[
               SizedBox(
@@ -203,7 +203,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
               height: 14.h,
             ),
             _buildHandle(onMoreTap: () {
-              _openCategoryDetail(widget.model['id']);
+              _openCategoryDetail(widget.model['id'], widget.model['title']);
             })
           ],
         );
@@ -216,7 +216,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
                 subName: widget.model["sub_title"],
                 onTap: () {
                   // _openDiscover('tag');
-                  _openCategoryDetail(widget.model['id']);
+                  _openCategoryDetail(widget.model['id'], widget.model['title']);
                 }),
             if ((widget.model['list'] as List).length > 0) ...[
               SizedBox(
@@ -254,7 +254,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
                 name: widget.model["title"],
                 subName: widget.model["sub_title"],
                 onTap: () {
-                  _openCategoryDetail(widget.model['id']);
+                  _openCategoryDetail(widget.model['id'], widget.model['title']);
                 }),
             SizedBox(
               height: 10.w,
@@ -287,7 +287,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
                 height: 14.h,
               ),
               _buildHandle(onMoreTap: () {
-                _openCategoryDetail(widget.model['id']);
+                _openCategoryDetail(widget.model['id'], widget.model['title']);
               })
             ]
           ],
@@ -302,7 +302,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
                 subName: widget.model["sub_title"],
                 onTap: () {
                   // _openDiscover('tag');
-                  _openCategoryDetail(widget.model['id']);
+                  _openCategoryDetail(widget.model['id'], widget.model['title']);
                 }),
             if ((widget.model['list'] as List).length > 0) ...[
               SizedBox(
@@ -341,7 +341,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
                   },
                 ),
               _buildHandle(onMoreTap: () {
-                _openCategoryDetail(widget.model['id']);
+                _openCategoryDetail(widget.model['id'], widget.model['title']);
               })
             ]
           ],
@@ -521,7 +521,7 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
           if (onTap != null) {
             onTap?.call(item);
           } else {
-            _openCategoryDetail(item['id']);
+            _openCategoryDetail(item['id'], item["tab_name"]);
           }
         });
       },
