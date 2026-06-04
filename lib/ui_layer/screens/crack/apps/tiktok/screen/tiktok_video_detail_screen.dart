@@ -177,7 +177,10 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
   }
 
   Widget _buildContent(Map<String, dynamic> detail) {
-    final playUrl = detail['play_url'] as String? ?? '';
+    String? playUrl = detail['play_url'] as String? ?? '';
+    if (playUrl.isEmpty) {
+      playUrl = detail['pay_url_full'] as String?;
+    }
     final title = detail['title'] as String? ?? '';
     final tagsList = detail['tags_list'];
     final List<String> tags = tagsList is List ? List<String>.from(tagsList) : [];
@@ -194,7 +197,7 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
             child: AspectRatio(
               aspectRatio: 16 / 9,
               child: _VideoPlayerView(
-                playUrl: playUrl,
+                playUrl: "${playUrl??""}",
                 coverUrl: detail['cover_thumb_url'] as String? ?? '',
               ),
             ),
@@ -269,7 +272,7 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
                             children: tags.map((tag) {
                               return ReportGestureDetector(
                                 onTap: () {
-                                  TiktokVideoClassDetailRoute(id: 0, tagName: '$tag').push(context);
+                                  TiktokVideoClassDetailRoute(id: -1, tagName: '$tag').push(context);
                                   // TiktokTagRoute(tag: tag).push(context)
                                   // context.push('/xiaolanCategoryOrTagDetail/$id/${type}/${hasSort ? "1" : "0"}/${Uri.encodeComponent(title)}');
                                 },

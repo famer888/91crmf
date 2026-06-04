@@ -59,10 +59,8 @@ class _TiktokVideoClassDetailScreenState extends State<TiktokVideoClassDetailScr
     setState(() {
       _asyncValue = const AsyncLoading();
     });
-    if (widget.id == 0 && widget.tagName.isNotEmpty) {
-      _asyncValue = AsyncData({
-        "tab_name": widget.tagName,
-      });
+    if (widget.id == -1 && widget.tagName.isNotEmpty) {
+      _asyncValue = AsyncData({"tab_name": widget.tagName, "work_num": 0, "favorites_num": 0});
     } else {
       final result =
           await _appDomain.getConstructByApiLink(apiLink: "/api/tabnewttav/tab_detail", params: {'tab_id': widget.id});
@@ -85,12 +83,12 @@ class _TiktokVideoClassDetailScreenState extends State<TiktokVideoClassDetailScr
     required int pageSize,
     required String sort,
   }) async {
-    final param = (widget.id == 0 && widget.tagName.isNotEmpty)
+    final param = (widget.id == -1 && widget.tagName.isNotEmpty)
         ? {'tag': widget.tagName, 'page': page, 'limit': pageSize, 'sort': sort}
         : {'tab_id': widget.id, 'page': page, 'limit': pageSize, 'sort': sort};
     final result = await _appDomain.getConstructByApiLink(
       apiLink:
-          (widget.id == 0 && widget.tagName.isNotEmpty) ? "/api/mvttav/list_of_tag" : "/api/tabnewttav/list_tab_mv",
+          (widget.id == -1 && widget.tagName.isNotEmpty) ? "/api/mvttav/list_of_tag" : "/api/tabnewttav/list_tab_mv",
       params: param,
     );
 
@@ -207,7 +205,7 @@ class _TiktokVideoClassDetailScreenState extends State<TiktokVideoClassDetailScr
                             SizedBox(
                               height: 10.w,
                             ),
-                            if (data['favorites_num'] != null && data['favorites_num'] != null) ...[
+                            if (data['work_num'] != null && data['favorites_num'] != null) ...[
                               Row(
                                 children: [
                                   Image.asset(
