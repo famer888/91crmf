@@ -74,12 +74,12 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
     TiktokDiscoverRoute(type: type, nagId: nagId).push(context);
   }
 
-  void _openCategoryDetail(int id) {
+  void _openCategoryDetail(int id, {String? tagName}) {
     // if (!(widget.model is List) && widget.model['type'] == 5) {
     //   _openDaily();
     //   return;
     // }
-    TiktokVideoClassDetailRoute(id: id).push(context);
+    TiktokVideoClassDetailRoute(id: id, tagName: tagName ?? "").push(context);
   }
 
   Widget _buildTypeLayout() {

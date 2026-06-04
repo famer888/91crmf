@@ -20,9 +20,10 @@ import '../../../../theme.dart';
 import '../widget/tiktok_list_build.dart';
 
 class TiktokVideoClassDetailScreen extends StatefulWidget {
-  const TiktokVideoClassDetailScreen({super.key, required this.id});
+  const TiktokVideoClassDetailScreen({super.key, required this.id, required this.tagName});
 
   final int id;
+  final String tagName;
 
   @override
   State<TiktokVideoClassDetailScreen> createState() => _TiktokVideoClassDetailScreenState();
@@ -58,14 +59,20 @@ class _TiktokVideoClassDetailScreenState extends State<TiktokVideoClassDetailScr
     setState(() {
       _asyncValue = const AsyncLoading();
     });
-    final result =
-        await _appDomain.getConstructByApiLink(apiLink: "/api/tabnewttav/tab_detail", params: {'tab_id': widget.id});
-    if (result.status == 1) {
-      final tab_info = result.data['tab_info'];
-      _isfavorite = result.data['is_follow'] == 1;
-      _asyncValue = AsyncData(tab_info);
+    if (widget.id == 0 && widget.tagName.isNotEmpty) {
+      _asyncValue = AsyncData({
+        "tab_name": widget.tagName,
+      });
     } else {
-      _asyncValue = const AsyncError();
+      final result =
+          await _appDomain.getConstructByApiLink(apiLink: "/api/tabnewttav/tab_detail", params: {'tab_id': widget.id});
+      if (result.status == 1) {
+        final tab_info = result.data['tab_info'];
+        _isfavorite = result.data['is_follow'] == 1;
+        _asyncValue = AsyncData(tab_info);
+      } else {
+        _asyncValue = const AsyncError();
+      }
     }
 
     if (mounted) {
@@ -78,9 +85,12 @@ class _TiktokVideoClassDetailScreenState extends State<TiktokVideoClassDetailScr
     required int pageSize,
     required String sort,
   }) async {
-    final param = {'tab_id': widget.id, 'page': page, 'limit': pageSize, 'sort': sort};
+    final param = (widget.id == 0 && widget.tagName.isNotEmpty)
+        ? {'tag': widget.tagName, 'page': page, 'limit': pageSize, 'sort': sort}
+        : {'tab_id': widget.id, 'page': page, 'limit': pageSize, 'sort': sort};
     final result = await _appDomain.getConstructByApiLink(
-      apiLink: "/api/tabnewttav/list_tab_mv",
+      apiLink:
+          (widget.id == 0 && widget.tagName.isNotEmpty) ? "/api/mvttav/list_of_tag" : "/api/tabnewttav/list_tab_mv",
       params: param,
     );
 
@@ -166,7 +176,10 @@ class _TiktokVideoClassDetailScreenState extends State<TiktokVideoClassDetailScr
                     child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    MyImage.network("${data['bg_thumb']}", fit: BoxFit.cover),
+                    if (data['bg_thumb'] != null)
+                      MyImage.network("${data['bg_thumb']}", fit: BoxFit.cover)
+                    else
+                      MyImage.asset(MyImagePaths.tiktokClassDetailDefaultBg, fit: BoxFit.cover),
                     DecoratedBox(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -194,53 +207,64 @@ class _TiktokVideoClassDetailScreenState extends State<TiktokVideoClassDetailScr
                             SizedBox(
                               height: 10.w,
                             ),
-                            Row(
-                              children: [
-                                Image.asset(
-                                  "assets/images/tiktok_icon_num.png",
-                                  width: 16.w,
-                                ),
-                                SizedBox(
-                                  width: 6.w,
-                                ),
-                                Text(
-                                  "${CommonUtils.formatNumber(data['work_num'])}",
-                                  style: TextStyle(color: Colors.white, fontSize: 13.sp),
-                                ),
-                                SizedBox(
-                                  width: 28.w,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    _onFavorite();
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Image.asset(
-                                        "assets/images/tiktok_icon_collection.png",
-                                        color: _isfavorite ? Color(0xFFF52C56) : Color(0xB2FFFFFF),
-                                        width: 13.w,
-                                      ),
-                                      SizedBox(
-                                        width: 6.w,
-                                      ),
-                                      Text(
-                                        "${CommonUtils.formatNumber(data['favorites_num'])}",
-                                        style: TextStyle(color: Colors.white, fontSize: 13.sp),
-                                      )
-                                    ],
+                            if (data['favorites_num'] != null && data['favorites_num'] != null) ...[
+                              Row(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/tiktok_icon_num.png",
+                                    width: 16.w,
                                   ),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10.w,
-                            ),
+                                  SizedBox(
+                                    width: 6.w,
+                                  ),
+                                  Text(
+                                    "${CommonUtils.formatNumber(data['work_num'])}",
+                                    style: TextStyle(color: Colors.white, fontSize: 13.sp),
+                                  ),
+                                  SizedBox(
+                                    width: 28.w,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      _onFavorite();
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Image.asset(
+                                          "assets/images/tiktok_icon_collection.png",
+                                          color: _isfavorite ? Color(0xFFF52C56) : Color(0xB2FFFFFF),
+                                          width: 13.w,
+                                        ),
+                                        SizedBox(
+                                          width: 6.w,
+                                        ),
+                                        Text(
+                                          "${CommonUtils.formatNumber(data['favorites_num'])}",
+                                          style: TextStyle(color: Colors.white, fontSize: 13.sp),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10.w,
+                              ),
+                            ],
                             RichText(
-                              text: TextSpan(children: [
-                                TextSpan(text: "分类简介：", style: TextStyle(color: Colors.white.withOpacity(.6))),
-                                TextSpan(text: "${data['intro'] ?? ""}", style: TextStyle(color: Colors.white))
-                              ], style: TextStyle(fontSize: 13.sp)),
+                              text: TextSpan(
+                                  children: "${data['intro'] ?? ""}".isEmpty
+                                      ? [
+                                          TextSpan(
+                                              text: "这人太懒什么也没留下", style: TextStyle(color: Colors.white.withOpacity(.6)))
+                                        ]
+                                      : [
+                                          TextSpan(
+                                              text: "分类简介：", style: TextStyle(color: Colors.white.withOpacity(.6))),
+                                          TextSpan(
+                                              text: "${data['intro'] ?? ""}", style: TextStyle(color: Colors.white))
+                                        ],
+                                  style: TextStyle(fontSize: 13.sp)),
                             )
                           ],
                         ))

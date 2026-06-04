@@ -87,7 +87,7 @@ class _ClassListRow extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        TiktokVideoClassDetailRoute(id: item['id']).push(context);
+        TiktokVideoClassDetailRoute(id: item['id'], tagName: item['tab_name'] ?? "").push(context);
       },
       child: SizedBox(
         height: 90.w,

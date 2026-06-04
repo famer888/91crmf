@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../../domain/domain.dart';
 import '../../../../../router/routes.dart';
+import '../../../../../utils/common_utils.dart';
 import '../../../../../utils/my_toast.dart';
 import '../../../../common_widgets/my_app_bar.dart';
 import '../../../../common_widgets/my_image.dart';
@@ -89,6 +90,7 @@ class _ClassListRow extends StatelessWidget {
     final title = item['nickname'] ?? '';
     final follow = item['fans_count'] ?? 0;
     final works = item['videos'] ?? 0;
+    final fabulous_count = item['fabulous_count'] ?? 0;
 
     return GestureDetector(
       onTap: () {
@@ -130,7 +132,7 @@ class _ClassListRow extends StatelessWidget {
                       ),
                       SizedBox(height: 4.w),
                       Text(
-                        '作品：$works  粉丝：$follow',
+                        '${CommonUtils.formatNumber(fabulous_count)}点赞  作品：${CommonUtils.formatNumber(works)}  粉丝：${CommonUtils.formatNumber(follow)}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(color: Colors.white.withOpacity(.4), fontSize: 12.sp),

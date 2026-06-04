@@ -3452,7 +3452,7 @@ extension $XiaolanUserWorksRouteExtension on XiaolanUserWorksRoute {
 }
 
 RouteBase get $tiktokVideoClassDetailRoute => GoRouteData.$route(
-      path: '/tiktokVideoClassDetail/:id',
+      path: '/tiktokVideoClassDetail/:id/:tagName',
       parentNavigatorKey: TiktokVideoClassDetailRoute.$parentNavigatorKey,
       factory: $TiktokVideoClassDetailRouteExtension._fromState,
     );
@@ -3460,10 +3460,11 @@ RouteBase get $tiktokVideoClassDetailRoute => GoRouteData.$route(
 extension $TiktokVideoClassDetailRouteExtension on TiktokVideoClassDetailRoute {
   static TiktokVideoClassDetailRoute _fromState(GoRouterState state) => TiktokVideoClassDetailRoute(
         id: int.parse(state.pathParameters['id']!),
+        tagName: state.pathParameters['tagName']!,
       );
 
   String get location => GoRouteData.$location(
-        '/tiktokVideoClassDetail/${Uri.encodeComponent(id.toString())}',
+        '/tiktokVideoClassDetail/${Uri.encodeComponent(id.toString())}/${Uri.encodeComponent(tagName)}',
       );
 
   void go(BuildContext context) => context.go(location);

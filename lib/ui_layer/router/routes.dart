@@ -2123,13 +2123,15 @@ class XiaolanUserWorksRoute extends GoRouteData {
 class TiktokVideoClassDetailRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey = AppRouter.rootNavigatorKey;
 
-  const TiktokVideoClassDetailRoute({required this.id});
+  const TiktokVideoClassDetailRoute({required this.id, required this.tagName});
 
   final int id;
+  final String tagName;
 
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
-    return CommonUtils.buildSlideTransitionPage(state: state, child: TiktokVideoClassDetailScreen(id: id));
+    return CommonUtils.buildSlideTransitionPage(
+        state: state, child: TiktokVideoClassDetailScreen(id: id, tagName: tagName));
   }
 }
 
