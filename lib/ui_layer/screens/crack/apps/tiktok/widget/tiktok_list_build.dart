@@ -409,15 +409,20 @@ class _TiktokListBuildState extends State<TiktokListBuild> with SingleTickerProv
                             child: MyImage.network(user['thumb_full'] ?? "",
                                 width: 38.w, height: 38.w, fit: BoxFit.cover, borderRadius: 38.r)),
                         Spacer(),
-                        Text(
-                          "${user['nickname'] ?? ""}",
-                          style: TextStyle(color: Color(0xB2FFFFFF), fontSize: 12.sp),
+                        SizedBox(
+                          width: 70.w,
+                          child: Center(child: Text(
+                            "${user['nickname'] ?? ""}",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(color: Color(0xB2FFFFFF), fontSize: 12.sp),
+                          ),),
                         )
                       ],
                     ),
                   );
                 },
-                separatorBuilder: (context, index) => SizedBox(width: 25.w),
+                separatorBuilder: (context, index) => SizedBox(width: 10.w),
                 itemCount: (widget.model['list'] as List).length,
               ),
             )
