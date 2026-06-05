@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jycrpj/domain/model/crack_model.dart';
 import 'package:jycrpj/domain/type_def.dart';
 import 'package:jycrpj/ui_layer/router/routes.dart';
 import 'package:jycrpj/ui_layer/screens/common_widgets/my_image.dart';
@@ -18,6 +19,7 @@ import '../../../../../../domain/domain.dart';
 import '../../../../../../domain/model/banner_model.dart';
 import '../../../../../../domain/model/video_detail_model.dart';
 import '../../../../../../report/ui_layer/report_gesture_detector.dart';
+import '../../../crack_app_type.dart';
 import '../../../widgets/scroll_top_button.dart';
 import '../widget/tiktok_ads_header.dart';
 
@@ -71,8 +73,8 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
     if (_isFavoriteing) return;
     _isFavoriteing = true;
     final result = await _appDomain.getConstructByApiLink(
-      apiLink: '/api/mvttav/favorite',
-      params: {'id': widget.id},
+      apiLink: '/api/user/favorites',
+      params: {'relatedId': widget.id, 'type': CrackAppType.tk.type},
     );
     _isFavoriteing = false;
     if (result.status == 1) {
@@ -112,8 +114,7 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
       _getRecommend();
       _likeCount = (_detail!['like'] ?? 0) as int;
       _isLiked = (_detail!['is_like'] ?? 0) == 1;
-
-      _favoriteCount = (_detail!['favorite'] ?? 0) as int;
+      _favoriteCount = (_detail!['favorite_num'] ?? 0) as int;
       _isfavorite = (_detail!['is_favorite'] ?? 0) == 1;
       if (mounted) setState(() => _loadState = _LoadState.success);
     } else {
@@ -177,10 +178,10 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
   }
 
   Widget _buildContent(Map<String, dynamic> detail) {
-    String? playUrl = detail['play_url'] as String? ?? '';
-    if (playUrl.isEmpty) {
-      playUrl = detail['pay_url_full'] as String?;
-    }
+    String? playUrl = detail['pay_url_full'] as String? ?? '';
+    // if (playUrl.isEmpty) {
+    //   playUrl = detail['play_url'] as String?;
+    // }
     final title = detail['title'] as String? ?? '';
     final tagsList = detail['tags_list'];
     final List<String> tags = tagsList is List ? List<String>.from(tagsList) : [];
@@ -197,7 +198,7 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
             child: AspectRatio(
               aspectRatio: 16 / 9,
               child: _VideoPlayerView(
-                playUrl: "${playUrl??""}",
+                playUrl: "${playUrl ?? ""}",
                 coverUrl: detail['cover_thumb_url'] as String? ?? '',
               ),
             ),

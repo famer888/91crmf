@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../../../router/routes.dart';
 import '../../../utils/common_utils.dart';
+import '../../crack/new_crack_screen.dart';
 import '../../theme.dart';
 
 import '../../../../report/ui_layer/report_gesture_detector.dart';
@@ -95,6 +96,8 @@ class _CollectAppVideoItem extends StatelessWidget {
       return tr('gdcm');
     } else if (type == CrackAppType.xiaolan.type) {
       return tr('xiaolan');
+    } else if (type == CrackAppType.tk.type) {
+      return "Tiktok破解";
     }
     return '';
   }
@@ -119,6 +122,8 @@ class _CollectAppVideoItem extends StatelessWidget {
           HjsqVideoDetailRoute(data.id ?? 0).push(context);
         } else if (type == CrackAppType.tiktok51.type) {
           Tiktok51VideoDetailRoute(id: data.id ?? 0).push(context);
+        } else if (type == CrackAppType.tk.type) {
+          TiktokVideoDetailRoute(id: data.id ?? 0).push(context);
         } /* else if (type == CrackAppType.gd.type) {
           GdVideoDetailRoute(id: data.id ?? 0).push(context);
         } else if (type == CrackAppType.xiaolan.type) {
@@ -137,7 +142,8 @@ class _CollectAppVideoItem extends StatelessWidget {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      MyImage.network(data.coverHorizontal ?? '', fit: BoxFit.cover, backgroundColor: MyTheme.imageBgColor, borderRadius: 5.w),
+                      MyImage.network(data.coverHorizontal ?? '',
+                          fit: BoxFit.cover, backgroundColor: MyTheme.imageBgColor, borderRadius: 5.w),
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: Container(
@@ -162,7 +168,8 @@ class _CollectAppVideoItem extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('${CommonUtils.renderFixedNumber(data.playCt ?? 0)}${'bf'.tr()}', style: MyTheme.white12medium),
+                              Text('${CommonUtils.renderFixedNumber(data.playCt ?? 0)}${'bf'.tr()}',
+                                  style: MyTheme.white12medium),
                               Text(RelativeDateFormat.getHMTime(time: data.duration), style: MyTheme.white12medium),
                             ],
                           ),

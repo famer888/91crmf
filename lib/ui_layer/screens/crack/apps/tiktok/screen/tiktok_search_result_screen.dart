@@ -195,7 +195,7 @@ class _TiktokSearchResultScreenState extends State<TiktokSearchResultScreen> {
                       ),
                       SizedBox(height: 4.w),
                       Text(
-                        '${CommonUtils.formatNumber(fabulous_count)}点赞  作品：${CommonUtils.formatNumber(works)}  粉丝：${CommonUtils.formatNumber(follow)}',
+                        '${CommonUtils.formatNumber(fabulous_count)}点赞  作品：${CommonUtils.formatNumber(works)}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(color: Colors.white.withOpacity(.4), fontSize: 12.sp),
