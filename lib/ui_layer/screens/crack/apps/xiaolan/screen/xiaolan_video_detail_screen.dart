@@ -17,6 +17,9 @@ import '../../../../../../domain/domain.dart';
 import '../../../../../../domain/model/banner_model.dart';
 import '../../../../../../domain/model/video_detail_model.dart';
 import '../../../../../../report/ui_layer/report_gesture_detector.dart';
+import '../../../../mine/visitrecord/visit_model.dart';
+import '../../../app_video_visit_util.dart';
+import '../../../crack_app_type.dart';
 import '../../../widgets/scroll_top_button.dart';
 import '../widget/xiaolan_ads_header.dart';
 
@@ -108,6 +111,18 @@ class _XiaolanVideoDetailScreenState extends State<XiaolanVideoDetailScreen> {
       _likeCount = (_detail!['like'] ?? 0) as int;
       _isLiked = (_detail!['is_like'] ?? 0) == 1;
       if (mounted) setState(() => _loadState = _LoadState.success);
+
+      AppVisitUtil.updateCrackAppVisitRecord(
+        context,
+        VideoVisitModel(
+          title: _detail!['title'],
+          duration: RelativeDateFormat.parseDurationStr(_detail!['duration_str']) ?? 0,
+          playCount: _detail!['rating'],
+          id: widget.id,
+          crackAppType: CrackAppType.xiaolan.type,
+          imgUrl: _detail!['cover_thumb_url'],
+        ),
+      );
     } else {
       if (result.msg case final msg? when msg.isNotEmpty) {
         MyToast.showText(text: msg);

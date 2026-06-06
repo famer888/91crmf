@@ -19,6 +19,8 @@ import '../../../../../../domain/domain.dart';
 import '../../../../../../domain/model/banner_model.dart';
 import '../../../../../../domain/model/video_detail_model.dart';
 import '../../../../../../report/ui_layer/report_gesture_detector.dart';
+import '../../../../mine/visitrecord/visit_model.dart';
+import '../../../app_video_visit_util.dart';
 import '../../../crack_app_type.dart';
 import '../../../widgets/scroll_top_button.dart';
 import '../widget/tiktok_ads_header.dart';
@@ -116,6 +118,18 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
       _isLiked = (_detail!['is_like'] ?? 0) == 1;
       _favoriteCount = (_detail!['favorite_num'] ?? 0) as int;
       _isfavorite = (_detail!['is_favorite'] ?? 0) == 1;
+      AppVisitUtil.updateCrackAppVisitRecord(
+        context,
+        VideoVisitModel(
+          title: _detail!['title'],
+          duration: RelativeDateFormat.parseDurationStr(_detail!['duration_str']) ?? 0,
+          playCount: _detail!['play_num'],
+          id: widget.id,
+          crackAppType: CrackAppType.tk.type,
+          imgUrl: _detail!['cover_thumb_url'],
+        ),
+      );
+
       if (mounted) setState(() => _loadState = _LoadState.success);
     } else {
       if (result.msg case final msg? when msg.isNotEmpty) {
@@ -338,16 +352,16 @@ class _TiktokVideoDetailScreenState extends State<TiktokVideoDetailScreen> {
                                 "作品${CommonUtils.formatNumber(_detail?['user']['videos'] ?? 0)}",
                                 style: TextStyle(color: Color(0xFF8A8B8C), fontSize: 13.sp),
                               ),
-                              Container(
-                                height: 12.w,
-                                width: 1.w,
-                                color: Color(0xFF8A8B8C),
-                                margin: EdgeInsets.symmetric(horizontal: 7.w),
-                              ),
-                              Text(
-                                "粉丝${CommonUtils.formatNumber(_detail?['user']['fans_count'] ?? 0)}",
-                                style: TextStyle(color: Color(0xFF8A8B8C), fontSize: 13.sp),
-                              ),
+                              // Container(
+                              //   height: 12.w,
+                              //   width: 1.w,
+                              //   color: Color(0xFF8A8B8C),
+                              //   margin: EdgeInsets.symmetric(horizontal: 7.w),
+                              // ),
+                              // Text(
+                              //   "粉丝${CommonUtils.formatNumber(_detail?['user']['fans_count'] ?? 0)}",
+                              //   style: TextStyle(color: Color(0xFF8A8B8C), fontSize: 13.sp),
+                              // ),
                             ],
                           )),
                       SizedBox(

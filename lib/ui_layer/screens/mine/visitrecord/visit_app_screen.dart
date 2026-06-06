@@ -109,6 +109,8 @@ class _VisitAppVideoItem extends StatelessWidget {
       return tr('gdcm');
     } else if (type == CrackAppType.xiaolan.type) {
       return tr('xiaolan');
+    } else if (type == CrackAppType.tk.type) {
+      return "Tiktok破解";
     }
     return '';
   }
@@ -133,7 +135,10 @@ class _VisitAppVideoItem extends StatelessWidget {
           HjsqVideoDetailRoute(data.id).push(context);
         } else if (type == CrackAppType.tiktok51.type) {
           Tiktok51VideoDetailRoute(id: data.id).push(context);
-        } /* else if (type == CrackAppType.gd.type) {
+        } else if (type == CrackAppType.tk.type) {
+          TiktokVideoDetailRoute(id: data.id ?? 0).push(context);
+        }
+        /* else if (type == CrackAppType.gd.type) {
           GdVideoDetailRoute(id: data.id).push(context);
         } else if (type == CrackAppType.xiaolan.type) {
           XiaolanVideoDetailRoute(id: data.id).push(context);
@@ -153,7 +158,8 @@ class _VisitAppVideoItem extends StatelessWidget {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      MyImage.network(imageUrl, fit: BoxFit.cover, backgroundColor: MyTheme.imageBgColor, borderRadius: 5.w),
+                      MyImage.network(imageUrl,
+                          fit: BoxFit.cover, backgroundColor: MyTheme.imageBgColor, borderRadius: 5.w),
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: Container(
@@ -178,7 +184,8 @@ class _VisitAppVideoItem extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('${CommonUtils.renderFixedNumber(data.playCount)}${'bf'.tr()}', style: MyTheme.white12medium),
+                              Text('${CommonUtils.renderFixedNumber(data.playCount)}${'bf'.tr()}',
+                                  style: MyTheme.white12medium),
                               Text(RelativeDateFormat.getHMTime(time: data.duration), style: MyTheme.white12medium),
                             ],
                           ),

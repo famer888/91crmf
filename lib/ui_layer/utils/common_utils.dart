@@ -1644,6 +1644,24 @@ class RelativeDateFormat {
     return '';
   }
 
+  static int? parseDurationStr(String? durationStr) {
+    if (durationStr == null || durationStr.isEmpty) {
+      return null;
+    }
+
+    try {
+      final parts = durationStr.split(':').map(int.parse).toList();
+
+      return switch (parts.length) {
+        2 => parts[0] * 60 + parts[1],
+        3 => parts[0] * 3600 + parts[1] * 60 + parts[2],
+        _ => null,
+      };
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// 格式化两位数不足补0
   static String formatTwoDigitNumber(int number) =>
       number.toString().padLeft(2, '0');
