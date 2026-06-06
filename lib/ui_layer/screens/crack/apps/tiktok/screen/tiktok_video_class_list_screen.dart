@@ -116,7 +116,7 @@ class _ClassListRow extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     title,
@@ -124,10 +124,7 @@ class _ClassListRow extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Text(
-                    '关注：${CommonUtils.formatNumber(follow)}',
-                    style: TextStyle(color: Colors.white.withOpacity(.4), fontSize: 10.sp),
-                  ),
+                  SizedBox(height: 16.w),
                   Text(
                     '作品：${CommonUtils.formatNumber(works)}',
                     style: TextStyle(color: Colors.white.withOpacity(.4), fontSize: 10.sp),
